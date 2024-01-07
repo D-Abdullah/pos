@@ -14,22 +14,12 @@ class Common
 {
     public function handle(Request $request, Closure $next)
     {
-        /*if( (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443) {
-            URL::forceScheme('https');
-        }*/
         //get general setting value
         $general_setting =  Cache::remember('general_setting', 60*60*24*365, function () {
             return DB::table('general_settings')->latest()->first();
         });
 
-        $todayDate = date("Y-m-d");
-        if($general_setting->expiry_date) {
-            $expiry_date = date("Y-m-d", strtotime($general_setting->expiry_date));
-            if($todayDate > $expiry_date) {
-                auth()->logout();
-                return redirect()->route('contactForRenewal');
-            }
-        }
+
         //setting language
         if(isset($_COOKIE['language'])) {
             \App::setLocale($_COOKIE['language']);

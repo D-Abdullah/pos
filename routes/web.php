@@ -93,37 +93,39 @@ Route::get('clear',function() {
 
 
 
-Route::get('update-coupon', [CouponController::class, 'updateCoupon']);
+//Route::get('update-coupon', [CouponController::class, 'updateCoupon']);
 
-Route::get('auto-update-dashboard', [DashboardController::class, 'index'])->name('dashboard');
+//Route::get('auto-update-dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 // Auto Update
-Route::group(['prefix' => 'developer-section'], function () {
-    Route::controller(DeveloperSectionController::class)->group(function () {
-        Route::get('/', 'index')->name('developer-section.index');
-        Route::post('/', 'submit')->name('developer-section.submit');
-        Route::post('/bug-update-setting', 'bugUpdateSetting')->name('bug-update-setting.submit');
-        Route::post('/version-upgrade-setting', 'versionUpgradeSetting')->name('version-upgrade-setting.submit');
-     });
-});
+//Route::group(['prefix' => 'developer-section'], function () {
+//    Route::controller(DeveloperSectionController::class)->group(function () {
+//        Route::get('/', 'index')->name('developer-section.index');
+//        Route::post('/', 'submit')->name('developer-section.submit');
+//        Route::post('/bug-update-setting', 'bugUpdateSetting')->name('bug-update-setting.submit');
+//        Route::post('/version-upgrade-setting', 'versionUpgradeSetting')->name('version-upgrade-setting.submit');
+//     });
+//});
 
-Route::controller(ClientAutoUpdateController::class)->group(function () {
-    Route::get('/new-release', 'newVersionReleasePage')->name('new-release');
-    Route::get('/bugs', 'bugUpdatePage')->name('bug-update-page');
-    // Action on Client server
-    Route::post('version-upgrade', 'versionUpgrade')->name('version-upgrade');
-    Route::post('bug-update', 'bugUpdate')->name('bug-update');
-});
+//Route::controller(ClientAutoUpdateController::class)->group(function () {
+//    Route::get('/new-release', 'newVersionReleasePage')->name('new-release');
+//    Route::get('/bugs', 'bugUpdatePage')->name('bug-update-page');
+//    // Action on Client server
+//    Route::post('version-upgrade', 'versionUpgrade')->name('version-upgrade');
+//    Route::post('bug-update', 'bugUpdate')->name('bug-update');
+//});
 
 
 Auth::routes();
-Route::get('/documentation', [HomeController::class, 'documentation']);
 
-Route::group(['middleware' => 'auth'], function() {
-    Route::controller(HomeController::class)->group(function () {
-        Route::get('home', 'home');
-    });
-});
+
+//Route::get('/documentation', [HomeController::class, 'documentation']);
+
+//Route::group(['middleware' => 'auth'], function() {
+//    Route::controller(HomeController::class)->group(function () {
+//        Route::get('home', 'home');
+//    });
+//});
 
 Route::group(['middleware' => ['common', 'auth', 'active']], function() {
 

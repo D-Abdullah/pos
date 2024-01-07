@@ -33,11 +33,6 @@ class HomeController extends Controller
 {
     use \App\Traits\AutoUpdateTrait;
 
-    public function home()
-    {
-        return view('backend.home');
-    }
-
     public function index()
     {
         return redirect('dashboard');
@@ -81,6 +76,7 @@ class HomeController extends Controller
         $resp = curl_exec($curl);
         curl_close($curl);
         return dd($resp);*/
+
         //return \Auth::user()->unreadNotifications->where('data.reminder_date', date('Y-m-d'));
         //making strict mode false for this query
         config()->set('database.connections.mysql.strict', false);

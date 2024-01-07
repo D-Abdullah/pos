@@ -551,7 +551,7 @@ CREATE TABLE `general_settings` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO general_settings VALUES("1","SalePros","20220905125905.png","0","1","","own","d-m-Y","LionCoders","standard","2","1","default.css","2018-07-06 12:13:11","2023-06-16 19:42:32","prefix","","0","","980980");
+INSERT INTO general_settings VALUES("1","NK","20220905125905.png","0","1","","own","d-m-Y","LionCoders","standard","2","1","default.css","2018-07-06 12:13:11","2023-06-16 19:42:32","prefix","","0","","980980");
 
 
 

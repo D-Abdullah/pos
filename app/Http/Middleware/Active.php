@@ -20,7 +20,7 @@ class Active
             return $next($request);
         }
 
-        return redirect('/home');
-        
+        return redirect('/dashboard');
+
     }
 }

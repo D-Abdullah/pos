@@ -14,6 +14,6 @@ class DashboardController extends Controller
         $autoUpdateData = $this->general();
         $alertBugEnable =  $autoUpdateData['alertBugEnable'];
         $alertVersionUpgradeEnable = $autoUpdateData['alertVersionUpgradeEnable'];
-        return view('dashboard', compact('alertBugEnable','alertVersionUpgradeEnable'));
+        return view('dashboard', compact('alertBugEnable', 'alertVersionUpgradeEnable'));
     }
 }
