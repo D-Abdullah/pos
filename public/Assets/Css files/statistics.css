@@ -1,0 +1,188 @@
+:root {
+    /* main-background */
+    --main-Background-color: #F8F7FA;
+    --secound-Background-color: #FFF;
+    /* main-background */
+
+    /* active scroll hover botton and border*/
+    --active-and-scroll: linear-gradient(72deg, #7367F0 22.16%, rgba(115, 103, 240, 0.70) 76.47%);
+    --hover-menu: linear-gradient(0deg, rgba(255, 255, 255, 0.80) 0%, rgba(255, 255, 255, 0.80) 100%), #8692D0;
+    --main-btn: #7367F0;
+    --main-btn: #7267f0a9;
+    --main-btn: #7267f079;
+    --main-btn: #7267f052;
+    --main-btn: #7267f011;
+    --active-btn: #7367F0;
+    --main-btn-hover: rgba(115, 103, 240, 0.16);
+    --cancel-btn: #F8F7FA;
+    --hover-list-dropdown: rgba(115, 103, 240, 0.08);
+    /* active scroll hover botton */
+
+
+    /* p span label h2 h3 h4 h5 */
+    --text-color: #4B465C;
+    /* p span label h2 h3 h4 h5 */
+
+    /* table */
+    --thead-table-color: #DFDFE3;
+    --cost-table-color: #7367F0;
+    --live-background: rgba(40, 199, 111, 0.16);
+    --live-color: #28C76F;
+    --contract-background: rgba(115, 103, 240, 0.16);
+    --contract-color: #7367F0;
+    --died-color: #EA5455;
+    --died-background: rgba(234, 84, 85, 0.16);
+    --disable-background: #dddddd1e;
+    --profit-color: #00CFE8;
+    /* table */
+
+    /* shadow  border-color raduis overlay font-weight transition*/
+    --shadow-menu-and-header-and-btn: 0px 2px 4px 0px rgba(165, 163, 174, 0.30);
+    --shadow-list-dropdown: 0px 4px 16px 0px rgba(165, 163, 174, 0.45);
+    --divider-color: #DBDADE;
+    --main-radius: 6px;
+    --overlay-color: rgba(0, 0, 0, 0.302);
+    --weight-normal: 600; 
+    --weight-medium: 800; 
+    --weight-bold: bold; 
+    --main-transition: .5s;
+    /* shadow  border-color raduis overlay font-weight transition*/
+}
+
+.section {
+    padding: 10px;
+    background-color: transparent !important;
+    overflow: scroll;
+}
+
+.section > div  {
+    /* overflow: scroll !important; */
+    background-color: var(--secound-Background-color);
+    min-width: 500px !important;
+}
+
+.firstSection > div {
+    width: 50%;
+}
+
+.section .chart .colum {
+    display: flex;
+    justify-content: end;
+    flex-direction: column;
+    align-items: center;
+}
+
+.section .earningsReports .deta {
+    padding: 18px;
+    border: 1px solid var(--divider-color);
+    border-radius: var(--main-radius);
+}
+
+.section .deta .box {
+    flex: 1;
+}
+
+.section .deta .box span {
+    color: var(--text-color)
+}
+
+.section .deta .prog {
+    background-color: rgba(75, 70, 92, 0.08);
+    height: 5px;
+    border-radius: var(--main-radius);
+}
+
+.section .deta .prog span {
+    border-radius: var(--main-radius);
+}
+
+.section .deta .box:first-of-type .prog span {
+    background-color: var(--main-btn);
+}
+.section .deta .box:nth-child(2) .prog span {
+    background-color: var(--died-color);
+}
+.section .deta .box:nth-child(3) .prog span {
+    background-color: var(--profit-color);
+}
+
+.section .chart .colum span:nth-child(2) {
+    color: var(--text-color);
+}
+
+#customChart {
+    width: 100% !important;
+    height: 200px !important;
+}
+
+#myChart2x {
+    height: 500px !important;
+    width: 100% !important;
+}
+
+#customChart3,
+#customChart4,
+#customChart5{
+    width: 100% !important;
+    height: 400px !important;
+}
+.buttoms button {
+    display: flex;
+    flex-direction: column;
+    padding: 15px 30px;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    font-weight: bold;
+    border: 1px dashed #ccc;
+    border-radius: 7px;
+}
+.buttoms button.active {
+    border: 1px solid var(--main-btn) !important; 
+} 
+#year {
+    border: 2px solid var(--main-btn);
+    padding: 10px 25px;
+    border-radius: var(--main-radius);
+    color: var(--main-btn);
+    font-weight: bold;
+}
+
+.workTarget .left .progress {
+    width: 60%;
+    height: 10px;
+    background-color: rgba(75, 70, 92, 0.08);
+    box-shadow: var(--shadow-menu-and-header-and-btn);
+}
+
+.workTarget .left .progress span {
+    height: 100%;
+    background: var(--profit-color);
+    border-radius: var(--main-radius);
+
+}
+
+
+/* responsive */
+
+@media(max-width: 1450px) {
+    .section {
+        flex-direction: column;
+    }
+
+    .section > div {
+        width: 100% !important;
+    }
+
+    .section .revenueReport {
+        flex-direction: column;
+    }
+}
+
+@media(max-width:700px) {
+    
+    .section .buttoms > div {
+        flex-direction: column !important;
+    } 
+}
+

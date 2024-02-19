@@ -11,11 +11,24 @@
 
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteCond %{REQUEST_URI} ^([^/]+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Send Requests To Front Controller...
+    # Handle Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+# Disable Directory listing
+Options -Indexes
+
+# Block files which need to be hidden
+<Files ~ "\.(env|json|config.js|md|gitignore|gitattributes|lock|txt)$">
+    Require all denied
+</Files>
+
+# Block specific files
+<Files ~ "(artisan)$">
+    Require all denied
+</Files>

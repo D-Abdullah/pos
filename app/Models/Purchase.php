@@ -2,22 +2,27 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Purchase extends Model
 {
-    protected $fillable =[
+    protected $fillable = ['supplier_id', 'product_id', 'added_by', 'quantity', 'total_price', 'date'];
 
-        "reference_no", "user_id", "warehouse_id", "supplier_id", "currency_id", "exchange_rate", "item", "total_qty", "total_discount", "total_tax", "total_cost", "order_tax_rate", "order_tax", "order_discount", "shipping_cost", "grand_total","paid_amount", "status", "payment_status", "document", "note", "created_at"
-    ];
-
+    public function getAddedByAttribute($value)
+    {
+        return User::find($value)->first()->name;
+    }
+    public function deposits()
+    {
+        return $this->hasMany(Deposit::class);
+    }
     public function supplier()
     {
-    	return $this->belongsTo('App\Models\Supplier');
+        return $this->hasOne(Supplier::class, 'id', 'supplier_id');
     }
-
-    public function warehouse()
+    public function product()
     {
-    	return $this->belongsTo('App\Models\Warehouse');
+        return $this->hasOne(Product::class, 'id', 'product_id');
     }
 }

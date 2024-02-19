@@ -2,76 +2,129 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Department;
-use Illuminate\Validation\Rule;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
-use Auth;
+use App\Http\Requests\StoreDepartmentRequest;
+use App\Http\Requests\UpdateDepartmentRequest;
+use App\Models\Product;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class DepartmentController extends Controller
 {
-    public function index()
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
     {
-        $role = Role::find(Auth::user()->role_id);
-        if($role->hasPermissionTo('department')) {
-            $lims_department_all = Department::where('is_active', true)->get();
-            return view('backend.department.index', compact('lims_department_all'));
+        try {
+            $rules = [
+                'query' => 'nullable|string',
+                'status' => 'nullable|boolean',
+            ];
+
+            $messages = [
+                'query.string' => 'حقل البحث يجب أن يكون نصًا.',
+                'status.boolean' => 'حقل الحالة يجب أن يكون قيمة منطقية.',
+            ];
+
+            $request->validate($rules, $messages);
+
+            $departments = Department::query();
+
+            if ($request->filled('query')) {
+                $searchTerm = trim($request->input('query'));
+                $departments->where(function ($query) use ($searchTerm) {
+                    $query->where('name', 'like', '%' . $searchTerm . '%')
+                        ->orWhere('description', 'like', '%' . $searchTerm . '%');
+                });
+            }
+
+            if ($request->filled('status')) {
+                $departments->where('is_active', $request->input('status'));
+            }
+
+            $departments = $departments->paginate(PAGINATION);
+
+            return view('pages.categories.index', compact('departments'))
+                ->with(
+                    [
+                        'query' => $request->filled('query') ? $request->input('query') : null,
+                        'status' => $request->filled('status') ? $request->input('status') : null,
+                    ]
+                );
+        } catch (\Exception $e) {
+            Log::error('حدث خطأ أثناء جلب الأقسام: ' . $e->getMessage());
+
+            return redirect()->back()->with(['error' => 'حدث خطأ أثناء جلب الأقسام. يرجى المحاولة مرة أخرى.']);
         }
-        else
-            return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
     }
 
-    public function store(Request $request)
+    /**
+     * Store a newly created resource in storage.
+     */
+
+    public function store(StoreDepartmentRequest $request)
     {
-        $this->validate($request, [
-            'name' => [
-                'max:255',
-                    Rule::unique('departments')->where(function ($query) {
-                    return $query->where('is_active', 1);
-                }),
-            ],
-        ]);
+        try {
+            Department::create([
+                'name' => $request->input('name'),
+                'description' => $request->input('description'),
+                'is_active' => $request->has('is_active') ? 1 : 0,
+                'added_by' => auth()->user()->getAuthIdentifier(),
+            ]);
 
-        $data = $request->all();
-        $data['is_active'] = true;
-        Department::create($data);
-        return redirect('departments')->with('message', 'Department created successfully');
-    }
+            return redirect()->route('department.all')->with(['success' => 'تم إنشاء القسم ' . $request->input('name') . ' بنجاح.']);
+        } catch (\Exception $e) {
+            Log::error('حدث خطأ أثناء انشاء قسم: ' . $e->getMessage());
 
-    public function update(Request $request, $id)
-    {
-        $this->validate($request,[
-            'name' => [
-                'max:255',
-                Rule::unique('departments')->ignore($request->department_id)->where(function ($query) {
-                    return $query->where('is_active', 1);
-                }),
-            ],
-        ]);
-
-        $data = $request->all();
-        $lims_department_data = Department::find($data['department_id']);
-        $lims_department_data->update($data);
-        return redirect('departments')->with('message', 'Department updated successfully');
-    }
-
-    public function deleteBySelection(Request $request)
-    {
-        $department_id = $request['departmentIdArray'];
-        foreach ($department_id as $id) {
-            $lims_department_data = Department::find($id);
-            $lims_department_data->is_active = false;
-            $lims_department_data->save();
+            return redirect()->back()->withInput($request->all())->with(['error' => 'حدث خطأ أثناء انشاء قسم. يرجى المحاولة مرة أخرى.']);
         }
-        return 'Department deleted successfully!';
     }
 
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateDepartmentRequest $request, $id)
+    {
+        try {
+            $department = Department::findOrFail($id);
+
+            $department->update([
+                'name' => $request->input('name'),
+                'description' => $request->input('description'),
+                'is_active' => $request->input('is_active') ? 1 : 0,
+            ]);
+
+            return redirect()->route('department.all')->with(['success' => 'تم تحديث القسم ' . $request->input('name') . ' بنجاح.']);
+        } catch (\Exception $e) {
+            Log::error('حدث خطأ أثناء تحديث القسم: ' . $e->getMessage());
+
+            return redirect()->back()->withInput($request->all())->with(['error' => 'حدث خطأ أثناء تحديث القسم. يرجى المحاولة مرة أخرى.']);
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy($id)
     {
-        $lims_department_data = Department::find($id);
-        $lims_department_data->is_active = false;
-        $lims_department_data->save();
-        return redirect('departments')->with('message', 'Department deleted successfully');
+        try {
+            $department = Department::findOrFail($id);
+
+            $products = Product::where('department_id', $id)->get();
+
+            foreach ($products as $product) {
+                $product->delete();
+            }
+
+            $department->delete();
+
+            return redirect()->route('department.all')->with(['success' => 'تم حذف القسم بنجاح.']);
+        } catch (\Exception $e) {
+            Log::error('حدث خطأ أثناء حذف القسم: ' . $e->getMessage());
+
+            return redirect()->back()->with(['error' => 'حدث خطأ أثناء حذف القسم. يرجى المحاولة مرة أخرى.']);
+        }
     }
 }

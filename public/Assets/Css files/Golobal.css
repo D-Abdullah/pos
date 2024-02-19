@@ -1,0 +1,885 @@
+:root {
+    /* main-background */
+    --main-Background-color: #F8F7FA;
+    --secound-Background-color: #FFF;
+    /* main-background */
+
+    /* active scroll hover botton and border*/
+    --active-and-scroll: linear-gradient(72deg, #7367F0 22.16%, rgba(115, 103, 240, 0.70) 76.47%);
+    --hover-menu: linear-gradient(0deg, rgba(255, 255, 255, 0.80) 0%, rgba(255, 255, 255, 0.80) 100%), #8692D0;
+    --main-btn: #7367F0;
+    --active-btn: #7367F0;
+    --main-btn-hover: rgba(115, 103, 240, 0.16);
+    --cancel-btn: #F8F7FA;
+    --hover-list-dropdown: rgba(115, 103, 240, 0.08);
+    /* active scroll hover botton */
+
+    /* p span label h2 h3 h4 h5 */
+    --text-color: #4B465C;
+    /* p span label h2 h3 h4 h5 */
+
+    /* table */
+    --thead-table-color: #DFDFE3;
+    --cost-table-color: #7367F0;
+    --live-background: rgba(40, 199, 111, 0.16);
+    --live-color: #28C76F;
+    --contract-background: rgba(115, 103, 240, 0.16);
+    --contract-color: #7367F0;
+    --died-color: #EA5455;
+    --died-background: rgba(234, 84, 85, 0.16);
+    --preparing-background:  rgba(255, 159, 67, 0.16);
+    --preparing-color: #FF9F43;
+    --disable-background: #dddddd1e;
+    /* table */
+
+    /* shadow  border-color raduis overlay font-weight transition*/
+    --shadow-menu-and-header-and-btn: 0px 2px 4px 0px rgba(165, 163, 174, 0.30);
+    --shadow-list-dropdown: 0px 4px 16px 0px rgba(165, 163, 174, 0.45);
+    --divider-color: #DBDADE;
+    --main-radius: 6px;
+    --overlay-color: rgba(0, 0, 0, 0.302);
+    --weight-normal: 600; 
+    --weight-medium: 800; 
+    --weight-bold: bold; 
+    --main-transition: .5s;
+    --secound-transition: .2s;
+    /* shadow  border-color raduis overlay font-weight transition*/
+}
+
+* {
+    direction: rtl !important;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    /* transition: var(--main-transition); */
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: var(--active-and-scroll);
+}
+
+.page a {
+    text-decoration: none !important;
+    color: black ;
+}
+
+.page {
+    max-width: 100%;
+}
+
+.page .vertical-menu {
+    background-color: var(--main-Background-color);
+    min-height: 100vh !important;
+}
+
+button {
+    border: none;
+    outline: none;
+}
+
+.none {
+    display: none !important; 
+}
+
+select {
+    box-shadow: none !important;
+    outline: none !important;
+    border-color: var(--divider-color) !important;
+}
+
+h2,
+label
+h3 {
+    flex-wrap: nowrap;
+    color: var(--text-color); 
+}
+
+label {
+    font-size: 18px;
+}
+
+.page input[type="search"],
+.page  input[type="date"] {
+    border: 1px solid var(--divider-color);
+    outline: none;
+    height: 45px;
+    border-radius: 6px;
+    padding-right: 15px;
+    width: 100%;
+    padding-left: 10px;
+    padding: 10px;
+    min-width: 100px;
+}
+
+.page input[type=search]::placeholder {
+    opacity: .3;
+    font-size: 20px;
+    color: var(--placeholder-icons-color);
+}
+
+.page input[type="checkbox"] {
+    height: 20px;
+}
+
+.page input[type="checkbox"]:checked {
+    background-color: var(--main-btn);
+}
+
+.page input[type=checkbox] {
+    box-shadow: none !important;
+    cursor: pointer;
+}
+
+.page .form-check label {
+    cursor: pointer;
+}
+
+.page input[type=text] {
+    width: 400px;
+    min-width: 70px !important;
+    padding: 7px;
+    border: 1px solid var(--divider-color);
+    border-radius: 6px;
+    padding-right: 10px;
+    outline: none;
+}
+
+.page .form-check-checkbox  input {
+    max-width: 20px !important;
+}
+
+.page label.form-check-label{
+    cursor: pointer;
+}
+
+.page textarea {
+    resize: none;
+    border: 1px solid var(--divider-color);
+    border-radius: var(--main-radius);
+    outline: none;
+    padding: 20px;
+}
+
+.page .select-btn button {
+    min-height: 50px !important;
+}
+
+
+/* end of global */
+
+/* start of Nav */
+.page .menu {
+    width: 260px;
+    min-width: 260px;
+    background-color: var(--secound-Background-color);
+    box-shadow: var(--shadow-menu-and-header-and-btn);
+    transition: var(--main-transition) ease;
+    overflow: hidden;
+}
+
+@media(max-width:840px) {
+    .page .menu {
+        z-index: 100;
+        height: 100%;
+        position: absolute;
+    }
+
+    .page .menu .logo button {
+        display: block !important;
+    }
+
+    .page .menu.close {
+        right: -100px;
+    }
+
+    .page .menu {
+        top: 0;
+        right: 0;
+    }
+
+    .page .vertical-menu {
+        padding: 10px 20px !important;
+    }
+}
+
+.page .menu span {
+    color: var(--text-color);
+}
+
+.page .menu.close .logoImg-2 {
+    display: block !important;
+    animation: opacityanimation var(--main-transition) ease-in-out;
+    transition: var(--main-transition);
+}
+
+.page .menu.close .logo {
+    justify-content: center !important;
+    padding: 20px !important;
+}
+
+.page .menu.close .list {
+    margin-bottom: 10px;
+    overflow-x: hidden;
+    justify-content: center !important;
+    animation: opacityanimation var(--main-transition) ease-in-out;
+    transition: var(--main-transition);
+}
+
+.page .menu .list:hover {
+    background: var(--hover-menu);
+}
+
+@keyframes opacityanimation {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .3;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.page .menu.close .logo .frame-1,
+.page .menu.close .logo .chevron-left {
+    display: none !important;
+    transition: var(--main-transition);
+}
+
+.page .menu .logo .frame-1 span {
+    white-space: nowrap !important;
+}
+
+.page .menu.close .list img {
+    margin: 0px;
+}
+
+.page .menu.close a:last-child {
+    display: none !important;
+    transition: var(--main-transition);
+}
+
+.page .menu.close span {
+    display: none !important;
+}
+
+.page .menu a:last-child {
+    width: 100% !important;
+}
+
+.page .menu.close {
+    width: 90px;
+    min-width: 90px;
+    overflow-x: hidden;
+}
+
+/* custom menu js */
+
+.page .menu .logo img {
+    max-width: 64px;
+    max-height: 64px;
+}
+
+.page .menu .logo .frame-1 {
+    height: 76px;
+}
+
+.page .menu .logo .frame-1 span {
+    font-weight: 700;
+    font-size: 22px;
+}
+
+.page .menu > div {
+    padding: 0px 14px;
+}
+
+.page .menu .list{
+    padding: 0px 0px;
+    border-radius: 6px;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.page .menu .list {
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.page .menu .list.active {
+    background: var(--active-and-scroll);
+    padding-right: 10px;
+    gap: 10px !important;
+}
+
+.page .menu.close .list.active {
+    padding: 10px;
+}
+
+.page .menu .list.active a {
+    color: var(--secound-Background-color) !important;
+}
+
+.page .menu .list.active .dark {
+    display: none;
+}
+
+.page .menu .list.active .none {
+    display: block !important;
+}
+
+.page .menu .list  a  {
+    padding: 10px;
+    color: var(--secound-color);
+}
+
+.page .menu .list  a:last-child {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+    min-width: 150px !important;
+}
+
+/* start of header */
+.page .main-container {
+    width: 100%;
+}
+
+.page .main-container header {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--secound-Background-color);
+}
+
+.first-select {
+    flex: 1;
+}
+
+.page .main-container header .info > div {
+    margin-right: 20px !important;
+}
+
+.page header .up button.shrink i {
+    transform: rotate(180deg);
+}
+.page header .info {
+    width: 200px;
+}
+
+.page header .info .manage {
+    background-color: var(--secound-Background-color) !important;
+    top: 60px;
+    min-width: 100px !important;
+    border-radius: var(--main-radius);
+    box-shadow: var(--shadow-list-dropdown);
+    z-index: 500;
+    min-width: 150px !important;
+}
+
+.page header .info .manage ul {
+    padding: 5px !important;
+}
+
+.page header .info .manage li {
+    padding: 10px 0;
+    margin: 5px;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: var(--main-radius);
+}
+
+.page .main-container header .info a {
+    padding: 10px 40px 10px 20px !important;
+}
+
+.page header .info .manage li:hover {
+    background-color: var(--hover-list-dropdown);
+}
+
+.page header .info .manage li svg {
+    right: 5px;
+}
+
+
+
+/* end of header */
+
+/* h2 */
+.page .main-container > h2 {
+    color: var(--text-color);
+}
+/* h2 */
+
+@media(max-width:600px) {
+
+    .special {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .special button {
+        margin-bottom: 10px;
+        width: 100% !important;
+    }
+
+}
+
+/* start of section */
+
+section {
+    background-color: var(--secound-Background-color);
+}
+
+.features {
+    min-width: 1200px !important;
+    top: 0px;
+    left: 0px;
+    position: sticky !important;
+    z-index: 1;
+    background-color: var(--secound-Background-color);
+}
+
+.component-right > button {
+    padding: 10px 30px !important;
+}
+
+.page section .features .add-button button:first-child {
+    padding: 10px 20px;
+    min-width: 130px;
+}
+
+.page section table thead {
+    background: var(--thead-table-color);
+}
+
+.page section table thead th svg {
+    font-size: 40px !important;
+}
+
+.page section table th,
+.page section table td {
+    padding: 20px;
+}
+
+.page section table th:not(:first-child),
+.page section table td:not(:first-child) {
+    text-align: center;
+}
+
+.page section table tr td:first-child {
+    opacity: .6 !important;
+}
+
+.page section table tbody td:first-child {
+    font-size: 20px;
+    font-weight: bold;
+    opacity: .7;
+}
+
+table {
+    min-width: 1200px !important;
+}
+
+table tbody td:last-child img{
+    cursor: pointer !important;
+}
+
+table .cost {
+    color: var(--cost-table-color);
+    font-weight: bold;
+    font-size: 18px;
+}
+
+table .address {
+    font-weight: bold;
+}
+
+.page section table tbody tr {
+    border-bottom: 1px solid var(--divider-color);
+}
+
+.page section {
+    max-height: 680px;
+}
+
+.page section .table-control {
+    padding: 0 30px 20px 30px;
+    min-width: 900px !important;
+}
+
+.page section .table-control .buttons-div {
+    min-width: 200px;
+}
+
+.page section .table-control .info-table p {
+    margin: auto 0;
+}
+
+.page section .table-control .number-pages {
+    padding: 9px 15px;
+}
+
+/* end of section */
+.footer {
+    bottom: 10px;
+    left: 30px;
+}
+
+.footer a {
+    color: var(--main-btn) !important;
+    font-weight: bold;
+}
+
+
+header .select-btn button {
+    border: none !important;
+}
+
+header .select-btn ul {
+    top: 60px !important;
+}
+
+.select-btn button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: transparent !important;
+    min-height: 45px;
+    min-width: 120px;
+    border: 1px solid var(--divider-color);
+    padding: 10px;
+    border-radius: var(--main-radius);
+}
+
+.select-btn ul {
+    position: absolute;
+    top: 55px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    min-width: 160px !important;
+    max-height: 235px;
+    overflow: scroll;
+    background-color: var(--secound-Background-color) !important;
+    box-shadow: var(--shadow-list-dropdown);
+    border-radius: var(--main-radius);
+    z-index: 10;
+}
+
+.select-btn ul li {
+    padding: 10px;
+    margin: 8px 8px 0 0;
+    cursor: pointer;
+    border-radius: var(--main-radius);
+}
+
+.select-btn ul li:hover {
+    color: var(--main-btn);
+    background-color: var(--hover-list-dropdown);
+}
+
+.select-btn ul li.active {
+    background-color: var(--main-btn);
+    color: var(--secound-Background-color);
+}
+/* end handle dropdown */
+
+/* concert page */
+.page .basket .up {
+    background-color: var(--secound-Background-color);
+    min-height: 50px;
+    max-height: 300px;
+    border: 1px solid var(--main-btn);
+}
+
+.page .basket .up > div {
+    display: flex;
+    justify-content: space-between !important;
+    border-radius: var(--main-radius);
+    max-width: 100% !important;
+    padding: 15px;
+    margin: 5px 5px 15px 5px;
+    background-color: var(--hover-list-dropdown);
+}
+
+.page .basket .up > div span {
+    font-size: 17px;
+}
+
+.page .basket .up > div img {
+    cursor: pointer;
+}
+/* concert page */
+
+/* start of popup */
+.popup {
+    background-color: var(--secound-Background-color);
+    top: 200px;
+    left: 50%;
+    max-height: 650px;
+    transform: translate(-50%);
+    transition: var(--main-transition);
+    z-index: 1002;
+    min-width: 350px !important;
+    padding-bottom: 30px !important;
+}
+
+.popup.purchases {
+    top: 150px;
+    overflow-y: auto !important;
+}
+
+.popup.purchases > img {
+    position: sticky absolute !important;
+    top: 5px;
+    right: 5px;
+}
+
+@media(max-width:600px) {
+
+    .popup {
+        padding: 20px 20px !important;
+    }
+
+}
+
+@media(min-width:600px) {
+    .popup {
+        min-width: 600px !important;
+    }
+}
+
+input:not([type=checkbox]) {
+    height: 45px !important;
+    width: 100% !important;
+}
+
+.popup-delete {
+    top: 350px;
+}
+
+.popup-add,
+.popup-edit {
+    padding: 20px 50px;
+}
+
+.popup.close {
+    opacity: 0;
+    top: -150%;
+    transition: var(--main-transition);
+}
+
+.popup img {
+    top: -10px;
+    right: -10px;
+    cursor: pointer;
+}
+
+.popup-add > div,
+.popup-edit > div {
+    margin-bottom: 15px;
+}
+
+.popup-add .f-row input,
+.popup-edit .f-row input{
+    width: 100% !important;
+}
+
+.f-row  > div {
+    width: 100% !important;
+}
+
+.popup-add input,
+.popup-edit input{
+    width: 400px;
+    padding: 7px;
+    border: 1px solid var(--divider-color);
+    border-radius: 6px;
+    padding-right: 10px;
+    outline: none;
+}
+
+.popup-add textarea,
+.popup-edit textarea {
+    width: 100%;
+    max-height: 100px;
+    border: 1px solid var(--divider-color);
+    outline: none;
+    resize: none;
+    padding-right: 10px;
+    border-radius: 6px;
+}
+.popup-add .form-check,
+.popup-edit .form-check {
+    width: fit-content;
+}
+
+.popup-add .form-check input {
+    margin: 0;
+}
+
+.popup-add button,
+.popup-edit button {
+    display: block;
+    padding: 10px 20px;
+    margin: 0 auto;
+}
+
+.popup-delete {
+    padding: 20px;
+    min-width: 400px;
+}
+
+.popup-delete .agree {
+    padding: 10px 20px;
+    background-color: transparent;
+    border: 1px solid var(--main-btn);
+    color: var(--main-btn);
+    font-weight: var(--weight-normal);
+    transition: var(--main-transition);
+}
+
+.popup-delete .agree:hover {
+    border-color: var(--main-btn-hover);
+    background-color: var(--main-btn-hover) !important;
+}
+
+.popup-delete .disagree {
+    padding: 10px 20px;
+}
+/* end of popup */
+
+/* start of overlay */
+.overlay {
+    top: 0;
+    left: 0;
+    background-color: var(--overlay-color);
+    z-index: 1000;
+}
+/* end of overlay */
+
+/* specail classes */
+.main-btn {
+    font-weight: var(--weight-normal);
+    background: var(--main-btn) !important;
+    box-shadow: var(--shadow-menu-and-header-and-btn);
+    border-radius: var(--main-radius);
+    color: var(--secound-Background-color) !important;
+    transition: var(--main-transition);
+}
+
+.special button .light {
+    display: none;
+}
+
+.special button.active-btn .dark {
+    display: none;
+}
+
+.special button.active-btn .light {
+    display: inline !important;
+}
+
+
+button.main-btn:hover {
+    color: var(--main-btn) !important;
+    background-color: var(--main-btn-hover) !important;
+}
+
+.active-btn {
+    color: var(--secound-Background-color) !important;
+    background-color: var(--active-btn) !important;
+    border-radius: var(--main-radius);
+    font-weight: var(--weight-normal);
+}
+
+.hover-color {
+    background-color: var(--main-btn-hover) !important;
+    color: var(--secound-Background-color);
+    border-radius: var(--main-radius);
+    font-weight: var(--weight-normal);
+}
+
+.secound-btn {
+    background-color: #fff;
+    box-shadow: var(--shadow-menu-and-header-and-btn);
+    border-radius: var(--main-radius);
+    color: var(--text-color);
+    font-weight: var(--weight-normal);
+    transition: var(--main-transition);
+}
+
+.secound-btn:hover {
+    color: var(--main-btn);
+    background-color: var(--main-btn-hover);
+}
+
+.cancel-btn {
+    background: var(--cancel-btn);
+    box-shadow: var(--shadow-menu-and-header-and-btn);
+    border-radius: var(--main-radius);
+    color: var(--light-solid-color-secondary-secondary-500-base, #A8AAAE);
+}
+
+.main-bc {
+    background-color: var(--main-Background-color);
+}
+
+.section-bc {
+    background-color: var(--secound-Background-color);
+}
+
+table .live,
+table .died {
+    border-radius: 6px;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+#edit,
+#trash {
+    cursor: pointer;
+}
+
+.live {
+    background: var(--live-background);
+    color: var(--live-color);
+    padding: 10px 23px;
+    border-radius: var(--main-radius);
+}
+
+.died {
+    background: var(--died-background);
+    color: var(--died-color);
+    padding: 10px 10px;
+    border-radius: var(--main-radius);
+}
+
+.preparing {
+    background-color: var(--preparing-background);
+    color: var(--preparing-color);
+    padding: 10px 14px;
+    border-radius: var(--main-radius);
+}
+
+.contracting {
+    background: var(--contract-background);
+    color: var(--contract-color);
+    padding: 10px 10px;
+    border-radius: 6px;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.text-color {
+    color: var(--text-color);
+}
+/* specail classes */

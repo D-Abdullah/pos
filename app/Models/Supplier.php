@@ -2,20 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Supplier extends Model
 {
-    protected $fillable =[
+    protected $fillable = ['name','address','phone','added_by','is_active','payment_type','email'];
 
-        "name", "image", "company_name", "vat_number",
-        "email", "phone_number", "address", "city",
-        "state", "postal_code", "country", "is_active"
-
-    ];
-
-    public function product()
+    public function getAddedByAttribute($value)
     {
-    	return $this->hasMany('App\Models\Product');
+        return User::find($value)->first()->name;
     }
 }

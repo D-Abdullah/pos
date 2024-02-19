@@ -2,47 +2,27 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected $fillable =[
-        "name", "code", "type", "barcode_symbology", "brand_id", "category_id", "unit_id", "purchase_unit_id", "sale_unit_id", "cost", "price", "qty", "alert_quantity", "daily_sale_objective", "promotion", "promotion_price", "starting_date", "last_date", "tax_id", "tax_method", "image", "file", "is_embeded", "is_batch", "is_variant", "is_diffPrice", "is_imei", "featured", "product_list", "variant_list", "qty_list", "price_list", "product_details", "variant_option", "variant_value", "is_active", "is_sync_disable", "woocommerce_product_id","woocommerce_media_id","tags","meta_title","meta_description"
-    ];
+    protected $fillable = ['name','added_by','quantity','department_id','is_active','description'];
 
-    public function category()
-    {
-    	return $this->belongsTo('App\Models\Category');
+    public function department(){
+        return $this->belongsTo(Department::class);
     }
 
-    public function brand()
+    public function getAddedByAttribute($value)
     {
-    	return $this->belongsTo('App\Models\Brand');
+        return User::find($value)->first()->name;
+    }
+    public function getDepartmentIdAttribute($value)
+    {
+        return Department::find($value)->first()->name;
     }
 
-    public function unit()
-    {
-        return $this->belongsTo('App\Models\Unit');
-    }
-
-    public function variant()
-    {
-        return $this->belongsToMany('App\Models\Variant', 'product_variants')->withPivot('id', 'item_code', 'additional_cost', 'additional_price');
-    }
-
-    public function scopeActiveStandard($query)
-    {
-        return $query->where([
-            ['is_active', true],
-            ['type', 'standard']
-        ]);
-    }
-
-    public function scopeActiveFeatured($query)
-    {
-        return $query->where([
-            ['is_active', true],
-            ['featured', 1]
-        ]);
+    public function eol(){
+        return $this->hasMany(Eol::class);
     }
 }
