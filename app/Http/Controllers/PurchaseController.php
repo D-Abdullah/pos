@@ -39,7 +39,6 @@ class PurchaseController extends Controller
 
     public function store(StorePurchaseRequest $request)
     {
-        return $request->all();
         $deposits = $request->input('deposits');
         $deposits_total_cost = 0;
         for ($i = 0; $i < count($deposits); $i++) {
@@ -92,7 +91,6 @@ class PurchaseController extends Controller
     }
     public function update(UpdatePurchaseRequest $request, int $id)
     {
-        return $request->all();
         try {
             DB::beginTransaction();
 
