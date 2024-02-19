@@ -38,9 +38,9 @@
     --divider-color: #DBDADE;
     --main-radius: 6px;
     --overlay-color: rgba(0, 0, 0, 0.302);
-    --weight-normal: 600; 
-    --weight-medium: 800; 
-    --weight-bold: bold; 
+    --weight-normal: 600;
+    --weight-medium: 800;
+    --weight-bold: bold;
     --main-transition: .5s;
     --secound-transition: .2s;
     /* shadow  border-color raduis overlay font-weight transition*/
@@ -83,7 +83,7 @@ button {
 }
 
 .none {
-    display: none !important; 
+    display: none !important;
 }
 
 select {
@@ -96,7 +96,7 @@ h2,
 label
 h3 {
     flex-wrap: nowrap;
-    color: var(--text-color); 
+    color: var(--text-color);
 }
 
 label {
@@ -486,8 +486,14 @@ table {
     min-width: 1200px !important;
 }
 
-table tbody td:last-child img{
+
+table tbody td img{
     cursor: pointer !important;
+}
+
+table tbody td:last-child {
+    width: 0;
+    padding: 0;
 }
 
 table .cost {
