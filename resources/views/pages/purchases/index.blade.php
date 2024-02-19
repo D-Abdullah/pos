@@ -29,7 +29,6 @@
 @endsection
 
 @section('content')
-
     <h2 class="mt-5 mb-5">المشتريات</h2>
     <section class="pt-0 rounded-3 position-relative shadow-sm overflow-auto">
 
@@ -132,32 +131,35 @@
                                     @endcan
                                 </div>
                             </td>
-                            </td>
                             @can('update purchase')
                                 <div
                                     class="popup-edit id-{{ $purchase->id }} popup close shadow-sm rounded-3 position-fixed overflow-y-auto">
                                     <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
-                                    <form action="{{ route('purchase.update', $purchase->id) }}" method="post" id="purchaseForm">
+                                    <form method="post" action="{{ route('purchase.update', $purchase->id) }}"
+                                        id="purchaseFormUpdate">
                                         @csrf
                                         @method('put')
                                         <h2 class="text-center mt-4 mb-4 opacity-75">تحديث دفعات عملية شراء</h2>
 
-                                        <h2><b>المتبقي:
+                                        <h2>
+                                            <b>المتبقي:
                                                 @php
                                                     $deposits = $purchase->deposits;
                                                     $dtc = 0;
                                                     for ($i = 0; $i < count($deposits); $i++) {
                                                         $dtc += $deposits[$i]['cost'];
                                                     }
+                                                    $dtc = $purchase->total_price - $dtc;
                                                 @endphp
                                                 <span style="color: #7367F0">{{ $dtc }}</span>
                                             </b>
                                         </h2>
 
                                         <!-- Deposits Container -->
-                                        <div id="addDepositsContainer">
+                                        <div id="addDepositsContainerUpdateElement{{ $purchase->id }}"
+                                            data-id="{{ $purchase->id }}">
                                             @foreach ($purchase->deposits as $index => $deposit)
-                                                <div class="f-row d-flex gap-4 align-items-end deposit-section">
+                                                <div class="f-row d-flex gap-4 align-items-end deposit-section-update">
                                                     <div>
                                                         <label class="d-block mb-1" for="deposit-amount">المبلغ</label>
                                                         <input type="text" name="deposits[{{ $index }}][cost]"
@@ -170,7 +172,7 @@
                                                             class="deposit-date form-control" placeholder="التاريخ"
                                                             value="{{ old('deposits.' . $index . '.date', $deposit->date) }}">
                                                     </div>
-                                                    <button type="button" class="remove-btn"
+                                                    <button type="button" class="remove-btn update-only"
                                                         {{ $index == 0 ? 'hidden' : '' }}><i
                                                             class="fa-solid fa-trash"></i></button>
                                                 </div>
@@ -178,8 +180,8 @@
                                         </div>
                                         <!-- Add Deposit Button -->
 
-                                        <button type="button" class="main-btn p-2 ps-3 pe-3 specialBtn m-0 mt-2 mb-2"
-                                            id="addElement">
+                                        <button type="button" data-id="{{ $purchase->id }}"
+                                            class="main-btn p-2 ps-3 pe-3 specialBtn m-0 mt-2 mb-2 addElementBtn">
                                             <svg class="pointer" xmlns="http://www.w3.org/2000/svg" width="26"
                                                 height="27" viewBox="0 0 26 27" fill="none">
                                                 <path d="M13 5.52753V20.6942" stroke="#fff" stroke-width="2"
@@ -194,7 +196,7 @@
                                         </button>
 
                                         <!-- Submit Button -->
-                                        <button class="main-btn mt-3" type="submit" id="formSubmitBtn">تحديث دفعات عملية
+                                        <button class="main-btn mt-3" type="submit" id="formSubmitBtnUpdate">تحديث دفعات عملية
                                             الشراء</button>
 
                                     </form>
@@ -303,6 +305,66 @@
         document.getElementById('addElement').addEventListener('click', addElement);
 
         // Initialize remove buttons on page load
+        initRemoveButtons();
+    </script>
+
+    {{-- ******************************************************************* --}}
+
+    <script>
+        function addElementUpdateOnly(id) {
+            let depositsContainer = document.getElementById('addDepositsContainerUpdateElement' + id);
+            let newDepositSection = depositsContainer.querySelector('.deposit-section-update').cloneNode(true);
+            console.log(newDepositSection);
+            var I = depositsContainer.childElementCount;
+            newDepositSection.querySelectorAll('input').forEach(function(input) {
+                input.value = '';
+                let name = input.name;
+                let index = name.match(/\d+/g);
+                if (index == null) {
+                    return;
+                } else {
+                    finalName = name.replace(/(\d)+/, I);
+                }
+                input.setAttribute('name', finalName);
+                console.log(finalName);
+            });
+
+            newDepositSection.querySelector('.remove-btn.update-only').removeAttribute('disabled');
+            newDepositSection.querySelector('.remove-btn.update-only').removeAttribute('hidden');
+
+            depositsContainer.appendChild(newDepositSection);
+
+            initRemoveButtons();
+        }
+
+        function removeElementUpdateOnly(button, id) {
+            let depositsContainer = document.getElementById('addDepositsContainerUpdateElement' + id);
+
+            if (depositsContainer.childElementCount > 1) {
+                depositsContainer.removeChild(button.parentNode);
+            } else {
+                button.setAttribute('disabled', 'disabled');
+                button.setAttribute('hidden', 'hidden');
+            }
+        }
+
+        function initRemoveButtons() {
+            document.querySelectorAll('.remove-btn.update-only').forEach(function(button) {
+                button.addEventListener('click', function(event) {
+                    event.stopPropagation();
+                    console.log(button.parentElement.parentElement);
+
+                    removeElementUpdateOnly(button, button.parentElement.parentElement.dataset.id);
+                });
+            });
+        }
+
+        document.querySelectorAll(".addElementBtn").forEach(function(button) {
+            button.addEventListener('click', function() {
+                addElementUpdateOnly(button.dataset.id);
+            });
+        })
+
         initRemoveButtons();
     </script>
 @endsection
