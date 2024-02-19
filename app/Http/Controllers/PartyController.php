@@ -14,7 +14,8 @@ class PartyController extends Controller
      */
     public function index()
     {
-        return view('pages.party.index');
+        $party = Party::paginate(PAGINATION);
+        return view('pages.party.index', compact('party'));
     }
 
     /**
@@ -22,7 +23,7 @@ class PartyController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.party.add');
     }
 
     /**
@@ -30,7 +31,7 @@ class PartyController extends Controller
      */
     public function store(StorePartyRequest $request)
     {
-        $party= Party::create($request->validated());
+        $party = Party::create($request->validated());
         return new PartyResource($party);
     }
 
@@ -64,9 +65,9 @@ class PartyController extends Controller
      */
     public function destroy(Party $party)
     {
-        if(!auth()->check()){
+        if (!auth()->check()) {
             return response()->json(['Unauthenticated'], 401);
-        }else{
+        } else {
             $party->delete();
             return response()->noContent();
         }

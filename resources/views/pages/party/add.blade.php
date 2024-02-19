@@ -1,35 +1,12 @@
 @extends('layouts.app')
 
-@section('title', "")
+@section('title', 'اضافه حفله جديده')
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('Assets/Css files/add-concert.css') }}">
 @endsection
 
 @section('content')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 @endsection
 
