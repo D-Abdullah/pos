@@ -131,77 +131,80 @@
                                     @endcan
                                 </div>
                             </td>
-                            @can('update purchase')
-                                <div
-                                    class="popup-edit id-{{ $purchase->id }} popup close shadow-sm rounded-3 position-fixed overflow-y-auto">
-                                    <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
-                                    <form method="post" action="{{ route('purchase.update', $purchase->id) }}"
-                                        id="purchaseFormUpdate">
-                                        @csrf
-                                        @method('put')
-                                        <h2 class="text-center mt-4 mb-4 opacity-75">تحديث دفعات عملية شراء</h2>
+                            <td>
+                                @can('update purchase')
+                                    <div
+                                        class="popup-edit id-{{ $purchase->id }} popup close shadow-sm rounded-3 position-fixed overflow-y-auto">
+                                        <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
+                                        <form method="post" action="{{ route('purchase.update', $purchase->id) }}"
+                                            id="purchaseFormUpdate">
+                                            @csrf
+                                            @method('put')
+                                            <h2 class="text-center mt-4 mb-4 opacity-75">تحديث دفعات عملية شراء</h2>
 
-                                        <h2>
-                                            <b>المتبقي:
-                                                @php
-                                                    $deposits = $purchase->deposits;
-                                                    $dtc = 0;
-                                                    for ($i = 0; $i < count($deposits); $i++) {
-                                                        $dtc += $deposits[$i]['cost'];
-                                                    }
-                                                    $dtc = $purchase->total_price - $dtc;
-                                                @endphp
-                                                <span style="color: #7367F0">{{ $dtc }}</span>
-                                            </b>
-                                        </h2>
+                                            <h2>
+                                                <b>المتبقي:
+                                                    @php
+                                                        $deposits = $purchase->deposits;
+                                                        $dtc = 0;
+                                                        for ($i = 0; $i < count($deposits); $i++) {
+                                                            $dtc += $deposits[$i]['cost'];
+                                                        }
+                                                        $dtc = $purchase->total_price - $dtc;
+                                                    @endphp
+                                                    <span style="color: #7367F0">{{ $dtc }}</span>
+                                                </b>
+                                            </h2>
 
-                                        <!-- Deposits Container -->
-                                        <div id="addDepositsContainerUpdateElement{{ $purchase->id }}"
-                                            data-id="{{ $purchase->id }}">
-                                            @foreach ($purchase->deposits as $index => $deposit)
-                                                <div class="f-row d-flex gap-4 align-items-end deposit-section-update">
-                                                    <div>
-                                                        <label class="d-block mb-1" for="deposit-amount">المبلغ</label>
-                                                        <input type="text" name="deposits[{{ $index }}][cost]"
-                                                            class="deposit-amount form-control" placeholder="المبلغ"
-                                                            value="{{ old('deposits.' . $index . '.cost', $deposit->cost) }}">
+                                            <!-- Deposits Container -->
+                                            <div id="addDepositsContainerUpdateElement{{ $purchase->id }}"
+                                                data-id="{{ $purchase->id }}">
+                                                @foreach ($purchase->deposits as $index => $deposit)
+                                                    <div class="f-row d-flex gap-4 align-items-end deposit-section-update">
+                                                        <div>
+                                                            <label class="d-block mb-1" for="deposit-amount">المبلغ</label>
+                                                            <input type="text" name="deposits[{{ $index }}][cost]"
+                                                                class="deposit-amount form-control" placeholder="المبلغ"
+                                                                value="{{ old('deposits.' . $index . '.cost', $deposit->cost) }}">
+                                                        </div>
+                                                        <div>
+                                                            <label class="d-block mb-1" for="deposit-date">التاريخ</label>
+                                                            <input type="date" name="deposits[{{ $index }}][date]"
+                                                                class="deposit-date form-control" placeholder="التاريخ"
+                                                                value="{{ old('deposits.' . $index . '.date', $deposit->date) }}">
+                                                        </div>
+                                                        <button type="button" class="remove-btn update-only"
+                                                            {{ $index == 0 ? 'hidden' : '' }}><i
+                                                                class="fa-solid fa-trash"></i></button>
                                                     </div>
-                                                    <div>
-                                                        <label class="d-block mb-1" for="deposit-date">التاريخ</label>
-                                                        <input type="date" name="deposits[{{ $index }}][date]"
-                                                            class="deposit-date form-control" placeholder="التاريخ"
-                                                            value="{{ old('deposits.' . $index . '.date', $deposit->date) }}">
-                                                    </div>
-                                                    <button type="button" class="remove-btn update-only"
-                                                        {{ $index == 0 ? 'hidden' : '' }}><i
-                                                            class="fa-solid fa-trash"></i></button>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                        <!-- Add Deposit Button -->
+                                                @endforeach
+                                            </div>
+                                            <!-- Add Deposit Button -->
 
-                                        <button type="button" data-id="{{ $purchase->id }}"
-                                            class="main-btn p-2 ps-3 pe-3 specialBtn m-0 mt-2 mb-2 addElementBtn">
-                                            <svg class="pointer" xmlns="http://www.w3.org/2000/svg" width="26"
-                                                height="27" viewBox="0 0 26 27" fill="none">
-                                                <path d="M13 5.52753V20.6942" stroke="#fff" stroke-width="2"
-                                                    stroke-linecap="round" stroke-linejoin="round" />
-                                                <path d="M13 5.52753V20.6942" stroke="white" stroke-opacity="0.2"
-                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                                <path d="M5.41663 13.1108H20.5833" stroke="#fff" stroke-width="1.5"
-                                                    stroke-linecap="round" stroke-linejoin="round" />
-                                                <path d="M5.41663 13.1108H20.5833" stroke="white" stroke-opacity="0.2"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                            </svg>
-                                        </button>
+                                            <button type="button" data-id="{{ $purchase->id }}"
+                                                class="main-btn p-2 ps-3 pe-3 specialBtn m-0 mt-2 mb-2 addElementBtn">
+                                                <svg class="pointer" xmlns="http://www.w3.org/2000/svg" width="26"
+                                                    height="27" viewBox="0 0 26 27" fill="none">
+                                                    <path d="M13 5.52753V20.6942" stroke="#fff" stroke-width="2"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                    <path d="M13 5.52753V20.6942" stroke="white" stroke-opacity="0.2"
+                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                    <path d="M5.41663 13.1108H20.5833" stroke="#fff" stroke-width="1.5"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                    <path d="M5.41663 13.1108H20.5833" stroke="white" stroke-opacity="0.2"
+                                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                </svg>
+                                            </button>
 
-                                        <!-- Submit Button -->
-                                        <button class="main-btn mt-3" type="submit" id="formSubmitBtnUpdate">تحديث دفعات عملية
-                                            الشراء</button>
+                                            <!-- Submit Button -->
+                                            <button class="main-btn mt-3" type="submit" id="formSubmitBtnUpdate">تحديث دفعات
+                                                عملية
+                                                الشراء</button>
 
-                                    </form>
-                                </div>
-                            @endcan
+                                        </form>
+                                    </div>
+                                @endcan
+                            </td>
 
                             @can('delete purchase')
                                 <div class="popup-delete popup close shadow-sm rounded-3 position-fixed">

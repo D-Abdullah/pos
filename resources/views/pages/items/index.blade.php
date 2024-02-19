@@ -145,58 +145,60 @@
                                     @endcan
                                 </div>
                             </td>
-                            @can('update product')
-                                <div class="popup-edit id-{{ $product->id }} popup close shadow-sm rounded-3 position-fixed">
-                                    <form method="post" action="{{ route('product.update', $product->id) }}">
-                                        @csrf
-                                        @method('put')
+                            <td>
+                                @can('update product')
+                                    <div class="popup-edit id-{{ $product->id }} popup close shadow-sm rounded-3 position-fixed">
+                                        <form method="post" action="{{ route('product.update', $product->id) }}">
+                                            @csrf
+                                            @method('put')
 
-                                        <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
-                                            alt="">
-                                        <h2 class="text-center mt-4 mb-4 opacity-75"> تعديل: {{ $product->name }} </h2>
-                                        <div class="f-row d-flex gap-4">
-                                            <div>
-                                                <label class="d-block mb-1" for="category-name">اسم المنتج</label>
-                                                <input type="text" name="name" value="{{ $product->name }}"
-                                                    id="category-name" placeholder="اسم المنتج">
-                                            </div>
-                                            <div class="select-form">
+                                            <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
+                                                alt="">
+                                            <h2 class="text-center mt-4 mb-4 opacity-75"> تعديل: {{ $product->name }} </h2>
+                                            <div class="f-row d-flex gap-4">
+                                                <div>
+                                                    <label class="d-block mb-1" for="category-name">اسم المنتج</label>
+                                                    <input type="text" name="name" value="{{ $product->name }}"
+                                                        id="category-name" placeholder="اسم المنتج">
+                                                </div>
                                                 <div class="select-form">
-                                                    <label for="department">القسم</label>
-                                                    <select class="form-control form-select" id="department"
-                                                        name="department_id">
-                                                        @foreach ($departments as $department)
-                                                            <option value="{{ $department->id }}"
-                                                                @if ($product->department_id == $department->id) selected @endif>
-                                                                {{ $department->name }}</option>
-                                                        @endforeach
-                                                    </select>
+                                                    <div class="select-form">
+                                                        <label for="department">القسم</label>
+                                                        <select class="form-control form-select" id="department"
+                                                            name="department_id">
+                                                            @foreach ($departments as $department)
+                                                                <option value="{{ $department->id }}"
+                                                                    @if ($product->department_id == $department->id) selected @endif>
+                                                                    {{ $department->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="f-row d-flex gap-4">
-                                            <div>
-                                                <label class="d-block mb-1" for="buy-price"> الكمية</label>
-                                                <input type="number" name="quantity" value="{{ $product->quantity }}"
-                                                    min="0" id="buy-price" placeholder="الكميه الموجوده">
+                                            <div class="f-row d-flex gap-4">
+                                                <div>
+                                                    <label class="d-block mb-1" for="buy-price"> الكمية</label>
+                                                    <input type="number" name="quantity" value="{{ $product->quantity }}"
+                                                        min="0" id="buy-price" placeholder="الكميه الموجوده">
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div>
-                                            <label class="d-block" for="textarea">وصف المنتج</label>
-                                            <textarea name="description" id="textarea" cols="30" rows="10" placeholder="وصف المنتج">
-                            {{ $product->description }}</textarea>
-                                        </div>
-                                        <div class="form-check form-switch d-flex align-items-center  ms-2 me-2">
-                                            <input class="form-check-input ms-3" @if ($product->is_active) checked @endif
-                                                type="checkbox" role="switch" id="flexSwitchCheckDefault-97" name="is_active"
-                                                value="1">
+                                            <div>
+                                                <label class="d-block" for="textarea">وصف المنتج</label>
+                                                <textarea name="description" id="textarea" cols="30" rows="10" placeholder="وصف المنتج">{{ $product->description }}</textarea>
+                                            </div>
+                                            <div class="form-check form-switch d-flex align-items-center  ms-2 me-2">
+                                                <input class="form-check-input ms-3"
+                                                    @if ($product->is_active) checked @endif type="checkbox"
+                                                    role="switch" id="flexSwitchCheckDefault-97" name="is_active"
+                                                    value="1">
 
-                                            <label for="flexSwitchCheckDefault-97">تفعيل</label>
-                                        </div>
-                                        <button class="main-btn">تحديث</button>
-                                    </form>
-                                </div>
-                            @endcan
+                                                <label for="flexSwitchCheckDefault-97">تفعيل</label>
+                                            </div>
+                                            <button class="main-btn">تحديث</button>
+                                        </form>
+                                    </div>
+                                @endcan
+                            </td>
                             @can('delete product')
                                 <div class="popup-delete id-{{ $product->id }} popup close shadow-sm rounded-3 position-fixed">
                                     <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
