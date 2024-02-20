@@ -21,13 +21,6 @@ class StorePartyRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'client_id'=>'required|integer|exists:clients,id',
-            'name'=>'required|string',
-            'address'=>'required|string',
-            'date'=>'required|date',
-            'status'=>'required|string|in:contracted,Transported, completed',
-            'added_by'=>'required|integer|exists:users,id'
-        ];
+        return [];
     }
 }

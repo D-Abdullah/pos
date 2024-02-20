@@ -6,6 +6,7 @@ use App\Models\Party;
 use App\Http\Requests\StorePartyRequest;
 use App\Http\Requests\UpdatePartyRequest;
 use App\Http\Resources\PartyResource;
+use Illuminate\Http\Request;
 
 class PartyController extends Controller
 {
@@ -29,10 +30,28 @@ class PartyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePartyRequest $request)
+    public function store(Request $request)
     {
-        $party = Party::create($request->validated());
-        return new PartyResource($party);
+        if (
+            isset($_SERVER['HTTP_REFERER'])
+            && strpos($_SERVER['HTTP_REFERER'], 'submit')
+        ) {
+            return $request->all();
+        } else {
+            return redirect()->to(route('party.addBill'));
+        }
+    }
+    public function createBill()
+    {
+        return view('pages.party.addBill');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function storeBill(Request $request)
+    {
+        return $request->all();
     }
 
     /**
