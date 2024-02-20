@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', "تحويلات المستودع")
+@section('title', 'تحويلات المستودع')
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('Assets/Css files/transaction.css') }}">
@@ -22,7 +22,7 @@
                 <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
                     <button onclick="dropdown('valueRelease', 'listRelease')">
                         <span class="fw-bold opacity-50 valueDropdown" id="valueRelease">اصدار</span>
-                        <img src="{{asset('Assets/imgs/chevron-down.png')}}" alt="">
+                        <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
                     </button>
                     <div class="options none">
                         <ul id="listRelease">
@@ -37,23 +37,23 @@
         <table class="w-100 mb-4 border">
 
             <thead class="head">
-            <tr>
-                <th>اسم المنتج</th>
-                <th>الكميه</th>
-                <th>من</th>
-                <th>الي</th>
-            </tr>
+                <tr>
+                    <th>اسم المنتج</th>
+                    <th>الكميه</th>
+                    <th>من</th>
+                    <th>الي</th>
+                </tr>
             </thead>
 
             <tbody>
-            @foreach($wts as $wt)
-                <tr>
-                    <td>{{$wt->product_id}}</td>
-                    <td>{{$wt->quantity}}</td>
-                    <td>{{$wt->from}}</td>
-                    <td>{{$wt->to}}</td>
-                </tr>
-            @endforeach
+                @foreach ($wts as $wt)
+                    <tr>
+                        <td>{{ $wt->product_id }}</td>
+                        <td>{{ $wt->quantity }}</td>
+                        <td>{{ $wt->from }}</td>
+                        <td>{{ $wt->to }}</td>
+                    </tr>
+                @endforeach
 
             </tbody>
 
@@ -63,25 +63,24 @@
         <div class="table-control d-flex justify-content-between align-items-center">
             <div class="buttons-div">
                 @if ($wts->currentPage() != 1)
-                    <a href="{{ $wts->previousPageUrl() }}"
-                       class="p-2 rounded-3 bg-primary text-white">السابق</a>
+                    <a href="{{ $wts->previousPageUrl() }}" class="p-2 rounded-3 bg-primary text-white">السابق</a>
                 @endif
 
                 @for ($i = max(1, $wts->currentPage() - 2); $i <= min($wts->lastPage(), $wts->currentPage() + 2); $i++)
                     <a href="{{ $wts->url($i) }}"
-                       class="number-pages text-light ms-1 me-1 main-btn {{ $i == $wts->currentPage() ? 'bg-primary' : '' }}">{{ $i }}</a>
+                        class="number-pages text-light ms-1 me-1 main-btn {{ $i == $wts->currentPage() ? 'bg-primary' : '' }}">{{ $i }}</a>
                 @endfor
 
                 @if ($wts->currentPage() != $wts->lastPage())
-                    <a href="{{ $wts->nextPageUrl() }}"
-                       class="p-2 rounded-3 bg-primary text-white">التالي</a>
+                    <a href="{{ $wts->nextPageUrl() }}" class="p-2 rounded-3 bg-primary text-white">التالي</a>
                 @endif
             </div>
 
             <div class="info-table opacity-50">
                 <p>عرض <span>{{ $wts->firstItem() }}</span> إلى <span>{{ $wts->lastItem() }}</span>
                     من
-                    <span>{{ $wts->total() }}</span> مدخلات</p>
+                    <span>{{ $wts->total() }}</span> مدخلات
+                </p>
             </div>
         </div>
 

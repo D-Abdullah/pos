@@ -86,7 +86,7 @@
                                     @endcan
                                 </div>
                             </td>
-                            <td>
+                            <td class="p-0">
                                 @can('update role')
                                     <div class="popup-edit id-{{ $role->id }} popup close shadow-sm rounded-3 position-fixed">
                                         <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">

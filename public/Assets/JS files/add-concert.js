@@ -1,38 +1,41 @@
-let element = document.querySelector(".components #element");
-let addButtom = document.querySelector(".components .buttons svg");
-let elementUp = document.querySelector(".elements");
+// let element = document.querySelector("#element");
+// let addButtom = document.querySelector(".buttons svg");
+// let elementUp = document.querySelector(".elements");
 
-addButtom.addEventListener("click", () => {
 
-    let newElement = element.cloneNode(true);
+// addButtom.addEventListener("click", () => {
 
-    let input = newElement.children[0].children[1];
-    input.value = "";
+//     let newElement = element.cloneNode(true);
 
-    let inputDate = newElement.children[1].children[0].children[1];
-    inputDate.value = new Date;
+//     let input = newElement.children[0].children[1];
+//     input.value = "";
 
-    elementUp.appendChild(newElement);
-})
+//     let inputDate = newElement.children[1].children[0].children[1];
+//     inputDate.value = new Date;
+
+//     elementUp.appendChild(newElement);
+// })
 
 
 let buttons = document.querySelectorAll(".special button");
 let parts = document.querySelectorAll(".part");
 
 buttons.forEach(button => {
-    
     button.addEventListener("click", () => {
-        
+        console.log("found");
+    })
+
+    button.addEventListener("click", () => {
+
         buttons.forEach(element => {
-            
+
             element.classList.remove("active-btn");
-            
+
             button.classList.add("active-btn");
 
             document.querySelector("#addNewProduct button").classList.remove(button.id)
-            
-        })
 
+        })
 
         parts.forEach(part => {
 
@@ -62,25 +65,25 @@ products.forEach(product => {
 
         document.querySelector("body").classList.add("overflow-hidden");
 
-        let NameOfProduct = product.children[1].children[0].innerHTML; 
-        
+        let NameOfProduct = product.children[0].children[0].innerHTML;
+
         if (document.querySelector(".special #ourProduct").classList.contains("active-btn")) {
-            
+
             document.querySelector("#popupAddOurProduct #nameProduct").innerHTML = NameOfProduct;
             let model = document.getElementById("popupAddOurProduct");
             model.classList.remove("close");
-            
+
         } else if (document.querySelector(".special #rent").classList.contains("active-btn")) {
-            
+
             document.querySelector("#popupAddRent #nameProduct").innerHTML = NameOfProduct;
             document.getElementById("popupAddRent").classList.remove("close");
-            
+
         } else if (document.querySelector(".special #specialConcert").classList.contains("active-btn")) {
-        
+
             document.getElementById("popupAddSpecial").classList.remove("close");
-            
+
         }
-        
+
         document.querySelector(".overlay").classList.remove("none");
 
     })
@@ -98,22 +101,22 @@ document.querySelectorAll("#edit").forEach(icon => {
         let NameOfProduct = icon.parentElement.parentElement.children[0].innerHTML;
 
         if (document.querySelector(".special #ourProduct").classList.contains("active-btn")) {
-    
+
             document.querySelector("#popupEditOurProduct #nameProduct").innerHTML = NameOfProduct;
-            
+
             document.getElementById("popupEditOurProduct").classList.remove("close");
-            
-            
+
+
         } else if (document.querySelector(".special #rent").classList.contains("active-btn")) {
 
             document.querySelector("#popupEditRent #nameProduct").innerHTML = NameOfProduct;
-            
+
             document.getElementById("popupEditRent").classList.remove("close");
-            
+
         } else if (document.querySelector(".special #specialConcert").classList.contains("active-btn")) {
-    
+
             document.getElementById("popupEditSpecial").classList.remove("close");
-            
+
         }
 
     })
@@ -122,19 +125,19 @@ document.querySelectorAll("#edit").forEach(icon => {
 
 // remove element
 document.querySelectorAll("#trash").forEach(trash => {
-    
+
     trash.addEventListener("click", (e) => {
 
         let product = trash.parentElement.parentElement;
-                
+
         document.querySelector(".popup-delete .agree").addEventListener("click", () => {
-            
+
             product.remove();
-            
+
         })
-        
+
     })
-    
+
 })
 
 // for ourProducts popup
@@ -147,11 +150,11 @@ inputAdd.addEventListener("click", () => {
     upAdd.classList.toggle("notReady");
 
     if (upAdd.classList.contains("notReady")) {
-        
+
         labelAdd.innerHTML = "قيد التحضير"
-        
+
     } else {
-        
+
         labelAdd.innerHTML = "جاهز"
 
     }
@@ -166,11 +169,11 @@ input.addEventListener("click", () => {
     input.parentElement.classList.toggle("ready");
 
     if (input.parentElement.classList.contains("ready")) {
-        
+
         label.innerHTML = "جاهز"
-        
+
     } else {
-        
+
         label.innerHTML = "قيد التحضير"
 
     }
@@ -187,11 +190,11 @@ inputAddRent.addEventListener("click", () => {
     upAddRent.classList.toggle("notReady");
 
     if (upAddRent.classList.contains("notReady")) {
-        
+
         labelAddRent.innerHTML = "قيد التحضير"
-        
+
     } else {
-        
+
         labelAddRent.innerHTML = "جاهز"
 
     }
@@ -206,11 +209,11 @@ inputEditRent.addEventListener("click", () => {
     inputEditRent.parentElement.classList.toggle("ready");
 
     if (inputEditRent.parentElement.classList.contains("ready")) {
-        
+
         labelEditRent.innerHTML = "جاهز"
-        
+
     } else {
-        
+
         labelEditRent.innerHTML = "قيد التحضير"
 
     }
@@ -227,11 +230,11 @@ inputAddSpecial.addEventListener("click", () => {
     upAddSpecial.classList.toggle("notReady");
 
     if (upAddSpecial.classList.contains("notReady")) {
-        
+
         labelAddSpecial.innerHTML = "قيد التحضير"
-        
+
     } else {
-        
+
         labelAddSpecial.innerHTML = "جاهز"
 
     }
@@ -246,11 +249,11 @@ inputEditSpecial.addEventListener("click", () => {
     inputEditSpecial.parentElement.classList.toggle("ready");
 
     if (inputEditSpecial.parentElement.classList.contains("ready")) {
-        
+
         labelEditSpecial.innerHTML = "جاهز"
-        
+
     } else {
-        
+
         labelEditSpecial.innerHTML = "قيد التحضير"
 
     }

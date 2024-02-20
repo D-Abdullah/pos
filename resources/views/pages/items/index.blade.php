@@ -145,7 +145,7 @@
                                     @endcan
                                 </div>
                             </td>
-                            <td>
+                            <td class="p-0">
                                 @can('update product')
                                     <div class="popup-edit id-{{ $product->id }} popup close shadow-sm rounded-3 position-fixed">
                                         <form method="post" action="{{ route('product.update', $product->id) }}">

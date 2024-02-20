@@ -98,7 +98,7 @@
                                     @endcan
                                 </div>
                             </td>
-                            <td>
+                            <td class="p-0">
                                 @can('update damaged')
                                     <div class="popup-edit id-{{ $eol->id }} popup close shadow-sm rounded-3 position-fixed">
                                         <form method="post" action="{{ route('eol.update', $eol->id) }}">

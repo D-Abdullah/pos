@@ -491,10 +491,10 @@ table tbody td img{
     cursor: pointer !important;
 }
 
-table tbody td:last-child {
+/* table tbody td:last-child {
     width: 0;
     padding: 0;
-}
+} */
 
 table .cost {
     color: var(--cost-table-color);
@@ -846,6 +846,10 @@ table .died {
     border-radius: 6px;
     font-size: 17px;
     font-weight: bold;
+}
+
+button.concert {
+    padding: 10px 20px;
 }
 
 #edit,

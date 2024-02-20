@@ -171,7 +171,7 @@
                                 @endcan
                             </div>
                         </td>
-                        <td>
+                        <td class="p-0">
                             @can('update supplier')
                                 <div
                                     class="popup-edit  id-{{ $supplier->id }} popup pb-5 close shadow-sm rounded-3 position-fixed">

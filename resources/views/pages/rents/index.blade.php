@@ -104,7 +104,7 @@
                                     @endcan
                                 </div>
                             </td>
-                            <td>
+                            <td class="p-0">
                                 @can('update rent')
                                     <div class="popup-edit id-{{ $rent->id }} popup close shadow-sm rounded-3 position-fixed">
                                         <form method="post" action="{{ route('rent.update', $rent->id) }}">

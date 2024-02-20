@@ -11,25 +11,14 @@
     <h2 class="mb-2 mt-5">اضافه حفله جديده</h2>
     <!-- start of body -->
     <div class="components">
-        <div class="parent gap-3 mb-4 d-flex">
+        <div class="parent gap-3 mb-3 d-flex">
             <div class="select-form">
-                <label>العميل</label>
-                <div class="select-btn w-100 mt-1 select position-relative rounded-3 d-flex align-items-center">
-                    <button class="w-100 d-flex justify-content-between" onclick="dropdown('valueStatus', 'listStatus')">
-                        <span class="fw-bold opacity-50 valueDropdown" id="valueStatus"></span>
-                        <img src="./Assets/imgs/chevron-down.png" alt="">
-                    </button>
-                    <div class="options none">
-                        <ul id="listStatus">
-                            <li class="p-0" id="search">
-                                <input class="search" type="search" placeholder="بحث">
-                            </li>
-                            <li>مصطفي</li>
-                            <li>فكري</li>
-                            <li>محمد</li>
-                        </ul>
-                    </div>
-                </div>
+                <label class="mb-1">العميل</label>
+                <select name="" id="" class="rounded-3 p-1">
+                    <option value="">محمد</option>
+                    <option value="">احمد</option>
+                    <option value="">كريم</option>
+                </select>
             </div>
             <div>
                 <label class="d-block mb-1" for="party-name">اسم الحفله</label>
@@ -37,40 +26,15 @@
             </div>
             <div>
                 <label class="d-block mb-1" for="party-date">تاريخ الحفله</label>
-                <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
-                    <button class="w-100 d-flex justify-content-between"
-                        onclick="dropdown('valueDateAddLast', 'listDateAddLast')">
-                        <span class="fw-bold opacity-50 valueDropdown" id="valueDateAddLast">التاريخ</span>
-                        <img src="./Assets/imgs/calendar-stats.png" alt="">
-                    </button>
-                    <div class="options none">
-                        <ul id="listDateAddLast">
-                            <li class="p-0" id="search">
-                                <input class="date" type="date" placeholder="بحث">
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                <input type="date" name="deposits[0][date]" class="deposit-date form-control" placeholder="التاريخ"
+                    value="2024-02-05">
             </div>
             <div class="select-form">
-                <label>الحاله</label>
-                <div class="select-btn w-100 mt-1 select position-relative rounded-3 d-flex align-items-center">
-                    <button class="w-100 d-flex justify-content-between"
-                        onclick="dropdown('valueStatusSix', 'listStatusSix')">
-                        <span class="fw-bold opacity-50 valueDropdown" id="valueStatusSix"></span>
-                        <img src="./Assets/imgs/chevron-down.png" alt="">
-                    </button>
-                    <div class="options none">
-                        <ul id="listStatusSix">
-                            <li class="p-0" id="search">
-                                <input class="search" type="search" placeholder="بحث">
-                            </li>
-                            <li>الحاله 1</li>
-                            <li>الحاله 2</li>
-                            <li>الحاله 3</li>
-                        </ul>
-                    </div>
-                </div>
+                <label class="mb-1">الحاله</label>
+                <select name="" id="" class="rounded-3 p-1">
+                    <option value="">متعاقد</option>
+                    <option value="">لا</option>
+                </select>
             </div>
         </div>
         <div class="parent d-flex mb-4">

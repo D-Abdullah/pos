@@ -16,7 +16,7 @@
 
             <div class="component-right gap-4 d-flex align-items-center">
                 @can('create party')
-                    <div class="add-concert ">
+                    <div class="add-concert">
                         <a href="{{ route('party.add') }}">
                             <button class="text-light main-btn concert"> اضافه حفله</button>
                         </a>

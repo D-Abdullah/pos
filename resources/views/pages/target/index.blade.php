@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', "")
+@section('title', '')
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('Path') }}">
