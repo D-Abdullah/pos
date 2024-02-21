@@ -55,8 +55,8 @@
                     </button>
                     <div class="options none">
                         <ul id="listRelease">
-                            <li>PDF</li>
-                            <li>EXCEL</li>
+                            <li id="pdf">PDF</li>
+                            <li id="excel">EXCEL</li>
                         </ul>
                     </div>
                 </div>
@@ -64,7 +64,7 @@
 
         </div>
         @can('read department')
-            <table class="w-100 mb-4 border">
+            <table class="w-100 mb-4 border" id="table">
 
                 <thead class="head">
                     <tr>
@@ -204,4 +204,6 @@
 
 @section('script')
     <script src="{{ asset('Assets/JS files/categories.js') }}"></script>
+    <script src="{{ asset('Assets/JS files/global.js') }}"></script>
+    <script src="html2pdf.bundle.main.js"></script>
 @endsection

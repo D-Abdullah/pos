@@ -8,10 +8,6 @@
     --active-and-scroll: linear-gradient(72deg, #7367F0 22.16%, rgba(115, 103, 240, 0.70) 76.47%);
     --hover-menu: linear-gradient(0deg, rgba(255, 255, 255, 0.80) 0%, rgba(255, 255, 255, 0.80) 100%), #8692D0;
     --main-btn: #7367F0;
-    --main-btn: #7267f0a9;
-    --main-btn: #7267f079;
-    --main-btn: #7267f052;
-    --main-btn: #7267f011;
     --active-btn: #7367F0;
     --main-btn-hover: rgba(115, 103, 240, 0.16);
     --cancel-btn: #F8F7FA;
@@ -42,9 +38,9 @@
     --divider-color: #DBDADE;
     --main-radius: 6px;
     --overlay-color: rgba(0, 0, 0, 0.302);
-    --weight-normal: 600; 
-    --weight-medium: 800; 
-    --weight-bold: bold; 
+    --weight-normal: 600;
+    --weight-medium: 800;
+    --weight-bold: bold;
     --main-transition: .5s;
     /* shadow  border-color raduis overlay font-weight transition*/
 }
@@ -138,8 +134,8 @@
     border-radius: 7px;
 }
 .buttoms button.active {
-    border: 1px solid var(--main-btn) !important; 
-} 
+    border: 1px solid var(--main-btn) !important;
+}
 #year {
     border: 2px solid var(--main-btn);
     padding: 10px 25px;
@@ -180,9 +176,9 @@
 }
 
 @media(max-width:700px) {
-    
     .section .buttoms > div {
         flex-direction: column !important;
-    } 
+    }
 }
+
 

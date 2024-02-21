@@ -58,6 +58,7 @@
                         <select name="status" id="" class="rounded-3 p-1">
                             <option value="contracting">متعاقد</option>
                             <option value="transported">منقول</option>
+                            <option value="completed">خالص</option>
                         </select>
                     </div>
                 </div>

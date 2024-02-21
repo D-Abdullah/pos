@@ -65,13 +65,13 @@
             ctx.textAlign = 'center';
             ctx.fillStyle = '#ccc';
           ctx.fillText(text, bar.x, bar.y - 10); // Adjust the y-coordinate for text placement
-        });    
+        });
 
 
 
 
 
-        // setup 
+        // setup
         const data11x = {
             labels: ['نوف', 'اوك', 'سبتمبر', 'اغسط', 'حول', 'بوني', 'ماي', "ابر", "مار" , "فب", "بن"],
                 datasets: [{
@@ -106,7 +106,7 @@
             }]
         };
 
-        // config 
+        // config
         const config11x = {
             type: 'bar',
             data: data11x,
@@ -181,10 +181,10 @@
           borderDash: [10]
         }
       }]
-      
+
     };
-  
-    // config 
+
+    // config
     const config = {
       type: 'line',
       data,
@@ -209,17 +209,17 @@
                 },
                 display: false, // Hide the x-axis
           },
-          
+
         }
       }
     };
-  
+
     // render init block
     const myChart5 = new Chart(
       document.getElementById('myChart5'),
       config
     );
-  
+
     // Instantly assign Chart.js version
     const chartVersion = document.getElementById('chartVersion');
     // chartVersion.innerText = Chart.version;
@@ -272,7 +272,7 @@
             },
             y: {
                 border: {
-                    display: false 
+                    display: false
                 },
                 grid: {
                     drawOnChartArea: false,
@@ -351,7 +351,7 @@
             },
             y: {
                 border: {
-                    display: false 
+                    display: false
                 },
                 grid: {
                     drawOnChartArea: false,
@@ -432,7 +432,7 @@
             },
             y: {
                 border: {
-                    display: false 
+                    display: false
                 },
                 grid: {
                     drawOnChartArea: false,
@@ -490,7 +490,7 @@
                 if (button.dataset.chart == "customChart3") {
 
                     document.getElementById("customChart3").classList.remove("none");
-                    
+
                 } else if (button.dataset.chart == "customChart4") {
 
                     document.getElementById("customChart4").classList.remove("none");

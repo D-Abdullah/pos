@@ -308,6 +308,14 @@ label {
     margin-bottom: 10px;
 }
 
+.page .menu .list .light {
+    display: none;
+}
+
+.page .menu .list.active .light {
+    display: block;
+}
+
 .page .menu .list {
     overflow: hidden;
     cursor: pointer;
@@ -315,12 +323,8 @@ label {
 
 .page .menu .list.active {
     background: var(--active-and-scroll);
-    padding-right: 10px;
-    gap: 10px !important;
-}
-
-.page .menu.close .list.active {
-    padding: 10px;
+    /* padding-right: 10px; */
+    /* gap: 10px !important; */
 }
 
 .page .menu .list.active a {
@@ -365,16 +369,18 @@ label {
     margin-right: 20px !important;
 }
 
-.page header .up button.shrink i {
+header .up button.shrink svg {
     transform: rotate(180deg);
 }
+
 .page header .info {
     width: 200px;
 }
 
 .page header .info .manage {
     background-color: var(--secound-Background-color) !important;
-    top: 60px;
+    top: 50px;
+    left: -25px;
     min-width: 100px !important;
     border-radius: var(--main-radius);
     box-shadow: var(--shadow-list-dropdown);
@@ -891,5 +897,20 @@ button.concert {
 
 .text-color {
     color: var(--text-color);
+}
+
+.avatar {
+    background-color: var(--active-btn);
+    color: var(--secound-Background-color);
+    padding: 7px 10px;
+    cursor: pointer;
+    border-radius: var(--main-radius);
+    transition: var(--main-transition);
+    font-weight: var(--weight-normal);
+}
+
+.avatar:hover {
+    background-color: var(--main-btn-hover);
+    color: var(--active-btn);
 }
 /* specail classes */
