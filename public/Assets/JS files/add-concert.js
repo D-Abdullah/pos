@@ -17,7 +17,7 @@
 // })
 
 
-let buttons = document.querySelectorAll(".special button");
+let buttons = document.querySelectorAll(".special .tabs");
 let parts = document.querySelectorAll(".part");
 
 buttons.forEach(button => {
@@ -57,6 +57,14 @@ buttons.forEach(button => {
 
 
 // popup
+
+document.querySelector("#specialConcert").addEventListener("click", () => {
+
+    document.querySelector("#popupAddSpecial").classList.remove("close");
+    document.querySelector("body").classList.add("overflow-hidden");
+    document.querySelector(".overlay").classList.remove("none");
+
+})
 
 let products = document.querySelectorAll(".part .up .box");
 products.forEach(product => {

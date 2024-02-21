@@ -14,9 +14,10 @@
     <h2 class="mb-2 mt-5">اضافه معلومات الفاتوره</h2>
 
     <div class="mt-5 mb-5 special">
-        <button class="secound-btn active-btn total-product mb-2"
+        <button class="secound-btn active-btn total-product mb-2 tabs"
             id="ourProduct"style="padding: 15px; width: 170px;">منتجاتنا</button>
-        <button class="me-2 secound-btn element-found mb-2" id="rent" style="padding: 15px; width: 170px;">ايجار</button>
+        <button class="me-2 secound-btn element-found mb-2 tabs" id="rent"
+            style="padding: 15px; width: 170px;">ايجار</button>
         <button class="secound-btn element-not-found mb-2 style="
             id="specialConcert"style="padding: 15px; width: 170px;">مخصص</button>
     </div>
@@ -263,31 +264,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div class="part gap-4" id="specialConcert">
-        <div class="products">
-            <div class="info p-2 mb-1 d-flex gap-4 align-items-center">
-                <div class="w-50">
-                    <input type="search" name="search" id="search-name" placeholder="بحث">
-                </div>
-                <div class="select-btn w-50 select position-relative rounded-3 d-flex align-items-center">
-                    <button class="w-100 d-flex justify-content-between"
-                        onclick="dropdown('valueDateAddLast3', 'listDateAddLast3')">
-                        <span class="fw-bold opacity-50 valueDropdown" id="valueDateAddLast3">الحاله</span>
-                        <img src="./Assets/imgs/chevron-down.png" alt="">
-                    </button>
-                    <div class="options none">
-                        <ul id="listDateAddLast3">
-                            <li>النوع 1</li>
-                            <li>النوع 2</li>
-                            <li>النوع 3</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <button class="main-btn w-100 p-3">اضافه</button>
         </div>
     </div>
 
