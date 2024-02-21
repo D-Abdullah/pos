@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Party;
 use App\Http\Requests\StorePartyRequest;
 use App\Http\Requests\UpdatePartyRequest;
+use App\Models\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PartyController extends Controller
 {
@@ -15,8 +18,16 @@ class PartyController extends Controller
      */
     public function index()
     {
-        $party = Party::paginate(PAGINATION);
-        return view('pages.party.index', compact('party'));
+        try {
+            $parties = Party::query();
+
+            $parties = $parties->with('client')->paginate(PAGINATION);
+            return view('pages.party.index', compact('parties'));
+        } catch (\Exception $e) {
+            Log::error('حدث خطأ أثناء جلب الحفلات: ' . $e->getMessage());
+
+            return redirect()->back()->with(['error' => 'حدث خطأ أثناء جلب الحفلات. يرجى المحاولة مرة أخرى.']);
+        }
     }
 
     /**
@@ -25,7 +36,30 @@ class PartyController extends Controller
      */
     public function create()
     {
-        return view('pages.party.add');
+        try {
+            $clients = Client::all();
+            $status = [
+                [
+                    'name' => 'متعاقد',
+                    'value' => 'contracted'
+                ],
+                [
+                    'name' => 'منقول',
+                    'value' => 'transported'
+                ],
+                [
+                    'name' => 'منتهي',
+                    'value' => 'completed'
+                ]
+            ];
+            return view('pages.party.add', compact('clients', 'status'));
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('حدث خطأ أثناء جلب صفحه اضافه الحفله: ' . $e->getMessage());
+
+            return redirect()->back()->with(['error' =>
+            'حدث خطأ أثناء جلب صفحه اضافه الحفله. يرجى المحاولة مرة أخرى.']);
+        }
     }
 
     /**
@@ -33,6 +67,17 @@ class PartyController extends Controller
      + Store the Form For Only Party Data
      */
     public function store(Request $request)
+    {
+        if (
+            isset($_SERVER['HTTP_REFERER'])
+            && strpos($_SERVER['HTTP_REFERER'], 'submit')
+        ) {
+            return $request->all();
+        } else {
+            return redirect()->to(route('party.addBill'));
+        }
+    }
+    public function storeR(Request $request)
     {
         if (
             isset($_SERVER['HTTP_REFERER'])
