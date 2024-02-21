@@ -95,51 +95,65 @@
                 </thead>
 
                 <tbody>
-                    <tr>
-                        <td>عبدالله</td>
-                        <td>حفله الساحل</td>
-                        <td>قريه فرعون</td>
-                        <td>20/2/2024</td>
-                        <td>admin</td>
-                        <td><span class="contracting">التعاقد</span></td>
-                        <td>
-                            <div class="edit d-flex align-items-center justify-content-center">
-                                @can('update party')
-                                    <a href="#">
-                                        <img src="{{ asset('Assets/imgs/edit-circle.png') }}" alt="">
-                                    </a>
-                                @endcan
-                                @can('delete party')
-                                    <img src="{{ asset('Assets/imgs/trash (1).png') }}" class=" ms-2 me-2" alt=""
-                                        id="trash">
-                                @endcan
-                            </div>
-                        </td>
-                    </tr>
+                    @foreach ($parties as $party)
+                        <tr>
+                            <td>{{ $party->client->name }}</td>
+                            <td>{{ $party->name }}</td>
+                            <td>{{ $party->address }}</td>
+                            <td>{{ $party->date }}</td>
+                            <td>{{ $party->added_by }}</td>
+                            <td>
+                                <span class="contracting">
+                                    @if ($party->status === 'contracted')
+                                        متعاقد
+                                    @elseif ($party->status === 'transported')
+                                        منقول
+                                    @elseif ($party->status === 'completed')
+                                        منتهي
+                                    @else
+                                        غير معرف
+                                    @endif
+                                </span>
+                            </td>
+                            <td>
+                                <div class="edit d-flex align-items-center justify-content-center">
+                                    @can('update party')
+                                        <a href="{{ route('party.edit', $party->id) }}">
+                                            <img src="{{ asset('Assets/imgs/edit-circle.png') }}" alt="">
+                                        </a>
+                                    @endcan
+                                    @can('delete party')
+                                        <img src="{{ asset('Assets/imgs/trash (1).png') }}" class=" ms-2 me-2" alt=""
+                                            id="trash">
+                                    @endcan
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
 
             </table>
 
             <div class="table-control d-flex justify-content-between align-items-center">
                 <div class="buttons-div">
-                    @if ($party->currentPage() != 1)
-                        <a href="{{ $party->previousPageUrl() }}" class="p-2 rounded-3 bg-primary text-white">السابق</a>
+                    @if ($parties->currentPage() != 1)
+                        <a href="{{ $parties->previousPageUrl() }}" class="p-2 rounded-3 bg-primary text-white">السابق</a>
                     @endif
 
-                    @for ($i = max(1, $party->currentPage() - 2); $i <= min($party->lastPage(), $party->currentPage() + 2); $i++)
-                        <a href="{{ $party->url($i) }}"
-                            class="number-pages text-light ms-1 me-1 main-btn {{ $i == $party->currentPage() ? 'bg-primary' : '' }}">{{ $i }}</a>
+                    @for ($i = max(1, $parties->currentPage() - 2); $i <= min($parties->lastPage(), $parties->currentPage() + 2); $i++)
+                        <a href="{{ $parties->url($i) }}"
+                            class="number-pages text-light ms-1 me-1 main-btn {{ $i == $parties->currentPage() ? 'bg-primary' : '' }}">{{ $i }}</a>
                     @endfor
 
-                    @if ($party->currentPage() != $party->lastPage())
-                        <a href="{{ $party->nextPageUrl() }}" class="p-2 rounded-3 bg-primary text-white">التالي</a>
+                    @if ($parties->currentPage() != $parties->lastPage())
+                        <a href="{{ $parties->nextPageUrl() }}" class="p-2 rounded-3 bg-primary text-white">التالي</a>
                     @endif
                 </div>
 
                 <div class="info-table opacity-50">
-                    <p>عرض <span>{{ $party->firstItem() }}</span> إلى <span>{{ $party->lastItem() }}</span>
+                    <p>عرض <span>{{ $parties->firstItem() }}</span> إلى <span>{{ $parties->lastItem() }}</span>
                         من
-                        <span>{{ $party->total() }}</span> مدخلات
+                        <span>{{ $parties->total() }}</span> مدخلات
                     </p>
                 </div>
             </div>
