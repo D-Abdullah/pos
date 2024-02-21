@@ -2,18 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Bill extends Model
 {
     protected $fillable = [
+        'id',
         'party_id',
         'product_id',
+        'rent_id',
         'from',
         'name',
         'quantity',
-        'rent_price',
         'unit_price',
         'total_price',
         'type',
@@ -32,5 +32,10 @@ class Bill extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function rent()
+    {
+        return $this->belongsTo(Rent::class);
     }
 }

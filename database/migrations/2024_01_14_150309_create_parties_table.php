@@ -18,20 +18,16 @@ return new class extends Migration
             $table->string('name');
             $table->string('address');
             $table->date('data');
-            $table->enum('status',['contracted', 'transported', 'completed']);
+            $table->enum('status', ['contracted', 'transported', 'completed']);
             $table->timestamps();
 
             $table->foreign('added_by')
-            ->references('id')
-            ->on('users');
+                ->references('id')
+                ->on('users');
 
             $table->foreign('client_id')
-            ->references('id')
-            ->on('clients');
-
-
-
-
+                ->references('id')
+                ->on('clients');
         });
     }
 

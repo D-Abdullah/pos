@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected $fillable = ['name','added_by','quantity','department_id','is_active','description'];
+    protected $fillable = ['name', 'added_by', 'quantity', 'department_id', 'is_active', 'description'];
 
-    public function department(){
+    public function department()
+    {
         return $this->belongsTo(Department::class);
     }
 
@@ -22,7 +22,8 @@ class Product extends Model
         return Department::find($value)->first()->name;
     }
 
-    public function eol(){
+    public function eol()
+    {
         return $this->hasMany(Eol::class);
     }
 }

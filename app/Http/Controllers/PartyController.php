@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Party;
 use App\Http\Requests\StorePartyRequest;
 use App\Http\Requests\UpdatePartyRequest;
-use App\Http\Resources\PartyResource;
 use Illuminate\Http\Request;
 
 class PartyController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Party Controller Index Method
+     + Show the datatable with party data and bills and warehouse data needed
      */
     public function index()
     {
@@ -20,7 +20,8 @@ class PartyController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Party Controller Create Method
+     + Show the Form For Only Party Data
      */
     public function create()
     {
@@ -28,7 +29,8 @@ class PartyController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Party Controller Update Method
+     + Store the Form For Only Party Data
      */
     public function store(Request $request)
     {
@@ -41,54 +43,44 @@ class PartyController extends Controller
             return redirect()->to(route('party.addBill'));
         }
     }
+
+    /**
+     * Party Controller Create Method
+     + Show the Form For Only Party Bill Data
+     */
     public function createBill()
     {
         return view('pages.party.addBill');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Party Controller Create Method
+     + Store the Form For Only Party Bill Data
      */
     public function storeBill(Request $request)
     {
         return $request->all();
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Party $party)
-    {
-        return new PartyResource($party);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Party $party)
     {
-        //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdatePartyRequest $request, Party $party)
     {
-        $party->update($request->validated());
-        return new PartyResource($party);
+    }
+    public function editBill(Party $party)
+    {
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    public function updateBill(UpdatePartyRequest $request, Party $party)
+    {
+    }
+
+    public function show(Party $party)
+    {
+    }
     public function destroy(Party $party)
     {
-        if (!auth()->check()) {
-            return response()->json(['Unauthenticated'], 401);
-        } else {
-            $party->delete();
-            return response()->noContent();
-        }
     }
 }

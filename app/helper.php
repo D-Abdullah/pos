@@ -8,7 +8,7 @@ const PERMISSIONS = [
     'create supplier', 'read supplier', 'update supplier', 'delete supplier',
     'create purchase', 'read purchase', 'update purchase', 'delete purchase',
     'create client', 'read client', 'update client', 'delete client',
-    'create damaged', 'read damaged', 'update damaged', 'delete damaged',
+    'create eol', 'read eol', 'update eol', 'delete eol',
     'create user', 'read user', 'update user', 'delete user',
     'create role', 'read role', 'update role', 'delete role',
     'create party', 'read party', 'update party', 'delete party',

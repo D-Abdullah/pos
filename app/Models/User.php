@@ -49,8 +49,9 @@ class User extends Authenticatable
 
     public function getAddedByAttribute($value)
     {
-        if($value === null)
+        if ($value === null) {
             return "المطور";
+        }
         return User::find($value)->first()->name;
     }
 }

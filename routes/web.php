@@ -141,24 +141,26 @@ Route::group(['middleware' => 'auth'], function () {
 
     //Eol
     Route::group(['prefix' => 'eol'], function () {
-        Route::middleware('permission:read damaged')
+        Route::middleware('permission:read eol')
             ->get('/all', [EolController::class, 'index'])
             ->name('eol.all');
-        Route::middleware('permission:create damaged')
+        Route::middleware('permission:create eol')
             ->post('/add', [EolController::class, 'store'])
             ->name('eol.add');
-        Route::middleware('permission:update damaged')
+        Route::middleware('permission:update eol')
             ->put('/{id}', [EolController::class, 'update'])
             ->name('eol.update');
-        Route::middleware('permission:delete damaged')
+        Route::middleware('permission:delete eol')
             ->delete('/{id}', [EolController::class, 'destroy'])
             ->name('eol.delete');
     });
 
+    //party
     Route::group(['prefix' => 'party'], function () {
         Route::middleware('permission:read party')
             ->get('/all', [PartyController::class, 'index'])
             ->name('party.all');
+
         Route::middleware('permission:create party')
             ->get('/add', [PartyController::class, 'create'])
             ->name('party.add');
@@ -173,28 +175,28 @@ Route::group(['middleware' => 'auth'], function () {
             ->name('party.addBillStore');
 
         Route::middleware('permission:update party')
-            ->put('/{id}', [PartyController::class, 'update'])
+            ->get('/update/{id}', [PartyController::class, 'edit'])
+            ->name('party.edit');
+        Route::middleware('permission:update party')
+            ->put('/update/{id}', [PartyController::class, 'update'])
             ->name('party.update');
+        Route::middleware('permission:update party')
+            ->get('/update-bill/{id}', [PartyController::class, 'editBill'])
+            ->name('party.editBill');
+        Route::middleware('permission:update party')
+            ->put('/update-bill/{id}', [PartyController::class, 'updateBill'])
+            ->name('party.updateBill');
+
+        Route::middleware('permission:read party')
+            ->get('/show/{id}', [PartyController::class, 'show'])
+            ->name('party.show');
+
         Route::middleware('permission:delete party')
-            ->delete('/{id}', [PartyController::class, 'destroy'])
+            ->delete('/delete/{id}', [PartyController::class, 'destroy'])
             ->name('party.delete');
     });
 
-    Route::group(['prefix' => 'target'], function () {
-        Route::middleware('permission:read target')
-            ->get('/all', [TargetController::class, 'index'])
-            ->name('target.all');
-        Route::middleware('permission:create target')
-            ->post('/add', [TargetController::class, 'store'])
-            ->name('target.add');
-        Route::middleware('permission:update target')
-            ->put('/{id}', [TargetController::class, 'update'])
-            ->name('target.update');
-        Route::middleware('permission:delete target')
-            ->delete('/{id}', [TargetController::class, 'destroy'])
-            ->name('target.delete');
-    });
-
+    //warehouse
     Route::group(['prefix' => 'warehouse'], function () {
         Route::get('/all', [WarehouseController::class, 'index'])->name('warehouse.all');
     });

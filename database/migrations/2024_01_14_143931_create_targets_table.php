@@ -20,8 +20,8 @@ return new class extends Migration
 
 
             $table->foreign('added_by')
-            ->references('id')
-            ->on('users');
+                ->references('id')
+                ->on('users');
         });
     }
 

@@ -17,13 +17,13 @@
             <div class="component-right gap-4 d-flex align-items-center">
 
 
-                @can('create damaged')
+                @can('create eol')
                     <div class="add-button">
                         <button class="main-btn"> اضافه هالك</button>
                     </div>
                 @endcan
 
-                @can('read damaged')
+                @can('read eol')
                     <div class="search-input">
                         <input type="search" placeholder="بحث" id="search">
                     </div>
@@ -49,7 +49,7 @@
             </div>
 
         </div>
-        @can('read damaged')
+        @can('read eol')
 
             <table class="w-100 mb-4 border">
 
@@ -88,18 +88,18 @@
                             <td>{{ $eol->added_by }}</td>
                             <td>
                                 <div class="edit d-flex align-items-center justify-content-center">
-                                    @can('update damaged')
+                                    @can('update eol')
                                         <img src="{{ asset('Assets/imgs/edit-circle.png') }}" data-id="{{ $eol->id }}"
                                             alt="" id="edit">
                                     @endcan
-                                    @can('delete damaged')
+                                    @can('delete eol')
                                         <img class="ms-2 me-2" src="{{ asset('Assets/imgs/trash (1).png') }}"
                                             data-id="{{ $eol->id }}" alt="" id="trash">
                                     @endcan
                                 </div>
                             </td>
                             <td class="p-0">
-                                @can('update damaged')
+                                @can('update eol')
                                     <div class="popup-edit id-{{ $eol->id }} popup close shadow-sm rounded-3 position-fixed">
                                         <form method="post" action="{{ route('eol.update', $eol->id) }}">
                                             @csrf
@@ -137,7 +137,7 @@
                                     </div>
                                 @endcan
                             </td>
-                            @can('delete damaged')
+                            @can('delete eol')
                                 <div class="popup-delete popup close shadow-sm rounded-3 position-fixed">
                                     <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
                                     <h3 class="fs-5 fw-bold mb-3">حذف العنصر</h3>

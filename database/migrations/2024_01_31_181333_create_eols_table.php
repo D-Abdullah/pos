@@ -21,12 +21,12 @@ return new class extends Migration
 
 
             $table->foreign('product_id')
-        ->references('id')
-        ->on('products');
+                ->references('id')
+                ->on('products');
 
-        $table->foreign('added_by')
-        ->references('id')
-        ->on('users');
+            $table->foreign('added_by')
+                ->references('id')
+                ->on('users');
         });
     }
 

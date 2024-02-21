@@ -46,10 +46,10 @@ class RoleController extends Controller
             'update client' => 'تحديث العميل',
             'delete client' => 'حذف العميل',
 
-            'create damaged' => 'إنشاء عملية التالف',
-            'read damaged' => 'قراءة عملية التالف',
-            'update damaged' => 'تحديث عملية التالف',
-            'delete damaged' => 'حذف عملية التالف',
+            'create eol' => 'إنشاء عملية التالف',
+            'read eol' => 'قراءة عملية التالف',
+            'update eol' => 'تحديث عملية التالف',
+            'delete eol' => 'حذف عملية التالف',
 
             'create user' => 'إنشاء المستخدم',
             'read user' => 'قراءة المستخدم',

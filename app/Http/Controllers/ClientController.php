@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
-use App\Http\Resources\ClientResource;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -51,7 +49,6 @@ class ClientController extends Controller
 
             return redirect()->back()->withInput($request->all())->with(['error' => 'حدث خطأ أثناء انشاء العميل. يرجى المحاولة مرة أخرى.']);
         }
-
     }
 
     /**

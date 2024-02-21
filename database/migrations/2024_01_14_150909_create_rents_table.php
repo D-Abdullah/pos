@@ -19,10 +19,11 @@ return new class extends Migration
             $table->integer('quantity');
             $table->boolean('is_active');
             $table->unsignedBigInteger('added_by');
-            $table->foreign('added_by')
-            ->references('id')
-            ->on('users');
             $table->timestamps();
+
+            $table->foreign('added_by')
+                ->references('id')
+                ->on('users');
         });
     }
 
