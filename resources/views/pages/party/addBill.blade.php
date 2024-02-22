@@ -269,7 +269,7 @@
 
     <div class="carts rounded-3 d-flex flex-column justify-content-between">
         <div class="elements ">
-            <div class="info d-flex gap-3 justify-content-evenly">
+            <div class="info d-flex gap-3 justify-content-between">
                 <span>الاسم</span>
                 <span>الكميه</span>
                 <span>سعر الوحده</span>
@@ -292,68 +292,8 @@
                 </svg>
             </div>
             <div class="element d-flex justify-content-between align-items-center" id="element">
-                <span class="productName">العاب</span>
-                <span class="countity">+ 2 -</span>
-                <span class="price">1500</span>
-                <span class="totalPrice">300</span>
-                <span class="type ">بيع</span>
-                <span class="status live">جاهز</span>
-                <div class="edit d-flex gap-2 align-items-center justify-content-center">
-                    <img src="{{ asset('Assets/imgs/edit-circle.png') }}" alt="" id="edit">
-                    <img src="{{ asset('Assets/imgs/trash (1).png') }}" alt="" id="trash">
-                </div>
-            </div>
-            <div class="element d-flex justify-content-between align-items-center" id="element">
-                <span class="productName">ملابس</span>
-                <span class="countity">+ 2 -</span>
-                <span class="price">1500</span>
-                <span class="totalPrice">300</span>
-                <span class="type ">بيع</span>
-                <span class="status live">جاهز</span>
-                <div class="edit d-flex gap-2 align-items-center justify-content-center">
-                    <img src="{{ asset('Assets/imgs/edit-circle.png') }}" alt="" id="edit">
-                    <img src="{{ asset('Assets/imgs/trash (1).png') }}" alt="" id="trash">
-                </div>
-            </div>
-            <div class="element d-flex justify-content-between align-items-center" id="element">
-                <span class="productName">كتب</span>
-                <span class="countity">+ 2 -</span>
-                <span class="price">1500</span>
-                <span class="totalPrice">300</span>
-                <span class="type ">بيع</span>
-                <span class="status live">جاهز</span>
-                <div class="edit d-flex gap-2 align-items-center justify-content-center">
-                    <img src="{{ asset('Assets/imgs/edit-circle.png') }}" alt="" id="edit">
-                    <img src="{{ asset('Assets/imgs/trash (1).png') }}" alt="" id="trash">
-                </div>
-            </div>
-            <div class="element d-flex justify-content-between align-items-center" id="element">
                 <span class="productName">شنطه</span>
-                <span class="countity">+ 2 -</span>
-                <span class="price">1500</span>
-                <span class="totalPrice">300</span>
-                <span class="type ">بيع</span>
-                <span class="status live">جاهز</span>
-                <div class="edit d-flex gap-2 align-items-center justify-content-center">
-                    <img src="{{ asset('Assets/imgs/edit-circle.png') }}" alt="" id="edit">
-                    <img src="{{ asset('Assets/imgs/trash (1).png') }}" alt="" id="trash">
-                </div>
-            </div>
-            <div class="element d-flex justify-content-between align-items-center" id="element">
-                <span class="productName">شنطه</span>
-                <span class="countity">+ 2 -</span>
-                <span class="price">1500</span>
-                <span class="totalPrice">300</span>
-                <span class="type ">بيع</span>
-                <span class="status live">جاهز</span>
-                <div class="edit d-flex gap-2 align-items-center justify-content-center">
-                    <img src="{{ asset('Assets/imgs/edit-circle.png') }}" alt="" id="edit">
-                    <img src="{{ asset('Assets/imgs/trash (1).png') }}" alt="" id="trash">
-                </div>
-            </div>
-            <div class="element d-flex justify-content-between align-items-center" id="element">
-                <span class="productName">شنطه</span>
-                <span class="countity">+ 2 -</span>
+                <span class="countity"> 2 </span>
                 <span class="price">1500</span>
                 <span class="totalPrice">300</span>
                 <span class="type ">بيع</span>
@@ -382,40 +322,24 @@
                 <input type="text" name="text" id="unit-price" placeholder="...">
             </div>
         </div>
-        <div class="f-row d-flex gap-4">
-            <div>
-                <label class="d-block mb-1" for="total-price">اجمالي السعر</label>
-                <input type="text" name="text" id="total-pricre" placeholder="...">
-            </div>
-            <div class="select-form">
-                <label for="">النوع</label>
-                <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
-                    <button class="w-100 d-flex justify-content-between"
-                        onclick="dropdown('valueCategoriesNameAdd', 'listCategoriesNameAdd')">
-                        <span class="fw-bold opacity-50 valueDropdown" id="valueCategoriesNameAdd"></span>
-                        <img src="./Assets/imgs/chevron-down.png" alt="">
-                    </button>
-                    <div class="options none">
-                        <ul id="listCategoriesNameAdd">
-                            <li class="p-0" id="search">
-                                <input class="search" type="search" placeholder="بحث">
-                            </li>
-                            <li>النوع</li>
-                            <li>النوع 1</li>
-                            <li>النوع 2</li>
-                        </ul>
-                    </div>
-                </div>
+        <div class="f-row">
+            <div class="select-form gap-2">
+                <label for="" class="mb-2">النوع</label>
+                <select name="" id="" class="w-100 p-2 rounded-2" id="type">
+                    <option value="rent">ايجار</option>
+                    <option value="sale">بيع</option>
+                    <option value="eol">هالك</option>
+                </select>
             </div>
 
         </div>
-        <div>
-            <label class="d-block" for="textarea">سبب الهلاك (لو هالك)</label>
+        <div class="eolReason none">
+            <label class="d-block" for="textarea">سبب الهلاك</label>
             <textarea name="textarea" id="textarea" cols="30" rows="10" placeholder=".."></textarea>
         </div>
         <div class="form-check-2 form-check-checkbox">
             <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault20" checked>
-            <label class="form-check-label" for="flexCheckDefault20">جاهز</label>
+            <label class="form-check-label" for="flexCheckDefault20" id="status">جاهز</label>
         </div>
         <button class="main-btn" id="AddToCart">اضافه</button>
     </div>
