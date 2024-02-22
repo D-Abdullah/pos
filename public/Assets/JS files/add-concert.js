@@ -267,3 +267,35 @@ inputEditSpecial.addEventListener("click", () => {
     }
 
 })
+
+// ------------------------------------
+
+let quantity = document.querySelector(".popup-add #countity");
+let unitPrice = document.querySelector(".popup-add #unit-price");
+let typeProduct = document.querySelector(".popup-add select");
+let checbox = document.querySelector(".popup-add .form-check-2 label");
+let mainProducts = [];
+
+document.querySelector("#popupAddOurProduct #AddToCart").addEventListener("click", () => {
+
+    mainProducts.push(
+        {
+            "party_id": "",
+            "product_id": "",
+            "rent_id": "",
+            "from": [],
+            "name": "",
+            "quantity": quantity.value,
+            "unitPrice": unitPrice.value,
+            "totalPrice": totalPrice.value,
+            "type": typeProduct.value,
+            "eol_ression": "",
+            "status": checbox.innerHTML
+        }
+    )
+
+    let values = JSON.stringify(mainProducts)
+
+    localStorage.setItem("products", values);
+
+})
