@@ -167,11 +167,12 @@ Route::group(['middleware' => 'auth'], function () {
         Route::middleware('permission:create party')
             ->post('/add', [PartyController::class, 'store'])
             ->name('party.addStore');
+
         Route::middleware('permission:create party')
-            ->get('/add-bill', [PartyController::class, 'createBill'])
+            ->get('/add-bill/{id}', [PartyController::class, 'createBill'])
             ->name('party.addBill');
         Route::middleware('permission:create party')
-            ->post('/add-bill', [PartyController::class, 'storeBill'])
+            ->post('/add-bill/{id}', [PartyController::class, 'storeBill'])
             ->name('party.addBillStore');
 
         Route::middleware('permission:update party')

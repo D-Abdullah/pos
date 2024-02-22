@@ -14,7 +14,7 @@
     <div class="apps-pages">
 
         @role('super_admin')
-            <div class="list {{ Request::is('dashboard') ? 'active' : '' }} statistics d-flex gap-0 align-items-center">
+            <div class="list {{ Request::is('dashboard*') ? 'active' : '' }} statistics d-flex gap-0 align-items-center">
                 <a href="{{ route('dashboard') }}" class="dark">
                     <img class="dark" src="{{ asset('Assets/imgs/home.png') }}" alt="">
                 </a>
@@ -26,8 +26,7 @@
         @endrole
 
         @can('read department')
-            <div
-                class="list {{ Request::is('department/all') ? 'active' : '' }} categories d-flex gap-0 align-items-center">
+            <div class="list {{ Request::is('department/*') ? 'active' : '' }} categories d-flex gap-0 align-items-center">
                 <a href="{{ route('department.all') }}" class="dark">
                     <img class="dark" src="{{ asset('Assets/imgs/checkup-list.png') }}" alt="">
                 </a>
@@ -38,7 +37,7 @@
             </div>
         @endcan
         @can('read product')
-            <div class="list {{ Request::is('product/all') ? 'active' : '' }} products d-flex gap-0 align-items-center">
+            <div class="list {{ Request::is('product/*') ? 'active' : '' }} products d-flex gap-0 align-items-center">
                 <a href="{{ route('product.all') }}" class="dark">
                     <img class="dark" src="{{ asset('Assets/imgs/box.png') }}" alt="">
                 </a>
@@ -49,7 +48,7 @@
             </div>
         @endcan
         @can('read supplier')
-            <div class="list {{ Request::is('supplier/all') ? 'active' : '' }} suppliers d-flex gap-0 align-items-center">
+            <div class="list {{ Request::is('supplier/*') ? 'active' : '' }} suppliers d-flex gap-0 align-items-center">
                 <a href="{{ route('supplier.all') }}" class="dark">
                     <img class="dark" src="{{ asset('Assets/imgs/tir.png') }}" alt="">
                 </a>
@@ -60,7 +59,7 @@
             </div>
         @endcan
         @can('read purchase')
-            <div class="list {{ Request::is('purchase/all') ? 'active' : '' }} purchases d-flex gap-0 align-items-center">
+            <div class="list {{ Request::is('purchase/*') ? 'active' : '' }} purchases d-flex gap-0 align-items-center">
                 <a href="{{ route('purchase.all') }}" class="dark">
                     <img class="dark" src="{{ asset('Assets/imgs/file-check.png') }}" alt="">
                 </a>
@@ -83,7 +82,7 @@
 
 
         <div
-            class="list {{ Request::is('warehouse-transaction/all') ? 'active' : '' }} transaction d-flex gap-0 align-items-center">
+            class="list {{ Request::is('warehouse-transaction/*') ? 'active' : '' }} transaction d-flex gap-0 align-items-center">
             <a href="{{ route('warehouse-transaction.all') }}" class="dark">
                 <img class="dark" src="{{ asset('Assets/imgs/switch-horizontal.png') }}" alt="">
             </a>
@@ -94,7 +93,7 @@
         </div>
 
         @can('read client')
-            <div class="list {{ Request::is('client/all') ? 'active' : '' }} customers d-flex gap-0 align-items-center">
+            <div class="list {{ Request::is('client/*') ? 'active' : '' }} customers d-flex gap-0 align-items-center">
                 <a href="{{ route('client.all') }}" class="dark">
                     <img class="dark" src="{{ asset('Assets/imgs/users.png') }}" alt="">
                 </a>
@@ -105,7 +104,7 @@
             </div>
         @endcan
         @can('read eol')
-            <div class="list {{ Request::is('eol/all') ? 'active' : '' }} perished d-flex gap-0 align-items-center">
+            <div class="list {{ Request::is('eol/*') ? 'active' : '' }} perished d-flex gap-0 align-items-center">
                 <a href="{{ route('eol.all') }}" class="dark">
                     <img class="dark" src="{{ asset('Assets/imgs/trash-x.png') }}" alt="">
                 </a>
@@ -116,7 +115,7 @@
             </div>
         @endcan
         @can('read user')
-            <div class="list  {{ Request::is('user/all') ? 'active' : '' }} data-users d-flex gap-0 align-items-center">
+            <div class="list  {{ Request::is('user/*') ? 'active' : '' }} data-users d-flex gap-0 align-items-center">
                 <a href="{{ route('user.all') }}" class="dark">
                     <img class="dark" src="{{ asset('Assets/imgs/User Info.png') }}" alt="">
                 </a>
@@ -128,7 +127,7 @@
         @endcan
 
         @can('read role')
-            <div class="list  {{ Request::is('role/all') ? 'active' : '' }} jobs d-flex gap-0 align-items-center">
+            <div class="list  {{ Request::is('role/*') ? 'active' : '' }} jobs d-flex gap-0 align-items-center">
                 <a href="{{ route('role.all') }}" class="dark">
                     <img class="dark" src="{{ asset('Assets/imgs/git-compare.png') }}" alt="">
                 </a>
@@ -140,7 +139,7 @@
         @endcan
 
         @can('read rent')
-            <div class="list  {{ Request::is('rent/all') ? 'active' : '' }} rent d-flex gap-0 align-items-center">
+            <div class="list  {{ Request::is('rent/*') ? 'active' : '' }} rent d-flex gap-0 align-items-center">
                 <a href="{{ route('rent.all') }}" class="dark">
                     <img class="dark" src="{{ asset('Assets/imgs/arrows-horizontal.png') }}" alt="">
                 </a>
@@ -151,7 +150,7 @@
             </div>
         @endcan
         @can('read party')
-            <div class="list  {{ Request::is('party/all') ? 'active' : '' }}  concerts d-flex gap-0 align-items-center">
+            <div class="list  {{ Request::is('party/*') ? 'active' : '' }}  concerts d-flex gap-0 align-items-center">
                 <a href="{{ route('party.all') }}" class="dark">
                     <img class="dark" src="{{ asset('Assets/imgs/gift.png') }}" alt="">
                 </a>

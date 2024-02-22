@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('added_by');
             $table->string('name');
             $table->string('address');
-            $table->date('data');
+            $table->date('date');
             $table->enum('status', ['contracted', 'transported', 'completed']);
             $table->timestamps();
 

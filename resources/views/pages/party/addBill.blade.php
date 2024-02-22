@@ -616,7 +616,7 @@
     <div class="overlay position-absolute none w-100 h-100"></div>
 
     <div class="w-100 d-flex justify-content-end mt-5 mb-5" id="addNewProduct">
-        <form action="{{ route('party.addBillStore') }}" method="post">
+        <form action="{{ route('party.addBillStore', $id) }}" method="post">
             @csrf
             <button class="submit main-btn p-3 ps-4 pe-4" type="submit">اضافه</button>
         </form>

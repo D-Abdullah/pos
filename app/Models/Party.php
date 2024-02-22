@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Party extends Model
 {
     protected $table = "parties";
-    protected $fillable = ['client_id', 'added_by', 'name', 'address', 'ststus', 'date'];
+    protected $fillable = ['id', 'client_id', 'added_by', 'name', 'address', 'status', 'date'];
     protected $hidden = ['created_at', 'updated_at'];
 
     public function client()

@@ -39,33 +39,38 @@
                 <div class="parent gap-3 mb-3 d-flex">
                     <div class="select-form">
                         <label class="mb-1">العميل</label>
-                        <select name="client" id="" class="rounded-3 p-1">
-                            <option value="">محمد</option>
-                            <option value="">احمد</option>
-                            <option value="">كريم</option>
+                        <select name="client_id" id="" class="rounded-3 p-1">
+                            <option selected hidden disabled>اختر العميل</option>
+                            @foreach ($clients as $client)
+                                <option value="{{ $client->id }}" {{ old('client_id') == $client->id ? 'selected' : '' }}>
+                                    {{ $client->name }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div>
                         <label class="d-block mb-1" for="party-name">اسم الحفله</label>
-                        <input type="text" name="name" id="party-name" placeholder="">
+                        <input type="text" name="name" value="{{ old('name') }}" id="party-name" placeholder="">
                     </div>
                     <div>
                         <label class="d-block mb-1" for="party-date">تاريخ الحفله</label>
-                        <input type="date" name="date" class="deposit-date form-control" placeholder="التاريخ">
+                        <input type="date" name="date" value="{{ old('date') }}" class="deposit-date form-control"
+                            placeholder="التاريخ">
                     </div>
                     <div class="select-form">
                         <label class="mb-1">الحاله</label>
                         <select name="status" id="" class="rounded-3 p-1">
-                            <option value="contracting">متعاقد</option>
-                            <option value="transported">منقول</option>
-                            <option value="completed">خالص</option>
+                            <option selected hidden disabled>اختر الحاله</option>
+                            @foreach ($status as $s)
+                                <option value="{{ $s['value'] }}" {{ old('status') == $s['value'] ? 'selected' : '' }}>
+                                    {{ $s['name'] }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
                 <div class="parent d-flex mb-4">
                     <div>
                         <label class="d-block mb-1" for="party-address">عنوان الحفله</label>
-                        <textarea class="w-100" name="address" id="" cols="30" rows="4"></textarea>
+                        <textarea class="w-100" name="address" id="" cols="30" rows="4">{{ old('address') }}</textarea>
                     </div>
                 </div>
                 <div class="elements">

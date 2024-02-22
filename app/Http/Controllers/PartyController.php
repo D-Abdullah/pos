@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Deposit;
 use App\Models\Party;
 use App\Http\Requests\StorePartyRequest;
 use App\Http\Requests\UpdatePartyRequest;
 use App\Models\Client;
+use App\Models\Product;
+use App\Models\WarehouseTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -54,7 +57,6 @@ class PartyController extends Controller
             ];
             return view('pages.party.add', compact('clients', 'status'));
         } catch (\Exception $e) {
-            DB::rollBack();
             Log::error('حدث خطأ أثناء جلب صفحه اضافه الحفله: ' . $e->getMessage());
 
             return redirect()->back()->with(['error' =>
@@ -66,26 +68,39 @@ class PartyController extends Controller
      * Party Controller Update Method
      + Store the Form For Only Party Data
      */
-    public function store(Request $request)
+    public function store(StorePartyRequest $request)
     {
-        if (
-            isset($_SERVER['HTTP_REFERER'])
-            && strpos($_SERVER['HTTP_REFERER'], 'submit')
-        ) {
-            return $request->all();
-        } else {
-            return redirect()->to(route('party.addBill'));
-        }
-    }
-    public function storeR(Request $request)
-    {
-        if (
-            isset($_SERVER['HTTP_REFERER'])
-            && strpos($_SERVER['HTTP_REFERER'], 'submit')
-        ) {
-            return $request->all();
-        } else {
-            return redirect()->to(route('party.addBill'));
+        try {
+            DB::beginTransaction();
+            $party = Party::create([
+                'client_id' => $request->input('client_id'),
+                'name' => $request->input('name'),
+                'address' => $request->input('address'),
+                'date' => $request->input('date'),
+                'status' => $request->input('status'),
+                'added_by' => auth()->user()->getAuthIdentifier(),
+            ]);
+
+            if ($request->input('deposits')) {
+                for ($i = 0; $i < count($request->input('deposits')); $i++) {
+                    $deposit = new Deposit();
+                    $deposit->party_id = $party->id;
+                    $deposit->type = "party";
+                    $deposit->cost = $request->input('deposits')[$i]['cost'];
+                    $deposit->date = $request->input('deposits')[$i]['date'];
+                    $deposit->save();
+                }
+            }
+
+            DB::commit();
+            return redirect()->route('party.addBill', $party->id)
+                ->with(['success' => 'تم إنشاء بيانات الحفله بنجاح, الأن قم بأضافه بيانات الفاتوره']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('حدث خطأ أثناء اضافه بيانات الحفله: ' . $e->getMessage());
+
+            return redirect()->back()->withInput($request->all())
+                ->with(['error' => 'حدث خطأ أثناء اضافه بيانات الحفله. يرجى المحاولة مرة أخرى.']);
         }
     }
 
@@ -93,16 +108,16 @@ class PartyController extends Controller
      * Party Controller Create Method
      + Show the Form For Only Party Bill Data
      */
-    public function createBill()
+    public function createBill(int $id)
     {
-        return view('pages.party.addBill');
+        return view('pages.party.addBill', compact('id'));
     }
 
     /**
      * Party Controller Create Method
      + Store the Form For Only Party Bill Data
      */
-    public function storeBill(Request $request)
+    public function storeBill(Request $request, int $id)
     {
         return $request->all();
     }
