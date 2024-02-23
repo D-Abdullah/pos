@@ -75,6 +75,7 @@
                         <th>التاريخ</th>
                         <th>بواسطه</th>
                         <th>الحاله</th>
+                        <th>التفاصيل</th>
                         <th>
                             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 25"
                                 fill="none">
@@ -115,6 +116,7 @@
                                     @endif
                                 </span>
                             </td>
+                            <td><i class="fa-solid fa-circle-info"></i></td>
                             <td>
                                 <div class="edit d-flex align-items-center justify-content-center">
                                     @can('update party')

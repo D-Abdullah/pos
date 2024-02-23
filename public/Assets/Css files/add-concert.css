@@ -158,10 +158,20 @@
     padding: 30px 20px;
     border: 1px solid var(--divider-color);
     border-top: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .carts .element span {
     text-align: center;
+}
+
+.carts .element .edit {
+    display: flex;
+    gap: 2;
+    align-items: center;
+    justify-content: center;
 }
 
 .carts .total {
