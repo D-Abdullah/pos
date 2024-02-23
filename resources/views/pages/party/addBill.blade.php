@@ -268,7 +268,7 @@
     </div>
 
     <div class="carts rounded-3 d-flex flex-column justify-content-between">
-        <div class="elements ">
+        <div class="elements">
             <div class="info d-flex gap-3 justify-content-between">
                 <span>الاسم</span>
                 <span>الكميه</span>
@@ -291,24 +291,24 @@
                         stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </div>
-            <div class="element d-flex justify-content-between align-items-center" id="element">
+            {{-- <div class="element" id="element">
                 <span class="productName">شنطه</span>
                 <span class="countity"> 2 </span>
-                <span class="price">1500</span>
-                <span class="totalPrice">300</span>
+                <span class="price">300</span>
+                <span class="totalPrice">1300</span>
                 <span class="type ">بيع</span>
                 <span class="status live">جاهز</span>
-                <div class="edit d-flex gap-2 align-items-center justify-content-center">
+                <div class="edit">
                     <img src="{{ asset('Assets/imgs/edit-circle.png') }}" alt="" id="edit">
                     <img src="{{ asset('Assets/imgs/trash (1).png') }}" alt="" id="trash">
                 </div>
-            </div>
+            </div> --}}
             <div class="total active-btn mt-2" id="totalPrice">اجمالي السعر 900</div>
         </div>
     </div>
 
 
-    <div class="popup-add popup close shadow-sm rounded-3 position-fixed" id="popupAddOurProduct">
+    <div class="popup-add popup close shadow-sm rounded-3 position-fixed" id="popupAddOurProduct" data-type="items">
         <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
 
         <h2 class="text-center mt-4 mb-4 opacity-75">اضافة <span id="nameProduct"></span></h2>
@@ -333,7 +333,7 @@
             </div>
 
         </div>
-        <div class="eolReason none">
+        <div class="eolReason ">
             <label class="d-block" for="textarea">سبب الهلاك</label>
             <textarea name="textarea" id="textarea" cols="30" rows="10" placeholder=".."></textarea>
         </div>
@@ -344,7 +344,7 @@
         <button class="main-btn" id="AddToCart">اضافه</button>
     </div>
 
-    <div class="popup-edit popup close shadow-sm rounded-3 position-fixed" id="popupEditOurProduct">
+    <div class="popup-edit popup close shadow-sm rounded-3 position-fixed" id="popupEditOurProduct" data-type="items">
         <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
         <h2 class="text-center mt-4 mb-4 opacity-75">تعديل <span id="nameProduct"></span></h2>
         <div class="f-row d-flex gap-4">
@@ -398,32 +398,22 @@
     <!-- end of popup  ourProduct-->
 
     <!-- start of popup rent -->
-    <div class="popup-add popup close shadow-sm rounded-3 position-fixed" id="popupAddRent">
+    <div class="popup-add popup close shadow-sm rounded-3 position-fixed" id="popupAddRent" data-type="rent">
         <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
         <h2 class="text-center mt-4 mb-4 opacity-75">اضافة <span id="nameProduct"></span></h2>
         <div class="f-row d-flex gap-4">
             <div>
                 <label class="d-block mb-1" for="category-name">الكميه</label>
-                <input type="text" name="text" id="category-name" placeholder="...">
+                <input type="text" name="text" id="category-name countity" placeholder="...">
             </div>
             <div class="select-form">
-                <label for="">النوع</label>
-                <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
-                    <button class="w-100 d-flex justify-content-between"
-                        onclick="dropdown('valueCategoriesNameAdd2', 'listCategoriesNameAdd2')">
-                        <span class="fw-bold opacity-50 valueDropdown" id="valueCategoriesNameAdd2"></span>
-                        <img src="./Assets/imgs/chevron-down.png" alt="">
-                    </button>
-                    <div class="options none">
-                        <ul id="listCategoriesNameAdd2">
-                            <li class="p-0" id="search">
-                                <input class="search" type="search" placeholder="بحث">
-                            </li>
-                            <li>النوع</li>
-                            <li>النوع 1</li>
-                            <li>النوع 2</li>
-                        </ul>
-                    </div>
+                <label for="" class="mb-1">النوع</label>
+                <div class="select-form gap-2">
+                    <select name="" id="" class="w-100 p-2 rounded-2" id="type">
+                        <option value="rent">ايجار</option>
+                        <option value="sale">بيع</option>
+                        <option value="eol">هالك</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -438,7 +428,7 @@
         <button class="main-btn" id="AddToCart">اضافه</button>
     </div>
 
-    <div class="popup-edit popup close shadow-sm rounded-3 position-fixed" id="popupEditRent">
+    <div class="popup-edit popup close shadow-sm rounded-3 position-fixed" id="popupEditRent" data-type="rent">
         <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
         <h2 class="text-center mt-4 mb-4 opacity-75">تعديل <span id="nameProduct"></span></h2>
         <div class="f-row d-flex gap-4">
@@ -481,7 +471,7 @@
     <!-- end of popup rent -->
 
     <!-- start of popuo special -->
-    <div class="popup-add popup close shadow-sm rounded-3 position-fixed" id="popupAddSpecial">
+    <div class="popup-add popup close shadow-sm rounded-3 position-fixed" id="popupAddSpecial" data-type="custom">
         <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
         <h2 class="text-center mt-4 mb-4 opacity-75">تكلفه اضافيه مخصصه</h2>
         <div class="f-row d-flex gap-4">
@@ -503,7 +493,7 @@
         <button class="main-btn" id="AddToCart">اضافه</button>
     </div>
 
-    <div class="popup-edit popup close shadow-sm rounded-3 position-fixed" id="popupEditSpecial">
+    <div class="popup-edit popup close shadow-sm rounded-3 position-fixed" id="popupEditSpecial" data-type="custom">
         <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
         <h2 class="text-center mt-4 mb-4 opacity-75">تعديل تكلفه اضافيه</h2>
         <div class="f-row d-flex gap-4">
@@ -550,4 +540,137 @@
 
 @section('script')
     <script src="{{ asset('Assets/JS files/add-concert.js') }}"></script>
+    <script>
+        let name = document.querySelector("#popupAddOurProduct h2 span");
+        let quantity = document.querySelector("#popupAddOurProduct #countity");
+        let unitPrice = document.querySelector("#popupAddOurProduct #unit-price");
+        let select = document.querySelector("#popupAddOurProduct select");
+
+        // select.addEventListener("change", () => {
+
+
+        // })
+
+        let textarea = document.querySelector("#popupAddOurProduct textarea");
+        let checbox = document.querySelector("#popupAddOurProduct .form-check-2 label");
+        let type = document.querySelector("#popupAddOurProduct").dataset.type;
+        // let boxs = document.querySelectorAll("#ourProduct .products .box");
+        let mainProducts = [];
+
+        document.querySelector("#popupAddOurProduct #AddToCart").addEventListener("click", () => {
+            if (checbox.innerHTML === "جاهز") {
+                checbox.classList.add("ready")
+                checbox.classList.remove("perparing");
+            } else {
+                checbox.classList.remove("ready");
+                checbox.classList.add("perparing");
+            }
+
+            let popupAdd = document.querySelectorAll(".popup-add")
+            popupAdd.forEach(popup => {
+
+                if (!popup.classList.contains("close")) {
+
+                    mainProducts.push(
+                        bill = {
+                            "party_id": "",
+                            "from": type,
+                            "product_id": "",
+                            "rent_id": "",
+                            "name": name.innerHTML,
+                            "quantity": quantity.value,
+                            "unitPrice": unitPrice.value,
+                            "totalPrice": totalPrice.value,
+                            "type": select.value,
+                            "eol_ression": textarea.value,
+                            "status": checbox.classList[1]
+                        }
+                    )
+
+                }
+
+            })
+            // console.log(mainProducts);
+
+            let values = JSON.stringify(mainProducts);
+            localStorage.setItem("products", values);
+
+            let object = localStorage.getItem("products");
+            let realObject = JSON.parse(object)
+            let lastObject = realObject[mainProducts.length - 1];
+
+            let element = document.createElement("div");
+            element.classList.add("element");
+
+            let productName = document.createElement("span");
+            let productNameText = document.createTextNode(lastObject.name)
+            productName.appendChild(productNameText);
+            productName.classList.add("productName");
+
+            let countity = document.createElement("span");
+            let countityText = document.createTextNode(lastObject.quantity);
+            countity.appendChild(countityText);
+            countity.classList.add("countity");
+
+            let price = document.createElement("span");
+            let priceText = document.createTextNode(lastObject.unitPrice);
+            price.appendChild(priceText);
+            price.classList.add("price");
+
+            let totalPricee = document.createElement("span");
+            let totalPriceeText = document.createTextNode(lastObject.unitPrice * lastObject.quantity);
+            totalPricee.appendChild(totalPriceeText);
+            totalPricee.classList.add("totalPrice");
+
+            let typeA = document.createElement("span");
+            let typeAText = document.createTextNode(lastObject.type);
+            typeA.appendChild(typeAText);
+            typeA.classList.add("type");
+
+            let status = document.createElement("span");
+            let statusText = document.createTextNode(lastObject.status);
+            status.appendChild(statusText);
+            status.classList.add("status");
+
+            let edit = document.createElement("div");
+            edit.classList.add("edit");
+            let editIcon = document.createElement("img");
+            editIcon.src = "{{ asset('Assets/imgs/edit-circle.png') }}";
+            let removeIcon = document.createElement("img");
+            removeIcon.src = "{{ asset('Assets/imgs/trash (1).png') }}";
+            edit.appendChild(editIcon);
+            edit.appendChild(removeIcon);
+
+
+            element.appendChild(productName);
+            element.appendChild(countity);
+            element.appendChild(price);
+            element.appendChild(totalPricee);
+            element.appendChild(typeA);
+            element.appendChild(status);
+            element.appendChild(edit);
+
+            console.log(element);
+            if (typeA.innerHTML === "sale") {
+                typeA.innerHTML = "بيع"
+            } else if (typeA.innerHTML === "rent") {
+                typeA.innerHTML = "ايجار"
+            } else {
+                typeA.innerHTML = "هالك"
+            }
+
+            if (status.innerHTML === "ready") {
+                status.innerHTML = "جاهز"
+                status.classList.add("live");
+            } else {
+                status.innerHTML = "قيد التحضير"
+                status.classList.add("died");
+            }
+            document.querySelector(".elements .total").before(element);
+            document.querySelector("#popupAddOurProduct").classList.add("close");
+            document.querySelector(".overlay").classList.add("none");
+            document.querySelector("body").classList.remove("overflow-hidden");
+
+        })
+    </script>
 @endsection
