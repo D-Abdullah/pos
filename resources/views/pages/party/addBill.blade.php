@@ -558,6 +558,7 @@
         let mainProducts = [];
 
         document.querySelector("#popupAddOurProduct #AddToCart").addEventListener("click", () => {
+
             if (checbox.innerHTML === "جاهز") {
                 checbox.classList.add("ready")
                 checbox.classList.remove("perparing");
@@ -569,27 +570,24 @@
             let popupAdd = document.querySelectorAll(".popup-add")
             popupAdd.forEach(popup => {
 
-                if (!popup.classList.contains("close")) {
-
-                    mainProducts.push(
-                        bill = {
-                            "party_id": "",
-                            "from": type,
-                            "product_id": "",
-                            "rent_id": "",
-                            "name": name.innerHTML,
-                            "quantity": quantity.value,
-                            "unitPrice": unitPrice.value,
-                            "totalPrice": totalPrice.value,
-                            "type": select.value,
-                            "eol_ression": textarea.value,
-                            "status": checbox.classList[1]
-                        }
-                    )
-
-                }
+                mainProducts.push(
+                    bill = {
+                        "party_id": "",
+                        "from": type,
+                        "product_id": "",
+                        "rent_id": "",
+                        "name": name.innerHTML,
+                        "quantity": quantity.value,
+                        "unitPrice": unitPrice.value,
+                        "totalPrice": totalPrice.value,
+                        "type": select.value,
+                        "eol_ression": textarea.value,
+                        "status": checbox.classList[1]
+                    }
+                )
 
             })
+
             // console.log(mainProducts);
 
             let values = JSON.stringify(mainProducts);
@@ -666,11 +664,13 @@
                 status.innerHTML = "قيد التحضير"
                 status.classList.add("died");
             }
+
             document.querySelector(".elements .total").before(element);
             document.querySelector("#popupAddOurProduct").classList.add("close");
             document.querySelector(".overlay").classList.add("none");
             document.querySelector("body").classList.remove("overflow-hidden");
 
-        })
+        });
     </script>
+
 @endsection
