@@ -8,7 +8,6 @@
 
 @section('content')
     <!-- start of body -->
-    {{ $party->id }}
     <h2 class="mb-2 mt-5">اضافه معلومات الفاتوره للحفله "{{ $party->name }}"</h2>
 
     <div class="mt-5 mb-5 special">
@@ -42,16 +41,16 @@
                     </div>
                 </div>
             </div>
-            <div class="up p-2 d-flex justify-content-between ">
-                <div class="box">
-                    @foreach ($products as $product)
+            <div class="up p-2 d-flex gap-3">
+                @foreach ($products as $product)
+                    <div class="box">
                         <div class="info-box p-3">
                             {{ $product->id }}
                             <span class="d-block fs-5">{{ $product->name }}</span>
                             <span class="fs-5">الكميه المتاحه: {{ $product->quantity }}</span>
                         </div>
-                    @endforeach
-                </div>
+                    </div>
+                @endforeach
             </div>
         </div>
     </div>
@@ -81,7 +80,7 @@
                 @foreach ($rents as $rent)
                     <div class="box">
                         <div class="info-box p-3">
-                            {{ $rent->id }}
+                            {{-- {{ $rent->id }} --}}
                             <dib class="d-block fs-5">{{ $rent->name }}</dib>
                             <div class="fs-5">السعر: {{ $rent->sale_price }}</div>
                             <div class="fs-5">الكميه المتاحه: {{ $rent->quantity }}</div>
@@ -116,22 +115,21 @@
                         stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </div>
-            {{-- <div class="element" id="element">
-                <span class="productName">شنطه</span>
-                <span class="countity"> 2 </span>
-                <span class="price">300</span>
-                <span class="totalPrice">1300</span>
-                <span class="type ">بيع</span>
-                <span class="status live">جاهز</span>
+            <div class="element" id="element">
+                <span class="productName"></span>
+                <span class="countity"> </span>
+                <span class="price"></span>
+                <span class="totalPrice"></span>
+                <span class="type "></span>
+                <span class="status live"></span>
                 <div class="edit">
                     <img src="{{ asset('Assets/imgs/edit-circle.png') }}" alt="" id="edit">
                     <img src="{{ asset('Assets/imgs/trash (1).png') }}" alt="" id="trash">
                 </div>
-            </div> --}}
+            </div>
             <div class="total active-btn mt-2" id="totalPrice">اجمالي السعر 900</div>
         </div>
     </div>
-
 
     <div class="popup-add popup close shadow-sm rounded-3 position-fixed" id="popupAddOurProduct" data-type="items">
         <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
@@ -397,7 +395,7 @@
 
                 mainProducts.push(
                     bill = {
-                        "party_id": "",
+                        "party_id": {{ $party->id }},
                         "from": type,
                         "product_id": "",
                         "rent_id": "",
@@ -497,5 +495,6 @@
 
         });
     </script>
+
 
 @endsection

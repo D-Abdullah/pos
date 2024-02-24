@@ -858,6 +858,10 @@ button.concert {
     padding: 10px 20px;
 }
 
+.pointer {
+    cursor: pointer;
+}
+
 #edit,
 #trash {
     cursor: pointer;

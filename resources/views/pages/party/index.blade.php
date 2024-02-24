@@ -75,7 +75,6 @@
                         <th>التاريخ</th>
                         <th>بواسطه</th>
                         <th>الحاله</th>
-                        <th>التفاصيل</th>
                         <th>
                             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 25"
                                 fill="none">
@@ -116,17 +115,16 @@
                                     @endif
                                 </span>
                             </td>
-                            <td><i class="fa-solid fa-circle-info"></i></td>
                             <td>
-                                <div class="edit d-flex align-items-center justify-content-center">
+                                <div class="edit gap-1 d-flex align-items-center justify-content-center">
                                     @can('update party')
                                         <a href="{{ route('party.edit', $party->id) }}">
                                             <img src="{{ asset('Assets/imgs/edit-circle.png') }}" alt="">
                                         </a>
                                     @endcan
+                                    <i class="fa-solid fa-eye pointer p-1"></i>
                                     @can('delete party')
-                                        <img src="{{ asset('Assets/imgs/trash (1).png') }}" class=" ms-2 me-2" alt=""
-                                            id="trash">
+                                        <img src="{{ asset('Assets/imgs/trash (1).png') }}" alt="" id="trash">
                                     @endcan
                                 </div>
                             </td>
