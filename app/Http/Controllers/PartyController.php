@@ -8,10 +8,12 @@ use App\Models\Party;
 use App\Http\Requests\StorePartyRequest;
 use App\Http\Requests\UpdatePartyRequest;
 use App\Models\Client;
+use App\Models\Eol;
 use App\Models\Product;
 use App\Models\Rent;
 use App\Models\WarehouseTransaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -132,7 +134,6 @@ class PartyController extends Controller
      */
     public function storeBill(Request $request, int $id)
     {
-        return $request->all();
         try {
             DB::beginTransaction();
             $party = Party::findOrFail($id);
@@ -232,6 +233,7 @@ class PartyController extends Controller
 
             // logic
             foreach ($testRequest['bills'] as $bill) {
+
                 // rent
                 if ($bill['from'] == 'rent') {
                     $rent = Rent::findOrFail($bill['rent_id']);
@@ -250,7 +252,14 @@ class PartyController extends Controller
                 }
 
                 // eol
-
+                if ($bill['type'] === 'eol') {
+                    $eol = Eol::create([
+                        'product_id' => $bill['product_id'],
+                        'quantity' => $bill['quantity'],
+                        'added_by' => Auth::user()->id,
+                        'reason' => $bill['eol_ression']
+                    ]);
+                }
                 // werehouse transaction
                 if ($party->status === "transported" && $bill['status'] === "ready") {
                     if ($bill['from'] === 'items') {
@@ -277,18 +286,17 @@ class PartyController extends Controller
                     "status" => $bill['status']
                 ]);
             }
-            // دون كل الحالات في ورقه وقم ب إنهاء هذه الصفحه
             // party
 
             DB::commit();
-            return redirect()->route('party.addBill', $party->id)
-                ->with(['success' => 'تم إنشاء بيانات الحفله بنجاح, الأن قم بأضافه بيانات الفاتوره']);
+            return redirect()->route('party.all')
+                ->with(['success' => 'تم إنشاء الحفله بنجاح']);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('حدث خطأ أثناء اضافه بيانات الحفله: ' . $e->getMessage());
 
             return redirect()->back()->withInput($request->all())
-                ->with(['error' => 'حدث خطأ أثناء اضافه بيانات الحفله. يرجى المحاولة مرة أخرى.']);
+                ->with(['error' => 'حدث خطأ أثناء اضافه بيانات الحفله. يرجى المحاولة مرة أخرى.' . $e->getMessage()]);
         }
     }
 
