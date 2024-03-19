@@ -5,7 +5,19 @@
 @section('styles')
     <link rel="stylesheet" href="{{ asset('Assets/Css files/categories.css') }}">
 @endsection
+<style>
+    #search {
+        min-width: 250px !important;
+    }
 
+    #category-name:invalid {
+        border: 1px solid red
+    }
+
+    #category-name:valid {
+        border: 1px solid #0075ff
+    }
+</style>
 @section('content')
 
     <h2 class="mt-5 mb-5">الأقسام</h2>
@@ -21,29 +33,39 @@
                     </div>
                 @endcan
                 @can('read department')
-                    <div class="search-input">
-                        <input type="text" name="query" value="{{ $query }}" placeholder="بحث" id="search">
-                    </div>
+                    <form action="" class="gap-4 d-flex align-items-center mb-0">
 
-                    <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
-                        <button onclick="dropdown('valueStatus', 'listStatus')">
-                            <span class="fw-bold opacity-50 valueDropdown" id="valueStatus">الحاله</span>
-                            <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
-                        </button>
-                        <div class="options none">
-                            <ul id="listStatus">
-                                <li class="p-0" id="search">
-                                    <input class="search" type="text" name="status" value="{{ $status }}"
-                                        placeholder="بحث">
-                                </li>
-                                <li class="active">الحاله</li>
-                                <li>الحاله 1</li>
-                                <li>الحاله 2</li>
-                            </ul>
+                        <div class="search-input">
+                            <input type="text" name="categoryQuery" value="{{ $query }}" placeholder="بحث بالاسم"
+                                id="search">
                         </div>
-                    </div>
 
-                    <button class="main-btn" id="form">تأكيد</button>
+                        {{-- <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
+                            <button onclick="dropdown('valueStatus', 'listStatus')">
+                                <span class="fw-bold opacity-50 valueDropdown" id="valueStatus">الحاله</span>
+                                <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
+                            </button>
+                            <div class="options none">
+                                <ul id="listStatus">
+                                    <li class="p-0" id="search">
+                                        <input class="search" type="text" name="status" value="{{ $status }}"
+                                            placeholder="بحث">
+                                    </li>
+                                    <li class="active">الحاله</li>
+                                    <li>الحاله 1</li>
+                                    <li>الحاله 2</li>
+                                </ul>
+                            </div>
+
+                        </div> --}}
+
+                        <input id="startDate" name="categoryDate" class="" type="date" />
+
+
+
+
+                        <button type="submit" class="main-btn" id="form">تأكيد</button>
+                    </form>
                 @endcan
             </div>
 
@@ -57,6 +79,7 @@
                         <ul id="listRelease">
                             <li id="pdf">PDF</li>
                             <li id="excel">EXCEL</li>
+                            <li id="print">Print</li>
                         </ul>
                     </div>
                 </div>
@@ -69,9 +92,10 @@
                 <thead class="head">
                     <tr>
                         <th>اسم القسم</th>
-                        <th>الوصف</th>
+                        {{-- <th>الوصف</th> --}}
                         <th>بواسطه</th>
-                        <th>الحاله</th>
+                        <th>التاريخ</th>
+                        {{-- <th>الحاله</th> --}}
                         <th>
                             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 25"
                                 fill="none">
@@ -92,18 +116,26 @@
                 </thead>
 
                 <tbody>
+                    @if (count($departments) === 0)
+                        <tr>
+                            <td colspan="6" class="text-center">
+                                لا توجد بيانات
+                            </td>
+                        </tr>
+                    @endif
+
                     @foreach ($departments as $department)
                         <tr>
                             <td>{{ $department->name }}</td>
-                            <td>{{ $department->description }}</td>
+                            {{-- <td>{{ $department->description }}</td> --}}
                             <td>{{ $department->added_by }}</td>
-                            <td>
+                            {{-- <td>
                                 @if ($department->is_active)
                                     <span class="live">مفعل</span>
                                 @else
                                     <span class="died">غير مفعل</span>
                                 @endif
-                            </td>
+                            </td> --}}
                             <td>
                                 <div class="edit d-flex align-items-center justify-content-center">
                                     @can('update department')
@@ -119,8 +151,7 @@
                             </td>
                             <td class="p-0">
                                 @can('update department')
-                                    <div
-                                        class="popup-edit id-{{ $department->id }} popup close shadow-sm rounded-3 position-fixed">
+                                    <div class="popup-edit id-{{ $department->id }} popup close shadow-sm rounded-3 position-fixed">
                                         <form method="post" action="{{ route('department.update', $department->id) }}">
                                             @csrf
                                             @method('put')
@@ -133,18 +164,17 @@
                                                 <input type="text" name="name" value="{{ $department->name }}"
                                                     id="category-name" placeholder="اسم القسم">
                                             </div>
-                                            <div>
+                                            {{-- <div>
                                                 <span class="d-block">وصف القسم</span>
                                                 <textarea name="description" id="textarea" cols="30" rows="10" placeholder="تفاصيل القسم">{{ $department->description }}</textarea>
-                                            </div>
-                                            <div class="form-check form-switch d-flex align-items-center  ms-2 me-2">
+                                            </div> --}}
+                                            {{-- <div class="form-check form-switch d-flex align-items-center  ms-2 me-2">
                                                 <input class="form-check-input ms-3"
-                                                    @if ($department->is_active) checked @endif type="checkbox"
-                                                    role="switch" id="flexSwitchCheckDefault-99" name="is_active"
-                                                    value="1">
+                                                    @if ($department->is_active) checked @endif type="checkbox" role="switch"
+                                                    id="flexSwitchCheckDefault-99" name="is_active" value="1">
                                                 <label for="flexSwitchCheckDefault-99">تفعيل</label>
-                                            </div>
-                                            <button class="main-btn" type="submit">تعديل</button>
+                                            </div> --}}
+                                            <button class="main-btn mt-5" type="submit">تعديل</button>
                                         </form>
                                     </div>
                                 @endcan
@@ -206,4 +236,109 @@
     <script src="{{ asset('Assets/JS files/categories.js') }}"></script>
     <script src="{{ asset('Assets/JS files/global.js') }}"></script>
     <script src="html2pdf.bundle.main.js"></script>
+
+    {{-- jsPdf --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.6/jspdf.plugin.autotable.min.js"></script>
+    <script type="text/javascript" src="jspdf.debug.js"></script>
+
+    <script>
+        // Print Table
+        function printTable() {
+            var el = document.getElementById("table");
+            el.setAttribute('border', '1');
+            el.setAttribute('cellpadding', '5');
+            var newPrint = window.open("");
+            newPrint.document.write(el.outerHTML);
+            newPrint.print();
+            newPrint.close();
+            console.log(el);
+        }
+
+        const print = document.getElementById("print");
+        print.addEventListener('click', () => {
+            printTable();
+        });
+
+        // Pdf Table
+
+        // function exportPdf() {
+        //     var pdf = new jsPDF();
+        //     pdf.text(20, 20, "Employee Details");
+        //     pdf.autoTable({
+        //         html: '#table',
+        //         startY: 25,
+        //         theme: 'grid',
+        //         columnStyles: {
+        //             0: {
+        //                 cellWidth: 20
+        //             },
+        //             1: {
+        //                 cellWidth: 60
+        //             },
+        //             2: {
+        //                 cellWidth: 40
+        //             },
+        //             3: {
+        //                 cellWidth: 60
+        //             }
+        //         },
+        //         bodyStyles: {
+        //             lineColor: [1, 1, 1]
+        //         },
+        //         styles: {
+        //             minCellHeight: 10
+        //         }
+        //     });
+        //     window.open(URL.createObjectURL(pdf.output("blob")))
+        // }
+
+        // function exportToPDF() {
+        //     const doc = new jsPDF();
+        //     const table = document.getElementById("table");
+
+        //     // Get table width and height
+        //     const width = doc.internal.pageSize.getWidth();
+        //     const height = doc.internal.pageSize.getHeight();
+
+        //     // Start Y position for the table
+        //     let startY = 20;
+
+        //     // Loop through each row of the table
+        //     table.querySelectorAll("tr").forEach(row => {
+        //         // Start X position for the row
+        //         let startX = 10;
+
+        //         // Loop through each cell of the row
+        //         row.querySelectorAll("td, th").forEach(cell => {
+        //             // Add cell content to PDF
+        //             doc.text(startX, startY, cell.textContent);
+
+        //             // Move to next cell
+        //             startX += cell.offsetWidth / 2;
+
+        //             // Check if adding next cell exceeds page width, if yes then start from new line
+        //             if (startX >= width - 10) {
+        //                 startX = 10;
+        //                 startY += 10; // Move to next line
+        //             }
+        //         });
+
+        //         // Move to next row
+        //         startY += 10; // Add some space between rows
+        //     });
+
+        //     // Save the PDF
+        //     doc.save("table.pdf");
+        // }
+
+        const pdfBtn = document.getElementById("pdf");
+        pdfBtn.addEventListener('click', () => {
+            // var doc = new jsPDF();
+            // autoTable(doc, "#table");
+            // doc.save("table.pdf");
+        });
+    </script>
+
+
 @endsection
