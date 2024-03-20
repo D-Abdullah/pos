@@ -34,6 +34,7 @@ person.addEventListener("click", () => {
 // handle remove and edit click
 document.querySelectorAll("#trash").forEach((trash) => {
     let id = trash.dataset.id;
+    
     trash.addEventListener("click", (e) => {
         document.querySelector("body").classList.add("overflow-hidden");
 

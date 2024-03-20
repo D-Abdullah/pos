@@ -5,6 +5,103 @@
 @section('styles')
     <link rel="stylesheet" href="{{ asset('Assets/Css files/products.css') }}">
 @endsection
+<style>
+    .select-btn,
+    li {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .select-btn {
+        padding: 10px 20px;
+        gap: 10px;
+        border-radius: 5px;
+        justify-content: space-between;
+        border: 1px solid #eee
+    }
+
+    .select-btn i {
+        font-size: 14px;
+        transition: transform 0.3s linear;
+    }
+
+    .wrapper.active .select-btn i {
+        transform: rotate(-180deg);
+    }
+
+    .content {
+        display: none;
+        padding: 20px;
+        margin-top: 15px;
+        background: #fff;
+        border-radius: 5px;
+        border: 1px solid #eee;
+        position: fixed;
+    }
+
+    .wrapper.active .content {
+        display: block;
+    }
+
+    .content .search {
+        position: relative;
+    }
+
+    .search input {
+        height: 50px;
+        width: 100%;
+        outline: none;
+        font-size: 17px;
+        border-radius: 5px;
+        padding: 0 20px 0 43px;
+        border: 1px solid #B3B3B3;
+    }
+
+    .search input:focus {
+        padding-left: 42px;
+        border: 2px solid #4285f4;
+    }
+
+    .search input::placeholder {
+        color: #bfbfbf;
+    }
+
+    .content .options {
+        margin-top: 10px;
+        max-height: 250px;
+        overflow-y: auto;
+        padding-right: 7px;
+    }
+
+    .options::-webkit-scrollbar {
+        width: 7px;
+    }
+
+    .options::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 25px;
+    }
+
+    .options::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 25px;
+    }
+
+    .options::-webkit-scrollbar-thumb:hover {
+        background: #b3b3b3;
+    }
+
+    .options li {
+        padding: 5px 13px;
+    }
+
+    .options li:hover,
+    li.selected {
+        border-radius: 5px;
+        background: #f2f2f2;
+    }
+</style>
 
 @section('content')
     <!-- end of frame-5 (header) -->
@@ -22,11 +119,27 @@
                     </div>
                 @endcan
                 @can('read product')
-                    <div class="search-input">
-                        <input type="search" placeholder="بحث" id="search">
-                    </div>
+                    <form action="" class="gap-4 d-flex align-items-center mb-0">
+                        <div class="search-input">
+                            <input type="search" placeholder="بحث" id="search">
+                        </div>
 
-                    <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
+                        <div class="wrapper">
+                            <div class="select-btn">
+                                <span>Select</span>
+
+                                <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
+                            </div>
+                            <div class="content">
+                                <div class="search">
+                                    <i class="uil uil-search"></i>
+                                    <input spellcheck="false" name="categoryDropdownQuery" type="text" placeholder="بحث">
+                                </div>
+                                <ul class="options"></ul>
+                            </div>
+                        </div>
+
+                        {{-- <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
                         <button onclick="dropdown('valueStatus', 'listStatus')">
                             <span class="fw-bold opacity-50 valueDropdown" id="valueStatus">الحاله</span>
                             <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
@@ -41,9 +154,11 @@
                                 <li>الحاله 2</li>
                             </ul>
                         </div>
-                    </div>
+                    </div> --}}
 
-                    <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
+                        <input id="startDate" name="categoryDate" class="" type="date" />
+
+                        {{-- <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
                         <button onclick="dropdown('valueCategories', 'listCategories')">
                             <span class="fw-bold opacity-50 valueDropdown" id="valueCategories">الفئه</span>
                             <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
@@ -59,9 +174,9 @@
                                 <li>فئه 3</li>
                             </ul>
                         </div>
-                    </div>
-
-                    <button class="main-btn" id="form">تأكيد</button>
+                    </div> --}}
+                        <button type="submit" class="main-btn" id="form">تأكيد</button>
+                    </form>
                 @endcan
             </div>
 
@@ -74,8 +189,9 @@
                     </button>
                     <div class="options none">
                         <ul id="listRelease">
-                            <li>PDF</li>
-                            <li>ECXEL</li>
+                            <li id="pdf">PDF</li>
+                            <li id="excel">EXCEL</li>
+                            <li id="print">PRINT</li>
                         </ul>
                     </div>
                 </div>
@@ -84,16 +200,15 @@
         </div>
 
         @can('read product')
-            <table class="w-100 mb-4 border">
+            <table id="table" class="w-100 mb-4 border">
 
                 <thead class="head">
                     <tr>
                         <th>المنتج</th>
                         <th>القسم</th>
-                        <th>وصف</th>
-                        <th>الكميه</th>
+                        {{-- <th>الكميه</th> --}}
                         <th>بواسطه</th>
-                        <th>الحاله</th>
+                        <th>التاريخ</th>
                         <th>
                             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 25"
                                 fill="none">
@@ -114,24 +229,35 @@
                 </thead>
 
                 <tbody>
+                    @if (count($departments) === 0)
+                        <tr>
+                            <td colspan="6" class="text-center">
+                                لا توجد بيانات
+                            </td>
+                        </tr>
+                    @endif
+
                     @foreach ($products as $product)
                         <tr>
                             <td class="opacity-50">
                                 {{ $product->name }}
                             </td>
                             <td>{{ $product->department_id }}</td>
-                            <td>{{ $product->description }}</td>
-                            <td>{{ $product->quantity }}</td>
+                            {{-- <td>{{ $product->description }}</td> --}}
+                            {{-- <td>{{ $product->quantity }}</td> --}}
                             <td>
                                 {{ $product->added_by }}
                             </td>
                             <td>
+                                {{ $product->date }}
+                            </td>
+                            {{-- <td>
                                 @if ($product->is_active)
                                     <span class="live">مفعل</span>
                                 @else
                                     <span class="died">غير مفعل</span>
                                 @endif
-                            </td>
+                            </td> --}}
                             <td>
                                 <div class="edit d-flex align-items-center justify-content-center">
                                     @can('update product')
@@ -161,39 +287,41 @@
                                                     <input type="text" name="name" value="{{ $product->name }}"
                                                         id="category-name" placeholder="اسم المنتج">
                                                 </div>
-                                                <div class="select-form">
-                                                    <div class="select-form">
-                                                        <label for="department">القسم</label>
-                                                        <select class="form-control form-select" id="department"
-                                                            name="department_id">
-                                                            @foreach ($departments as $department)
-                                                                <option value="{{ $department->id }}"
-                                                                    @if ($product->department_id == $department->id) selected @endif>
-                                                                    {{ $department->name }}</option>
-                                                            @endforeach
-                                                        </select>
+                                                <div class="wrapper">
+                                                    <div id="select-btn" class="select-btn">
+                                                        <span>Select</span>
+
+                                                        <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
+                                                    </div>
+                                                    <div class="content">
+                                                        <div class="search">
+                                                            <i class="uil uil-search"></i>
+                                                            <input spellcheck="false" name="categoryDropdownQuery" type="text"
+                                                                placeholder="بحث">
+                                                        </div>
+                                                        <ul class="options"></ul>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="f-row d-flex gap-4">
+                                            {{-- <div class="f-row d-flex gap-4">
                                                 <div>
                                                     <label class="d-block mb-1" for="buy-price"> الكمية</label>
                                                     <input type="number" name="quantity" value="{{ $product->quantity }}"
                                                         min="0" id="buy-price" placeholder="الكميه الموجوده">
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                             <div>
                                                 <label class="d-block" for="textarea">وصف المنتج</label>
                                                 <textarea name="description" id="textarea" cols="30" rows="10" placeholder="وصف المنتج">{{ $product->description }}</textarea>
                                             </div>
-                                            <div class="form-check form-switch d-flex align-items-center  ms-2 me-2">
+                                            {{-- <div class="form-check form-switch d-flex align-items-center  ms-2 me-2">
                                                 <input class="form-check-input ms-3"
                                                     @if ($product->is_active) checked @endif type="checkbox"
                                                     role="switch" id="flexSwitchCheckDefault-97" name="is_active"
                                                     value="1">
 
                                                 <label for="flexSwitchCheckDefault-97">تفعيل</label>
-                                            </div>
+                                            </div> --}}
                                             <button class="main-btn">تحديث</button>
                                         </form>
                                     </div>
@@ -254,4 +382,117 @@
 
 @section('script')
     <script src="{{ asset('Assets/JS files/products.js') }}"></script>
+    {{-- For Exel --}}
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+    {{-- For PDF --}}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js">
+    </script>
+
+    {{-- For Drobdown input --}}
+    <script>
+        const wrapper = document.querySelector(".wrapper"),
+            selectBtn = wrapper.querySelector(".select-btn"),
+            searchInp = wrapper.querySelector("input"),
+            options = wrapper.querySelector(".options");
+
+        let countries = ["Afghanistan", "Algeria", "Argentina"];
+
+        function addCountry(selectedCountry) {
+            options.innerHTML = "";
+            countries.forEach(country => {
+                let isSelected = country == selectedCountry ? "selected" : "";
+                let li = `<li onclick="updateName(this)" class="${isSelected}">${country}</li>`;
+                options.insertAdjacentHTML("beforeend", li);
+            });
+        }
+        addCountry();
+
+        function updateName(selectedLi) {
+            searchInp.value = "";
+            addCountry(selectedLi.innerText);
+            wrapper.classList.remove("active");
+            selectBtn.firstElementChild.innerText = selectedLi.innerText;
+        }
+
+        searchInp.addEventListener("keyup", () => {
+            let arr = [];
+            let searchWord = searchInp.value.toLowerCase();
+            arr = countries.filter(data => {
+                return data.toLowerCase().startsWith(searchWord);
+            }).map(data => {
+                let isSelected = data == selectBtn.firstElementChild.innerText ? "selected" : "";
+                return `<li onclick="updateName(this)" class="${isSelected}">${data}</li>`;
+            }).join("");
+            options.innerHTML = arr ? arr : `<p style="margin-top: 10px;">Oops! not found</p>`;
+        });
+
+        selectBtn.addEventListener("click", () => wrapper.classList.toggle("active"));
+    </script>
+    {{-- Print and Pdf and Excel  --}}
+    <script>
+        // Start Print Table
+        function printTable() {
+            var el = document.getElementById("table");
+            el.setAttribute('border', '1');
+            el.setAttribute('cellpadding', '5');
+            var newPrint = window.open("");
+            newPrint.document.write(el.outerHTML);
+            newPrint.print();
+            newPrint.close();
+        }
+
+
+        const print = document.getElementById("print");
+        print.addEventListener('click', () => {
+            printTable();
+        });
+        //End Print Table
+
+        // Start PDF File
+        function Export() {
+            html2canvas(document.getElementById('table'), {
+                onrendered: function(canvas) {
+                    var data = canvas.toDataURL();
+                    var docDefinition = {
+                        content: [{
+                            image: data,
+                            width: 500
+                        }]
+                    };
+                    pdfMake.createPdf(docDefinition).download("Table.pdf");
+                }
+            });
+        }
+
+        const pdfBtn = document.getElementById("pdf");
+        pdfBtn.addEventListener('click', () => {
+            Export()
+        });
+        // End PDF File
+
+        // Start Exel Sheet
+        function htmlTableToExcel(type) {
+            var data = document.getElementById('table');
+            var excelFile = XLSX.utils.table_to_book(data, {
+                sheet: "sheet1"
+            });
+            XLSX.write(excelFile, {
+                bookType: type,
+                bookSST: true,
+                type: 'base64'
+            });
+            XLSX.writeFile(excelFile, 'ExportedFile:HTMLTableToExcel.' + type);
+
+        }
+
+
+        const exelBtn = document.getElementById("excel");
+        exelBtn.addEventListener('click', () => {
+            htmlTableToExcel('xlsx')
+        });
+        // End Exel Sheet
+    </script>
+
+
 @endsection
