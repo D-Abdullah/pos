@@ -1,3 +1,15 @@
+<style>
+    #user-name:invalid,
+    #phone:invalid {
+        border: 1px solid red
+    }
+
+    #user-name:valid,
+    #phone:valid {
+        border: 1px solid #0075ff
+    }
+</style>
+
 <div class="popup-add popup pb-5 close shadow-sm rounded-3 position-fixed">
     <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
     <h2 class="text-center mt-4 mb-4 opacity-75">اضافة مستخدم جديد</h2>
@@ -7,14 +19,10 @@
         <div class="f-row d-flex gap-4">
             <div>
                 <label class="d-block mb-1" for="user-name">اسم المستخدم</label>
-                <input
-                    type="text"
-                    name="name"
-                    id="user-name"
-                    placeholder="ادخل اسم المستخدم"
-                    value="{{ old('name') }}"
-                    class="{{ $errors->has('name') ? 'is-invalid' : '' }}"
-                >
+                <input type="text" name="name" id="user-name" placeholder="ادخل اسم المستخدم"
+                    value="{{ old('name') }}" class="{{ $errors->has('name') ? 'is-invalid' : '' }}"
+                    pattern="[a-zA-Z\u0600-\u06FF]{2,}"
+                    title="Please enter a valid name with at least 2 Latin alphabet letters" required>
                 @if ($errors->has('name'))
                     <div class="invalid-feedback">
                         {{ $errors->first('name') }}
@@ -23,14 +31,8 @@
             </div>
             <div>
                 <label class="d-block mb-1" for="gmail">البريد الالكتروني</label>
-                <input
-                    type="email"
-                    name="email"
-                    id="gmail"
-                    placeholder="ادخل البريد الاكتروني"
-                    value="{{ old('email') }}"
-                    class="{{ $errors->has('email') ? 'is-invalid' : '' }}"
-                >
+                <input type="email" name="email" id="gmail" placeholder="ادخل البريد الاكتروني"
+                    value="{{ old('email') }}" class="{{ $errors->has('email') ? 'is-invalid' : '' }}">
                 @if ($errors->has('email'))
                     <div class="invalid-feedback">
                         {{ $errors->first('email') }}
@@ -42,15 +44,10 @@
         <div class="f-row d-flex gap-4 align-items-end">
             <div>
                 <label class="d-block mb-1" for="phone">رقم الهاتف</label>
-                <input
-                    type="number"
-                    name="phone"
-                    id="phone"
-                    maxlength="11"
-                    placeholder="ادخل رقم الهاتف"
-                    value="{{ old('phone') }}"
-                    class="{{ $errors->has('phone') ? 'is-invalid' : '' }}"
-                >
+                <input type="number" name="phone" id="phone" maxlength="11" placeholder="ادخل رقم الهاتف"
+                    value="{{ old('phone') }}" class="{{ $errors->has('phone') ? 'is-invalid' : '' }}"
+                    pattern="[a-zA-Z\u0600-\u06FF]{2,}"
+                    title="Please enter a valid name with at least 2 Latin alphabet letters" required>
                 @if ($errors->has('phone'))
                     <div class="invalid-feedback">
                         {{ $errors->first('phone') }}
@@ -60,16 +57,10 @@
 
             <div class="select-form">
                 <label class="d-block mb-1" for="role">الصلاحيه</label>
-                <select
-                    name="role"
-                    id="role"
-                    class="form-control {{ $errors->has('role') ? 'is-invalid' : '' }}"
-                >
-                    @foreach($roles as $role)
-                        <option
-                            value="{{ $role->name }}"
-                            {{ old('role') == $role->name ? 'selected' : '' }}
-                        >
+                <select name="role" id="role"
+                    class="form-control {{ $errors->has('role') ? 'is-invalid' : '' }}">
+                    @foreach ($roles as $role)
+                        <option value="{{ $role->name }}" {{ old('role') == $role->name ? 'selected' : '' }}>
                             {{ $role->name }}
                         </option>
                     @endforeach
@@ -82,6 +73,6 @@
             </div>
         </div>
 
-        <button class="main-btn mt-3">اضافه</button>
+        <button class="main-btn mt-5">اضافه</button>
     </form>
 </div>

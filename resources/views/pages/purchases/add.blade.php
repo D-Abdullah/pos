@@ -70,7 +70,7 @@
 
         <div class="f-row d-flex gap-4">
             <div>
-                <label class="d-block mb-1" for="purchase-total-price">السعر الإجمالي</label>
+                <label class="d-block mb-1" for="purchase-total-price">سعر الوحده</label>
                 <input type="text" name="total_price" id="purchase-total-price"
                     class="form-control {{ $errors->has('total_price') ? 'is-invalid' : '' }}"
                     value="{{ old('total_price') }}" placeholder="السعر الإجمالي">
@@ -82,7 +82,7 @@
             </div>
         </div>
         {{-- <input type="hidden" name="deposits" id="depositsInput"> --}}
-        <div id="addDepositsContainer">
+        {{-- <div id="addDepositsContainer">
             <div class="f-row d-flex gap-4 align-items-end deposit-section">
                 <div>
                     <label class="d-block mb-1" for="deposit-amount">المبلغ</label>
@@ -110,7 +110,7 @@
                 <path d="M5.41663 13.1108H20.5833" stroke="white" stroke-opacity="0.2" stroke-width="1.5"
                     stroke-linecap="round" stroke-linejoin="round" />
             </svg>
-        </button>
+        </button> --}}
 
         <button class="main-btn mt-3" type="submit" id="formSubmitBtn">انشاء عملية الشراء</button>
 
