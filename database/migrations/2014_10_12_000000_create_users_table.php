@@ -18,12 +18,13 @@ return new class extends Migration
             $table->string('phone');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->unsignedBigInteger('added_by')->nullable();
             $table->rememberToken();
             $table->timestamps();
-            $table->foreign('added_by')
-            ->references('id')
-            ->on('users');
+
+            $table->foreignId('added_by')->nullable()
+            ->constrained('users')
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
         });
     }
 

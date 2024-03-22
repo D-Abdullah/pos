@@ -19,40 +19,39 @@ class DepartmentController extends Controller
     {
         try {
             $rules = [
-                'query' => 'nullable|string',
-                'status' => 'nullable|boolean',
+                'q' => 'nullable|string',
+                'date_from' => 'nullable|date',
+                'date_to' => 'nullable|date',
             ];
 
             $messages = [
-                'query.string' => 'حقل البحث يجب أن يكون نصًا.',
-                'status.boolean' => 'حقل الحالة يجب أن يكون قيمة منطقية.',
+                'q.string' => 'حقل البحث يجب أن يكون نصًا.',
+                'date_from.date' => 'تاريخ "من" غير صالح.',
+                'date_to.date' => 'تاريخ "إلى" غير صالح.',
             ];
 
             $request->validate($rules, $messages);
 
             $departments = Department::query();
 
-            if ($request->filled('query')) {
-                $searchTerm = trim($request->input('query'));
+            if ($request->filled('q')) {
+                $searchTerm = trim($request->input('q'));
                 $departments->where(function ($query) use ($searchTerm) {
                     $query->where('name', 'like', '%' . $searchTerm . '%')
                         ->orWhere('description', 'like', '%' . $searchTerm . '%');
                 });
             }
-
-            if ($request->filled('status')) {
-                $departments->where('is_active', $request->input('status'));
+            // Apply Date Filters
+            if ($request->filled('date_from')) {
+                $departments->whereDate('created_at', '>=', $request->input('date_from'));
             }
 
+            if ($request->filled('date_to')) {
+                $departments->whereDate('created_at', '<=', $request->input('date_to'));
+            }
             $departments = $departments->paginate(PAGINATION);
 
-            return view('pages.categories.index', compact('departments'))
-                ->with(
-                    [
-                        'query' => $request->filled('query') ? $request->input('query') : null,
-                        'status' => $request->filled('status') ? $request->input('status') : null,
-                    ]
-                );
+            return view('pages.categories.index', compact('departments'));
         } catch (\Exception $e) {
             Log::error('حدث خطأ أثناء جلب الأقسام: ' . $e->getMessage());
 
@@ -70,7 +69,7 @@ class DepartmentController extends Controller
             Department::create([
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),
-                'is_active' => $request->has('is_active') ? 1 : 0,
+                'is_active' => true,
                 'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
 
@@ -93,7 +92,7 @@ class DepartmentController extends Controller
             $department->update([
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),
-                'is_active' => $request->input('is_active') ? 1 : 0,
+                'is_active' => true,
             ]);
 
             return redirect()->route('department.all')->with(['success' => 'تم تحديث القسم ' . $request->input('name') . ' بنجاح.']);
@@ -112,11 +111,11 @@ class DepartmentController extends Controller
         try {
             $department = Department::findOrFail($id);
 
-            $products = Product::where('department_id', $id)->get();
+            // $products = Product::where('department_id', $id)->get();
 
-            foreach ($products as $product) {
-                $product->delete();
-            }
+            // foreach ($products as $product) {
+            //     $product->delete();
+            // }
 
             $department->delete();
 

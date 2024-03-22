@@ -13,9 +13,6 @@ return new class extends Migration
     {
         Schema::create('bills', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('party_id');
-            $table->unsignedBigInteger('Product_id')->nullable(); // I
-            $table->unsignedBigInteger('rent_id')->nullable(); // R
             $table->enum('from', ['items', 'rent', 'custom']);
             $table->string('name')->nullable(); // C
             $table->integer('quantity')->nullable(); // I, R
@@ -25,17 +22,22 @@ return new class extends Migration
             $table->enum('status', ['ready', 'preparing'])->nullable();
             $table->timestamps();
 
-            $table->foreign('party_id')
-                ->references('id')
-                ->on('parties');
+           
+                $table->foreignId('party_id')
 
-            $table->foreign('product_id')
-                ->references('id')
-                ->on('products');
+            ->constrained('parties')
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
 
-            $table->foreign('rent_id')
-                ->references('id')
-                ->on('rents');
+                $table->foreignId('product_id')->nullable()
+            ->constrained('products')
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
+
+                $table->foreignId('rent_id')->nullable()
+            ->constrained('rents')
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
         });
     }
 

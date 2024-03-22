@@ -16,11 +16,12 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->text('description')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->unsignedBigInteger('added_by');
             $table->timestamps();
-            $table->foreign('added_by')
-            ->references('id')
-            ->on('users');
+
+            $table->foreignId('added_by')
+                ->constrained('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 

@@ -13,21 +13,21 @@ return new class extends Migration
     {
         Schema::create('parties', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('client_id');
-            $table->unsignedBigInteger('added_by');
             $table->string('name');
             $table->string('address');
             $table->date('date');
             $table->enum('status', ['contracted', 'transported', 'completed']);
             $table->timestamps();
 
-            $table->foreign('added_by')
-                ->references('id')
-                ->on('users');
+            $table->foreignId('added_by')
+            ->constrained('users')
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
 
-            $table->foreign('client_id')
-                ->references('id')
-                ->on('clients');
+            $table->foreignId('client_id')
+            ->constrained('clients')
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
         });
     }
 

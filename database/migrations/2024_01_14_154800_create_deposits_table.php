@@ -13,20 +13,20 @@ return new class extends Migration
     {
         Schema::create('deposits', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('purchase_id')->nullable();
-            $table->unsignedBigInteger('party_id')->nullable();
             $table->double('cost');
             $table->date('date');
             $table->enum('type', ['purchase', 'party']);
             $table->timestamps();
 
-            $table->foreign('purchase_id')
-                ->references('id')
-                ->on('purchases');
+            $table->foreignId('purchase_id')->nullable()
+            ->constrained('purchases')
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
 
-            $table->foreign('party_id')
-                ->references('id')
-                ->on('parties');
+            $table->foreignId('party_id')->nullable()
+            ->constrained('parties')
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
         });
     }
 

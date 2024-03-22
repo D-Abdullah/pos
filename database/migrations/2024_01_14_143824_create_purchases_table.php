@@ -13,25 +13,24 @@ return new class extends Migration
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('supplier_id');
-            $table->unsignedBigInteger('added_by');
             $table->date('date');
             $table->integer('quantity');
             $table->double('total_price');
 
-            $table->timestamps();
-            $table->foreign('added_by')
-            ->references('id')
-            ->on('users');
+            $table->foreignId('added_by')
+            ->constrained('users')
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
 
-            $table->foreign('product_id')
-            ->references('id')
-            ->on('products');
+            $table->foreignId('product_id')
+            ->constrained('products')
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
 
-            $table->foreign('supplier_id')
-            ->references('id')
-            ->on('suppliers');
+            $table->foreignId('supplier_id')
+            ->constrained('suppliers')
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
         });
     }
 

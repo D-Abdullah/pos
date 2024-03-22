@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
             $table->double('cost');
             $table->date('date');
-            $table->unsignedBigInteger('added_by');
             $table->timestamps();
 
-
-            $table->foreign('added_by')
-                ->references('id')
-                ->on('users');
+            $table->foreignId('added_by')
+            ->constrained('users')
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
+                
         });
     }
 

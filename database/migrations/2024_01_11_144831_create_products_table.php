@@ -16,18 +16,18 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->integer('quantity');
-            $table->unsignedBigInteger('department_id');
             $table->boolean('is_active')->default(true);
-            $table->unsignedBigInteger('added_by');
             $table->timestamps();
 
-            $table->foreign('department_id')
-            ->references('id')
-            ->on('departments');
+            $table->foreignId('department_id')
+            ->constrained('departments')
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
 
-            $table->foreign('added_by')
-            ->references('id')
-            ->on('users');
+            $table->foreignId('added_by')
+            ->constrained('users')
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
         });
     }
 

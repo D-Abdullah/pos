@@ -18,12 +18,12 @@ return new class extends Migration
             $table->double('sale_price');
             $table->integer('quantity');
             $table->boolean('is_active');
-            $table->unsignedBigInteger('added_by');
             $table->timestamps();
 
-            $table->foreign('added_by')
-                ->references('id')
-                ->on('users');
+            $table->foreignId('added_by')
+            ->constrained('users')
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
         });
     }
 

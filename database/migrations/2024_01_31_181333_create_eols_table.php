@@ -13,20 +13,19 @@ return new class extends Migration
     {
         Schema::create('eols', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('added_by');
             $table->integer('quantity');
             $table->text('reason');
             $table->timestamps();
 
+            $table->foreignId('product_id')
+            ->constrained('products')
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
 
-            $table->foreign('product_id')
-                ->references('id')
-                ->on('products');
-
-            $table->foreign('added_by')
-                ->references('id')
-                ->on('users');
+                $table->foreignId('added_by')
+            ->constrained('users')
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
         });
     }
 

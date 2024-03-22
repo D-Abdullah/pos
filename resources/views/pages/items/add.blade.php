@@ -124,16 +124,16 @@
             </div>
             {{-- drobdown search --}}
             <div class="dropdown">
-                <label class="d-block mb-1" for="category-name">اسم القسم</label>
+                <label class="d-block mb-1" for="category-name"> القسم</label>
                 <div class="select-btn-add">
-                    <span>Select</span>
+                    <span>اختر القسم</span>
 
                     <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
                 </div>
                 <div class="content">
                     <div class="search">
                         <i class="uil uil-search"></i>
-                        <input spellcheck="false" name="categoryDropdownQuery" type="text" placeholder="بحث">
+                        <input spellcheck="false" name="categoryDropdownQuery" type="text" placeholder="بحث في الاقسام">
                     </div>
                     <ul class="options"></ul>
                 </div>
