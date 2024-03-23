@@ -16,18 +16,17 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->integer('quantity');
-            $table->boolean('is_active')->default(true);
             $table->timestamps();
 
             $table->foreignId('department_id')
-            ->constrained('departments')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
+                ->constrained('departments')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
 
             $table->foreignId('added_by')
-            ->constrained('users')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
+                ->constrained('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 

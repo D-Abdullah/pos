@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected $fillable = ['name', 'added_by', 'quantity', 'department_id', 'is_active', 'description'];
+    protected $fillable = ['id', 'name', 'description', 'quantity', 'added_by', 'department_id', 'created_at', 'updated_at'];
 
     public function department()
     {
@@ -16,10 +16,6 @@ class Product extends Model
     public function getAddedByAttribute($value)
     {
         return User::find($value)->first()->name;
-    }
-    public function getDepartmentIdAttribute($value)
-    {
-        return Department::find($value)->first()->name;
     }
 
     public function eol()
