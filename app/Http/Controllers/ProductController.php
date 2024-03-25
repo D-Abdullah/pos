@@ -42,7 +42,6 @@ class ProductController extends Controller
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),
                 'department_id' => $request->input('department_id'),
-                'is_active' => $request->has('is_active') ? 1 : 0,
                 'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
 
