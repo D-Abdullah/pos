@@ -69,7 +69,6 @@ class DepartmentController extends Controller
             Department::create([
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),
-                'is_active' => true,
                 'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
 
@@ -92,7 +91,7 @@ class DepartmentController extends Controller
             $department->update([
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),
-                'is_active' => true,
+                'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
 
             return redirect()->route('department.all')->with(['success' => 'تم تحديث القسم ' . $request->input('name') . ' بنجاح.']);
@@ -110,13 +109,6 @@ class DepartmentController extends Controller
     {
         try {
             $department = Department::findOrFail($id);
-
-            // $products = Product::where('department_id', $id)->get();
-
-            // foreach ($products as $product) {
-            //     $product->delete();
-            // }
-
             $department->delete();
 
             return redirect()->route('department.all')->with(['success' => 'تم حذف القسم بنجاح.']);

@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->integer('quantity');
             $table->timestamps();
 
             $table->foreignId('department_id')

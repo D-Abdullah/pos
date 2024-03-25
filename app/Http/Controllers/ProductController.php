@@ -36,7 +36,6 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        return $request->all();
         try {
             Product::create([
                 'name' => $request->input('name'),
@@ -65,9 +64,8 @@ class ProductController extends Controller
             $product->update([
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),
-                'quantity' => $request->input('quantity'),
                 'department_id' => $request->input('department_id'),
-                'is_active' => $request->has('is_active') ? 1 : 0,
+                'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
 
             return redirect()->route('product.all')->with(['success' => 'تم تحديث المنتج ' . $request->input('name') . ' بنجاح.']);

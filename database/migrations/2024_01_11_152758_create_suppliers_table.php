@@ -17,14 +17,13 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('phone');
             $table->string('address');
-            $table->enum('payment_type',['cash', 'deposit', 'both']);
-            $table->boolean('is_active')->default(true);
+            $table->enum('payment_type', ['cash', 'deposit', 'both']);
             $table->timestamps();
 
             $table->foreignId('added_by')
-            ->constrained('users')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
+                ->constrained('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 
