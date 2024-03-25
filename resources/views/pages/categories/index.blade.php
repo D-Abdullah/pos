@@ -164,7 +164,7 @@
                                     <h3 class="fs-5 fw-bold mb-3">حذف العنصر</h3>
                                     <p>هل تريد الحذف متاكد !!</p>
                                     <div class="buttons mt-5 d-flex">
-                                        <button onclick="fnDelete('{{ $department->id }}')" class="agree rounded-2">نعم
+                                        <button class="agree rounded-2">نعم
                                             أريد</button>
                                         <button class="disagree me-3 text-light rounded-2 main-btn">لا أريد</button>
                                     </div>
@@ -224,6 +224,52 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js">
     </script>
 
+
+    <script>
+        document.querySelectorAll("#trash").forEach((trash) => {
+            let id = trash.dataset.id;
+
+            trash.addEventListener("click", (e) => {
+                document.querySelector("body").classList.add("overflow-hidden");
+
+                document.querySelector(".overlay").classList.remove("none");
+
+                document.querySelector(".popup-delete").classList.remove("close");
+
+                document
+                    .querySelector(".popup-delete .agree")
+                    .addEventListener("click", () => {
+
+
+                        fnDelete(id)
+
+                        document
+                            .querySelector("body")
+
+                            .classList.remove("overflow-hidden");
+
+                        document.querySelector(".overlay").classList.add("none");
+
+                        document.querySelector(".popup-delete").classList.add("close");
+
+
+
+                    });
+
+                document
+                    .querySelector(".popup-delete .disagree")
+                    .addEventListener("click", () => {
+                        document
+                            .querySelector("body")
+                            .classList.remove("overflow-hidden");
+
+                        document.querySelector(".overlay").classList.add("none");
+
+                        document.querySelector(".popup-delete").classList.add("close");
+                    });
+            });
+        });
+    </script>
 
     <script>
         function printTable() {
@@ -355,27 +401,6 @@
         // End Exel Sheet
     </script>
 
-    {{-- <script>
-        function fnDelete(id) {
-            var url = `{{ url('department/${id}') }}`;
-            var xhr = new XMLHttpRequest();
-
-            xhr.open("DELETE", url, true);
-            xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
-            xhr.onload = function() {
-                var response = JSON.parse(xhr.responseText);
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    console.log("Department deleted successfully");
-                    console.table(response);
-                } else {
-                    console.error("Failed to delete department");
-                    console.error(response);
-                }
-                window.location.reload();
-            };
-            xhr.send();
-        }
-    </script> --}}
 
     {{-- Delete --}}
     <script>
@@ -407,6 +432,8 @@
             form.submit();
         }
     </script>
+
+
 
     {{-- Validation For Edits --}}
     <script>

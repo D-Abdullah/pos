@@ -19,27 +19,7 @@
             <span class="d-block">وصف الفئة</span>
             <textarea name="description" class="category-input" cols="30" rows="10" placeholder="وصف القسم"></textarea>
         </div>
-        <div id="invalid" class="invalid my-3"></div>
+        <div id="invalidAdd" class="invalid invalidAdd my-3"></div>
         <button class="main-btn mt-5" type="submit">اضافه القسم</button>
     </form>
 </div>
-
-<script>
-    const myForm = document.getElementById("add-cate");
-    const inputs = document.querySelectorAll(".category-input");
-    const message = document.getElementById("invalid");
-
-    myForm.addEventListener('submit', (event) => {
-        message.textContent = '';
-
-        inputs.forEach(input => {
-            if (input.value.trim() === "") {
-                event.preventDefault();
-                const inputName = input.getAttribute('placeholder');
-                message.textContent = `الحقل ${inputName} مطلوب`;
-                input.focus();
-                return;
-            }
-        });
-    });
-</script>
