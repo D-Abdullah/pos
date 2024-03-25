@@ -25,10 +25,8 @@ class UpdateProductRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'quantity' => 'required|integer',
             'department_id' => 'required|integer|exists:departments,id',
             'description' => 'nullable|string',
-            'is_active' => 'nullable|boolean',
         ];
     }
 
@@ -42,14 +40,11 @@ class UpdateProductRequest extends FormRequest
         return [
             'name.required' => 'حقل الاسم مطلوب.',
             'name.string' => 'يجب أن يكون الاسم نصًا.',
-            'quantity.required' => 'حقل الكمية مطلوب.',
-            'quantity.integer' => 'يجب أن تكون الكمية عددًا صحيحًا.',
             'department_id.required' => 'حقل القسم مطلوب.',
             'department_id.integer' => 'يجب أن يكون حقل القسم عددًا صحيحًا.',
             'department_id.exists' => 'القسم المحدد غير صحيح.',
             'description.required' => 'حقل الوصف مطلوب.',
             'description.string' => 'يجب أن يكون الوصف نصًا.',
-            'is_active.boolean' => 'يجب أن يكون حقل التفعيل منطقيًا.',
         ];
     }
 

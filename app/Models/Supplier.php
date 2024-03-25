@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Supplier extends Model
 {
-    protected $fillable = ['name', 'address', 'phone', 'added_by', 'is_active', 'payment_type', 'email'];
+    protected $fillable = ['id', 'name', 'email', 'phone', 'address', 'payment_type', 'added_by', 'created_at', 'updated_at'];
 
     public function getAddedByAttribute($value)
     {

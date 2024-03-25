@@ -26,7 +26,6 @@ class StoreDepartmentRequest extends FormRequest
         return [
             'name' => 'required|string|unique:departments,name',
             'description' => 'nullable|string',
-            'is_active' => 'nullable|boolean',
         ];
     }
 
@@ -44,8 +43,6 @@ class StoreDepartmentRequest extends FormRequest
 
             'description.required' => 'حقل الوصف مطلوب.',
             'description.string' => 'يجب أن يكون الوصف نصًا.',
-
-            'is_active.boolean' => 'يجب أن يكون حقل التفعيل منطقيًا.',
         ];
     }
 
