@@ -123,9 +123,11 @@
                     <button class="main-btn"> اضافه منتج</button>
                 </div>
 
-                <form action="" class="gap-4 d-flex align-items-center mb-0">
-                    <div class="search-input">
-                        <input type="search" placeholder="بحث" id="search">
+                <form action="{{ url()->current() }}" class="gap-4 d-flex align-items-center mb-0" method="GET">
+                    <div>
+                        <label for="search">ابحث بالاسم:</label>
+                        <input type="text" id="search" name="q" value="{{ request('q') }}"
+                            placeholder="ابحث بإسم المنتج">
                     </div>
 
                     <div class="wrapper">
