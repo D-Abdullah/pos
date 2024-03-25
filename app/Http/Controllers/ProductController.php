@@ -22,12 +22,14 @@ class ProductController extends Controller
                 'q' => 'nullable|string',
                 'date_from' => 'nullable|date',
                 'date_to' => 'nullable|date',
+                'department' => 'nullable|exists:departments,id',
             ];
 
             $messages = [
                 'q.string' => 'حقل البحث يجب أن يكون نصًا.',
                 'date_from.date' => 'تاريخ "من" غير صالح.',
                 'date_to.date' => 'تاريخ "إلى" غير صالح.',
+                'department.exists' => 'القسم المحدد غير صالح.',
             ];
 
             $request->validate($rules, $messages);
@@ -50,7 +52,12 @@ class ProductController extends Controller
                 $products->whereDate('created_at', '<=', $request->input('date_to'));
             }
 
-            $products = $products->paginate(PAGINATION);
+            // department filter
+            if ($request->filled('department')) {
+                $products->where('department_id', $request->input('department'));
+            }
+
+            $products = $products->with('department')->paginate(PAGINATION);
             $departments = Department::all();
             return view('pages.items.index', compact('products', 'departments'));
         } catch (\Exception $e) {

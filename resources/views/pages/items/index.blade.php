@@ -4,326 +4,327 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('Assets/Css files/products.css') }}">
+
+    <style>
+        .select-btn,
+        li {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .select-btn {
+            padding: 10px 20px;
+            gap: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #eee
+        }
+
+        .select-btn i {
+            font-size: 14px;
+            transition: transform 0.3s linear;
+        }
+
+        .wrapperFilter {
+            cursor: pointer;
+        }
+
+        .wrapperFilter.active .select-btn i {
+            transform: rotate(-180deg);
+        }
+
+        .content {
+            display: none;
+            padding: 20px;
+            margin-top: 15px;
+            background: #fff;
+            border-radius: 5px;
+            border: 1px solid #eee;
+            position: fixed;
+        }
+
+        .wrapperFilter.active .content {
+            display: block;
+        }
+
+        .content .search {
+            position: relative;
+        }
+
+        .search input {
+            height: 50px;
+            width: 100%;
+            outline: none;
+            font-size: 17px;
+            border-radius: 5px;
+            padding: 0 20px 0 43px;
+            border: 1px solid #B3B3B3;
+        }
+
+        .search input:focus {
+            padding-left: 42px;
+            border: 2px solid #4285f4;
+        }
+
+        .search input::placeholder {
+            color: #bfbfbf;
+        }
+
+        .content .options {
+            margin-top: 10px;
+            max-height: 250px;
+            overflow-y: auto;
+            padding-right: 7px;
+        }
+
+        .options::-webkit-scrollbar {
+            width: 7px;
+        }
+
+        .options::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 25px;
+        }
+
+        .options::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 25px;
+        }
+
+        .options::-webkit-scrollbar-thumb:hover {
+            background: #b3b3b3;
+        }
+
+        .options li {
+            padding: 5px 13px;
+        }
+
+        .options li:hover,
+        li.selected {
+            border-radius: 5px;
+            background: #f2f2f2;
+        }
+    </style>
+
+    <style>
+        .select-btn-edit,
+        li {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .select-btn-edit {
+            padding: 10px 20px;
+            gap: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #eee
+        }
+
+        .select-btn-edit i {
+            font-size: 14px;
+            transition: transform 0.3s linear;
+        }
+
+        .wrapperEdit {
+            cursor: pointer;
+        }
+
+        .wrapperEdit.active .select-btn-edit i {
+            transform: rotate(-180deg);
+        }
+
+        .content {
+            display: none;
+            padding: 20px;
+            margin-top: 15px;
+            background: #fff;
+            border-radius: 5px;
+            border: 1px solid #eee;
+            position: fixed;
+        }
+
+        .wrapperEdit.active .content {
+            display: block;
+        }
+
+        .content .search {
+            position: relative;
+        }
+
+        .search input {
+            height: 50px;
+            width: 100%;
+            outline: none;
+            font-size: 17px;
+            border-radius: 5px;
+            padding: 0 20px 0 43px;
+            border: 1px solid #B3B3B3;
+        }
+
+        .search input:focus {
+            padding-left: 42px;
+            border: 2px solid #4285f4;
+        }
+
+        .search input::placeholder {
+            color: #bfbfbf;
+        }
+
+        .content .options {
+            margin-top: 10px;
+            max-height: 250px;
+            overflow-y: auto;
+            padding-right: 7px;
+        }
+
+        .options::-webkit-scrollbar {
+            width: 7px;
+        }
+
+        .options::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 25px;
+        }
+
+        .options::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 25px;
+        }
+
+        .options::-webkit-scrollbar-thumb:hover {
+            background: #b3b3b3;
+        }
+
+        .options li {
+            padding: 5px 13px;
+        }
+
+        .options li:hover,
+        li.selected {
+            border-radius: 5px;
+            background: #f2f2f2;
+        }
+    </style>
+
+    <style>
+        .select-btn-add,
+        li {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .select-btn-add {
+            padding: 10px 20px;
+            gap: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #eee
+        }
+
+        .select-btn-add i {
+            font-size: 14px;
+            transition: transform 0.3s linear;
+        }
+
+        .dropdown {
+            cursor: pointer;
+        }
+
+        .dropdown.active .select-btn-add i {
+            transform: rotate(-180deg);
+        }
+
+        .content {
+            display: none;
+            padding: 20px;
+            margin-top: 15px;
+            background: #fff;
+            border-radius: 5px;
+            border: 1px solid #eee;
+            position: fixed;
+        }
+
+        .dropdown.active .content {
+            display: block;
+        }
+
+        .content .search {
+            position: relative;
+        }
+
+        .search input {
+            height: 50px;
+            width: 100%;
+            outline: none;
+            font-size: 17px;
+            border-radius: 5px;
+            padding: 0 20px 0 43px;
+            border: 1px solid #B3B3B3;
+        }
+
+        .search input:focus {
+            padding-left: 42px;
+            border: 2px solid #4285f4;
+        }
+
+        .search input::placeholder {
+            color: #bfbfbf;
+        }
+
+        .content .options {
+            margin-top: 10px;
+            max-height: 250px;
+            overflow-y: auto;
+            padding-right: 7px;
+        }
+
+        .options::-webkit-scrollbar {
+            width: 7px;
+        }
+
+        .options::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 25px;
+        }
+
+        .options::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 25px;
+        }
+
+        .options::-webkit-scrollbar-thumb:hover {
+            background: #b3b3b3;
+        }
+
+        .options li {
+            padding: 5px 13px;
+        }
+
+        .options li:hover,
+        li.selected {
+            border-radius: 5px;
+            background: #f2f2f2;
+        }
+    </style>
+
+    <style>
+        .dateInp,
+        .search-input {
+            max-width: 180px;
+        }
+    </style>
+
 @endsection
-<style>
-    .select-btn,
-    li {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-    }
-
-    .select-btn {
-        padding: 10px 20px;
-        gap: 10px;
-        border-radius: 5px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border: 1px solid #eee
-    }
-
-    .select-btn i {
-        font-size: 14px;
-        transition: transform 0.3s linear;
-    }
-
-    .wrapperFilter {
-        cursor: pointer;
-    }
-
-    .wrapperFilter.active .select-btn i {
-        transform: rotate(-180deg);
-    }
-
-    .content {
-        display: none;
-        padding: 20px;
-        margin-top: 15px;
-        background: #fff;
-        border-radius: 5px;
-        border: 1px solid #eee;
-        position: fixed;
-    }
-
-    .wrapperFilter.active .content {
-        display: block;
-    }
-
-    .content .search {
-        position: relative;
-    }
-
-    .search input {
-        height: 50px;
-        width: 100%;
-        outline: none;
-        font-size: 17px;
-        border-radius: 5px;
-        padding: 0 20px 0 43px;
-        border: 1px solid #B3B3B3;
-    }
-
-    .search input:focus {
-        padding-left: 42px;
-        border: 2px solid #4285f4;
-    }
-
-    .search input::placeholder {
-        color: #bfbfbf;
-    }
-
-    .content .options {
-        margin-top: 10px;
-        max-height: 250px;
-        overflow-y: auto;
-        padding-right: 7px;
-    }
-
-    .options::-webkit-scrollbar {
-        width: 7px;
-    }
-
-    .options::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 25px;
-    }
-
-    .options::-webkit-scrollbar-thumb {
-        background: #ccc;
-        border-radius: 25px;
-    }
-
-    .options::-webkit-scrollbar-thumb:hover {
-        background: #b3b3b3;
-    }
-
-    .options li {
-        padding: 5px 13px;
-    }
-
-    .options li:hover,
-    li.selected {
-        border-radius: 5px;
-        background: #f2f2f2;
-    }
-</style>
-
-<style>
-    .select-btn-edit,
-    li {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-    }
-
-    .select-btn-edit {
-        padding: 10px 20px;
-        gap: 10px;
-        border-radius: 5px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border: 1px solid #eee
-    }
-
-    .select-btn-edit i {
-        font-size: 14px;
-        transition: transform 0.3s linear;
-    }
-
-    .wrapperEdit {
-        cursor: pointer;
-    }
-
-    .wrapperEdit.active .select-btn-edit i {
-        transform: rotate(-180deg);
-    }
-
-    .content {
-        display: none;
-        padding: 20px;
-        margin-top: 15px;
-        background: #fff;
-        border-radius: 5px;
-        border: 1px solid #eee;
-        position: fixed;
-    }
-
-    .wrapperEdit.active .content {
-        display: block;
-    }
-
-    .content .search {
-        position: relative;
-    }
-
-    .search input {
-        height: 50px;
-        width: 100%;
-        outline: none;
-        font-size: 17px;
-        border-radius: 5px;
-        padding: 0 20px 0 43px;
-        border: 1px solid #B3B3B3;
-    }
-
-    .search input:focus {
-        padding-left: 42px;
-        border: 2px solid #4285f4;
-    }
-
-    .search input::placeholder {
-        color: #bfbfbf;
-    }
-
-    .content .options {
-        margin-top: 10px;
-        max-height: 250px;
-        overflow-y: auto;
-        padding-right: 7px;
-    }
-
-    .options::-webkit-scrollbar {
-        width: 7px;
-    }
-
-    .options::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 25px;
-    }
-
-    .options::-webkit-scrollbar-thumb {
-        background: #ccc;
-        border-radius: 25px;
-    }
-
-    .options::-webkit-scrollbar-thumb:hover {
-        background: #b3b3b3;
-    }
-
-    .options li {
-        padding: 5px 13px;
-    }
-
-    .options li:hover,
-    li.selected {
-        border-radius: 5px;
-        background: #f2f2f2;
-    }
-</style>
-
-<style>
-    .select-btn-add,
-    li {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-    }
-
-    .select-btn-add {
-        padding: 10px 20px;
-        gap: 10px;
-        border-radius: 5px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border: 1px solid #eee
-    }
-
-    .select-btn-add i {
-        font-size: 14px;
-        transition: transform 0.3s linear;
-    }
-
-    .dropdown {
-        cursor: pointer;
-    }
-
-    .dropdown.active .select-btn-add i {
-        transform: rotate(-180deg);
-    }
-
-    .content {
-        display: none;
-        padding: 20px;
-        margin-top: 15px;
-        background: #fff;
-        border-radius: 5px;
-        border: 1px solid #eee;
-        position: fixed;
-    }
-
-    .dropdown.active .content {
-        display: block;
-    }
-
-    .content .search {
-        position: relative;
-    }
-
-    .search input {
-        height: 50px;
-        width: 100%;
-        outline: none;
-        font-size: 17px;
-        border-radius: 5px;
-        padding: 0 20px 0 43px;
-        border: 1px solid #B3B3B3;
-    }
-
-    .search input:focus {
-        padding-left: 42px;
-        border: 2px solid #4285f4;
-    }
-
-    .search input::placeholder {
-        color: #bfbfbf;
-    }
-
-    .content .options {
-        margin-top: 10px;
-        max-height: 250px;
-        overflow-y: auto;
-        padding-right: 7px;
-    }
-
-    .options::-webkit-scrollbar {
-        width: 7px;
-    }
-
-    .options::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 25px;
-    }
-
-    .options::-webkit-scrollbar-thumb {
-        background: #ccc;
-        border-radius: 25px;
-    }
-
-    .options::-webkit-scrollbar-thumb:hover {
-        background: #b3b3b3;
-    }
-
-    .options li {
-        padding: 5px 13px;
-    }
-
-    .options li:hover,
-    li.selected {
-        border-radius: 5px;
-        background: #f2f2f2;
-    }
-</style>
-
-<style>
-    .dateInp,
-    .search-input {
-        max-width: 180px;
-    }
-</style>
-
 @section('content')
     <!-- end of frame-5 (header) -->
     <h2 class="mt-5 mb-5">المنتجات</h2>
@@ -348,8 +349,8 @@
                     <div class="wrapperFilter">
                         <label class="d-block mb-1"> القسم</label>
                         <div class="select-btn">
-                            <span>اختر القسم</span>
-                            <input class="input_id" type="hidden" value="" name="department_id">
+                            <span>{{ request('department') ? request('department') : 'اختر القسم' }}</span>
+                            <input class="input_id" type="hidden" value="{{ request('department') }}" name="department_id">
                             <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
                         </div>
                         <div class="content">
@@ -360,8 +361,6 @@
                             <ul class="options"></ul>
                         </div>
                     </div>
-
-
 
                     <!-- Filter by Date From -->
                     <div class="dateInp">
@@ -458,14 +457,14 @@
                         <td class="opacity-50">
                             {{ $product->name }}
                         </td>
-                        <td>{{ $product->department_id }}</td>
+                        <td>{{ $product->department->name }}</td>
                         {{-- <td>{{ $product->description }}</td> --}}
                         {{-- <td>{{ $product->quantity }}</td> --}}
                         <td>
                             {{ $product->added_by }}
                         </td>
                         <td>
-                            {{ $product->date }}
+                            {{ $product->updated_at->format('Y/m/d') }}
                         </td>
                         {{-- <td>
                                 @if ($product->is_active)

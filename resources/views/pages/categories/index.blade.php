@@ -119,7 +119,7 @@
                         <tr>
                             <td>{{ $department->name }}</td>
                             <td>{{ $department->added_by }}</td>
-                            <td>{{ $department->created_at->format('Y/m/d') }}</td>
+                            <td>{{ $department->updated_at->format('Y/m/d') }}</td>
                             <td class="print-hidden">
                                 <div class="edit d-flex align-items-center justify-content-center">
                                     <img src="{{ asset('Assets/imgs/edit-circle.png') }}" data-id="{{ $department->id }}"
