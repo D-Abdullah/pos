@@ -22,9 +22,9 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreignId('added_by')->nullable()
-            ->constrained('users')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
+                ->constrained('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 

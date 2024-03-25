@@ -1,0 +1,92 @@
+[all]
+	-loading page
+    -all btn's on click disable it with loader
+[login]
+    -login validation enhancement
+[category]
+    -add popup to validation not work
+    -filter block linear design enhancement
+    -popup dismiss on click "X" and blur also
+    -validation it reverse counting of the inputs
+	-test responsive design
+[products]
+	-filter block linear design enhancement
+    -popup dismiss on click "X" and blur also
+    -validation it reverse counting of the inputs
+    -ddws blur dismiss
+    -ddws error on selecting value
+    -ddws search not found value message must be arabic
+	-test responsive design
+[supplier]
+	-filter with ( name, email, mobile, datefrom and dateto ) with lables
+    -filter block linear design enhancement
+	-replace date with payment_type on the table data
+    -center no data placeholder on the table "colspan"
+    -popup dismiss on click "X" and blur also
+    -validation enhancement
+	-add new action on the table after edit btn with icon ($)
+	[$] button
+		-must be open popup modal for each suppliers record to see 3 data
+			(1) The total cost required
+			(2) Total cost paid
+			(3) Total cost of receivables
+		-after this data must be show form cost and date multiple with approvement btns depend on date
+	-export table data as pdf and print and excel
+	-add and edit javascript validation before submit and also remove status btn
+	-delete btn on true result must be send delete method request to supplier/<supplier id>
+	-test responsive design
+[purchase]
+	-filter with ( supplier, product ) dropdown with search && (date) with lable
+	-export table data as pdf and print and excel
+	-add and edit form javascript validation before submit and also remove date and cost multiple inputs and replace total price with unit price
+	-edit form must be like add form remove cost and date multiple
+	-delete btn on true result must be send delete method request to purchase/<purchase id>
+	-test responsive design
+[warehouse]
+	-move front into system page
+	-filter with ( products, categories ) dropdown with search
+	-just table without any filter or actions like delete or edit without status
+	-just with only product name and category and qty and
+	-test responsive design
+[warehouse transaction]
+	-add date on the table
+	-filter with ( products ) dropdown with search && (date)
+	-export table data as pdf and print and excel
+[clients]
+	-filter with ( name, phone, date )
+	-remove status from the table and add date added
+	-export table data as pdf and print and excel
+	-add and edit javascript validation before submit and also remove status btn
+	-delete btn on true result must be send delete method request to client/<client id>
+	-test responsive design
+[EOL] (End Of Life)
+	-filter with ( product name[dropdown with search], date )
+	-remove reason from the table and add date added
+	-export table data as pdf and print and excel
+	-add and edit javascript validation before submit and product input must dropdown with search and also remove status btn
+	-delete btn on true result must be send delete method request to eol/<eol id>
+	-test responsive design
+[users]
+	-filter with ( name, phone, email, role[dropdown with search], date )
+	-table add date added
+	-export table data as pdf and print and excel
+	-add and edit javascript validation before submit
+	-delete btn on true result must be send delete method request to user/<user id>
+	-test responsive design
+[roles]
+	-filter with ( name, date )
+	-table add date added
+	-export table data as pdf and print and excel
+	-add and edit javascript validation before submit and permission must be as checkbox inputs
+	-delete btn on true result must be send delete method request to role/<role id>
+	-test responsive design
+[rents]
+	-filter with ( name, date )
+	-table add date added and remove status
+	-export table data as pdf and print and excel
+	-add and edit javascript validation before submit and remove status btn
+	-delete btn on true result must be send delete method request to rent/<rent id>
+	-test responsive design
+
+[home] [reports] [party] [bill]
+	-at the end !!

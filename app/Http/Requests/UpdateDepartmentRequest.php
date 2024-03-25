@@ -18,7 +18,6 @@ class UpdateDepartmentRequest extends FormRequest
         return [
             'name' => 'required|string|unique:departments,name,' . $this->route('id'),
             'description' => 'nullable|string',
-            'is_active' => 'nullable|boolean',
         ];
     }
 
@@ -31,8 +30,6 @@ class UpdateDepartmentRequest extends FormRequest
 
             'description.required' => 'حقل الوصف مطلوب.',
             'description.string' => 'حقل الوصف يجب أن يكون نصًا.',
-
-            'is_active.boolean' => 'حقل الحالة يجب أن يكون قيمة منطقية.',
         ];
     }
     /**

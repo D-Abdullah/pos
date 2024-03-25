@@ -8,18 +8,56 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
+            $rules = [
+                'q' => 'nullable|string',
+                'date_from' => 'nullable|date',
+                'date_to' => 'nullable|date',
+                'department' => 'nullable|exists:departments,id',
+            ];
+
+            $messages = [
+                'q.string' => 'حقل البحث يجب أن يكون نصًا.',
+                'date_from.date' => 'تاريخ "من" غير صالح.',
+                'date_to.date' => 'تاريخ "إلى" غير صالح.',
+                'department.exists' => 'القسم المحدد غير صالح.',
+            ];
+
+            $request->validate($rules, $messages);
+
             $products = Product::query();
-            // filter
-            $products = $products->paginate(PAGINATION);
+
+            if ($request->filled('q')) {
+                $searchTerm = trim($request->input('q'));
+                $products->where(function ($query) use ($searchTerm) {
+                    $query->where('name', 'like', '%' . $searchTerm . '%')
+                        ->orWhere('description', 'like', '%' . $searchTerm . '%');
+                });
+            }
+            // Apply Date Filters
+            if ($request->filled('date_from')) {
+                $products->whereDate('created_at', '>=', $request->input('date_from'));
+            }
+
+            if ($request->filled('date_to')) {
+                $products->whereDate('created_at', '<=', $request->input('date_to'));
+            }
+
+            // department filter
+            if ($request->filled('department')) {
+                $products->where('department_id', $request->input('department'));
+            }
+
+            $products = $products->with('department')->paginate(PAGINATION);
             $departments = Department::all();
             return view('pages.items.index', compact('products', 'departments'));
         } catch (\Exception $e) {
@@ -36,13 +74,11 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        return $request->all();
         try {
             Product::create([
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),
                 'department_id' => $request->input('department_id'),
-                'is_active' => $request->has('is_active') ? 1 : 0,
                 'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
 
@@ -66,9 +102,8 @@ class ProductController extends Controller
             $product->update([
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),
-                'quantity' => $request->input('quantity'),
                 'department_id' => $request->input('department_id'),
-                'is_active' => $request->has('is_active') ? 1 : 0,
+                'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
 
             return redirect()->route('product.all')->with(['success' => 'تم تحديث المنتج ' . $request->input('name') . ' بنجاح.']);
