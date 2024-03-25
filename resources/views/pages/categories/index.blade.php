@@ -10,18 +10,21 @@
         min-width: 250px !important;
     }
 
-    #category-name:invalid {
-        border: 1px solid red
-    }
-
-    #category-name:valid {
-        border: 1px solid #0075ff
-    }
-
     #startDate {
         max-width: 250px !important;
     }
+
+    .invalid {
+        color: red;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .tableTh th {
+        text-align: justify;
+    }
 </style>
+
 @section('content')
 
     <h2 class="mt-5 mb-5">الأقسام</h2>
@@ -76,7 +79,7 @@
             </div>
 
         </div>
-        <div id="div_table">
+        <div id="dvContents">
             <table class="w-100 mb-4 border" id="table">
 
                 <thead class="head">
@@ -84,7 +87,7 @@
                         <th>اسم القسم</th>
                         <th>بواسطه</th>
                         <th>التاريخ</th>
-                        <th>
+                        <th class="print-hidden">
                             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 25"
                                 fill="none">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -117,7 +120,7 @@
                             <td>{{ $department->name }}</td>
                             <td>{{ $department->added_by }}</td>
                             <td>{{ $department->created_at->format('Y/m/d') }}</td>
-                            <td>
+                            <td class="print-hidden">
                                 <div class="edit d-flex align-items-center justify-content-center">
                                     <img src="{{ asset('Assets/imgs/edit-circle.png') }}" data-id="{{ $department->id }}"
                                         alt="" id="edit">
@@ -131,7 +134,8 @@
                             <td class="p-0">
                                 <div
                                     class="popup-edit id-{{ $department->id }} popup close shadow-sm rounded-3 position-fixed">
-                                    <form method="post" action="{{ route('department.update', $department->id) }}">
+                                    <form id="edit-cate" method="post"
+                                        action="{{ route('department.update', $department->id) }}">
                                         @csrf
                                         @method('put')
 
@@ -140,22 +144,16 @@
                                         <h2 class="text-center mt-4 mb-4 opacity-75"> تعديل: {{ $department->name }} </h2>
                                         <div>
                                             <span class="d-block mb-1">اسم القسم</span>
-                                            <input type="text" name="name" value="{{ $department->name }}"
-                                                id="category-name" placeholder="اسم القسم"
-                                                pattern="[a-zA-Z\u0600-\u06FF]{2,}"
-                                                title="Please enter a valid name with at least 2 Latin alphabet letters"
-                                                required>
+                                            <input type="text" class="category-input" name="name"
+                                                value="{{ $department->name }}" id="category-name"
+                                                placeholder="اسم القسم">
                                         </div>
-                                        {{-- <div>
-                                                <span class="d-block">وصف القسم</span>
-                                                <textarea name="description" id="textarea" cols="30" rows="10" placeholder="تفاصيل القسم">{{ $department->description }}</textarea>
-                                            </div> --}}
-                                        {{-- <div class="form-check form-switch d-flex align-items-center  ms-2 me-2">
-                                                <input class="form-check-input ms-3"
-                                                    @if ($department->is_active) checked @endif type="checkbox" role="switch"
-                                                    id="flexSwitchCheckDefault-99" name="is_active" value="1">
-                                                <label for="flexSwitchCheckDefault-99">تفعيل</label>
-                                            </div> --}}
+                                        <div>
+                                            <span class="d-block">وصف القسم</span>
+                                            <textarea name="description" class="category-input" id="textarea" cols="30" rows="10"
+                                                placeholder="تفاصيل القسم">{{ $department->description }}</textarea>
+                                        </div>
+                                        <div id="invalid" class="invalid my-3"></div>
                                         <button class="main-btn mt-5" type="submit">تعديل</button>
                                     </form>
                                 </div>
@@ -228,28 +226,45 @@
 
 
     <script>
-        // Start Print Table
         function printTable() {
-            var el = document.getElementById("table");
-            el.setAttribute('border', '1');
-            el.setAttribute('cellpadding', '5');
+            // Clone the table
+            var myTable = document.getElementById("table").cloneNode(true);
+            myTable.setAttribute('border', '1');
+            myTable.setAttribute('cellpadding', '5');
 
-            // Remove last column from the table
-            var rows = el.rows;
+            // Remove last column from the cloned table
+            var rows = myTable.getElementsByTagName("tr");
             for (var i = 0; i < rows.length; i++) {
-                var cells = rows[i].cells;
-                if (cells.length > 0) {
-                    var lastCellIndex = cells.length - 1;
-                    rows[i].deleteCell(lastCellIndex);
+                var cols = rows[i].getElementsByTagName("td");
+                if (cols.length > 0) {
+                    rows[i].removeChild(cols[cols.length - 1]);
                 }
             }
 
-            var newPrint = window.open("");
-            newPrint.document.write(el.outerHTML);
-            newPrint.print();
-            newPrint.close();
-        }
+            // Open a new window for printing
+            var printWindow = window.open('');
+            printWindow.document.write('<html dir="rtl"><head><title>Table Contents</title>');
 
+            // Print the Table CSS.
+            // var table_style = document.getElementById("table_style").innerHTML;
+            printWindow.document.write('<style type="text/css">');
+            // printWindow.document.write(table_style);
+            printWindow.document.write('.print-hidden{display:none;}')
+            printWindow.document.write('#table{width:100%;}')
+            printWindow.document.write('</style>');
+            printWindow.document.write('</head>');
+
+            // Print the cloned table
+            printWindow.document.write('<body>');
+            printWindow.document.write('<div id="dvContents">');
+            printWindow.document.write(myTable.outerHTML);
+            printWindow.document.write('</div>');
+            printWindow.document.write('</body>');
+
+            printWindow.document.write('</html>');
+            printWindow.document.close();
+            printWindow.print();
+        }
 
         const print = document.getElementById("print");
         print.addEventListener('click', () => {
@@ -261,9 +276,16 @@
         function Export() {
             // Hide the last column of the table
             var table = document.getElementById('table');
+
             var lastColumnCells = table.querySelectorAll('td:last-child, th:last-child');
             lastColumnCells.forEach(function(cell) {
                 cell.style.display = 'none';
+            });
+
+            // Apply text alignment style to <th> and <td> elements inside the table
+            var tableCells = table.querySelectorAll('th, td');
+            tableCells.forEach(function(cell) {
+                cell.style.textAlign = "right";
             });
 
             // Render the modified table to canvas
@@ -272,6 +294,11 @@
                     // Restore the visibility of the last column
                     lastColumnCells.forEach(function(cell) {
                         cell.style.display = '';
+                    });
+
+                    // Remove text alignment style from <th> and <td> elements inside the table
+                    tableCells.forEach(function(cell) {
+                        cell.style.textAlign = "";
                     });
 
                     // Convert canvas to base64 data URL
@@ -289,6 +316,7 @@
             });
         }
 
+
         const pdfBtn = document.getElementById("pdf");
         pdfBtn.addEventListener('click', () => {
             Export()
@@ -298,6 +326,7 @@
         // Start Exel Sheet
         function htmlTableToExcel(type) {
             var data = document.getElementById('table');
+
 
             // Remove last column
             var rows = data.getElementsByTagName('tr');
@@ -319,7 +348,6 @@
             XLSX.writeFile(excelFile, 'ExportedFile:HTMLTableToExcel.' + type);
         }
 
-
         const exelBtn = document.getElementById("excel");
         exelBtn.addEventListener('click', () => {
             htmlTableToExcel('xlsx')
@@ -327,7 +355,7 @@
         // End Exel Sheet
     </script>
 
-    <script>
+    {{-- <script>
         function fnDelete(id) {
             var url = `{{ url('department/${id}') }}`;
             var xhr = new XMLHttpRequest();
@@ -347,7 +375,9 @@
             };
             xhr.send();
         }
-    </script>
+    </script> --}}
+
+    {{-- Delete --}}
     <script>
         function fnDelete(id) {
             // Get the form element
@@ -355,30 +385,50 @@
             form.setAttribute('method', 'POST');
             form.setAttribute('action', `{{ url('department') }}/${id}`);
             form.style.display = 'none';
-    
+
             // Add CSRF token field
             var csrfTokenField = document.createElement('input');
             csrfTokenField.setAttribute('type', 'hidden');
             csrfTokenField.setAttribute('name', '_token');
             csrfTokenField.setAttribute('value', '{{ csrf_token() }}');
             form.appendChild(csrfTokenField);
-    
+
             // Add method spoofing for DELETE request
             var methodField = document.createElement('input');
             methodField.setAttribute('type', 'hidden');
             methodField.setAttribute('name', '_method');
             methodField.setAttribute('value', 'DELETE');
             form.appendChild(methodField);
-    
+
             // Append the form to the document body
             document.body.appendChild(form);
-    
+
             // Submit the form
             form.submit();
         }
     </script>
-    
 
+    {{-- Validation For Edits --}}
+    <script>
+        const editForm = document.getElementById("edit-cate");
+        const editInputs = editForm.querySelectorAll(".category-input");
+        const editMessage = document.getElementById("invalid");
+
+        editForm.addEventListener('submit', (event) => {
+            console.log("validation working");
+            editMessage.textContent = '';
+
+            editInputs.forEach(input => {
+                if (input.value.trim() === "") {
+                    event.preventDefault();
+                    const inputName = input.getAttribute('placeholder');
+                    editMessage.textContent = `الحقل ${inputName} مطلوب`;
+                    input.focus();
+                    return;
+                }
+            });
+        });
+    </script>
 
 
 @endsection

@@ -1,18 +1,4 @@
 <style>
-    #search {
-        min-width: 250px !important;
-    }
-
-    #category-name:invalid {
-        border: 1px solid red
-    }
-
-    #category-name:valid {
-        border: 1px solid #0075ff
-    }
-</style>
-
-<style>
     .select-btn,
     li {
         display: flex;
@@ -109,31 +95,35 @@
         background: #f2f2f2;
     }
 </style>
-
+<style>
+    .invalid {
+        color: red;
+        font-size: 12px;
+        text-align: center;
+    }
+</style>
 <div class="popup-add popup close shadow-sm rounded-3 position-fixed">
     <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
     <h2 class="text-center mt-4 mb-4 opacity-75">اضافة منتج جديد</h2>
-    <form method="post" action="{{ route('product.add') }}">
+    <form id="add-cate" method="post" action="{{ route('product.add') }}">
         @csrf
         <div class="f-row d-flex gap-4">
             <div>
                 <label class="d-block mb-1" for="category-name">اسم المنتج</label>
-                <input type="text" name="name" id="category-name" placeholder="اسم المنتج"
-                    pattern="[a-zA-Z\u0600-\u06FF]{2,}"
-                    title="Please enter a valid name with at least 2 Latin alphabet letters" required>
+                <input class="category-input" type="text" name="name" id="category-name" placeholder="اسم المنتج">
             </div>
             {{-- drobdown search --}}
             <div class="dropdown">
                 <label class="d-block mb-1" for="category-name"> القسم</label>
                 <div class="select-btn-add">
                     <span>اختر القسم</span>
-
+                    <input id="input_id" type="hidden" value="" name="department_id">
                     <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
                 </div>
                 <div class="content">
                     <div class="search">
                         <i class="uil uil-search"></i>
-                        <input spellcheck="false" name="categoryDropdownQuery" type="text" placeholder="بحث في الاقسام">
+                        <input class="input" spellcheck="false" type="text" placeholder="بحث في الاقسام">
                     </div>
                     <ul class="options"></ul>
                 </div>
@@ -149,7 +139,8 @@
 
         <div>
             <label class="d-block" for="textarea">وصف المنتج</label>
-            <textarea name="description" id="textarea" cols="30" rows="10" placeholder="ادخل وصف المنتج"></textarea>
+            <textarea class="category-input" name="description" id="textarea" cols="30" rows="10"
+                placeholder=" وصف المنتج"></textarea>
         </div>
 
         {{-- <div class="form-check form-switch d-flex align-items-center  ms-2 me-2">
@@ -157,6 +148,7 @@
                    id="flexSwitchCheckDefault-90">
             <label for="flexSwitchCheckDefault-90">تفعيل</label>
         </div> --}}
+        <div id="invalid" class="invalid my-3"></div>
         <button class="main-btn mt-5">اضافه</button>
 </div>
 
@@ -166,17 +158,22 @@
 <script>
     const wrapperAdd = document.querySelector(".dropdown"),
         selectBtnAdd = wrapperAdd.querySelector(".select-btn-add"),
-        searchInpAdd = wrapperAdd.querySelector("input"),
-        optionsAdd = wrapperAdd.querySelector(".options");
+        searchInpAdd = wrapperAdd.querySelector(".input"),
+        optionsAdd = wrapperAdd.querySelector(".options"),
+        addHiddenInput = wrapperAdd.querySelector("#input_id");
 
-    let parts = ["part 1", "part 3", "part 2"];
+    // let parts = ["part 1", "part 3", "part 2"];
+    let departs = "{{ $departments }}";
+    let parts = JSON.parse(departs.replaceAll("&quot;", '"'))
+    console.log(parts);
 
     function addCate(selectedPart) {
         optionsAdd.innerHTML = "";
-        parts.forEach(category => {
-            let isSelectedAdd = category == selectedPart ? "selected" : "";
-            let li = `<li onclick="update(this)" class="${isSelectedAdd}">${category}</li>`;
+        parts && parts.forEach(category => {
+            let isSelectedAdd = category.name == selectedPart ? "selected" : "";
+            let li = `<li onclick="update(this)" class="${isSelectedAdd}">${category.name}</li>`;
             optionsAdd.insertAdjacentHTML("beforeend", li);
+            addHiddenInput.value = category.id
         });
     }
     addCate();
@@ -188,17 +185,47 @@
         selectBtnAdd.firstElementChild.innerText = selectedli.innerText;
     }
 
-    searchInpAdd.addEventListener("keyup", () => {
-        let arr = [];
-        let searchWord = searchInpAdd.value.toLowerCase();
-        arr = parts.filter(onePart => {
-            return onePart.toLowerCase().startsWith(searchWord);
-        }).map(onePart => {
-            let isSelectedAdd = onePart == selectBtnAdd.firstElementChild.innerText ? "selected" : "";
-            return `<li onclick="update(this)" class="${isSelectedAdd}">${onePart}</li>`;
-        }).join("");
-        optionsAdd.innerHTML = arr ? arr : `<p style="margin-top: 10px;">Oops! not found</p>`;
-    });
+    if (searchInpAdd) {
+        searchInpAdd.addEventListener("keyup", () => {
+
+            let arr = [];
+            let searchWord = searchInpAdd.value.toLowerCase();
+            arr = parts.filter(onePart => {
+                return onePart.name.toLowerCase().startsWith(searchWord);
+            }).map(onePart => {
+                let isSelectedAdd = onePart.name === selectBtnAdd.firstElementChild.innerText ?
+                    "selected" :
+                    "";
+                return `<li onclick="update(this)" class="${isSelectedAdd}">${onePart.name}</li>`;
+            }).join("");
+            optionsAdd.innerHTML = arr ? arr : `<p style="margin-top: 10px;">Oops! not found</p>`;
+        });
+    }
+
+
 
     selectBtnAdd.addEventListener("click", () => wrapperAdd.classList.toggle("active"));
+</script>
+
+{{-- For Validation --}}
+
+
+<script>
+    const myForm = document.getElementById("add-cate");
+    const inputs = document.querySelectorAll(".category-input");
+    const message = document.getElementById("invalid");
+
+    myForm.addEventListener('submit', (event) => {
+        message.textContent = '';
+
+        inputs.forEach(input => {
+            if (input.value.trim() === "") {
+                event.preventDefault();
+                const inputName = input.getAttribute('placeholder');
+                message.textContent = `الحقل ${inputName} مطلوب`;
+                input.focus();
+                return;
+            }
+        });
+    });
 </script>
