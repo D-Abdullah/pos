@@ -349,7 +349,7 @@
                     <div class="wrapperFilter">
                         <label class="d-block mb-1"> القسم</label>
                         <div class="select-btn">
-                            <span>{{ request('department') ? request('department') : 'اختر القسم' }}</span>
+                            <span>{{ request('department') ? \App\Models\Department::find(request('department'))->name : 'اختر القسم' }}</span>
                             <input class="input_id" type="hidden" value="{{ request('department') }}" name="department">
                             <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
                         </div>
