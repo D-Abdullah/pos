@@ -1,31 +1,30 @@
 <div class="popup-add popup pb-5 close shadow-sm rounded-3 position-fixed">
     <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
     <h2 class="text-center mt-4 mb-4 opacity-75">اضافة مورد جديد</h2>
-    <form method="post" action="{{ route('supplier.add') }}">
+    <form method="post" action="{{ route('supplier.add') }}" id="add-cate">
         @csrf
         <div class="f-row d-flex gap-4">
             <div>
                 <label class="d-block mb-1" for="category-name">اسم المورد</label>
-                <input class="for-valid" type="text" name="name" id="category-name" placeholder="اسم المورد"
-                    title="Please enter a valid name with at least 2 Latin alphabet letters" required>
+                <input class="for-valid category-input" type="text" name="name" id="category-name"
+                    placeholder="اسم المورد">
             </div>
             <div>
                 <label class="d-block mb-1" for="phone-number"> رقم الهاتف</label>
-                <input class="for-valid" type="number" minlength="11" name="phone" id="phone-number"
-                    placeholder="رقم الهاتف" title="Please enter a valid name with at least 2 Latin alphabet letters"
-                    required>
+                <input class="for-valid category-input" type="number" minlength="11" name="phone" id="phone-number"
+                    placeholder="رقم الهاتف">
             </div>
         </div>
         <div class="f-row d-flex gap-4">
             <div>
                 <label class="d-block mb-1" for="buy-price">العنوان</label>
-                <input class="for-valid" type="text" name="address" id="buy-price" placeholder="العنوان"
-                    title="Please enter a valid name with at least 2 Latin alphabet letters" required>
+                <input class="for-valid category-input" type="text" name="address" id="buy-price"
+                    placeholder="العنوان">
             </div>
             <div class="">
                 <label class="d-block mb-1" for="sale-buy">البريد الالكتروني</label>
-                <input class="for-valid" type="text" name="email" id="sale-buy" placeholder="البريد الالكتروني "
-                    title="Please enter a valid name with at least 2 Latin alphabet letters" required>
+                <input class="for-valid category-input" type="text" name="email" id="sale-buy"
+                    placeholder="البريد الالكتروني ">
             </div>
         </div>
 
@@ -45,5 +44,6 @@
                    id="flexSwitchCheckDefault-90">
             <label for="flexSwitchCheckDefault-90">تفعيل</label>
         </div> --}}
+        <div id="invalidAdd" class="invalid invalidAdd my-3"></div>
         <button class="main-btn mt-5" type="submit">اضافه</button>
 </div>
