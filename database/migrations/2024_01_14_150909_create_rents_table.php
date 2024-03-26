@@ -17,13 +17,12 @@ return new class extends Migration
             $table->double('rent_price');
             $table->double('sale_price');
             $table->integer('quantity');
-            $table->boolean('is_active');
             $table->timestamps();
 
             $table->foreignId('added_by')
-            ->constrained('users')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
+                ->constrained('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 

@@ -16,21 +16,22 @@ return new class extends Migration
             $table->date('date');
             $table->integer('quantity');
             $table->double('total_price');
+            $table->double('unit_price');
 
             $table->foreignId('added_by')
-            ->constrained('users')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
+                ->constrained('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
 
             $table->foreignId('product_id')
-            ->constrained('products')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
+                ->constrained('products')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
 
             $table->foreignId('supplier_id')
-            ->constrained('suppliers')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
+                ->constrained('suppliers')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 

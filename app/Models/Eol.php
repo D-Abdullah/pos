@@ -7,8 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class Eol extends Model
 {
     protected $table = 'eols';
-    protected $fillable = ['product_id', 'quantity', 'reason', 'added_by'];
-    protected $hidden = ['created_at', 'updated_at'];
+    protected $fillable = [
+        'id',
+        'quantity',
+        'reason',
+        'added_by',
+        'product_id',
+        'created_at',
+        'updated_at'
+    ];
+
     public function product()
     {
         return $this->belongsTo(Product::class);
