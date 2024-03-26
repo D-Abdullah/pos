@@ -38,7 +38,6 @@ class ClientController extends Controller
             Client::create([
                 'name' => $request->input('name'),
                 'phone' => $request->input('phone'),
-                'is_active' => $request->has('is_active') ? 1 : 0,
                 'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
 
@@ -61,7 +60,7 @@ class ClientController extends Controller
             $client->update([
                 'name' => $request->input('name'),
                 'phone' => $request->input('phone'),
-                'is_active' => $request->input('is_active') ? 1 : 0
+                'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
 
             return redirect()->route('client.all')->with(['success' => 'تم تحديث العميل ' . $request->input('name') . ' بنجاح.']);
