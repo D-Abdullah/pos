@@ -77,10 +77,15 @@
                     <div>
 
                         <label for="date_to">اختر القسم</label>
-                        <select class="js-example-basic-single" name="state">
+                        <select class="js-example-basic-single" name="department">
 
+                            <option value=""
+                                {{ request('department') ? 'disabled hidden' : 'selected disabled hidden' }}>اختر القسم
+                            </option>
                             @foreach ($departments as $department)
-                                <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                <option value="{{ $department->id }}"
+                                    {{ request('department') == $department->id ? 'selected' : '' }}>{{ $department->name }}
+                                </option>
                             @endforeach
 
                         </select>
@@ -202,10 +207,15 @@
                                         <div>
 
                                             <label for="date_to">اختر القسم</label>
-                                            <select class="js-example-basic-single edit" name="state">
-
+                                            <select class="js-example-basic-single edit" name="department_id">
+                                                <option value=""
+                                                    {{ $product->department_id ? 'disabled hidden' : 'selected disabled hidden' }}>
+                                                    اختر القسم
+                                                </option>
                                                 @foreach ($departments as $department)
-                                                    <option value="{{ $department->id }}">{{ $department->name }}
+                                                    <option value="{{ $department->id }}"
+                                                        {{ $product->department_id == $department->id ? 'selected' : '' }}>
+                                                        {{ $department->name }}
                                                     </option>
                                                 @endforeach
 

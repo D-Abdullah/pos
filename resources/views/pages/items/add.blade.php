@@ -20,8 +20,9 @@
             <div>
 
                 <label for="add-select">اختر القسم</label>
-                <select id="add-select" class="js-example-basic-single add" name="state">
+                <select id="add-select" class="js-example-basic-single add" name="department_id">
 
+                    <option value="" selected disabled hidden>اختر القسم</option>
                     @foreach ($departments as $department)
                         <option value="{{ $department->id }}">{{ $department->name }}</option>
                     @endforeach
