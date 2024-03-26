@@ -22,7 +22,6 @@ class RentController extends Controller
             $rents = $rents->paginate(PAGINATION);
 
             return view('pages.rents.index', compact('rents'));
-
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('حدث خطأ أثناء جلب الايجار: ' . $e->getMessage());
@@ -44,7 +43,6 @@ class RentController extends Controller
                 'sale_price' => $request->input('sale_price'),
                 'rent_price' => $request->input('rent_price'),
                 'quantity' => $request->input('quantity'),
-                'is_active' => $request->has('is_active') ? 1 : 0,
                 'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
 
@@ -70,7 +68,7 @@ class RentController extends Controller
                 'sale_price' => $request->input('sale_price'),
                 'rent_price' => $request->input('rent_price'),
                 'quantity' => $request->input('quantity'),
-                'is_active' => $request->has('is_active') ? 1 : 0,
+                'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
 
             return redirect()->route('rent.all')->with(['success' => 'تم تحديث الايجار ' . $request->input('name') . ' بنجاح.']);

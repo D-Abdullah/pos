@@ -20,9 +20,11 @@ class UpdatePurchaseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'deposits' => 'array|filled',
-            'deposits.*.cost' => ['required', 'numeric'],
-            'deposits.*.date' => ['required', 'date'],
+            'supplier_id' => 'required|integer|exists:suppliers,id',
+            'product_id' => 'required|integer|exists:products,id',
+            'date' => 'required|date',
+            'quantity' => 'required|integer',
+            'unit_price' => 'required|numeric',
         ];
     }
 
@@ -34,11 +36,18 @@ class UpdatePurchaseRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'deposits.array' => 'حقل الدفعات يجب أن يكون عبارة عن مصفوفة.',
-            'deposits.*.date.required' => 'حقل التاريخ في الدفعات مطلوب.',
-            'deposits.*.date.date' => 'حقل التاريخ في الدفعات يجب أن يكون تاريخ صحيح.',
-            'deposits.*.cost.required' => 'حقل التكلفة في الدفعات مطلوب.',
-            'deposits.*.cost.numeric' => 'حقل التكلفة في الدفعات يجب أن يكون رقمًا صحيحًا.',
+            'supplier_id.required' => 'حقل مُزوّد المنتج مطلوب.',
+            'supplier_id.integer' => 'حقل مُزوّد المنتج يجب أن يكون عبارة عن رقم صحيح.',
+            'supplier_id.exists' => 'المُزوّد المحدد غير موجود.',
+            'product_id.required' => 'حقل المنتج مطلوب.',
+            'product_id.integer' => 'حقل المنتج يجب أن يكون عبارة عن رقم صحيح.',
+            'product_id.exists' => 'المنتج المحدد غير موجود.',
+            'date.required' => 'حقل التاريخ مطلوب.',
+            'date.date' => 'حقل التاريخ يجب أن يكون تاريخ صحيح.',
+            'quantity.required' => 'حقل الكمية مطلوب.',
+            'quantity.integer' => 'حقل الكمية يجب أن تكون عبارة عن رقم صحيح.',
+            'unit_price.required' => 'حقل السعر الإجمالي مطلوب.',
+            'unit_price.numeric' => 'حقل السعر الإجمالي يجب أن يكون رقمًا.',
         ];
     }
 

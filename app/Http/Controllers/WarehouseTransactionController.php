@@ -18,8 +18,9 @@ class WarehouseTransactionController extends Controller
             $wts = WarehouseTransaction::query();
 
             $wts = $wts->paginate(PAGINATION);
+            $products = Product::all();
 
-            return view('pages.warehouse_transaction.index', compact('wts'));
+            return view('pages.warehouse_transaction.index', compact('wts', 'products'));
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('حدث خطأ أثناء جلب معاملات المخزن: ' . $e->getMessage());

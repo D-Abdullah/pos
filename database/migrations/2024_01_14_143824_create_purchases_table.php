@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('quantity');
             $table->double('total_price');
             $table->double('unit_price');
+            $table->timestamps();
 
             $table->foreignId('added_by')
                 ->constrained('users')

@@ -28,10 +28,7 @@ class StorePurchaseRequest extends FormRequest
             'product_id' => 'required|integer|exists:products,id',
             'date' => 'required|date',
             'quantity' => 'required|integer',
-            'total_price' => 'required|numeric',
-            'deposits' => 'array|filled',
-            'deposits.*.cost' => ['required', 'numeric'],
-            'deposits.*.date' => ['required', 'date'],
+            'unit_price' => 'required|numeric',
         ];
     }
 
@@ -43,12 +40,6 @@ class StorePurchaseRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'حقل الاسم مطلوب.',
-            'name.string' => 'حقل الاسم يجب أن يكون عبارة عن نص.',
-            'email.required' => 'حقل البريد الإلكتروني مطلوب.',
-            'email.string' => 'حقل البريد الإلكتروني يجب أن يكون عبارة عن نص.',
-            'phone.required' => 'حقل رقم الهاتف مطلوب.',
-            'phone.string' => 'حقل رقم الهاتف يجب أن يكون عبارة عن نص.',
             'supplier_id.required' => 'حقل مُزوّد المنتج مطلوب.',
             'supplier_id.integer' => 'حقل مُزوّد المنتج يجب أن يكون عبارة عن رقم صحيح.',
             'supplier_id.exists' => 'المُزوّد المحدد غير موجود.',
@@ -59,13 +50,8 @@ class StorePurchaseRequest extends FormRequest
             'date.date' => 'حقل التاريخ يجب أن يكون تاريخ صحيح.',
             'quantity.required' => 'حقل الكمية مطلوب.',
             'quantity.integer' => 'حقل الكمية يجب أن تكون عبارة عن رقم صحيح.',
-            'total_price.required' => 'حقل السعر الإجمالي مطلوب.',
-            'total_price.numeric' => 'حقل السعر الإجمالي يجب أن يكون رقمًا.',
-            'deposits.array' => 'حقل الدفعات يجب أن يكون عبارة عن مصفوفة.',
-            'deposits.*.date.required' => 'حقل التاريخ في الدفعات مطلوب.',
-            'deposits.*.date.date' => 'حقل التاريخ في الدفعات يجب أن يكون تاريخ صحيح.',
-            'deposits.*.cost.required' => 'حقل التكلفة في الدفعات مطلوب.',
-            'deposits.*.cost.numeric' => 'حقل التكلفة في الدفعات يجب أن يكون رقمًا صحيحًا.',
+            'unit_price.required' => 'حقل السعر الإجمالي مطلوب.',
+            'unit_price.numeric' => 'حقل السعر الإجمالي يجب أن يكون رقمًا.',
         ];
     }
 

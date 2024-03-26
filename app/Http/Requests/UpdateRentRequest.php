@@ -24,11 +24,10 @@ class UpdateRentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'=>'required|string',
-            'quantity'=>'required|integer',
-            'sale_price'=>'required|numeric',
-            'rent_price'=>'required|numeric',
-            'is_active' => 'nullable|boolean',
+            'name' => 'required|string',
+            'quantity' => 'required|integer',
+            'sale_price' => 'required|numeric',
+            'rent_price' => 'required|numeric',
         ];
     }
 
@@ -39,11 +38,10 @@ class UpdateRentRequest extends FormRequest
             'name.string' => 'يجب أن يكون الاسم نصًا.',
             'quantity.required' => 'حقل الكمية مطلوب.',
             'quantity.integer' => 'يجب أن تكون الكمية عددًا صحيحًا.',
-            'sale_price.required'=>'يجب ان يكون حقل سعر البيع مطلوب',
-            'sale_price.integer'=>'يجب ان يكون سعر البيع صحيحا',
-            'rent_price.required'=>'يجب ان يكون حقل سعر الايجار مطلوب',
-            'rent_price.integer'=>'يجب ان يكون سعر الايجار صحيحا',
-            'is_active.boolean' => 'يجب أن يكون حقل التفعيل منطقيًا.',
+            'sale_price.required' => 'يجب ان يكون حقل سعر البيع مطلوب',
+            'sale_price.integer' => 'يجب ان يكون سعر البيع صحيحا',
+            'rent_price.required' => 'يجب ان يكون حقل سعر الايجار مطلوب',
+            'rent_price.integer' => 'يجب ان يكون سعر الايجار صحيحا',
         ];
     }
 

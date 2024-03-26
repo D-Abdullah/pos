@@ -21,7 +21,7 @@ class EolController extends Controller
         try {
             $eols = Eol::query();
 
-            $eols = $eols->paginate(PAGINATION);
+            $eols = $eols->with('product')->paginate(PAGINATION);
 
             $products = Product::all();
             return view('pages.eol.index', compact('eols', 'products'));
@@ -36,7 +36,6 @@ class EolController extends Controller
     public function store(StoreEolRequest $request)
     {
         try {
-
             Eol::create([
                 'product_id' => $request->input('product_id'),
                 'reason' => $request->input('reason'),
@@ -44,8 +43,7 @@ class EolController extends Controller
                 'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
 
-
-            return redirect()->route('eol.all')->with(['success' => 'تم إنشاء الهالك ' . $request->input('name') . ' بنجاح.']);
+            return redirect()->route('eol.all')->with(['success' => 'تم إنشاء الهالك ' . Product::find($request->input('product_id'))->name . ' بنجاح.']);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('حدث خطأ أثناء انشاء الهالك: ' . $e->getMessage());
@@ -66,9 +64,10 @@ class EolController extends Controller
                 'product_id' => $request->input('product_id'),
                 'reason' => $request->input('reason'),
                 'quantity' => $request->input('quantity'),
+                'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
 
-            return redirect()->route('eol.all')->with(['success' => 'تم تحديث الهالك ' . $request->input('name') . ' بنجاح.']);
+            return redirect()->route('eol.all')->with(['success' => 'تم تحديث الهالك ' . Product::find($request->input('product_id'))->name . ' ' . $request->input('quantity') . ' بنجاح.']);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('حدث خطأ أثناء تحديث الهالك: ' . $e->getMessage());

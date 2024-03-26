@@ -26,7 +26,6 @@ class UpdateClientRequest extends FormRequest
         return [
             'name' => 'required|string',
             'phone' => 'required|string|regex:/^[0-9+\-]+$/',
-            'is_active' => 'nullable|boolean',
         ];
     }
 
@@ -43,7 +42,6 @@ class UpdateClientRequest extends FormRequest
             'phone.required' => 'حقل الهاتف مطلوب.',
             'phone.string' => 'يجب أن يكون الهاتف نصًا.',
             'phone.regex' => 'يجب أن يكون الهاتف في صيغة صحيحة.',
-            'is_active.boolean' => 'يجب أن يكون حقل التفعيل منطقيًا.',
         ];
     }
 

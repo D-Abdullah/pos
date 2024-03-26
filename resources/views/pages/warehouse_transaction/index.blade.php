@@ -4,104 +4,43 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('Assets/Css files/transaction.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <style>
+        .dateInp,
+        .search-input,
+        .search-div {
+            max-width: 180px;
+        }
+
+        .select2-container--default .select2-search--dropdown .select2-search__field {
+            padding: 0;
+            outline: none;
+            border: 1px solid #ddd;
+            height: 30px !important;
+
+        }
+
+        .select2-container--default .select2-selection--single {
+            height: 45px !important;
+            border: 1px solid #ddd;
+        }
+
+        .select2-container[dir="rtl"] .select2-selection--single .select2-selection__rendered {
+            padding-top: 7px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 0px !important;
+            top: 50% !important;
+        }
+
+        .select2-container {
+            width: 280px !important;
+        }
+    </style>
 @endsection
-<style>
-    .select-btn,
-    li {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-    }
 
-    .select-btn {
-        padding: 10px 20px;
-        gap: 10px;
-        border-radius: 5px;
-        justify-content: space-between;
-        border: 1px solid #eee
-    }
-
-    .select-btn i {
-        font-size: 14px;
-        transition: transform 0.3s linear;
-    }
-
-    .wrapper.active .select-btn i {
-        transform: rotate(-180deg);
-    }
-
-    .content {
-        display: none;
-        padding: 20px;
-        margin-top: 15px;
-        background: #fff;
-        border-radius: 5px;
-        border: 1px solid #eee;
-        position: fixed;
-    }
-
-    .wrapper.active .content {
-        display: block;
-    }
-
-    .content .search {
-        position: relative;
-    }
-
-    .search input {
-        height: 50px;
-        width: 100%;
-        outline: none;
-        font-size: 17px;
-        border-radius: 5px;
-        padding: 0 20px 0 43px;
-        border: 1px solid #B3B3B3;
-    }
-
-    .search input:focus {
-        padding-left: 42px;
-        border: 2px solid #4285f4;
-    }
-
-    .search input::placeholder {
-        color: #bfbfbf;
-    }
-
-    .content .options {
-        margin-top: 10px;
-        max-height: 250px;
-        overflow-y: auto;
-        padding-right: 7px;
-    }
-
-    .options::-webkit-scrollbar {
-        width: 7px;
-    }
-
-    .options::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 25px;
-    }
-
-    .options::-webkit-scrollbar-thumb {
-        background: #ccc;
-        border-radius: 25px;
-    }
-
-    .options::-webkit-scrollbar-thumb:hover {
-        background: #b3b3b3;
-    }
-
-    .options li {
-        padding: 5px 13px;
-    }
-
-    .options li:hover,
-    li.selected {
-        border-radius: 5px;
-        background: #f2f2f2;
-    }
-</style>
 @section('content')
     <h2 class="mt-5 mb-5">معاملات المستودع</h2>
     <!-- start of body -->
@@ -112,20 +51,28 @@
                 <div class="search-input">
                     <input type="search" placeholder="بحث" id="search">
                 </div>
-                <div class="wrapper">
-                    <div class="select-btn">
-                        <span>Select</span>
 
-                        <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
-                    </div>
-                    <div class="content">
-                        <div class="search">
-                            <i class="uil uil-search"></i>
-                            <input spellcheck="false" name="categoryDropdownQuery" type="text" placeholder="بحث">
-                        </div>
-                        <ul class="options"></ul>
-                    </div>
+                <div>
+
+                    <label for="date_to">اختر المنتج</label>
+                    <select class="js-example-basic-single" name="product">
+
+                        {{-- <option value="" {{ request('product') ? 'disabled hidden' : 'selected disabled hidden' }}>
+                            اختر المنتج
+                        </option>
+                        @foreach ($products as $product)
+                            <option value="{{ $product->id }}" {{ request('product') == $product->id ? 'selected' : '' }}>
+                                {{ $product->name }}
+                            </option>
+                        @endforeach --}}
+                        <option value="1">
+                            test
+                        </option>
+
+
+                    </select>
                 </div>
+
                 <button type="submit" class="main-btn" id="form">تأكيد</button>
             </div>
             <div class="component-left me-3 gap-4 d-flex align-items-center">
@@ -212,47 +159,12 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js">
     </script>
+    {{-- For JQuery --}}
+    <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    {{-- For Drobdown input --}}
-    <script>
-        const wrapper = document.querySelector(".wrapper"),
-            selectBtn = wrapper.querySelector(".select-btn"),
-            searchInp = wrapper.querySelector("input"),
-            options = wrapper.querySelector(".options");
 
-        let countries = ["Afghanistan", "Algeria", "Argentina"];
 
-        function addCountry(selectedCountry) {
-            options.innerHTML = "";
-            countries.forEach(country => {
-                let isSelected = country == selectedCountry ? "selected" : "";
-                let li = `<li onclick="updateName(this)" class="${isSelected}">${country}</li>`;
-                options.insertAdjacentHTML("beforeend", li);
-            });
-        }
-        addCountry();
-
-        function updateName(selectedLi) {
-            searchInp.value = "";
-            addCountry(selectedLi.innerText);
-            wrapper.classList.remove("active");
-            selectBtn.firstElementChild.innerText = selectedLi.innerText;
-        }
-
-        searchInp.addEventListener("keyup", () => {
-            let arr = [];
-            let searchWord = searchInp.value.toLowerCase();
-            arr = countries.filter(data => {
-                return data.toLowerCase().startsWith(searchWord);
-            }).map(data => {
-                let isSelected = data == selectBtn.firstElementChild.innerText ? "selected" : "";
-                return `<li onclick="updateName(this)" class="${isSelected}">${data}</li>`;
-            }).join("");
-            options.innerHTML = arr ? arr : `<p style="margin-top: 10px;">Oops! not found</p>`;
-        });
-
-        selectBtn.addEventListener("click", () => wrapper.classList.toggle("active"));
-    </script>
     {{-- Print and Pdf and Excel  --}}
     <script>
         // Start Print Table
@@ -353,5 +265,13 @@
             htmlTableToExcel('xlsx')
         });
         // End Exel Sheet
+    </script>
+
+
+    {{-- For Select JQuery  --}}
+    <script>
+        $(document).ready(function() {
+            $('.js-example-basic-single').select2();
+        });
     </script>
 @endsection
