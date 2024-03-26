@@ -23,6 +23,15 @@
 
             width: 15px;
         }
+
+        .check-btn {
+            background-color: #15d057;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
     </style>
 @endsection
 
@@ -301,10 +310,11 @@
                         <div class="popup-dolar id-{{ $supplier->id }} popup close shadow-sm rounded-3 position-fixed">
                             <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
                             <div class="dolar-container p-5 d-flex flex-column">
-                                <div class="dolar-info d-flex justify-content-center gap-3">
-                                    <p> <span class="fw-bold"> The total cost required :</span> <span>00</span></p>
-                                    <p> <span class="fw-bold">Total cost paid :</span> <span>00</span></p>
-                                    <p> <span class="fw-bold">Total cost of receivables :</span> <span>00</span></p>
+                                <div
+                                    class="dolar-info d-flex  flex-column justify-content-center  align-items-center gap-3">
+                                    <p> <span class="fw-bold"> التكلفة الإجمالية المطلوبة :</span> <span>00</span></p>
+                                    <p> <span class="fw-bold">التكلفة الإجمالية المدفوعة :</span> <span>00</span></p>
+                                    <p> <span class="fw-bold">إجمالي تكلفة الحسابات المتبقيه:</span> <span>00</span></p>
 
                                 </div>
 
@@ -326,6 +336,9 @@
                                                 </div>
                                                 <button type="button" class="remove-btn p-3" hidden disabled><i
                                                         class="fa-solid fa-trash"></i></button>
+                                                <button type="button" class="check-btn p-3 ">
+                                                    <i class="fa-solid fa-check"></i>
+                                                </button>
                                             </div>
                                         </div>
 
@@ -440,7 +453,6 @@
             printWindow.document.close();
             printWindow.print();
         }
-
         const print = document.getElementById("print");
         print.addEventListener('click', () => {
             printTable();
@@ -449,7 +461,6 @@
 
         // Start PDF File
         function Export() {
-            // Hide the last column of the table
             var table = document.getElementById('table');
 
             var lastColumnCells = table.querySelectorAll('td:last-child, th:last-child');
@@ -457,29 +468,23 @@
                 cell.style.display = 'none';
             });
 
-            // Apply text alignment style to <th> and <td> elements inside the table
             var tableCells = table.querySelectorAll('th, td');
             tableCells.forEach(function(cell) {
                 cell.style.textAlign = "right";
             });
 
-            // Render the modified table to canvas
             html2canvas(table, {
                 onrendered: function(canvas) {
-                    // Restore the visibility of the last column
                     lastColumnCells.forEach(function(cell) {
                         cell.style.display = '';
                     });
 
-                    // Remove text alignment style from <th> and <td> elements inside the table
                     tableCells.forEach(function(cell) {
                         cell.style.textAlign = "";
                     });
 
-                    // Convert canvas to base64 data URL
                     var data = canvas.toDataURL();
 
-                    // Create PDF
                     var docDefinition = {
                         content: [{
                             image: data,
@@ -531,43 +536,62 @@
     </script>
 
     <script>
-        function fnDelete(id) {
+        document.querySelectorAll("table #edit").forEach((edit) => {
+            let id = edit.dataset.id;
 
-            var url = `{{ url('supplier/${id}') }}`;
-            var xhr = new XMLHttpRequest();
+            edit.addEventListener("click", () => {
+                let popUp = document.querySelector(".popup-edit.id-" + id),
+                    editForm = popUp.querySelector("#edit-cate"),
+                    editInputs = editForm.querySelectorAll(".category-input"),
+                    editMessage = editForm.querySelector("#invalidEdit");
 
-            xhr.open("DELETE", url, true);
-            xhr.onload = function() {
-                var categories = JSON.parse(xhr.responseText);
-                if (xhr.readyState == 4 && xhr.status == "200") {
-                    console.table(categories);
-                } else {
-                    console.error(categories);
-                }
-            }
-            xhr.send(null);
+                editForm.addEventListener('submit', (event) => {
+                    editMessage.textContent = '';
+                    let notValid = false;
+                    for (let i = 0; i < editInputs.length; i++) {
+                        if (editInputs[i].value.trim() === "") {
+                            event.preventDefault();
+                            const inputName = editInputs[i].getAttribute('placeholder');
+                            editMessage.textContent = `الحقل ${inputName} مطلوب`;
+                            editInputs[i].focus();
+                            notValid = true;
+                            if (notValid) {
+                                break;
+                            }
 
-        }
-    </script>
-    <script>
-        const myForm = document.getElementById("add-cate");
-        const inputs = document.querySelectorAll(".category-input");
-        const messageAdd = document.querySelector("#invalidAdd.invalid.invalidAdd");
-
-        myForm.addEventListener('submit', (event) => {
-            messageAdd.textContent = '';
-            inputs.forEach(input => {
-                if (input.value.trim() === "") {
-                    event.preventDefault();
-                    const inputName = input.getAttribute('placeholder');
-                    messageAdd.innerText = `الحقل ${inputName} مطلوب`;
-                    input.focus();
-                    return;
-                }
+                        }
+                    }
+                });
             });
         });
     </script>
 
+    {{-- Validation For Add --}}
+    <script>
+        const addForm = document.getElementById("add-cate");
+        const addInputs = addForm.querySelectorAll(".category-input");
+        const addMessage = document.getElementById("invalidAdd");
+
+        addForm.addEventListener('submit', (event) => {
+            addMessage.textContent = '';
+            let notValid = false;
+
+            for (let i = 0; i < addInputs.length; i++) {
+                if (addInputs[i].value.trim() === "") {
+                    event.preventDefault();
+                    const inputName = addInputs[i].getAttribute('placeholder');
+                    addMessage.textContent = `الحقل ${inputName} مطلوب`;
+                    addInputs[i].focus();
+                    notValid = true;
+                    if (notValid) {
+                        break;
+                    }
+                }
+            }
+        });
+    </script>
+
+    {{-- Delete --}}
     <script>
         document.querySelectorAll("#trash").forEach((trash) => {
             let id = trash.dataset.id;
@@ -612,6 +636,35 @@
                     });
             });
         });
+
+
+        function fnDelete(id) {
+            // Get the form element
+            var form = document.createElement('form');
+            form.setAttribute('method', 'POST');
+            form.setAttribute('action', `{{ url('supplier') }}/${id}`);
+            form.style.display = 'none';
+
+            // Add CSRF token field
+            var csrfTokenField = document.createElement('input');
+            csrfTokenField.setAttribute('type', 'hidden');
+            csrfTokenField.setAttribute('name', '_token');
+            csrfTokenField.setAttribute('value', '{{ csrf_token() }}');
+            form.appendChild(csrfTokenField);
+
+            // Add method spoofing for DELETE request
+            var methodField = document.createElement('input');
+            methodField.setAttribute('type', 'hidden');
+            methodField.setAttribute('name', '_method');
+            methodField.setAttribute('value', 'DELETE');
+            form.appendChild(methodField);
+
+            // Append the form to the document body
+            document.body.appendChild(form);
+
+            // Submit the form
+            form.submit();
+        }
     </script>
     <script>
         document.querySelectorAll("#dolar").forEach((dolar) => {
@@ -657,37 +710,6 @@
                     });
             });
         });
-    </script>
-
-
-    <script>
-        function fnDelete(id) {
-            // Get the form element
-            var form = document.createElement('form');
-            form.setAttribute('method', 'POST');
-            form.setAttribute('action', `{{ url('supplier') }}/${id}`);
-            form.style.display = 'none';
-
-            // Add CSRF token field
-            var csrfTokenField = document.createElement('input');
-            csrfTokenField.setAttribute('type', 'hidden');
-            csrfTokenField.setAttribute('name', '_token');
-            csrfTokenField.setAttribute('value', '{{ csrf_token() }}');
-            form.appendChild(csrfTokenField);
-
-            // Add method spoofing for DELETE request
-            var methodField = document.createElement('input');
-            methodField.setAttribute('type', 'hidden');
-            methodField.setAttribute('name', '_method');
-            methodField.setAttribute('value', 'DELETE');
-            form.appendChild(methodField);
-
-            // Append the form to the document body
-            document.body.appendChild(form);
-
-            // Submit the form
-            form.submit();
-        }
     </script>
     <script>
         function addElement() {
