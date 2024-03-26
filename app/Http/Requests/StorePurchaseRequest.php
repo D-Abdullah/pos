@@ -28,10 +28,7 @@ class StorePurchaseRequest extends FormRequest
             'product_id' => 'required|integer|exists:products,id',
             'date' => 'required|date',
             'quantity' => 'required|integer',
-            'total_price' => 'required|numeric',
-            'deposits' => 'array|filled',
-            'deposits.*.cost' => ['required', 'numeric'],
-            'deposits.*.date' => ['required', 'date'],
+            'unit_price' => 'required|numeric',
         ];
     }
 

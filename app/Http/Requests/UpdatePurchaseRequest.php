@@ -20,9 +20,9 @@ class UpdatePurchaseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'deposits' => 'array|filled',
-            'deposits.*.cost' => ['required', 'numeric'],
-            'deposits.*.date' => ['required', 'date'],
+            // 'deposits' => 'array|filled',
+            // 'deposits.*.cost' => ['required', 'numeric'],
+            // 'deposits.*.date' => ['required', 'date'],
         ];
     }
 

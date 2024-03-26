@@ -39,15 +39,15 @@ class PurchaseController extends Controller
 
     public function store(StorePurchaseRequest $request)
     {
-        $deposits = $request->input('deposits');
-        $deposits_total_cost = 0;
-        for ($i = 0; $i < count($deposits); $i++) {
-            $deposits_total_cost += $deposits[$i]['cost'];
-        }
-        if ($deposits_total_cost > $request->input('total_price')) {
-            return redirect()->back()->withInput($request->all())
-                ->with(['error' => 'لا يمكن ان يكون قيمة الدفعات اكبر من السعر الإجمالي.']);
-        }
+        // $deposits = $request->input('deposits');
+        // $deposits_total_cost = 0;
+        // for ($i = 0; $i < count($deposits); $i++) {
+        //     $deposits_total_cost += $deposits[$i]['cost'];
+        // }
+        // if ($deposits_total_cost > $request->input('total_price')) {
+        //     return redirect()->back()->withInput($request->all())
+        //         ->with(['error' => 'لا يمكن ان يكون قيمة الدفعات اكبر من السعر الإجمالي.']);
+        // }
         try {
             DB::beginTransaction();
             $purchase = Purchase::create([
@@ -55,20 +55,21 @@ class PurchaseController extends Controller
                 'supplier_id' => $request->input('supplier_id'),
                 'date' => $request->input('date'),
                 'quantity' => $request->input('quantity'),
-                'total_price' => $request->input('total_price'),
+                'unit_price' => $request->input('unit_price'),
+                'total_price' => (float) $request->input('unit_price') * (int) $request->input('quantity'),
                 'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
 
-            if ($request->input('deposits')) {
-                for ($i = 0; $i < count($request->input('deposits')); $i++) {
-                    $deposit = new Deposit();
-                    $deposit->purchase_id = $purchase->id;
-                    $deposit->type = "purchase";
-                    $deposit->cost = $request->input('deposits')[$i]['cost'];
-                    $deposit->date = $request->input('deposits')[$i]['date'];
-                    $deposit->save();
-                }
-            }
+            // if ($request->input('deposits')) {
+            //     for ($i = 0; $i < count($request->input('deposits')); $i++) {
+            //         $deposit = new Deposit();
+            //         $deposit->purchase_id = $purchase->id;
+            //         $deposit->type = "purchase";
+            //         $deposit->cost = $request->input('deposits')[$i]['cost'];
+            //         $deposit->date = $request->input('deposits')[$i]['date'];
+            //         $deposit->save();
+            //     }
+            // }
             $product = Product::findOrFail($request->input('product_id'));
             $product->update(['quantity' => $product->quantity + $request->input('quantity')]);
 
