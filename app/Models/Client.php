@@ -6,7 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Client extends Model
 {
-    protected $fillable = ['id', 'name', 'added_by', 'phone', 'created_at', 'updated_at'];
+    protected $fillable = [
+        'id',
+        'name',
+        'phone',
+        'added_by',
+        'created_at',
+        'updated_at'
+    ];
 
     public function getAddedByAttribute($value)
     {

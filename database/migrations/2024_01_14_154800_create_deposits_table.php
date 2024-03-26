@@ -18,15 +18,15 @@ return new class extends Migration
             $table->enum('type', ['purchase', 'party']);
             $table->timestamps();
 
-            $table->foreignId('purchase_id')->nullable()
-            ->constrained('purchases')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
+            $table->foreignId('supplier_id')->nullable()
+                ->constrained('suppliers')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
 
             $table->foreignId('party_id')->nullable()
-            ->constrained('parties')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
+                ->constrained('parties')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 
