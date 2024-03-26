@@ -3,324 +3,39 @@
 @section('title', 'المنتجات')
 
 @section('styles')
-    <link rel="stylesheet" href="{{ asset('Assets/Css files/products.css') }}">
-
-    <style>
-        .select-btn,
-        li {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .select-btn {
-            padding: 10px 20px;
-            gap: 10px;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border: 1px solid #eee
-        }
-
-        .select-btn i {
-            font-size: 14px;
-            transition: transform 0.3s linear;
-        }
-
-        .wrapperFilter {
-            cursor: pointer;
-        }
-
-        .wrapperFilter.active .select-btn i {
-            transform: rotate(-180deg);
-        }
-
-        .content {
-            display: none;
-            padding: 20px;
-            margin-top: 15px;
-            background: #fff;
-            border-radius: 5px;
-            border: 1px solid #eee;
-            position: fixed;
-        }
-
-        .wrapperFilter.active .content {
-            display: block;
-        }
-
-        .content .search {
-            position: relative;
-        }
-
-        .search input {
-            height: 50px;
-            width: 100%;
-            outline: none;
-            font-size: 17px;
-            border-radius: 5px;
-            padding: 0 20px 0 43px;
-            border: 1px solid #B3B3B3;
-        }
-
-        .search input:focus {
-            padding-left: 42px;
-            border: 2px solid #4285f4;
-        }
-
-        .search input::placeholder {
-            color: #bfbfbf;
-        }
-
-        .content .options {
-            margin-top: 10px;
-            max-height: 250px;
-            overflow-y: auto;
-            padding-right: 7px;
-        }
-
-        .options::-webkit-scrollbar {
-            width: 7px;
-        }
-
-        .options::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 25px;
-        }
-
-        .options::-webkit-scrollbar-thumb {
-            background: #ccc;
-            border-radius: 25px;
-        }
-
-        .options::-webkit-scrollbar-thumb:hover {
-            background: #b3b3b3;
-        }
-
-        .options li {
-            padding: 5px 13px;
-        }
-
-        .options li:hover,
-        li.selected {
-            border-radius: 5px;
-            background: #f2f2f2;
-        }
-    </style>
-
-    <style>
-        .select-btn-edit,
-        li {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .select-btn-edit {
-            padding: 10px 20px;
-            gap: 10px;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border: 1px solid #eee
-        }
-
-        .select-btn-edit i {
-            font-size: 14px;
-            transition: transform 0.3s linear;
-        }
-
-        .wrapperEdit {
-            cursor: pointer;
-        }
-
-        .wrapperEdit.active .select-btn-edit i {
-            transform: rotate(-180deg);
-        }
-
-        .content {
-            display: none;
-            padding: 20px;
-            margin-top: 15px;
-            background: #fff;
-            border-radius: 5px;
-            border: 1px solid #eee;
-            position: fixed;
-        }
-
-        .wrapperEdit.active .content {
-            display: block;
-        }
-
-        .content .search {
-            position: relative;
-        }
-
-        .search input {
-            height: 50px;
-            width: 100%;
-            outline: none;
-            font-size: 17px;
-            border-radius: 5px;
-            padding: 0 20px 0 43px;
-            border: 1px solid #B3B3B3;
-        }
-
-        .search input:focus {
-            padding-left: 42px;
-            border: 2px solid #4285f4;
-        }
-
-        .search input::placeholder {
-            color: #bfbfbf;
-        }
-
-        .content .options {
-            margin-top: 10px;
-            max-height: 250px;
-            overflow-y: auto;
-            padding-right: 7px;
-        }
-
-        .options::-webkit-scrollbar {
-            width: 7px;
-        }
-
-        .options::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 25px;
-        }
-
-        .options::-webkit-scrollbar-thumb {
-            background: #ccc;
-            border-radius: 25px;
-        }
-
-        .options::-webkit-scrollbar-thumb:hover {
-            background: #b3b3b3;
-        }
-
-        .options li {
-            padding: 5px 13px;
-        }
-
-        .options li:hover,
-        li.selected {
-            border-radius: 5px;
-            background: #f2f2f2;
-        }
-    </style>
-
-    <style>
-        .select-btn-add,
-        li {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .select-btn-add {
-            padding: 10px 20px;
-            gap: 10px;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border: 1px solid #eee
-        }
-
-        .select-btn-add i {
-            font-size: 14px;
-            transition: transform 0.3s linear;
-        }
-
-        .dropdown {
-            cursor: pointer;
-        }
-
-        .dropdown.active .select-btn-add i {
-            transform: rotate(-180deg);
-        }
-
-        .content {
-            display: none;
-            padding: 20px;
-            margin-top: 15px;
-            background: #fff;
-            border-radius: 5px;
-            border: 1px solid #eee;
-            position: fixed;
-        }
-
-        .dropdown.active .content {
-            display: block;
-        }
-
-        .content .search {
-            position: relative;
-        }
-
-        .search input {
-            height: 50px;
-            width: 100%;
-            outline: none;
-            font-size: 17px;
-            border-radius: 5px;
-            padding: 0 20px 0 43px;
-            border: 1px solid #B3B3B3;
-        }
-
-        .search input:focus {
-            padding-left: 42px;
-            border: 2px solid #4285f4;
-        }
-
-        .search input::placeholder {
-            color: #bfbfbf;
-        }
-
-        .content .options {
-            margin-top: 10px;
-            max-height: 250px;
-            overflow-y: auto;
-            padding-right: 7px;
-        }
-
-        .options::-webkit-scrollbar {
-            width: 7px;
-        }
-
-        .options::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 25px;
-        }
-
-        .options::-webkit-scrollbar-thumb {
-            background: #ccc;
-            border-radius: 25px;
-        }
-
-        .options::-webkit-scrollbar-thumb:hover {
-            background: #b3b3b3;
-        }
-
-        .options li {
-            padding: 5px 13px;
-        }
-
-        .options li:hover,
-        li.selected {
-            border-radius: 5px;
-            background: #f2f2f2;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
     <style>
         .dateInp,
-        .search-input {
+        .search-input,
+        .search-div {
             max-width: 180px;
+        }
+
+        .select2-container--default .select2-search--dropdown .select2-search__field {
+            padding: 0;
+            outline: none;
+            border: 1px solid #ddd;
+            height: 30px !important;
+
+        }
+
+        .select2-container--default .select2-selection--single {
+            height: 45px !important;
+            border: 1px solid #ddd;
+        }
+
+        .select2-container[dir="rtl"] .select2-selection--single .select2-selection__rendered {
+            padding-top: 7px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 0px !important;
+            top: 50% !important;
+        }
+
+        .select2-container {
+            width: 280px !important;
         }
     </style>
 
@@ -331,36 +46,22 @@
     <!-- start of body -->
     <section class="pt-0 rounded-3 position-relative shadow-sm overflow-auto">
 
-        <div class="features shadow-sm p-4 d-flex justify-content-between align-items-center">
+        <div class="features shadow-sm p-4 d-flex justify-content-between align-items-end">
 
-            <div class="component-right gap-4 d-flex align-items-center">
+            <div class="component-right gap-4 d-flex align-items-end">
 
                 <div class="add-button">
                     <button class="main-btn"> اضافه منتج</button>
                 </div>
 
-                <form action="{{ url()->current() }}" class="gap-4 d-flex align-items-center mb-0" method="GET">
-                    <div>
+                <form action="{{ url()->current() }}" class="gap-4 d-flex align-items-end mb-0" method="GET">
+                    <div class="search-div">
                         <label for="search">ابحث بالاسم:</label>
                         <input type="text" id="search" name="q" value="{{ request('q') }}"
                             placeholder="ابحث بإسم المنتج">
                     </div>
 
-                    <div class="wrapperFilter">
-                        <label class="d-block mb-1"> القسم</label>
-                        <div class="select-btn">
-                            <span>{{ request('department') ? \App\Models\Department::find(request('department'))->name : 'اختر القسم' }}</span>
-                            <input class="input_id" type="hidden" value="{{ request('department') }}" name="department">
-                            <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
-                        </div>
-                        <div class="content">
-                            <div class="search">
-                                <i class="uil uil-search"></i>
-                                <input class="input" spellcheck="false" type="text" placeholder="بحث في الاقسام">
-                            </div>
-                            <ul class="options"></ul>
-                        </div>
-                    </div>
+
 
                     <!-- Filter by Date From -->
                     <div class="dateInp">
@@ -373,24 +74,19 @@
                         <label for="date_to">إلى تاريخ:</label>
                         <input type="date" id="date_to" name="date_to" value="{{ request('date_to') }}">
                     </div>
+                    <div>
 
-                    {{-- <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
-                        <button onclick="dropdown('valueCategories', 'listCategories')">
-                            <span class="fw-bold opacity-50 valueDropdown" id="valueCategories">الفئه</span>
-                            <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
-                        </button>
-                        <div class="options none">
-                            <ul id="listCategories">
-                                <li class="p-0" id="search">
-                                    <input class="search" type="search" placeholder="بحث">
-                                </li>
-                                <li class="active">الفئة</li>
-                                <li>فئه 1</li>
-                                <li>فئه 2</li>
-                                <li>فئه 3</li>
-                            </ul>
-                        </div>
-                    </div> --}}
+                        <label for="date_to">اختر القسم</label>
+                        <select class="js-example-basic-single" name="state">
+
+                            @foreach ($departments as $department)
+                                <option value="{{ $department->id }}">{{ $department->name }}</option>
+                            @endforeach
+
+                        </select>
+                    </div>
+
+
                     <button type="submit" class="main-btn" id="form">تأكيد</button>
                 </form>
 
@@ -398,7 +94,7 @@
 
             <div class="component-left me-3 gap-4 d-flex align-items-center">
 
-                <div class="select-btn border-0 select position-relative rounded-3 d-flex align-items-center">
+                <div class="select-btn border-0 p-0 select position-relative rounded-3 d-flex align-items-center">
                     <button onclick="dropdown('valueRelease', 'listRelease')">
                         <span class="fw-bold opacity-50 valueDropdown" id="valueRelease">اصدار</span>
                         <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
@@ -485,7 +181,8 @@
                             </div>
                         </td>
                         <td class="p-0">
-                            <div class="popup-edit id-{{ $product->id }} popup close shadow-sm rounded-3 position-fixed">
+                            <div
+                                class="popup-edit id-{{ $product->id }} popup close shadow-sm rounded-3 position-fixed text-end">
                                 <form id="edit-cate" method="post"
                                     action="{{ route('product.update', $product->id) }}">
                                     @csrf
@@ -502,22 +199,17 @@
                                                 placeholder="اسم المنتج">
                                         </div>
 
-                                        <div class="wrapperEdit">
-                                            <label class="d-block mb-1"> القسم</label>
-                                            <div class="select-btn">
-                                                <span>اختر القسم</span>
-                                                <input class="input_id" type="hidden" value=""
-                                                    name="department_id">
-                                                <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
-                                            </div>
-                                            <div class="content">
-                                                <div class="search">
-                                                    <i class="uil uil-search"></i>
-                                                    <input class="input" spellcheck="false" type="text"
-                                                        placeholder="بحث في الاقسام">
-                                                </div>
-                                                <ul class="options"></ul>
-                                            </div>
+                                        <div>
+
+                                            <label for="date_to">اختر القسم</label>
+                                            <select class="js-example-basic-single edit" name="state">
+
+                                                @foreach ($departments as $department)
+                                                    <option value="{{ $department->id }}">{{ $department->name }}
+                                                    </option>
+                                                @endforeach
+
+                                            </select>
                                         </div>
 
                                     </div>
@@ -611,167 +303,13 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js">
     </script>
-
-    {{-- For Drobdown input Add --}}
-    <script>
-        const wrapperFilter = document.querySelector(".wrapperFilter"),
-            selectBtnFilter = wrapperFilter.querySelector(".select-btn"),
-            searchInpFilter = wrapperFilter.querySelector(".input"),
-            optionsFilter = wrapperFilter.querySelector(".options"),
-            FilterHiddenInput = wrapperFilter.querySelector(".input_id");
-
-        let departsFilter = "{{ $departments }}";
-        let partsFilter = JSON.parse(departsFilter.replaceAll("&quot;", '"'))
-
-        if (departsFilter) {
-            console.log("wrapperFilter", wrapperFilter);
-        }
-
-
-
-        function addCateFilter(selectedPart) {
-            optionsFilter.innerHTML = "";
-            partsFilter && partsFilter.forEach(category => {
-                let isSelectedAdd = category.name == selectedPart ? "selected" : "";
-                let li = `<li onclick="updateFilter(this)" class="${isSelectedAdd}">${category.name}</li>`;
-                optionsFilter.insertAdjacentHTML("beforeend", li);
-                FilterHiddenInput.value = category.id
-            });
-        }
-        addCateFilter();
-
-        function updateFilter(selectedli) {
-            searchInpFilter.value = "";
-            addCateFilter(selectedli.innerText);
-            wrapperFilter.classList.remove("active");
-            selectBtnFilter.firstElementChild.innerText = selectedli.innerText;
-        }
-
-        searchInpFilter.addEventListener("keyup", () => {
-
-            let arr = [];
-            let searchWord = searchInpFilter.value.toLowerCase();
-            arr = partsFilter.filter(onePart => {
-                return onePart.name.toLowerCase().startsWith(searchWord);
-            }).map(onePart => {
-                let isSelectedAdd = onePart.name === selectBtnFilter.firstElementChild.innerText ?
-                    "selected" :
-                    "";
-                return `<li onclick="update(this)" class="${isSelectedAdd}">${onePart.name}</li>`;
-            }).join("");
-            optionsFilter.innerHTML = arr ? arr : `<p style="margin-top: 10px;">Oops! not found</p>`;
-        });
+    {{-- For JQuery --}}
+    <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 
 
 
-        selectBtnFilter.addEventListener("click", () => wrapperFilter.classList.toggle("active"));
-    </script>
-    {{-- For Drobdown input Filter --}}
-    <script>
-        const wrapperAdd = document.querySelector(".dropdown"),
-            selectBtnAdd = wrapperAdd.querySelector(".select-btn-add"),
-            searchInpAdd = wrapperAdd.querySelector(".input"),
-            optionsAdd = wrapperAdd.querySelector(".options"),
-            addHiddenInput = wrapperAdd.querySelector("#add_input_id");
-
-        let departs = "{{ $departments }}";
-        let parts = JSON.parse(departs.replaceAll("&quot;", '"'))
-
-
-        console.log("dropdown", wrapperAdd);
-
-
-        function addCate(selectedPart) {
-            optionsAdd.innerHTML = "";
-            parts && parts.forEach(category => {
-                let isSelectedAdd = category.name == selectedPart ? "selected" : "";
-                let li = `<li onclick="update(this)" class="${isSelectedAdd}">${category.name}</li>`;
-                optionsAdd.insertAdjacentHTML("beforeend", li);
-                addHiddenInput.value = category.id
-            });
-        }
-        addCate();
-
-        function update(selectedli) {
-            searchInpAdd.value = "";
-            addCate(selectedli.innerText);
-            wrapperAdd.classList.remove("active");
-            selectBtnAdd.firstElementChild.innerText = selectedli.innerText;
-        }
-
-        if (searchInpAdd) {
-            searchInpAdd.addEventListener("keyup", () => {
-
-                let arr = [];
-                let searchWord = searchInpAdd.value.toLowerCase();
-                arr = parts.filter(onePart => {
-                    return onePart.name.toLowerCase().startsWith(searchWord);
-                }).map(onePart => {
-                    let isSelectedAdd = onePart.name === selectBtnAdd.firstElementChild.innerText ?
-                        "selected" :
-                        "";
-                    return `<li onclick="update(this)" class="${isSelectedAdd}">${onePart.name}</li>`;
-                }).join("");
-                optionsAdd.innerHTML = arr ? arr : `<p style="margin-top: 10px;">Oops! not found</p>`;
-            });
-        }
-
-
-
-        selectBtnAdd.addEventListener("click", () => wrapperAdd.classList.toggle("active"));
-    </script>
-    {{-- For Drobdown input Edit --}}
-    {{-- <script>
-        const wrapperEdit = document.querySelector(".wrapperEdit"),
-            selectBtnEdit = wrapperEdit.querySelector(".select-btn"),
-            searchInpEdit = wrapperEdit.querySelector(".input"),
-            optionsEdit = wrapperEdit.querySelector(".options"),
-            EditHiddenInput = wrapperEdit.querySelector(".input_id");
-
-        let departsEdit = "{{ $departments }}";
-        let partsEdit = JSON.parse(departsEdit.replaceAll("&quot;", '"'))
-
-
-
-        function addCateEdit(selectedPart) {
-            optionsEdit.innerHTML = "";
-            partsEdit && partsEdit.forEach(category => {
-                let isSelectedAdd = category.name == selectedPart ? "selected" : "";
-                let li = `<li onclick="updateEdit(this)" class="${isSelectedAdd}">${category.name}</li>`;
-                optionsEdit.insertAdjacentHTML("beforeend", li);
-                EditHiddenInput.value = category.id
-            });
-        }
-        addCateEdit();
-
-        function updateEdit(selectedli) {
-            searchInpEdit.value = "";
-            addCateEdit(selectedli.innerText);
-            wrapperEdit.classList.remove("active");
-            selectBtnEdit.firstElementChild.innerText = selectedli.innerText;
-        }
-
-        if (searchInpEdit) {
-            searchInpEdit.addEventListener("keyup", () => {
-                let arr = [];
-                let searchWord = searchInpEdit.value.toLowerCase();
-                arr = partsEdit.filter(onePart => {
-                    return onePart.name.toLowerCase().startsWith(searchWord);
-                }).map(onePart => {
-                    let isSelectedAdd = onePart.name === selectBtnEdit.firstElementChild.innerText ?
-                        "selected" :
-                        "";
-                    return `<li onclick="updateEdit(this)" class="${isSelectedAdd}">${onePart.name}</li>`;
-                }).join("");
-                optionsEdit.innerHTML = arr ? arr : `<p style="margin-top: 10px;">Oops! not found</p>`;
-            });
-        }
-
-        selectBtnEdit.addEventListener("click", () => {
-            wrapperEdit.classList.toggle("active")
-        });
-    </script> --}}
     {{-- Print and Pdf and Excel  --}}
     <script>
         function printTable() {
@@ -813,7 +351,6 @@
             printWindow.document.close();
             printWindow.print();
         }
-
         const print = document.getElementById("print");
         print.addEventListener('click', () => {
             printTable();
@@ -822,7 +359,6 @@
 
         // Start PDF File
         function Export() {
-            // Hide the last column of the table
             var table = document.getElementById('table');
 
             var lastColumnCells = table.querySelectorAll('td:last-child, th:last-child');
@@ -830,29 +366,23 @@
                 cell.style.display = 'none';
             });
 
-            // Apply text alignment style to <th> and <td> elements inside the table
             var tableCells = table.querySelectorAll('th, td');
             tableCells.forEach(function(cell) {
                 cell.style.textAlign = "right";
             });
 
-            // Render the modified table to canvas
             html2canvas(table, {
                 onrendered: function(canvas) {
-                    // Restore the visibility of the last column
                     lastColumnCells.forEach(function(cell) {
                         cell.style.display = '';
                     });
 
-                    // Remove text alignment style from <th> and <td> elements inside the table
                     tableCells.forEach(function(cell) {
                         cell.style.textAlign = "";
                     });
 
-                    // Convert canvas to base64 data URL
                     var data = canvas.toDataURL();
 
-                    // Create PDF
                     var docDefinition = {
                         content: [{
                             image: data,
@@ -903,13 +433,11 @@
         // End Exel Sheet
     </script>
 
-    {{-- Validation For Edits Edit --}}
-    {{-- <script>
+    <script>
         document.querySelectorAll("table #edit").forEach((edit) => {
             let id = edit.dataset.id;
 
             edit.addEventListener("click", () => {
-
                 let popUp = document.querySelector(".popup-edit.id-" + id),
                     editForm = popUp.querySelector("#edit-cate"),
                     editInputs = editForm.querySelectorAll(".category-input"),
@@ -917,175 +445,47 @@
 
                 editForm.addEventListener('submit', (event) => {
                     editMessage.textContent = '';
-
-                    editInputs.forEach(input => {
-                        if (input.value.trim() === "") {
+                    let notValid = false;
+                    for (let i = 0; i < editInputs.length; i++) {
+                        if (editInputs[i].value.trim() === "") {
                             event.preventDefault();
-                            const inputName = input.getAttribute('placeholder');
+                            const inputName = editInputs[i].getAttribute('placeholder');
                             editMessage.textContent = `الحقل ${inputName} مطلوب`;
-                            input.focus();
-                            return;
+                            editInputs[i].focus();
+                            notValid = true;
+                            if (notValid) {
+                                break;
+                            }
+
                         }
-                    });
-                });
-
-                const wrapperEdit = editForm.querySelector(".wrapperEdit"),
-                    selectBtnEdit = wrapperEdit.querySelector(".select-btn"),
-                    searchInpEdit = wrapperEdit.querySelector(".input"),
-                    optionsEdit = wrapperEdit.querySelector(".options"),
-                    EditHiddenInput = wrapperEdit.querySelector(".input_id");
-
-                let departsEdit = "{{ $departments }}";
-                let partsEdit = JSON.parse(departsEdit.replaceAll("&quot;", '"'))
-
-
-
-                function addCateEdit(selectedPart) {
-                    optionsEdit.innerHTML = "";
-                    partsEdit && partsEdit.forEach(category => {
-                        let isSelectedAdd = category.name == selectedPart ? "selected" : "";
-                        let li =
-                            `<li onclick="updateEdit(this)" class="${isSelectedAdd}">${category.name}</li>`;
-                        optionsEdit.insertAdjacentHTML("beforeend", li);
-                        EditHiddenInput.value = category.id
-                    });
-                }
-                addCateEdit();
-
-                function updateEdit(selectedli) {
-                    searchInpEdit.value = "";
-                    addCateEdit(selectedli.innerText);
-                    wrapperEdit.classList.remove("active");
-                    selectBtnEdit.firstElementChild.innerText = selectedli.innerText;
-                }
-
-                if (searchInpEdit) {
-                    searchInpEdit.addEventListener("keyup", () => {
-                        let arr = [];
-                        let searchWord = searchInpEdit.value.toLowerCase();
-                        arr = partsEdit.filter(onePart => {
-                            return onePart.name.toLowerCase().startsWith(searchWord);
-                        }).map(onePart => {
-                            let isSelectedAdd = onePart.name === selectBtnEdit
-                                .firstElementChild.innerText ?
-                                "selected" :
-                                "";
-                            return `<li onclick="updateEdit(this)" class="${isSelectedAdd}">${onePart.name}</li>`;
-                        }).join("");
-                        optionsEdit.innerHTML = arr ? arr :
-                            `<p style="margin-top: 10px;">Oops! not found</p>`;
-                    });
-                }
-
-                selectBtnEdit.addEventListener("click", () => {
-                    wrapperEdit.classList.toggle("active")
-                });
-
-
-
-            });
-        });
-    </script> --}}
-    <script>
-        // Define addCateEdit function
-        function addCateEdit(selectedPart, optionsEdit, partsEdit, EditHiddenInput) {
-            optionsEdit.innerHTML = "";
-            partsEdit.forEach(category => {
-                let isSelectedAdd = category.name == selectedPart ? "selected" : "";
-                let li =
-                    `<li onclick="updateEdit(this, '${category.name}', '${category.id}', searchInpEdit)" class="${isSelectedAdd}">${category.name}</li>`;
-                optionsEdit.insertAdjacentHTML("beforeend", li);
-                EditHiddenInput.value = category.id;
-            });
-        }
-
-        // Define updateEdit function
-        function updateEdit(selectedli, selectedPart, categoryId, searchInput) {
-            searchInput.value = "";
-            wrapperEdit.classList.remove("active");
-            selectBtnEdit.firstElementChild.innerText = selectedPart;
-            EditHiddenInput.value = categoryId;
-        }
-
-        document.querySelectorAll("table #edit").forEach((edit) => {
-            let id = edit.dataset.id;
-
-            edit.addEventListener("click", () => {
-                let popUp = document.querySelector(".popup-edit.id-" + id),
-                    editForm = popUp.querySelector("#edit-cate"),
-                    editInputs = editForm.querySelectorAll(".category-input"),
-                    editMessage = editForm.querySelector("#invalidEdit"),
-                    wrapperEdit = editForm.querySelector(".wrapperEdit"),
-                    selectBtnEdit = wrapperEdit.querySelector(".select-btn"),
-                    searchInpEdit = wrapperEdit.querySelector(".input"),
-                    optionsEdit = wrapperEdit.querySelector(".options"),
-                    EditHiddenInput = wrapperEdit.querySelector(".input_id");
-
-                editForm.addEventListener('submit', (event) => {
-                    editMessage.textContent = '';
-
-                    editInputs.forEach(input => {
-                        if (input.value.trim() === "") {
-                            event.preventDefault();
-                            const inputName = input.getAttribute('placeholder');
-                            editMessage.textContent = `الحقل ${inputName} مطلوب`;
-                            input.focus();
-                            return;
-                        }
-                    });
-                });
-
-                let departsEdit = "{{ $departments }}";
-                let partsEdit = JSON.parse(departsEdit.replaceAll("&quot;", '"'));
-
-                addCateEdit(null, optionsEdit, partsEdit, EditHiddenInput);
-
-                if (searchInpEdit) {
-                    searchInpEdit.addEventListener("keyup", () => {
-                        let arr = [];
-                        let searchWord = searchInpEdit.value.toLowerCase();
-                        arr = partsEdit.filter(onePart => {
-                            return onePart.name.toLowerCase().startsWith(searchWord);
-                        }).map(onePart => {
-                            let isSelectedAdd = onePart.name === selectBtnEdit
-                                .firstElementChild.innerText ?
-                                "selected" :
-                                "";
-                            return `<li onclick="updateEdit(this, '${onePart.name}', '${onePart.id}', searchInpEdit)" class="${isSelectedAdd}">${onePart.name}</li>`;
-                        }).join("");
-                        optionsEdit.innerHTML = arr ? arr :
-                            `<p style="margin-top: 10px;">Oops! not found</p>`;
-                    });
-                }
-
-                selectBtnEdit.addEventListener("click", () => {
-                    wrapperEdit.classList.toggle("active")
+                    }
                 });
             });
         });
     </script>
 
-
-
-
-    {{-- Validation For Edits Add --}}
-
+    {{-- Validation For Add --}}
     <script>
-        const myForm = document.getElementById("add-cate");
-        const inputs = document.querySelectorAll(".category-input");
-        const messageAdd = document.querySelector("#invalidAdd.invalid.invalidAdd");
+        const addForm = document.getElementById("add-cate");
+        const addInputs = addForm.querySelectorAll(".category-input");
+        const addMessage = document.getElementById("invalidAdd");
 
-        myForm.addEventListener('submit', (event) => {
-            messageAdd.textContent = '';
-            inputs.forEach(input => {
-                if (input.value.trim() === "") {
+        addForm.addEventListener('submit', (event) => {
+            addMessage.textContent = '';
+            let notValid = false;
+
+            for (let i = 0; i < addInputs.length; i++) {
+                if (addInputs[i].value.trim() === "") {
                     event.preventDefault();
-                    const inputName = input.getAttribute('placeholder');
-                    messageAdd.innerText = `الحقل ${inputName} مطلوب`;
-                    input.focus();
-                    return;
+                    const inputName = addInputs[i].getAttribute('placeholder');
+                    addMessage.textContent = `الحقل ${inputName} مطلوب`;
+                    addInputs[i].focus();
+                    notValid = true;
+                    if (notValid) {
+                        break;
+                    }
                 }
-            });
+            }
         });
     </script>
 
@@ -1134,10 +534,8 @@
                     });
             });
         });
-    </script>
 
 
-    <script>
         function fnDelete(id) {
             // Get the form element
             var form = document.createElement('form');
@@ -1167,6 +565,19 @@
         }
     </script>
 
+
+    {{-- For Select JQuery  --}}
+    <script>
+        $(document).ready(function() {
+            $('.js-example-basic-single').select2();
+        });
+        $(document).ready(function() {
+            $('.js-example-basic-single.add').select2();
+        });
+        $(document).ready(function() {
+            $('.js-example-basic-single.edit').select2();
+        });
+    </script>
 
 
     <script src="{{ asset('Assets/JS files/products.js') }}"></script>

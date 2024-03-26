@@ -31,14 +31,14 @@
     <!-- start of body -->
     <section class="pt-0 rounded-3 position-relative shadow-sm overflow-auto">
 
-        <div class="features shadow-sm p-4 d-flex justify-content-between align-items-center">
+        <div class="features shadow-sm p-4 d-flex justify-content-between align-items-end">
 
-            <div class="component-right gap-4 d-flex align-items-center">
+            <div class="component-right gap-4 d-flex align-items-end">
                 <div class="add-button">
                     <button class="text-light main-btn">اضافه قسم جديد</button>
                 </div>
 
-                <form action="{{ url()->current() }}" class="gap-4 d-flex align-items-center mb-0" method="GET">
+                <form action="{{ url()->current() }}" class="gap-4 d-flex align-items-end mb-0" method="GET">
                     <div>
                         <label for="search">ابحث بالاسم:</label>
                         <input type="text" id="search" name="q" value="{{ request('q') }}"
@@ -153,7 +153,7 @@
                                             <textarea name="description" class="category-input" id="textarea" cols="30" rows="10"
                                                 placeholder="تفاصيل القسم">{{ $department->description }}</textarea>
                                         </div>
-                                        <div id="invalid" class="invalid my-3"></div>
+                                        <div id="invalidEdit" class="invalid my-3"></div>
                                         <button class="main-btn mt-5" type="submit">تعديل</button>
                                     </form>
                                 </div>
@@ -435,25 +435,55 @@
 
 
 
-    {{-- Validation For Edits --}}
+    {{-- Validation For Add --}}
+    <script>
+        const addForm = document.getElementById("add-cate");
+        const addInputs = addForm.querySelectorAll(".category-input");
+        const addMessage = document.getElementById("invalidAdd");
+
+        addForm.addEventListener('submit', (event) => {
+            addMessage.textContent = '';
+            let notValid = false;
+
+            for (let i = 0; i < addInputs.length; i++) {
+                if (addInputs[i].value.trim() === "") {
+                    event.preventDefault();
+                    const inputName = addInputs[i].getAttribute('placeholder');
+                    addMessage.textContent = `الحقل ${inputName} مطلوب`;
+                    addInputs[i].focus();
+                    notValid = true;
+                    if (notValid) {
+                        break;
+                    }
+
+                }
+            }
+
+        });
+    </script>
+
+    {{-- Validation For Edit --}}
     <script>
         const editForm = document.getElementById("edit-cate");
         const editInputs = editForm.querySelectorAll(".category-input");
-        const editMessage = document.getElementById("invalid");
+        const editMessage = document.getElementById("invalidEdit");
 
         editForm.addEventListener('submit', (event) => {
-            console.log("validation working");
             editMessage.textContent = '';
-
-            editInputs.forEach(input => {
-                if (input.value.trim() === "") {
+            let notValid = false;
+            for (let i = 0; i < editInputs.length; i++) {
+                if (editInputs[i].value.trim() === "") {
                     event.preventDefault();
-                    const inputName = input.getAttribute('placeholder');
+                    const inputName = editInputs[i].getAttribute('placeholder');
                     editMessage.textContent = `الحقل ${inputName} مطلوب`;
-                    input.focus();
-                    return;
+                    editInputs[i].focus();
+                    notValid = true;
+                    if (notValid) {
+                        break;
+                    }
+
                 }
-            });
+            }
         });
     </script>
 

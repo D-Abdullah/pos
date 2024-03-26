@@ -38,7 +38,7 @@
                                 <input type="search" placeholder="بحث رقم الهاتف" id="search-mobile">
                             </div>
 
-                            {{-- <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
+                    {{-- <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
                         <button onclick="dropdown('valuePay', 'listPay')">
                             <span class="fw-bold opacity-50 valueDropdown" id="valuePay">نوع الدفع</span>
                             <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
@@ -49,9 +49,9 @@
                                 <li>دفعات</li>
                             </ul>
                         </div>
-                    </div>
+                     </div>
 
-                    <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
+                     <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
                         <button onclick="dropdown('valueStatus', 'listStatus')">
                             <span class="fw-bold opacity-50 valueDropdown" id="valueStatus">الحاله</span>
                             <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
@@ -66,9 +66,9 @@
                                 <li>الحاله 2</li>
                             </ul>
                         </div>
-                    </div>
+                     </div>
 
-                    <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
+                     <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
                         <button onclick="dropdown('valueCategories', 'listCategories')">
                             <span class="fw-bold opacity-50 valueDropdown" id="valueCategories">الفئه</span>
                             <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
