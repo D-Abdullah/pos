@@ -18,6 +18,11 @@
             cursor: pointer;
             border-radius: 5px;
         }
+
+        .dolar-icon {
+
+            width: 15px;
+        }
     </style>
 @endsection
 
@@ -216,7 +221,7 @@
                                 <img class="ms-2 me-2" src="{{ asset('Assets/imgs/trash (1).png') }}"
                                     data-id="{{ $supplier->id }}" alt="" id="trash">
 
-                                <img class="ms-2 me-2" src="{{ asset('Assets/imgs/current-dollar.png') }}"
+                                <img class="ms-2 me-2 dolar-icon" src="{{ asset('Assets/imgs/dolar.svg') }}"
                                     data-id="{{ $supplier->id }}" alt="" id="dolar">
 
                             </div>
