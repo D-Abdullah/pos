@@ -99,20 +99,28 @@ popupsExit.forEach((exit) => {
         exit.addEventListener("click", (e) => {
             e.preventDefault();
 
-            document.querySelector(".overlay").classList.add("none");
-
-            popups.forEach((popup) => {
-                if (!popup.classList.contains("close")) {
-                    popup.classList.add("close");
-
-                    document
-                        .querySelector("body")
-                        .classList.remove("overflow-hidden");
-                }
-            });
+            closePopups();
         });
     }
 });
+
+document.querySelector(".overlay").addEventListener("click", (e) => {
+    if (e.target.classList.contains("overlay")) {
+        closePopups();
+    }
+});
+
+function closePopups() {
+    document.querySelector(".overlay").classList.add("none");
+
+    popups.forEach((popup) => {
+        if (!popup.classList.contains("close")) {
+            popup.classList.add("close");
+
+            document.querySelector("body").classList.remove("overflow-hidden");
+        }
+    });
+}
 
 document.onkeyup = function (e) {
     if (e.key === "Escape") {

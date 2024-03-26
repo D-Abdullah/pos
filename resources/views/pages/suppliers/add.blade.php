@@ -24,27 +24,24 @@
             <div>
                 <label class="d-block mb-1" for="category-name">اسم المورد</label>
                 <input class="for-valid" type="text" name="name" id="category-name" placeholder="اسم المورد"
-                    pattern="[a-zA-Z\u0600-\u06FF]{2,}"
                     title="Please enter a valid name with at least 2 Latin alphabet letters" required>
             </div>
             <div>
                 <label class="d-block mb-1" for="phone-number"> رقم الهاتف</label>
                 <input class="for-valid" type="number" minlength="11" name="phone" id="phone-number"
-                    placeholder="رقم الهاتف" pattern="[a-zA-Z\u0600-\u06FF]{2,}"
-                    title="Please enter a valid name with at least 2 Latin alphabet letters" required>
+                    placeholder="رقم الهاتف" title="Please enter a valid name with at least 2 Latin alphabet letters"
+                    required>
             </div>
         </div>
         <div class="f-row d-flex gap-4">
             <div>
                 <label class="d-block mb-1" for="buy-price">العنوان</label>
                 <input class="for-valid" type="text" name="address" id="buy-price" placeholder="العنوان"
-                    pattern="[a-zA-Z\u0600-\u06FF]{2,}"
                     title="Please enter a valid name with at least 2 Latin alphabet letters" required>
             </div>
             <div class="">
                 <label class="d-block mb-1" for="sale-buy">البريد الالكتروني</label>
                 <input class="for-valid" type="text" name="email" id="sale-buy" placeholder="البريد الالكتروني "
-                    pattern="[a-zA-Z\u0600-\u06FF]{6,}"
                     title="Please enter a valid name with at least 2 Latin alphabet letters" required>
             </div>
         </div>
