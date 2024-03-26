@@ -5,6 +5,48 @@
 @section('styles')
     <link rel="stylesheet" href="{{ asset('Assets/Css files/purchases.css') }}">
 
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <style>
+        .dateInp,
+        .search-input,
+        .search-div {
+            max-width: 150px;
+        }
+
+        .select2-container--default .select2-search--dropdown .select2-search__field {
+            padding: 0;
+            outline: none;
+            border: 1px solid #ddd;
+            height: 30px !important;
+
+        }
+
+        .select2-container--default .select2-selection--single {
+            height: 45px !important;
+            border: 1px solid #ddd;
+        }
+
+        .select2-container[dir="rtl"] .select2-selection--single .select2-selection__rendered {
+            padding-top: 7px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 0px !important;
+            top: 50% !important;
+        }
+
+        .select2-container,
+        .dds {
+            width: 150px !important;
+        }
+
+        .dds.add .select2-container,
+        .dds.edit .select2-container {
+            width: 100% !important;
+        }
+    </style>
+
     <style>
         /* Style for the remove button */
         .remove-btn {
@@ -30,205 +72,7 @@
             max-width: 160px !important;
         }
     </style>
-    {{-- First One Style --}}
-    <style>
-        .select-btn,
-        li {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
 
-        .select-btn {
-            padding: 10px 20px;
-            gap: 10px;
-            border-radius: 5px;
-            justify-content: space-between;
-            border: 1px solid #eee;
-            min-width: 160px;
-        }
-
-        .select-btn i {
-            font-size: 14px;
-            transition: transform 0.3s linear;
-        }
-
-        .wrapper.active .select-btn i {
-            transform: rotate(-180deg);
-        }
-
-        .content {
-            display: none;
-            padding: 20px;
-            margin-top: 15px;
-            background: #fff;
-            border-radius: 5px;
-            border: 1px solid #eee;
-            position: fixed;
-        }
-
-        .wrapper.active .content {
-            display: block;
-        }
-
-        .content .search {
-            position: relative;
-        }
-
-        .search input {
-            height: 50px;
-            width: 100%;
-            outline: none;
-            font-size: 17px;
-            border-radius: 5px;
-            padding: 0 20px 0 43px;
-            border: 1px solid #B3B3B3;
-        }
-
-        .search input:focus {
-            padding-left: 42px;
-            border: 2px solid #4285f4;
-        }
-
-        .search input::placeholder {
-            color: #bfbfbf;
-        }
-
-        .content .options {
-            margin-top: 10px;
-            max-height: 250px;
-            overflow-y: auto;
-            padding-right: 7px;
-        }
-
-        .options::-webkit-scrollbar {
-            width: 7px;
-        }
-
-        .options::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 25px;
-        }
-
-        .options::-webkit-scrollbar-thumb {
-            background: #ccc;
-            border-radius: 25px;
-        }
-
-        .options::-webkit-scrollbar-thumb:hover {
-            background: #b3b3b3;
-        }
-
-        .options li {
-            padding: 5px 13px;
-        }
-
-        .options li:hover,
-        li.selected {
-            border-radius: 5px;
-            background: #f2f2f2;
-        }
-    </style>
-    {{-- Second One Style --}}
-
-    <style>
-        .select-btn,
-        li {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .select-btn-add {
-            padding: 10px 20px;
-            gap: 10px;
-            border-radius: 5px;
-            justify-content: space-between;
-            border: 1px solid #eee;
-            min-width: 160px;
-        }
-
-        .select-btn i {
-            font-size: 14px;
-            transition: transform 0.3s linear;
-        }
-
-        .dropdown.active .select-btn i {
-            transform: rotate(-180deg);
-        }
-
-        .content {
-            display: none;
-            padding: 20px;
-            margin-top: 15px;
-            background: #fff;
-            border-radius: 5px;
-            border: 1px solid #eee;
-            position: fixed;
-        }
-
-        .dropdown.active .content {
-            display: block;
-        }
-
-        .content .search {
-            position: relative;
-        }
-
-        .search input {
-            height: 50px;
-            width: 100%;
-            outline: none;
-            font-size: 17px;
-            border-radius: 5px;
-            padding: 0 20px 0 43px;
-            border: 1px solid #B3B3B3;
-        }
-
-        .search input:focus {
-            padding-left: 42px;
-            border: 2px solid #4285f4;
-        }
-
-        .search input::placeholder {
-            color: #bfbfbf;
-        }
-
-        .content .options {
-            margin-top: 10px;
-            max-height: 250px;
-            overflow-y: auto;
-            padding-right: 7px;
-        }
-
-        .options::-webkit-scrollbar {
-            width: 7px;
-        }
-
-        .options::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 25px;
-        }
-
-        .options::-webkit-scrollbar-thumb {
-            background: #ccc;
-            border-radius: 25px;
-        }
-
-        .options::-webkit-scrollbar-thumb:hover {
-            background: #b3b3b3;
-        }
-
-        .options li {
-            padding: 5px 13px;
-        }
-
-        .options li:hover,
-        li.selected {
-            border-radius: 5px;
-            background: #f2f2f2;
-        }
-    </style>
 
 @endsection
 
@@ -236,68 +80,59 @@
     <h2 class="mt-5 mb-5">المشتريات</h2>
     <section class="pt-0 rounded-3 position-relative shadow-sm overflow-auto">
 
-        <div class="features shadow-sm p-4 d-flex justify-content-between align-items-center">
+        <div class="features shadow-sm p-4 d-flex justify-content-between align-items-end">
 
-            <div class="component-right gap-4 d-flex align-items-center">
+            <div class="component-right gap-4 d-flex align-items-end">
 
                 <div class="add-button">
                     <button class="text-light main-btn"> اضافه عمليه شراء</button>
                 </div>
 
-                <form action="" class="gap-4 d-flex align-items-center mb-0">
-                    <div class="search-input">
-                        <input type="search" placeholder="بحث بالاسم" id="search">
+                <form action="" class="gap-4 d-flex align-items-end mb-0">
+                    <div class="search-div">
+                        <label for="search">ابحث بالاسم:</label>
+                        <input type="text" id="search" name="q" value="{{ request('q') }}"
+                            placeholder="ابحث بإسم المنتج">
                     </div>
 
-                    <div class="wrapper">
-                        <div class="select-btn">
-                            <span>المورد</span>
-
-                            <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
-                        </div>
-                        <div class="content">
-                            <div class="search">
-                                <i class="uil uil-search"></i>
-                                <input spellcheck="false" name="categoryDropdownQuery" type="text" placeholder="بحث">
-                            </div>
-                            <ul class="options"></ul>
-                        </div>
+                    <!-- Filter by Date From -->
+                    <div class="dateInp">
+                        <label for="startDate">من تاريخ:</label>
+                        <input type="date" id="startDate" name="date_from" value="{{ request('date_from') }}">
                     </div>
 
-                    <div class="dropdown">
-                        <div class="select-btn-add">
-                            <span>المنتج</span>
-
-                            <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
-                        </div>
-                        <div class="content">
-                            <div class="search">
-                                <i class="uil uil-search"></i>
-                                <input spellcheck="false" name="categoryDropdownQuery" type="text" placeholder="بحث">
-                            </div>
-                            <ul class="options"></ul>
-                        </div>
+                    <!-- Filter by Date To -->
+                    <div class="dateInp">
+                        <label for="date_to">إلى تاريخ:</label>
+                        <input type="date" id="date_to" name="date_to" value="{{ request('date_to') }}">
                     </div>
 
-                    <input id="startDate" name="categoryDate" class="" type="date" />
-
-
-                    {{-- <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
-                        <button onclick="dropdown('valueStatus', 'listStatus')">
-                            <span class="fw-bold opacity-50 valueDropdown" id="valueStatus">فلتر</span>
-                            <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
-                        </button>
-                        <div class="options none">
-                            <ul id="listStatus">
-                                <li class="p-0" id="search">
-                                    <input class="search" type="search" placeholder="بحث">
-                                </li>
-                                <li class="active">الوظيفه</li>
-                                <li>وظيفه 2</li>
-                                <li>وظيفه 3</li>
-                            </ul>
-                        </div>
-                    </div> --}}
+                    <div class="dds">
+                        <label for="date_to">اختر المورد</label>
+                        <select class="js-example-basic-single supplier" name="supplier">
+                            <option value=""
+                                {{ request('supplier') ? 'disabled hidden' : 'selected disabled hidden' }}>اختر المورد
+                            </option>
+                            @foreach ($suppliers as $supplier)
+                                <option value="{{ $supplier->id }}"
+                                    {{ request('supplier') == $supplier->id ? 'selected' : '' }}>{{ $supplier->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="dds">
+                        <label for="date_to">اختر المنتج</label>
+                        <select class="js-example-basic-single product" name="product">
+                            <option value=""
+                                {{ request('product') ? 'disabled hidden' : 'selected disabled hidden' }}>اختر المنتج
+                            </option>
+                            @foreach ($products as $product)
+                                <option value="{{ $product->id }}"
+                                    {{ request('product') == $product->id ? 'selected' : '' }}>{{ $product->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
 
                     <button type="submit" class="main-btn" id="form">تأكيد</button>
                 </form>
@@ -378,7 +213,7 @@
                         </td>
                         <td class="p-0">
                             <div
-                                class="popup-edit id-{{ $purchase->id }} popup close shadow-sm rounded-3 position-fixed overflow-y-auto">
+                                class="popup-edit id-{{ $purchase->id }} popup close shadow-sm rounded-3 position-fixed ">
                                 <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
                                     alt="">
                                 <form method="post" action="{{ route('purchase.update', $purchase->id) }}"
@@ -387,7 +222,19 @@
                                     @method('put')
                                     <h2 class="text-center mt-4 mb-4 opacity-75">تحديث دفعات عملية شراء</h2>
 
-
+                                    <h2>
+                                        <b>المتبقي:
+                                            @php
+                                                $deposits = $purchase->deposits;
+                                                $dtc = 0;
+                                                for ($i = 0; $i < count($deposits); $i++) {
+                                                    $dtc += $deposits[$i]['cost'];
+                                                }
+                                                $dtc = $purchase->total_price - $dtc;
+                                            @endphp
+                                            <span style="color: #7367F0">{{ $dtc }}</span>
+                                        </b>
+                                    </h2>
 
                                     <!-- Deposits Container -->
                                     {{-- <div id="addDepositsContainerUpdateElement{{ $purchase->id }}"
@@ -493,6 +340,17 @@
 
 @section('script')
     <script src="{{ asset('Assets/JS files/purchases.js') }}"></script>
+
+    {{-- For Exel --}}
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+    {{-- For PDF --}}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js">
+    </script>
+    {{-- For JQuery --}}
+    <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 
     <script>
         function addElement() {
@@ -603,32 +461,47 @@
 
         initRemoveButtons();
     </script>
-    {{-- For Export  --}}
+    {{-- Print and Pdf and Excel  --}}
     <script>
-        // Start Print Table
-        // Start Print Table
         function printTable() {
-            var el = document.getElementById("table");
-            el.setAttribute('border', '1');
-            el.setAttribute('cellpadding', '5');
+            // Clone the table
+            var myTable = document.getElementById("table").cloneNode(true);
+            myTable.setAttribute('border', '1');
+            myTable.setAttribute('cellpadding', '5');
 
-            // Remove last column from the table
-            var rows = el.rows;
+            // Remove last column from the cloned table
+            var rows = myTable.getElementsByTagName("tr");
             for (var i = 0; i < rows.length; i++) {
-                var cells = rows[i].cells;
-                if (cells.length > 0) {
-                    var lastCellIndex = cells.length - 1;
-                    rows[i].deleteCell(lastCellIndex);
+                var cols = rows[i].getElementsByTagName("td");
+                if (cols.length > 0) {
+                    rows[i].removeChild(cols[cols.length - 1]);
                 }
             }
 
-            var newPrint = window.open("");
-            newPrint.document.write(el.outerHTML);
-            newPrint.print();
-            newPrint.close();
+            // Open a new window for printing
+            var printWindow = window.open('');
+            printWindow.document.write('<html dir="rtl"><head><title>Table Contents</title>');
+
+            // Print the Table CSS.
+            // var table_style = document.getElementById("table_style").innerHTML;
+            printWindow.document.write('<style type="text/css">');
+            // printWindow.document.write(table_style);
+            printWindow.document.write('.print-hidden{display:none;}')
+            printWindow.document.write('#table{width:100%;}')
+            printWindow.document.write('</style>');
+            printWindow.document.write('</head>');
+
+            // Print the cloned table
+            printWindow.document.write('<body>');
+            printWindow.document.write('<div id="dvContents">');
+            printWindow.document.write(myTable.outerHTML);
+            printWindow.document.write('</div>');
+            printWindow.document.write('</body>');
+
+            printWindow.document.write('</html>');
+            printWindow.document.close();
+            printWindow.print();
         }
-
-
         const print = document.getElementById("print");
         print.addEventListener('click', () => {
             printTable();
@@ -637,25 +510,30 @@
 
         // Start PDF File
         function Export() {
-            // Hide the last column of the table
             var table = document.getElementById('table');
+
             var lastColumnCells = table.querySelectorAll('td:last-child, th:last-child');
             lastColumnCells.forEach(function(cell) {
                 cell.style.display = 'none';
             });
 
-            // Render the modified table to canvas
+            var tableCells = table.querySelectorAll('th, td');
+            tableCells.forEach(function(cell) {
+                cell.style.textAlign = "right";
+            });
+
             html2canvas(table, {
                 onrendered: function(canvas) {
-                    // Restore the visibility of the last column
                     lastColumnCells.forEach(function(cell) {
                         cell.style.display = '';
                     });
 
-                    // Convert canvas to base64 data URL
+                    tableCells.forEach(function(cell) {
+                        cell.style.textAlign = "";
+                    });
+
                     var data = canvas.toDataURL();
 
-                    // Create PDF
                     var docDefinition = {
                         content: [{
                             image: data,
@@ -667,6 +545,7 @@
             });
         }
 
+
         const pdfBtn = document.getElementById("pdf");
         pdfBtn.addEventListener('click', () => {
             Export()
@@ -676,6 +555,7 @@
         // Start Exel Sheet
         function htmlTableToExcel(type) {
             var data = document.getElementById('table');
+
 
             // Remove last column
             var rows = data.getElementsByTagName('tr');
@@ -697,7 +577,6 @@
             XLSX.writeFile(excelFile, 'ExportedFile:HTMLTableToExcel.' + type);
         }
 
-
         const exelBtn = document.getElementById("excel");
         exelBtn.addEventListener('click', () => {
             htmlTableToExcel('xlsx')
@@ -705,107 +584,166 @@
         // End Exel Sheet
     </script>
 
-    {{-- For Drobdown input --}}
+    {{-- Validation for edit --}}
     <script>
-        const wrapper = document.querySelector(".wrapper"),
-            selectBtn = wrapper.querySelector(".select-btn"),
-            searchInp = wrapper.querySelector("input"),
-            options = wrapper.querySelector(".options");
+        document.querySelectorAll("table #edit").forEach((edit) => {
+            let id = edit.dataset.id;
 
-        let countries = ["Afghanistan", "Algeria", "Argentina"];
+            edit.addEventListener("click", () => {
+                let popUp = document.querySelector(".popup-edit.id-" + id),
+                    editForm = popUp.querySelector("#edit-cate"),
+                    editInputs = editForm.querySelectorAll(".category-input"),
+                    editMessage = editForm.querySelector("#invalidEdit");
 
-        function addCountry(selectedCountry) {
-            options.innerHTML = "";
-            countries.forEach(country => {
-                let isSelected = country == selectedCountry ? "selected" : "";
-                let li = `<li onclick="updateName(this)" class="${isSelected}">${country}</li>`;
-                options.insertAdjacentHTML("beforeend", li);
+                editForm.addEventListener('submit', (event) => {
+                    editMessage.textContent = '';
+                    let notValid = false;
+                    for (let i = 0; i < editInputs.length; i++) {
+                        if (editInputs[i].value.trim() === "") {
+                            event.preventDefault();
+                            const inputName = editInputs[i].getAttribute('placeholder');
+                            editMessage.textContent = `الحقل ${inputName} مطلوب`;
+                            editInputs[i].focus();
+                            notValid = true;
+                            if (notValid) {
+                                break;
+                            }
+
+                        }
+                    }
+                });
             });
-        }
-        addCountry();
-
-        function updateName(selectedLi) {
-            searchInp.value = "";
-            addCountry(selectedLi.innerText);
-            wrapper.classList.remove("active");
-            selectBtn.firstElementChild.innerText = selectedLi.innerText;
-        }
-
-        searchInp.addEventListener("keyup", () => {
-            let arr = [];
-            let searchWord = searchInp.value.toLowerCase();
-            arr = countries.filter(data => {
-                return data.toLowerCase().startsWith(searchWord);
-            }).map(data => {
-                let isSelected = data == selectBtn.firstElementChild.innerText ? "selected" : "";
-                return `<li onclick="updateName(this)" class="${isSelected}">${data}</li>`;
-            }).join("");
-            options.innerHTML = arr ? arr : `<p style="margin-top: 10px;">Oops! not found</p>`;
         });
-
-        selectBtn.addEventListener("click", () => wrapper.classList.toggle("active"));
-    </script>
-    {{-- Second One Script --}}
-    <script>
-        const wrapperAdd = document.querySelector(".dropdown"),
-            selectBtnAdd = wrapperAdd.querySelector(".select-btn-add"),
-            searchInpAdd = wrapperAdd.querySelector("input"),
-            optionsAdd = wrapperAdd.querySelector(".options");
-
-        let parts = ["part 1", "part 3", "part 2"];
-
-        function addCate(selectedPart) {
-            optionsAdd.innerHTML = "";
-            parts.forEach(category => {
-                let isSelectedAdd = category == selectedPart ? "selected" : "";
-                let li = `<li onclick="update(this)" class="${isSelectedAdd}">${category}</li>`;
-                optionsAdd.insertAdjacentHTML("beforeend", li);
-            });
-        }
-        addCate();
-
-        function update(selectedli) {
-            searchInpAdd.value = "";
-            addCate(selectedli.innerText);
-            wrapperAdd.classList.remove("active");
-            selectBtnAdd.firstElementChild.innerText = selectedli.innerText;
-        }
-
-        searchInpAdd.addEventListener("keyup", () => {
-            let arr = [];
-            let searchWord = searchInpAdd.value.toLowerCase();
-            arr = parts.filter(onePart => {
-                return onePart.toLowerCase().startsWith(searchWord);
-            }).map(onePart => {
-                let isSelectedAdd = onePart == selectBtnAdd.firstElementChild.innerText ? "selected" : "";
-                return `<li onclick="update(this)" class="${isSelectedAdd}">${onePart}</li>`;
-            }).join("");
-            optionsAdd.innerHTML = arr ? arr : `<p style="margin-top: 10px;">Oops! not found</p>`;
-        });
-
-        selectBtnAdd.addEventListener("click", () => wrapperAdd.classList.toggle("active"));
     </script>
 
-    {{-- Delete --}}
-
+    {{-- Validation For Add --}}
     <script>
-        function fnDelete(id) {
+        const addForm = document.getElementById("add-cate");
+        const addInputs = addForm.querySelectorAll(".category-input");
+        const addMessage = document.getElementById("invalidAdd");
 
-            var url = `{{ url('supplier/${id}') }}`;
-            var xhr = new XMLHttpRequest();
+        addForm.addEventListener('submit', (event) => {
+            addMessage.textContent = '';
+            let notValid = false;
 
-            xhr.open("DELETE", url, true);
-            xhr.onload = function() {
-                var categories = JSON.parse(xhr.responseText);
-                if (xhr.readyState == 4 && xhr.status == "200") {
-                    console.table(categories);
-                } else {
-                    console.error(categories);
+            for (let i = 0; i < addInputs.length; i++) {
+                if (addInputs[i].value.trim() === "") {
+                    event.preventDefault();
+                    const inputName = addInputs[i].getAttribute('placeholder');
+                    addMessage.textContent = `الحقل ${inputName} مطلوب`;
+                    addInputs[i].focus();
+                    notValid = true;
+                    if (notValid) {
+                        break;
+                    }
                 }
             }
-            xhr.send(null);
+        });
+    </script>
 
+
+    {{-- Delete --}}
+    <script>
+        document.querySelectorAll("#trash").forEach((trash) => {
+            let id = trash.dataset.id;
+
+            trash.addEventListener("click", (e) => {
+                document.querySelector("body").classList.add("overflow-hidden");
+
+                document.querySelector(".overlay").classList.remove("none");
+
+                document.querySelector(".popup-delete").classList.remove("close");
+
+                document
+                    .querySelector(".popup-delete .agree")
+                    .addEventListener("click", () => {
+
+
+                        fnDelete(id)
+
+                        document
+                            .querySelector("body")
+
+                            .classList.remove("overflow-hidden");
+
+                        document.querySelector(".overlay").classList.add("none");
+
+                        document.querySelector(".popup-delete").classList.add("close");
+
+
+
+                    });
+
+                document
+                    .querySelector(".popup-delete .disagree")
+                    .addEventListener("click", () => {
+                        document
+                            .querySelector("body")
+                            .classList.remove("overflow-hidden");
+
+                        document.querySelector(".overlay").classList.add("none");
+
+                        document.querySelector(".popup-delete").classList.add("close");
+                    });
+            });
+        });
+
+
+        function fnDelete(id) {
+            // Get the form element
+            var form = document.createElement('form');
+            form.setAttribute('method', 'POST');
+            form.setAttribute('action', `{{ url('purchase') }}/${id}`);
+            form.style.display = 'none';
+
+            // Add CSRF token field
+            var csrfTokenField = document.createElement('input');
+            csrfTokenField.setAttribute('type', 'hidden');
+            csrfTokenField.setAttribute('name', '_token');
+            csrfTokenField.setAttribute('value', '{{ csrf_token() }}');
+            form.appendChild(csrfTokenField);
+
+            // Add method spoofing for DELETE request
+            var methodField = document.createElement('input');
+            methodField.setAttribute('type', 'hidden');
+            methodField.setAttribute('name', '_method');
+            methodField.setAttribute('value', 'DELETE');
+            form.appendChild(methodField);
+
+            // Append the form to the document body
+            document.body.appendChild(form);
+
+            // Submit the form
+            form.submit();
         }
     </script>
+
+
+    {{-- For Select JQuery  --}}
+    <script>
+        $(document).ready(function() {
+            $('.js-example-basic-single.product').select2();
+        });
+        $(document).ready(function() {
+            $('.js-example-basic-single.supplier').select2();
+        });
+
+        $(document).ready(function() {
+            $('.js-example-basic-single.product.add').select2();
+        });
+        $(document).ready(function() {
+            $('.js-example-basic-single.supplier.add').select2();
+        });
+
+        $(document).ready(function() {
+            $('.js-example-basic-single.product.edit').select2();
+        });
+        $(document).ready(function() {
+            $('.js-example-basic-single.supplier.edit').select2();
+        });
+    </script>
+
+
+
 
 @endsection

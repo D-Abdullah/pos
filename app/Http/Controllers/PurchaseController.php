@@ -67,7 +67,7 @@ class PurchaseController extends Controller
             Log::error('حدث خطأ أثناء اضافه عمليه شراء: ' . $e->getMessage());
 
             return redirect()->back()->withInput($request->all())
-                ->with(['error' => 'حدث خطأ أثناء اضافه عمليه شراء. يرجى المحاولة مرة أخرى.']);
+                ->with(['error' => 'حدث خطأ أثناء اضافه عمليه شراء. يرجى المحاولة مرة أخرى.'.$e->getMessage()]);
         }
     }
     public function update(UpdatePurchaseRequest $request, int $id)

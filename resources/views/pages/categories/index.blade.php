@@ -464,26 +464,33 @@
 
     {{-- Validation For Edit --}}
     <script>
-        const editForm = document.getElementById("edit-cate");
-        const editInputs = editForm.querySelectorAll(".category-input");
-        const editMessage = document.getElementById("invalidEdit");
+        document.querySelectorAll("table #edit").forEach((edit) => {
+            let id = edit.dataset.id;
 
-        editForm.addEventListener('submit', (event) => {
-            editMessage.textContent = '';
-            let notValid = false;
-            for (let i = 0; i < editInputs.length; i++) {
-                if (editInputs[i].value.trim() === "") {
-                    event.preventDefault();
-                    const inputName = editInputs[i].getAttribute('placeholder');
-                    editMessage.textContent = `الحقل ${inputName} مطلوب`;
-                    editInputs[i].focus();
-                    notValid = true;
-                    if (notValid) {
-                        break;
+            edit.addEventListener("click", () => {
+                let popUp = document.querySelector(".popup-edit.id-" + id),
+                    editForm = popUp.querySelector("#edit-cate"),
+                    editInputs = editForm.querySelectorAll(".category-input"),
+                    editMessage = editForm.querySelector("#invalidEdit");
+
+                editForm.addEventListener('submit', (event) => {
+                    editMessage.textContent = '';
+                    let notValid = false;
+                    for (let i = 0; i < editInputs.length; i++) {
+                        if (editInputs[i].value.trim() === "") {
+                            event.preventDefault();
+                            const inputName = editInputs[i].getAttribute('placeholder');
+                            editMessage.textContent = `الحقل ${inputName} مطلوب`;
+                            editInputs[i].focus();
+                            notValid = true;
+                            if (notValid) {
+                                break;
+                            }
+
+                        }
                     }
-
-                }
-            }
+                });
+            });
         });
     </script>
 

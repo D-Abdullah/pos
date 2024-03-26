@@ -1,11 +1,11 @@
-<div class="popup-add popup pb-5 close shadow-sm rounded-3 position-fixed overflow-y-auto">
+<div class="popup-add popup pb-5 close shadow-sm rounded-3 position-fixed ">
     <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
-    <form action="{{ route('purchase.add') }}" method="post" id="purchaseForm">
+    <form id="add-purshe" action="{{ route('purchase.add') }}" method="post" id="purchaseForm">
         @csrf
         <h2 class="text-center mt-4 mb-4 opacity-75">انشاء عملية شراء</h2>
 
         <div class="f-row d-flex gap-4">
-            <div>
+            {{-- <div>
                 <label class="d-block mb-1" for="purchase-supplier">اسم المورد</label>
                 <select name="supplier_id" id="purchase-supplier"
                     class="form-control {{ $errors->has('supplier_id') ? 'is-invalid' : '' }}">
@@ -21,9 +21,9 @@
                         {{ $errors->first('supplier_id') }}
                     </div>
                 @endif
-            </div>
+            </div> --}}
 
-            <div>
+            {{-- <div>
                 <label class="d-block mb-1" for="purchase-product">اسم المنتج</label>
                 <select name="product_id" id="purchase-product"
                     class="form-control {{ $errors->has('product_id') ? 'is-invalid' : '' }}">
@@ -39,6 +39,33 @@
                         {{ $errors->first('product_id') }}
                     </div>
                 @endif
+            </div> --}}
+
+            <div class="dds add">
+                <label class="d-block" for="date_to">اختر المورد</label>
+                <select class="js-example-basic-single supplier add" name="supplier_id">
+                    <option value="" {{ old('supplier_id') ? 'disabled hidden' : 'selected disabled hidden' }}>
+                        اختر المورد
+                    </option>
+                    @foreach ($suppliers as $supplier)
+                        <option value="{{ $supplier->id }}" {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
+                            {{ $supplier->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="dds add">
+                <label class="d-block" for="date_to">اختر المنتج</label>
+                <select class="js-example-basic-single product add" name="product_id">
+                    <option value="" {{ old('product_id') ? 'disabled hidden' : 'selected disabled hidden' }}>
+                        اختر المنتج
+                    </option>
+                    @foreach ($products as $product)
+                        <option value="{{ $product->id }}" {{ old('product_id') == $product->id ? 'selected' : '' }}>
+                            {{ $product->name }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
         </div>
 
@@ -71,7 +98,7 @@
         <div class="f-row d-flex gap-4">
             <div>
                 <label class="d-block mb-1" for="purchase-total-price">سعر الوحده</label>
-                <input type="text" name="total_price" id="purchase-total-price"
+                <input type="text" name="unit_price" id="purchase-total-price"
                     class="form-control {{ $errors->has('total_price') ? 'is-invalid' : '' }}"
                     value="{{ old('total_price') }}" placeholder="السعر الإجمالي">
                 @if ($errors->has('total_price'))
@@ -117,3 +144,28 @@
     </form>
 
 </div>
+
+{{-- Validation For Add --}}
+<script>
+    const addForm = document.getElementById("add-purshe");
+    const addInputs = addForm.querySelectorAll(".category-input");
+    const addMessage = document.getElementById("invalidAdd");
+
+    addForm.addEventListener('submit', (event) => {
+        addMessage.textContent = '';
+        let notValid = false;
+
+        for (let i = 0; i < addInputs.length; i++) {
+            if (addInputs[i].value.trim() === "") {
+                event.preventDefault();
+                const inputName = addInputs[i].getAttribute('placeholder');
+                addMessage.textContent = `الحقل ${inputName} مطلوب`;
+                addInputs[i].focus();
+                notValid = true;
+                if (notValid) {
+                    break;
+                }
+            }
+        }
+    });
+</script>
