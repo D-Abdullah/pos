@@ -16,22 +16,20 @@
                 <label class="d-block mb-1" for="category-name">اسم المنتج</label>
                 <input class="category-input" type="text" name="name" id="category-name" placeholder="اسم المنتج">
             </div>
-            {{-- drobdown search --}}
-            <div class="dropdown">
-                <label class="d-block mb-1" for="category-name"> القسم</label>
-                <div class="select-btn-add">
-                    <span>اختر القسم</span>
-                    <input id="add_input_id" type="hidden" value="" name="department_id">
-                    <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
-                </div>
-                <div class="content">
-                    <div class="search">
-                        <i class="uil uil-search"></i>
-                        <input class="input" spellcheck="false" type="text" placeholder="بحث في الاقسام">
-                    </div>
-                    <ul class="options"></ul>
-                </div>
+
+            <div>
+
+                <label for="add-select">اختر القسم</label>
+                <select id="add-select" class="js-example-basic-single add" name="state">
+
+                    @foreach ($departments as $department)
+                        <option value="{{ $department->id }}">{{ $department->name }}</option>
+                    @endforeach
+
+                </select>
             </div>
+
+
         </div>
 
         {{-- <div class="f-row d-flex gap-4">

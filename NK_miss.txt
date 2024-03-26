@@ -2,17 +2,17 @@
 	-loading page
     -all btn's on click disable it with loader
 [login]
-    -login validation enhancement
+    -login validation enhancement => DONE BY KHALED
 [category]
-    -add popup to validation not work
-    -filter block linear design enhancement
-    -popup dismiss on click "X" and blur also
-    -validation it reverse counting of the inputs
+    -add popup to validation not work  => DONE BY KHALED
+    -filter block linear design enhancement  => DONE BY KHALED
+    -popup dismiss on click "X" and blur also => DONE BY JIMMY
+    -validation it reverse counting of the inputs  => DONE BY KHALED
 	-test responsive design
 [products]
-	-filter block linear design enhancement
-    -popup dismiss on click "X" and blur also
-    -validation it reverse counting of the inputs
+	-filter block linear design enhancement  => DONE BY KHALED
+    -popup dismiss on click "X" and blur also => DONE BY JIMMY
+    -validation it reverse counting of the inputs => DONE BY KHALED
     -ddws blur dismiss
     -ddws error on selecting value
     -ddws search not found value message must be arabic

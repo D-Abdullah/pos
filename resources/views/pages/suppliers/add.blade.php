@@ -1,20 +1,3 @@
-<style>
-    #category-name:invalid,
-    #phone-number:invalid,
-    #buy-price:invalid,
-    #sale-buy:invalid {
-        border: 1px solid red
-    }
-
-    #category-name:valid,
-    #phone-number:valid,
-    #buy-price:valid,
-    #sale-buy:valid {
-        border: 1px solid #0075ff
-    }
-</style>
-
-
 <div class="popup-add popup pb-5 close shadow-sm rounded-3 position-fixed">
     <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
     <h2 class="text-center mt-4 mb-4 opacity-75">اضافة مورد جديد</h2>
