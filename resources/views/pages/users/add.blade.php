@@ -8,8 +8,7 @@
             <div>
                 <label class="d-block mb-1" for="user-name">اسم المستخدم</label>
                 <input type="text" name="name" id="user-name" placeholder="ادخل اسم المستخدم"
-                    class="category-input" value="{{ old('name') }}"
-                    class="{{ $errors->has('name') ? 'is-invalid' : '' }}">
+                    value="{{ old('name') }}" class="{{ $errors->has('name') ? 'is-invalid' : '' }} category-input">
                 @if ($errors->has('name'))
                     <div class="invalid-feedback">
                         {{ $errors->first('name') }}
@@ -19,8 +18,7 @@
             <div>
                 <label class="d-block mb-1" for="gmail">البريد الالكتروني</label>
                 <input type="email" name="email" id="gmail" placeholder="ادخل البريد الاكتروني"
-                    class="category-input" value="{{ old('email') }}"
-                    class="{{ $errors->has('email') ? 'is-invalid' : '' }}">
+                    value="{{ old('email') }}" class="{{ $errors->has('email') ? 'is-invalid' : '' }} category-input">
                 @if ($errors->has('email'))
                     <div class="invalid-feedback">
                         {{ $errors->first('email') }}
@@ -33,8 +31,7 @@
             <div>
                 <label class="d-block mb-1" for="phone">رقم الهاتف</label>
                 <input type="number" name="phone" id="phone" maxlength="11" placeholder="ادخل رقم الهاتف"
-                    class="category-input" value="{{ old('phone') }}"
-                    class="{{ $errors->has('phone') ? 'is-invalid' : '' }}">
+                    value="{{ old('phone') }}" class="{{ $errors->has('phone') ? 'is-invalid' : '' }} category-input">
                 @if ($errors->has('phone'))
                     <div class="invalid-feedback">
                         {{ $errors->first('phone') }}
