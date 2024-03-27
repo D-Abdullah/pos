@@ -213,7 +213,7 @@
                         </td>
                         <td class="p-0">
                             <div
-                                class="popup-edit id-{{ $purchase->id }} popup close shadow-sm rounded-3 position-fixed ">
+                                class="popup-edit id-{{ $purchase->id }} popup close shadow-sm rounded-3 position-fixed text-end">
                                 <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
                                     alt="">
                                 <form method="post" action="{{ route('purchase.update', $purchase->id) }}"
@@ -222,19 +222,78 @@
                                     @method('put')
                                     <h2 class="text-center mt-4 mb-4 opacity-75">تحديث دفعات عملية شراء</h2>
 
-                                    <h2>
-                                        <b>المتبقي:
-                                            @php
-                                                $deposits = $purchase->deposits;
-                                                $dtc = 0;
-                                                for ($i = 0; $i < count($deposits); $i++) {
-                                                    $dtc += $deposits[$i]['cost'];
-                                                }
-                                                $dtc = $purchase->total_price - $dtc;
-                                            @endphp
-                                            <span style="color: #7367F0">{{ $dtc }}</span>
-                                        </b>
-                                    </h2>
+                                    <div class="f-row d-flex gap-4">
+                                        <div class="dds add">
+                                            <label class="d-block" for="date_to">اختر المورد</label>
+                                            <select class="js-example-basic-single supplier add" name="supplier_id">
+                                                <option value=""
+                                                    {{ old('supplier_id') ? 'disabled hidden' : 'selected disabled hidden' }}>
+                                                    اختر المورد
+                                                </option>
+                                                @foreach ($suppliers as $supplier)
+                                                    <option value="{{ $supplier->id }}"
+                                                        {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
+                                                        {{ $supplier->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="dds add">
+                                            <label class="d-block" for="date_to">اختر المنتج</label>
+                                            <select class="js-example-basic-single product add" name="product_id">
+                                                <option value=""
+                                                    {{ old('product_id') ? 'disabled hidden' : 'selected disabled hidden' }}>
+                                                    اختر المنتج
+                                                </option>
+                                                @foreach ($products as $product)
+                                                    <option value="{{ $product->id }}"
+                                                        {{ old('product_id') == $product->id ? 'selected' : '' }}>
+                                                        {{ $product->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="f-row d-flex gap-4">
+                                        <div>
+                                            <label class="d-block mb-1" for="purchase-date">تاريخ الشراء</label>
+                                            <input type="date" name="date" id="purchase-date"
+                                                class="form-control {{ $errors->has('date') ? 'is-invalid' : '' }}"
+                                                value="{{ old('date') }}" placeholder="تاريخ الشراء">
+                                            @if ($errors->has('date'))
+                                                <div class="invalid-feedback">
+                                                    {{ $errors->first('date') }}
+                                                </div>
+                                            @endif
+                                        </div>
+
+                                        <div>
+                                            <label class="d-block mb-1" for="purchase-quantity">الكمية</label>
+                                            <input type="number" name="quantity" id="purchase-quantity"
+                                                class="form-control {{ $errors->has('quantity') ? 'is-invalid' : '' }}"
+                                                value="{{ old('quantity') }}" placeholder="الكمية">
+                                            @if ($errors->has('quantity'))
+                                                <div class="invalid-feedback">
+                                                    {{ $errors->first('quantity') }}
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <div class="f-row d-flex gap-4">
+                                        <div>
+                                            <label class="d-block mb-1" for="purchase-total-price">سعر الوحده</label>
+                                            <input type="text" name="unit_price" id="purchase-total-price"
+                                                class="form-control {{ $errors->has('total_price') ? 'is-invalid' : '' }}"
+                                                value="{{ old('total_price') }}" placeholder="السعر الإجمالي">
+                                            @if ($errors->has('total_price'))
+                                                <div class="invalid-feedback">
+                                                    {{ $errors->first('total_price') }}
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
 
                                     <!-- Deposits Container -->
                                     {{-- <div id="addDepositsContainerUpdateElement{{ $purchase->id }}"
@@ -291,7 +350,7 @@
                             <h3 class="fs-5 fw-bold mb-3">حذف العنصر</h3>
                             <p>هل تريد الحذف متاكد !!</p>
                             <div class="buttons mt-5 d-flex">
-                                <button onclick="fnDelete('{{ $purchase->id }}')" class="agree rounded-2">نعم
+                                <button class="agree rounded-2">نعم
                                     أريد</button>
                                 <button class="disagree me-3 text-light rounded-2 main-btn">لا أريد</button>
                             </div>

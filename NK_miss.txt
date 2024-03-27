@@ -1,45 +1,48 @@
 [all]
 	-loading page
-    -all btn's on click disable it with loader
 [login]
-    -login validation enhancement => DONE BY KHALED
+    -login validation enhancement => Test
 [category]
-    -add popup to validation not work  => DONE BY KHALED
-    -filter block linear design enhancement  => DONE BY KHALED
-    -popup dismiss on click "X" and blur also => DONE BY JIMMY
-    -validation it reverse counting of the inputs  => DONE BY KHALED
+    -add popup to validation not work  => Test
+    -filter block linear design enhancement  => Test
+    -popup dismiss on click "X" and blur also => Test
+    -validation it reverse counting of the inputs  => Test
 	-test responsive design
 [products]
-	-filter block linear design enhancement  => DONE BY KHALED
-    -popup dismiss on click "X" and blur also => DONE BY JIMMY
-    -validation it reverse counting of the inputs => DONE BY KHALED
-    -ddws blur dismiss
-    -ddws error on selecting value
-    -ddws search not found value message must be arabic
+	-filter block linear design enhancement  => Test
+    -popup dismiss on click "X" and blur also => Test
+    -validation it reverse counting of the inputs => Test
+    -ddws blur dismiss  => Test
+    -ddws error on selecting value => Test
+    -ddws search not found value message must be arabic => Test
 	-test responsive design
 [supplier]
-	-filter with ( name, email, mobile, datefrom and dateto ) with lables
-    -filter block linear design enhancement
-	-replace date with payment_type on the table data
-    -center no data placeholder on the table "colspan"
-    -popup dismiss on click "X" and blur also
+	-filter with ( name, email, mobile, datefrom and dateto ) with lables => Test
+    -filter block linear design enhancement => Test
+	-replace date with payment_type on the table data => explain this <=
+    -center no data placeholder on the table "colspan" => Test
+    -popup dismiss on click "X" and blur also => Test
     -validation enhancement
-	-add new action on the table after edit btn with icon ($)
+	-add new action on the table after edit btn with icon ($) => Test
 	[$] button
 		-must be open popup modal for each suppliers record to see 3 data
 			(1) The total cost required
 			(2) Total cost paid
 			(3) Total cost of receivables
 		-after this data must be show form cost and date multiple with approvement btns depend on date
-	-export table data as pdf and print and excel
+	-export table data as pdf and print and excel => Test
+
 	-add and edit javascript validation before submit and also remove status btn
-	-delete btn on true result must be send delete method request to supplier/<supplier id>
-	-test responsive design
+
+    -delete btn on true result must be send delete method request to supplier/<supplier id>
+
+    -test responsive design
 [purchase]
-	-filter with ( supplier, product ) dropdown with search && (date) with lable
-	-export table data as pdf and print and excel
-	-add and edit form javascript validation before submit and also remove date and cost multiple inputs and replace total price with unit price
-	-edit form must be like add form remove cost and date multiple
+	-filter with ( supplier, product ) dropdown with search && (date) with lable => Test
+	-export table data as pdf and print and excel => Test
+	-add and edit form javascript validation before submit and also remove date and cost multiple inputs
+     and replace total price with unit price
+	-edit form must be like add form remove cost and date multiple =>Test
 	-delete btn on true result must be send delete method request to purchase/<purchase id>
 	-test responsive design
 [warehouse]
@@ -49,22 +52,22 @@
 	-just with only product name and category and qty and
 	-test responsive design
 [warehouse transaction]
-	-add date on the table
-	-filter with ( products ) dropdown with search && (date)
-	-export table data as pdf and print and excel
+	-add date on the table =>Test
+	-filter with ( products ) dropdown with search && (date) =>Test
+	-export table data as pdf and print and excel =>Test
 [clients]
-	-filter with ( name, phone, date )
-	-remove status from the table and add date added
-	-export table data as pdf and print and excel
-	-add and edit javascript validation before submit and also remove status btn
-	-delete btn on true result must be send delete method request to client/<client id>
+	-filter with ( name, phone, date ) => Test
+	-remove status from the table and add date added =>Test
+	-export table data as pdf and print and excel => Test
+	-add and edit javascript validation before submit and also remove status btn=> Test
+	-delete btn on true result must be send delete method request to client/<client id> =>Test
 	-test responsive design
 [EOL] (End Of Life)
-	-filter with ( product name[dropdown with search], date )
-	-remove reason from the table and add date added
-	-export table data as pdf and print and excel
+	-filter with ( product name[dropdown with search], date ) =>Test
+	-remove reason from the table and add date added => Test
+	-export table data as pdf and print and excel =>Test
 	-add and edit javascript validation before submit and product input must dropdown with search and also remove status btn
-	-delete btn on true result must be send delete method request to eol/<eol id>
+	-delete btn on true result must be send delete method request to eol/<eol id> =>Test
 	-test responsive design
 [users]
 	-filter with ( name, phone, email, role[dropdown with search], date )
@@ -74,11 +77,12 @@
 	-delete btn on true result must be send delete method request to user/<user id>
 	-test responsive design
 [roles]
-	-filter with ( name, date )
-	-table add date added
-	-export table data as pdf and print and excel
-	-add and edit javascript validation before submit and permission must be as checkbox inputs
-	-delete btn on true result must be send delete method request to role/<role id>
+	-filter with ( name, date ) =>Test
+	-table add date added =>Test
+	-export table data as pdf and print and excel   =>Test
+	-add and edit javascript validation before submit=>Test
+    -permission must be as checkbox inputs => explain this =>Test
+	-delete btn on true result must be send delete method request to role/<role id> =>Test
 	-test responsive design
 [rents]
 	-filter with ( name, date )

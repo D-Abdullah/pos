@@ -238,7 +238,8 @@
                         <td class="p-0">
                             <div
                                 class="popup-edit  id-{{ $supplier->id }} popup pb-5 close shadow-sm rounded-3 position-fixed">
-                                <form method="post" action="{{ route('supplier.update', $supplier->id) }}">
+                                <form id="edit-cate" method="post"
+                                    action="{{ route('supplier.update', $supplier->id) }}">
                                     @csrf
                                     @method('put')
                                     <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
@@ -247,25 +248,27 @@
                                     <div class="f-row d-flex gap-4">
                                         <div>
                                             <label class="d-block mb-1" for="category-name">اسم المورد</label>
-                                            <input type="text" name="name" id="category-name"
-                                                value="{{ $supplier->name }}">
+                                            <input class="category-input" type="text" name="name"
+                                                id="category-name" value="{{ $supplier->name }}"
+                                                placeholder="اسم المورد">
                                         </div>
                                         <div>
                                             <label class="d-block mb-1" for="phone-number"> رقم الهاتف</label>
-                                            <input type="number" minlength="11" name="phone" id="phone-number"
-                                                value="{{ $supplier->phone }}">
+                                            <input class="category-input" type="number" minlength="11" name="phone"
+                                                id="phone-number" value="{{ $supplier->phone }}"
+                                                placeholder="رقم الهاتف">
                                         </div>
                                     </div>
                                     <div class="f-row d-flex gap-4">
                                         <div>
                                             <label class="d-block mb-1" for="buy-price">العنوان</label>
-                                            <input type="text" name="address" id="buy-price"
-                                                value="{{ $supplier->address }}">
+                                            <input class="category-input" type="text" name="address" id="buy-price"
+                                                value="{{ $supplier->address }}" placeholder="العنوان">
                                         </div>
                                         <div class="">
                                             <label class="d-block mb-1" for="sale-buy">البريد الالكتروني</label>
-                                            <input type="text" name="email" id="sale-buy"
-                                                value="{{ $supplier->email }}">
+                                            <input class="category-input" type="text" name="email" id="sale-buy"
+                                                value="{{ $supplier->email }}" placeholder="البريد الالكتروني">
                                         </div>
                                     </div>
 
@@ -283,13 +286,16 @@
                                         </select>
                                     </div>
 
-                                    <div class="form-check form-switch d-flex align-items-center  ms-2 me-2">
+                                    {{-- <div class="form-check form-switch d-flex align-items-center  ms-2 me-2">
                                         <input class="form-check-input ms-3"
                                             @if ($supplier->is_active) checked @endif type="checkbox"
                                             role="switch" id="flexSwitchCheckDefault-99" name="is_active"
                                             value="1">
                                         <label for="flexSwitchCheckDefault-92">تفعيل</label>
-                                    </div>
+                                    </div> --}}
+
+                                    <div id="invalidEdit" class="invalid invalidEdit my-3"></div>
+
                                     <button class="main-btn">تحديث</button>
                                 </form>
                             </div>
@@ -666,6 +672,7 @@
             form.submit();
         }
     </script>
+
     <script>
         document.querySelectorAll("#dolar").forEach((dolar) => {
             let id = dolar.dataset.id;
@@ -711,6 +718,7 @@
             });
         });
     </script>
+
     <script>
         function addElement() {
             let depositsContainer = document.getElementById('addDepositsContainer');

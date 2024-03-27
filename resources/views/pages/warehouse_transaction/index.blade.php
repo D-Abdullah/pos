@@ -46,31 +46,41 @@
     <!-- start of body -->
     <section class="pt-0 rounded-3 position-relative shadow-sm overflow-auto">
 
-        <div class="features shadow-sm p-4 d-flex justify-content-between align-items-center">
-            <div class="component-right gap-4 d-flex align-items-center">
+        <div class="features shadow-sm p-4 d-flex justify-content-between align-items-end">
+            <div class="component-right gap-4 d-flex align-items-end">
                 <div class="search-input">
+                    <label class="d-block">بحث بالاسم</label>
                     <input type="search" placeholder="بحث" id="search">
                 </div>
 
                 <div>
 
-                    <label for="date_to">اختر المنتج</label>
+                    <label class="d-block">اختر المنتج</label>
                     <select class="js-example-basic-single" name="product">
 
-                        {{-- <option value="" {{ request('product') ? 'disabled hidden' : 'selected disabled hidden' }}>
+                        <option value="" {{ request('product') ? 'disabled hidden' : 'selected disabled hidden' }}>
                             اختر المنتج
                         </option>
                         @foreach ($products as $product)
                             <option value="{{ $product->id }}" {{ request('product') == $product->id ? 'selected' : '' }}>
                                 {{ $product->name }}
                             </option>
-                        @endforeach --}}
-                        <option value="1">
-                            test
-                        </option>
+                        @endforeach
+
 
 
                     </select>
+                </div>
+
+                <div>
+                    <label for="startDate">من تاريخ:</label>
+                    <input type="date" id="startDate" name="date_from" value="{{ request('date_from') }}">
+                </div>
+
+                <!-- Filter by Date To -->
+                <div>
+                    <label for="date_to">إلى تاريخ:</label>
+                    <input type="date" id="date_to" name="date_to" value="{{ request('date_to') }}">
                 </div>
 
                 <button type="submit" class="main-btn" id="form">تأكيد</button>
@@ -167,29 +177,37 @@
 
     {{-- Print and Pdf and Excel  --}}
     <script>
-        // Start Print Table
-        // Start Print Table
         function printTable() {
-            var el = document.getElementById("table");
-            el.setAttribute('border', '1');
-            el.setAttribute('cellpadding', '5');
+            // Clone the table
+            var myTable = document.getElementById("table").cloneNode(true);
+            myTable.setAttribute('border', '1');
+            myTable.setAttribute('cellpadding', '5');
 
-            // Remove last column from the table
-            var rows = el.rows;
-            for (var i = 0; i < rows.length; i++) {
-                var cells = rows[i].cells;
-                if (cells.length > 0) {
-                    var lastCellIndex = cells.length - 1;
-                    rows[i].deleteCell(lastCellIndex);
-                }
-            }
 
-            var newPrint = window.open("");
-            newPrint.document.write(el.outerHTML);
-            newPrint.print();
-            newPrint.close();
+            // Open a new window for printing
+            var printWindow = window.open('');
+            printWindow.document.write('<html dir="rtl"><head><title>Table Contents</title>');
+
+            // Print the Table CSS.
+            // var table_style = document.getElementById("table_style").innerHTML;
+            printWindow.document.write('<style type="text/css">');
+            // printWindow.document.write(table_style);
+            printWindow.document.write('.print-hidden{display:none;}')
+            printWindow.document.write('#table{width:100%;}')
+            printWindow.document.write('</style>');
+            printWindow.document.write('</head>');
+
+            // Print the cloned table
+            printWindow.document.write('<body>');
+            printWindow.document.write('<div id="dvContents">');
+            printWindow.document.write(myTable.outerHTML);
+            printWindow.document.write('</div>');
+            printWindow.document.write('</body>');
+
+            printWindow.document.write('</html>');
+            printWindow.document.close();
+            printWindow.print();
         }
-
 
         const print = document.getElementById("print");
         print.addEventListener('click', () => {
@@ -201,17 +219,23 @@
         function Export() {
             // Hide the last column of the table
             var table = document.getElementById('table');
-            var lastColumnCells = table.querySelectorAll('td:last-child, th:last-child');
-            lastColumnCells.forEach(function(cell) {
-                cell.style.display = 'none';
+
+
+
+            // Apply text alignment style to <th> and <td> elements inside the table
+            var tableCells = table.querySelectorAll('th, td');
+            tableCells.forEach(function(cell) {
+                cell.style.textAlign = "right";
             });
 
             // Render the modified table to canvas
             html2canvas(table, {
                 onrendered: function(canvas) {
-                    // Restore the visibility of the last column
-                    lastColumnCells.forEach(function(cell) {
-                        cell.style.display = '';
+
+
+                    // Remove text alignment style from <th> and <td> elements inside the table
+                    tableCells.forEach(function(cell) {
+                        cell.style.textAlign = "";
                     });
 
                     // Convert canvas to base64 data URL
@@ -229,6 +253,7 @@
             });
         }
 
+
         const pdfBtn = document.getElementById("pdf");
         pdfBtn.addEventListener('click', () => {
             Export()
@@ -239,14 +264,7 @@
         function htmlTableToExcel(type) {
             var data = document.getElementById('table');
 
-            // Remove last column
-            var rows = data.getElementsByTagName('tr');
-            for (var i = 0; i < rows.length; i++) {
-                var cells = rows[i].getElementsByTagName('td');
-                if (cells.length > 0) {
-                    rows[i].deleteCell(cells.length - 1);
-                }
-            }
+
 
             var excelFile = XLSX.utils.table_to_book(data, {
                 sheet: "sheet1"
@@ -258,7 +276,6 @@
             });
             XLSX.writeFile(excelFile, 'ExportedFile:HTMLTableToExcel.' + type);
         }
-
 
         const exelBtn = document.getElementById("excel");
         exelBtn.addEventListener('click', () => {
