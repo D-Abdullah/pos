@@ -1,49 +1,22 @@
 [all]
-	-loading page
+	-loading page | do simple loading page
+    -All CDN Or any http get data like fonts or css or js code must download on the public and link with it
 [login]
-    -login validation enhancement => Test
+    -login validation enhancement => check on loading page if input is valid
 [category]
-    -add popup to validation not work  => Test
-    -filter block linear design enhancement  => Test
-    -popup dismiss on click "X" and blur also => Test
-    -validation it reverse counting of the inputs  => Test
-	-test responsive design
+    -popup dismiss on click "X" => not Work on edit
+	-responsive design
 [products]
-	-filter block linear design enhancement  => Test
-    -popup dismiss on click "X" and blur also => Test
-    -validation it reverse counting of the inputs => Test
-    -ddws blur dismiss  => Test
-    -ddws error on selecting value => Test
-    -ddws search not found value message must be arabic => Test
+    -popup dismiss on click "X" => not Work on edit
 	-test responsive design
 [supplier]
-	-filter with ( name, email, mobile, datefrom and dateto ) with lables => Test
-    -filter block linear design enhancement => Test
-	-replace date with payment_type on the table data => explain this <=
-    -center no data placeholder on the table "colspan" => Test
-    -popup dismiss on click "X" and blur also => Test
-    -validation enhancement
-	-add new action on the table after edit btn with icon ($) => Test
-	[$] button
-		-must be open popup modal for each suppliers record to see 3 data
-			(1) The total cost required
-			(2) Total cost paid
-			(3) Total cost of receivables
-		-after this data must be show form cost and date multiple with approvement btns depend on date
-	-export table data as pdf and print and excel => Test
-
-	-add and edit javascript validation before submit and also remove status btn
-
-    -delete btn on true result must be send delete method request to supplier/<supplier id>
-
+    -popup dismiss on click "X" => not Work on edit
+	[$]
+		-validation
+        -check popup value
     -test responsive design
 [purchase]
-	-filter with ( supplier, product ) dropdown with search && (date) with lable => Test
-	-export table data as pdf and print and excel => Test
-	-add and edit form javascript validation before submit and also remove date and cost multiple inputs
-     and replace total price with unit price
-	-edit form must be like add form remove cost and date multiple =>Test
-	-delete btn on true result must be send delete method request to purchase/<purchase id>
+    -add date on table
 	-test responsive design
 [warehouse]
 	-move front into system page
@@ -52,9 +25,7 @@
 	-just with only product name and category and qty and
 	-test responsive design
 [warehouse transaction]
-	-add date on the table =>Test
-	-filter with ( products ) dropdown with search && (date) =>Test
-	-export table data as pdf and print and excel =>Test
+
 [clients]
 	-filter with ( name, phone, date ) => Test
 	-remove status from the table and add date added =>Test

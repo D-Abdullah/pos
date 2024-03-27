@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->double('cost');
             $table->date('date');
-            $table->enum('type', ['purchase', 'party']);
+            $table->enum('type', ['supplier', 'party']);
+            $table->tinyInteger('is_paid')->default(0);
             $table->timestamps();
 
             $table->foreignId('supplier_id')->nullable()

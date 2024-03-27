@@ -86,6 +86,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::middleware('permission:update supplier')
             ->put('/{id}', [SupplierController::class, 'update'])
             ->name('supplier.update');
+        Route::middleware('permission:update supplier')
+            ->patch('/{id}', [SupplierController::class, 'deposits'])
+            ->name('supplier.deposits');
         Route::middleware('permission:delete supplier')
             ->delete('/{id}', [SupplierController::class, 'destroy'])
             ->name('supplier.delete');
