@@ -222,19 +222,6 @@
                                     @method('put')
                                     <h2 class="text-center mt-4 mb-4 opacity-75">تحديث دفعات عملية شراء</h2>
 
-                                    <h2>
-                                        <b>المتبقي:
-                                            @php
-                                                $deposits = $purchase->deposits;
-                                                $dtc = 0;
-                                                for ($i = 0; $i < count($deposits); $i++) {
-                                                    $dtc += $deposits[$i]['cost'];
-                                                }
-                                                $dtc = $purchase->total_price - $dtc;
-                                            @endphp
-                                            <span style="color: #7367F0">{{ $dtc }}</span>
-                                        </b>
-                                    </h2>
 
                                     <!-- Deposits Container -->
                                     {{-- <div id="addDepositsContainerUpdateElement{{ $purchase->id }}"
