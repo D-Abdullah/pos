@@ -1,28 +1,14 @@
-<style>
-    #user-name:invalid,
-    #phone:invalid {
-        border: 1px solid red
-    }
-
-    #user-name:valid,
-    #phone:valid {
-        border: 1px solid #0075ff
-    }
-</style>
-
 <div class="popup-add popup pb-5 close shadow-sm rounded-3 position-fixed">
     <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
     <h2 class="text-center mt-4 mb-4 opacity-75">اضافة مستخدم جديد</h2>
-    <form method="post" action="{{ route('user.add') }}">
+    <form method="post" action="{{ route('user.add') }}" id="add-cate">
         @csrf
 
         <div class="f-row d-flex gap-4">
             <div>
                 <label class="d-block mb-1" for="user-name">اسم المستخدم</label>
                 <input type="text" name="name" id="user-name" placeholder="ادخل اسم المستخدم"
-                    value="{{ old('name') }}" class="{{ $errors->has('name') ? 'is-invalid' : '' }}"
-                    pattern="[a-zA-Z\u0600-\u06FF]{2,}"
-                    title="Please enter a valid name with at least 2 Latin alphabet letters" required>
+                    value="{{ old('name') }}" class="{{ $errors->has('name') ? 'is-invalid' : '' }} category-input">
                 @if ($errors->has('name'))
                     <div class="invalid-feedback">
                         {{ $errors->first('name') }}
@@ -32,7 +18,7 @@
             <div>
                 <label class="d-block mb-1" for="gmail">البريد الالكتروني</label>
                 <input type="email" name="email" id="gmail" placeholder="ادخل البريد الاكتروني"
-                    value="{{ old('email') }}" class="{{ $errors->has('email') ? 'is-invalid' : '' }}">
+                    value="{{ old('email') }}" class="{{ $errors->has('email') ? 'is-invalid' : '' }} category-input">
                 @if ($errors->has('email'))
                     <div class="invalid-feedback">
                         {{ $errors->first('email') }}
@@ -45,9 +31,7 @@
             <div>
                 <label class="d-block mb-1" for="phone">رقم الهاتف</label>
                 <input type="number" name="phone" id="phone" maxlength="11" placeholder="ادخل رقم الهاتف"
-                    value="{{ old('phone') }}" class="{{ $errors->has('phone') ? 'is-invalid' : '' }}"
-                    pattern="[a-zA-Z\u0600-\u06FF]{2,}"
-                    title="Please enter a valid name with at least 2 Latin alphabet letters" required>
+                    value="{{ old('phone') }}" class="{{ $errors->has('phone') ? 'is-invalid' : '' }} category-input">
                 @if ($errors->has('phone'))
                     <div class="invalid-feedback">
                         {{ $errors->first('phone') }}
@@ -72,6 +56,7 @@
                 @endif
             </div>
         </div>
+        <div id="invalidAdd" class="invalid invalidAdd my-3"></div>
 
         <button class="main-btn mt-5">اضافه</button>
     </form>
