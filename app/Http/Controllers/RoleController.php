@@ -76,8 +76,7 @@ class RoleController extends Controller
     public function index()
     {
         try {
-            $roles = Role::paginate(PAGINATION);
-
+            $roles = Role::with('permissions')->paginate(PAGINATION);
             $permissions = collect($this->translated_permissions)->map(function ($translation, $permission) {
                 return [
                     'name' => $translation,

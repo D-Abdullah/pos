@@ -145,12 +145,14 @@
                                         <div class="d-flex gap-3 flex-wrap">
                                             @foreach ($permissions as $permission)
                                                 <div class="form-check d-flex align-items-center">
+
                                                     <input class="form-check-input ms-2  check-box" name="permissions[]"
                                                         type="checkbox" value="{{ $permission['org'] }}"
-                                                        id="{{ preg_replace('/\s+/', '', $permission['org']) }}">
-                                                        
+                                                        id="{{ preg_replace('/\s+/', '', $permission['org']) . $role->id }}" {{ $role->permissions->pluck('name')->contains($permission['org']) ? 'checked' : '' }}>
+
+                                                    {{-- {{ in_array($permission['name'], (array) $role->permissions) ? "checked" : '' }} --}}
                                                     <label class="form-check-label pe-1 d-block"
-                                                        for="{{ preg_replace('/\s+/', '', $permission['org']) }}">
+                                                        for="{{ preg_replace('/\s+/', '', $permission['org']) . $role->id }}">
                                                         {{ $permission['name'] }}
                                                     </label>
                                                 </div>
