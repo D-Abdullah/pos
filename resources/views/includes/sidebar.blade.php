@@ -66,7 +66,7 @@
                         </div>
 
 
-                        <div class="list warehouse d-flex gap-0 align-items-center">
+                        <div class="list {{ Request::is('warehouse/*') ? 'active' : '' }} warehouse d-flex gap-0 align-items-center">
                             <a href="{{ route('warehouse.all') }}" class="dark">
                                 <img class="dark" src="{{ asset('Assets/imgs/building-bank.png') }}" alt="">
                             </a>

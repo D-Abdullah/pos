@@ -206,30 +206,6 @@
 </style>
 @section('content')
 
-    <!DOCTYPE html>
-    <html lang="en">
-
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>المستودع</title>
-        <link rel="stylesheet" href="./Assets/Css files/warehouse.css">
-        <link rel="stylesheet" href="./Assets/Css files/Golobal.css">
-        <link rel="stylesheet" href="./Assets/Normalize file/Normalize.css">
-        <link rel="stylesheet" href="./Assets/Bootsrap files/all.min.css">
-        <link rel="stylesheet" href="./Assets/Bootsrap files/bootstrap.min.css">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    </head>
-
-    <body>
-        <div class="page position-relative overflow-hidden">
-
-            <!-- start of vertical-menu -->
-            <div class="vertical-menu gap-5 d-flex ps-5 overflow-hidden">
-
-
-
                 <!-- start of main-container -->
                 <div class="main-container pt-4 d-flex flex-column overflow-hidden">
 
@@ -238,17 +214,17 @@
                         <button class="p-2 ps-4 pe-4 secound-btn active-btn mb-2" data-count="one">
                             <img class="dark" src="./Assets/imgs/box.png" alt="">
                             <img class="light" src="./Assets/imgs/box-light.png" alt="">
-                            اجمالي المنتجات
+                            اجمالي المخزن
                         </button>
                         <button class="p-2 ps-4 pe-4 ms-2 me-2 secound-btn mb-2" data-count="two">
                             <img class="dark" src="./Assets/imgs/file-check.png" alt="">
                             <img class="light" src="./Assets/imgs/file-check-light.png" alt="">
-                            عناصر موجوده
+                            عناصر المتاحه
                         </button>
                         <button class="p-2 ps-4 pe-4 secound-btn mb-2" data-count="three">
                             <img class="dark" src="./Assets/imgs/file-import.png" alt="">
                             <img class="light" src="./Assets/imgs/file-import-light.png" alt="">
-                            عناصر غير موجوده
+                            عناصر في الحفلات
                         </button>
                     </div>
                     <!-- end of buttons -->
@@ -695,113 +671,6 @@
                 </div>
                 <!-- end of main-container -->
 
-            </div>
-            <!-- end of vertical-menu -->
-
-            <!-- start of popup -->
-            <div class="popup-add popup pb-5 close shadow-sm rounded-3 position-fixed">
-                <img class="position-absolute" src="./Assets/imgs/Close.png" alt="">
-                <h2 class="text-center mt-4 mb-4 opacity-75">اضافة عنصر جديد</h2>
-                <div class="f-row d-flex gap-4 align-items-end">
-                    <div>
-                        <label class="d-block mb-1" for="suppliers-name">اسم المورد</label>
-                        <input type="text" name="text" id="suppliers-name" placeholder="...">
-                    </div>
-                    <div>
-                        <input type="search" name="search" id="suppliers-search" placeholder="بحث">
-                    </div>
-                </div>
-                <div class="select-form">
-                    <span>الفئه</span>
-                    <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
-                        <button class="w-100 d-flex justify-content-between"
-                            onclick="dropdown('valueStatusAdd', 'listStatusAdd')">
-                            <span class="fw-bold opacity-50 valueDropdown" id="valueStatusAdd"></span>
-                            <img src="./Assets/imgs/chevron-down.png" alt="">
-                        </button>
-                        <div class="options none">
-                            <ul id="listStatusAdd">
-                                <li class="p-0" id="search">
-                                    <input class="search" type="search" placeholder="بحث">
-                                </li>
-                                <li>فئة 1</li>
-                                <li>فئه 2</li>
-                                <li>فئه 3</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <div class="form-check form-switch d-flex align-items-center  ms-2 me-2">
-                    <input class="form-check-input ms-3" checked type="checkbox" role="switch"
-                        id="flexSwitchCheckDefault-90">
-                    <label for="flexSwitchCheckDefault-90">تفعيل</label>
-                </div>
-                <button class="main-btn">اضافه</button>
-            </div>
-
-            <div class="popup-edit popup close shadow-sm rounded-3 position-fixed">
-                <img class="position-absolute" src="./Assets/imgs/Close.png" alt="">
-                <h2 class="text-center mt-4 mb-4 opacity-75">تعديل العنصر</h2>
-                <div class="f-row d-flex gap-4 align-items-end">
-                    <div>
-                        <label class="d-block mb-1" for="suppliers-name">اسم المورد</label>
-                        <input type="text" name="text" id="suppliers-name" placeholder="...">
-                    </div>
-                    <div>
-                        <input type="search" name="search" id="suppliers-search" placeholder="بحث">
-                    </div>
-                </div>
-                <div class="select-form">
-                    <span>الفئه</span>
-                    <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
-                        <button class="w-100 d-flex justify-content-between"
-                            onclick="dropdown('valueStatusEdit', 'listStatusEdit')">
-                            <span class="fw-bold opacity-50 valueDropdown" id="valueStatusEdit">فئة 1</span>
-                            <img src="./Assets/imgs/chevron-down.png" alt="">
-                        </button>
-                        <div class="options none">
-                            <ul id="listStatusEdit">
-                                <li class="p-0" id="search">
-                                    <input class="search" type="search" placeholder="بحث">
-                                </li>
-                                <li class="active">فئة 1</li>
-                                <li>فئه 2</li>
-                                <li>فئه 3</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-check form-switch d-flex align-items-center  ms-2 me-2">
-                    <input class="form-check-input ms-3" checked type="checkbox" role="switch"
-                        id="flexSwitchCheckDefault-21">
-                    <label for="flexSwitchCheckDefault-21">تفعيل</label>
-                </div>
-                <button class="main-btn">تحديث</button>
-            </div>
-
-            <div class="popup-delete popup close shadow-sm rounded-3 position-fixed">
-                <img class="position-absolute" src="./Assets/imgs/Close.png" alt="">
-                <h3 class="fs-5 fw-bold mb-3">حذف العنصر</h3>
-                <p>هل تريد الحذف متاكد !!</p>
-                <div class="buttons mt-5 d-flex">
-                    <button class="agree rounded-2">نعم أريد</button>
-                    <button class="disagree me-3 text-light rounded-2 main-btn">لا أريد</button>
-                </div>
-            </div>
-
-            <div class="overlay position-fixed none w-100 h-100"></div>
-            <!-- end of popup -->
-
-        </div>
-        <script src="./Assets/JS files/warehouse.js"></script>
-        <script src="./Assets/JS files/global.js"></script>
-        <script src="./Assets/JS files/dropdown.js"></script>
-    </body>
-
-    </html>
 
 @endsection
 
