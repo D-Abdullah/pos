@@ -237,68 +237,7 @@
 
                         <div class="features shadow-sm p-4 d-flex justify-content-between align-items-center">
 
-                            <div class="component-right gap-4 d-flex align-items-center">
 
-                                <div class="add-button">
-                                    <button class="text-light main-btn"> اضافه عنصر</button>
-                                </div>
-
-                                <div class="search-input">
-                                    <input type="search" placeholder="بحث" id="search">
-                                </div>
-
-                                <div class="wrapper">
-                                    <div class="select-btn">
-                                        <span>المورد</span>
-
-                                        <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
-                                    </div>
-                                    <div class="content">
-                                        <div class="search">
-                                            <i class="uil uil-search"></i>
-                                            <input spellcheck="false" name="categoryDropdownQuery" type="text"
-                                                placeholder="بحث">
-                                        </div>
-                                        <ul class="options"></ul>
-                                    </div>
-                                </div>
-
-                                <div class="dropdown">
-                                    <div class="select-btn-add">
-                                        <span>المنتج</span>
-
-                                        <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
-                                    </div>
-                                    <div class="content">
-                                        <div class="search">
-                                            <i class="uil uil-search"></i>
-                                            <input spellcheck="false" name="categoryDropdownQuery" type="text"
-                                                placeholder="بحث">
-                                        </div>
-                                        <ul class="options"></ul>
-                                    </div>
-                                </div>
-
-                                {{-- <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
-                                    <button onclick="dropdown('valueStatus', 'listStatus')">
-                                        <span class="fw-bold opacity-50 valueDropdown" id="valueStatus">الفئة</span>
-                                        <img src="./Assets/imgs/chevron-down.png" alt="">
-                                    </button>
-                                    <div class="options none">
-                                        <ul id="listStatus">
-                                            <li class="p-0" id="search">
-                                                <input class="search" type="search" placeholder="بحث">
-                                            </li>
-                                            <li class="active">الفئة</li>
-                                            <li>فئة 1</li>
-                                            <li>فئه 2</li>
-                                        </ul>
-                                    </div>
-                                </div> --}}
-
-                                <button class="main-btn" id="form">تأكيد</button>
-
-                            </div>
 
                             <div class="component-left me-3 gap-4 d-flex align-items-center">
 
