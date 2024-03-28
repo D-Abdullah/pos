@@ -73,6 +73,7 @@
             </div>
         </div>
 
+        <div id="invalidAdd" class="invalid invalidAdd my-3"></div>
         <button class="main-btn mt-3" type="submit" id="formSubmitBtn">انشاء عملية الشراء</button>
 
     </form>

@@ -50,11 +50,11 @@ class UserController extends Controller
             $user = User::create([
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
-                'email_verified_at'=> Carbon::now(),
+                'email_verified_at' => Carbon::now(),
                 'password' => Hash::make('123456789'),
                 'phone' => $request->input('phone'),
                 'added_by' => auth()->user()->getAuthIdentifier(),
-                'remember_token'=> Str::random(50)
+                'remember_token' => Str::random(50)
             ]);
             $user->save();
 
@@ -107,6 +107,5 @@ class UserController extends Controller
 
             return redirect()->back()->with(['error' => 'حدث خطأ أثناء حذف المستخدم. يرجى المحاولة مرة أخرى.']);
         }
-
     }
 }
