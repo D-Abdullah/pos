@@ -262,104 +262,103 @@
                                 </form>
                             </div>
 
-                        </td>
 
-                        <div class="popup-delete id-{{ $supplier->id }} popup close shadow-sm rounded-3 position-fixed">
-                            <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
-                            <h3 class="fs-5 fw-bold mb-3">حذف المورد</h3>
-                            <p>هل تريد الحذف متاكد !!</p>
-                            <div class="buttons mt-5 d-flex">
-                                <button onclick="fnDelete('{{ $supplier->id }}')" class="agree rounded-2">نعم
-                                    أريد</button>
-                                <button class="disagree me-3 text-light rounded-2 main-btn">لا أريد</button>
-                            </div>
-                        </div>
 
-                        <div class="popup-dolar id-{{ $supplier->id }} popup close shadow-sm rounded-3 position-fixed">
-                            <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
-                            <div class="dolar-container p-5 d-flex flex-column">
-                                <div
-                                    class="dolar-info d-flex  flex-column justify-content-center  align-items-center gap-3">
-                                    <p> <span class="fw-bold"> التكلفة الإجمالية المطلوبة :</span>
-                                        <span>{{ number_format($supplier->total_required, 0, ',', ',') }} جنيه</span>
-                                    </p>
-                                    <p> <span class="fw-bold">التكلفة الإجمالية المدفوعة :</span>
-                                        <span>{{ number_format($supplier->total_paid, 0, ',', ',') }} جنيه</span>
-                                    </p>
-                                    <p> <span class="fw-bold">إجمالي تكلفة المستحقات المتبقيه:</span>
-                                        <span>{{ number_format($supplier->total_receivables, 0, ',', ',') }} جنيه</span>
-                                    </p>
-
+                            <div
+                                class="popup-delete id-{{ $supplier->id }} popup close shadow-sm rounded-3 position-fixed">
+                                <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
+                                    alt="">
+                                <h3 class="fs-5 fw-bold mb-3">حذف المورد</h3>
+                                <p>هل تريد الحذف متاكد !!</p>
+                                <div class="buttons mt-5 d-flex">
+                                    <button onclick="fnDelete('{{ $supplier->id }}')" class="agree rounded-2">نعم
+                                        أريد</button>
+                                    <button class="disagree me-3 text-light rounded-2 main-btn">لا أريد</button>
                                 </div>
-                                <form id="dolar-form" action="{{ route('supplier.deposits', $supplier->id) }}"
-                                    method="post">
-                                    @csrf
-                                    @method('PATCH')
-                                    <div class="buttons mt-5 d-flex justify-content-center">
-                                        <div class="elements w-100">
-                                            <div id="addDepositsContainer">
-                                                <div class="f-row d-flex gap-4 align-items-end deposit-section">
-                                                    <div>
-                                                        <label class="d-block mb-1" for="deposit-amount">المبلغ</label>
-                                                        <input type="text" name="deposits[0][cost]"
-                                                            class="deposit-amount category-input form-control"
-                                                            placeholder="المبلغ" value="{{ old('deposits.0.cost') }}">
-                                                    </div>
-                                                    <div>
-                                                        <label class="d-block mb-1" for="deposit-date">التاريخ</label>
-                                                        <input type="date" name="deposits[0][date]"
-                                                            class="deposit-date category-input form-control"
-                                                            placeholder="التاريخ" value="{{ old('deposits.0.date') }}">
-                                                    </div>
-                                                    <div>
-                                                        <label class="d-block mb-1" for="deposit-amount">المبلغ</label>
-                                                        <input type="text" name="deposits[1][cost]"
-                                                            class="deposit-amount category-input form-control"
-                                                            placeholder="المبلغ" value="{{ old('deposits.0.cost') }}">
-                                                    </div>
-                                                    <div>
-                                                        <label class="d-block mb-1" for="deposit-date">التاريخ</label>
-                                                        <input type="date" name="deposits[1][date]"
-                                                            class="deposit-date category-input form-control"
-                                                            placeholder="التاريخ" value="{{ old('deposits.0.date') }}">
-                                                    </div>
-                                                    <button type="button" class="remove-btn p-3" hidden disabled><i
-                                                            class="fa-solid fa-trash"></i></button>
-                                                    <button type="button" class="check-btn p-3 ">
-                                                        <i class="fa-solid fa-check"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                            <button type="button" class="main-btn p-2 ps-3 pe-3 specialBtn m-0 mt-2 mb-2"
-                                                id="addElement">
-                                                <svg class="pointer" xmlns="http://www.w3.org/2000/svg" width="26"
-                                                    height="27" viewBox="0 0 26 27" fill="none">
-                                                    <path d="M13 5.52753V20.6942" stroke="#fff" stroke-width="2"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                    <path d="M13 5.52753V20.6942" stroke="white" stroke-opacity="0.2"
-                                                        stroke-width="2" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path d="M5.41663 13.1108H20.5833" stroke="#fff" stroke-width="1.5"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                    <path d="M5.41663 13.1108H20.5833" stroke="white" stroke-opacity="0.2"
-                                                        stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div id="invalidDolar" class="invalid invalidDolar my-3"></div>
-
-                                    <button class="dollar-btn" type="submit">
-                                        تـأكيد
-                                    </button>
-                                </form>
                             </div>
 
-                        </div>
+                            <div
+                                class="popup-dolar id-{{ $supplier->id }} popup close shadow-sm rounded-3 position-fixed">
+                                <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
+                                    alt="">
+                                <div class="dolar-container p-5 d-flex flex-column">
+                                    <div
+                                        class="dolar-info d-flex  flex-column justify-content-center  align-items-center gap-3">
+                                        <p> <span class="fw-bold"> التكلفة الإجمالية المطلوبة :</span>
+                                            <span>{{ number_format($supplier->total_required, 0, ',', ',') }} جنيه</span>
+                                        </p>
+                                        <p> <span class="fw-bold">التكلفة الإجمالية المدفوعة :</span>
+                                            <span>{{ number_format($supplier->total_paid, 0, ',', ',') }} جنيه</span>
+                                        </p>
+                                        <p> <span class="fw-bold">إجمالي تكلفة المستحقات المتبقيه:</span>
+                                            <span>{{ number_format($supplier->total_receivables, 0, ',', ',') }}
+                                                جنيه</span>
+                                        </p>
 
+                                    </div>
+                                    <form id="dolar-form" action="{{ route('supplier.deposits', $supplier->id) }}"
+                                        method="post">
+                                        @csrf
+                                        @method('PATCH')
+                                        <div class="buttons mt-5 d-flex justify-content-center">
+                                            <div class="elements w-100">
+                                                <div id="addDepositsContainer">
+                                                    <div class="f-row d-flex gap-4 align-items-end deposit-section">
+                                                        <div>
+                                                            <label class="d-block mb-1"
+                                                                for="deposit-amount">المبلغ</label>
+                                                            <input type="text" name="deposits[0][cost]"
+                                                                class="deposit-amount category-input form-control"
+                                                                placeholder="المبلغ"
+                                                                value="{{ old('deposits.0.cost') }}">
+                                                        </div>
+                                                        <div>
+                                                            <label class="d-block mb-1" for="deposit-date">التاريخ</label>
+                                                            <input type="date" name="deposits[0][date]"
+                                                                class="deposit-date category-input form-control"
+                                                                placeholder="التاريخ"
+                                                                value="{{ old('deposits.0.date') }}">
+                                                        </div>
+                                                        <button type="button" class="remove-btn p-3" hidden disabled><i
+                                                                class="fa-solid fa-trash"></i></button>
+                                                        <button type="button" class="check-btn p-3 ">
+                                                            <i class="fa-solid fa-check"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <button type="button"
+                                                    class="main-btn p-2 ps-3 pe-3 specialBtn m-0 mt-2 mb-2"
+                                                    id="addElement">
+                                                    <svg class="pointer" xmlns="http://www.w3.org/2000/svg"
+                                                        width="26" height="27" viewBox="0 0 26 27"
+                                                        fill="none">
+                                                        <path d="M13 5.52753V20.6942" stroke="#fff" stroke-width="2"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path d="M13 5.52753V20.6942" stroke="white" stroke-opacity="0.2"
+                                                            stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                        <path d="M5.41663 13.1108H20.5833" stroke="#fff"
+                                                            stroke-width="1.5" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                        <path d="M5.41663 13.1108H20.5833" stroke="white"
+                                                            stroke-opacity="0.2" stroke-width="1.5"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div id="invalidDolar" class="invalid invalidDolar my-3"></div>
+
+                                        <button class="dollar-btn" type="submit">
+                                            تـأكيد
+                                        </button>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
@@ -700,39 +699,9 @@
 
                 document.querySelector(".overlay").classList.remove("none");
 
-                document.querySelector(".popup-dolar").classList.remove("close");
-
-                document
-                    .querySelector(".popup-dolar .agree")
-                    .addEventListener("click", () => {
+                document.querySelector(`.popup-dolar.id-${id}`).classList.remove("close");
 
 
-                        fnDelete(id)
-
-                        document
-                            .querySelector("body")
-
-                            .classList.remove("overflow-hidden");
-
-                        document.querySelector(".overlay").classList.add("none");
-
-                        document.querySelector(".popup-dolar").classList.add("close");
-
-
-
-                    });
-
-                document
-                    .querySelector(".popup-delete .disagree")
-                    .addEventListener("click", () => {
-                        document
-                            .querySelector("body")
-                            .classList.remove("overflow-hidden");
-
-                        document.querySelector(".overlay").classList.add("none");
-
-                        document.querySelector(".popup-delete").classList.add("close");
-                    });
             });
         });
     </script>
