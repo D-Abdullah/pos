@@ -6,18 +6,6 @@
     <link rel="stylesheet" href="{{ asset('Assets/Css files/rent.css') }}">
 @endsection
 <style>
-    #name:invalid,
-    #user-name:invalid,
-    #sale-rent:invalid {
-        border: 1px solid red
-    }
-
-    #name:valid,
-    #user-name:valid,
-    #sale-rent:valid {
-        border: 1px solid #0075ff
-    }
-
     .invalid {
         color: red;
         font-size: 12px;
@@ -42,11 +30,18 @@
 
                     <div class="search-input">
                         <label for="search-name">بحث بالاسم</label>
-                        <input type="search" placeholder="بحث بالاسم" id="search-name">
+                        <input type="search" name="q" placeholder="بحث بالاسم" id="search-name">
                     </div>
+
                     <div>
                         <label for="startDate">من تاريخ:</label>
-                        <input id="startDate" name="categoryDate" class="" type="date" />
+                        <input type="date" id="startDate" name="date_from" value="{{ request('date_from') }}">
+                    </div>
+
+                    <!-- Filter by Date To -->
+                    <div>
+                        <label for="date_to">إلى تاريخ:</label>
+                        <input type="date" id="date_to" name="date_to" value="{{ request('date_to') }}">
                     </div>
 
 
@@ -118,7 +113,7 @@
                         <td>{{ $rent->sale_price }}</td>
                         <td>{{ $rent->quantity }}</td>
                         <td>{{ $rent->added_by }}</td>
-                        <td>{{ $rent->date }}</td>
+                        <td> {{ $rent->updated_at->format('Y/m/d') }}</td>
                         {{-- <td>
                                 @if ($rent->is_active)
                                     <span class="live">مفعل</span>
@@ -147,25 +142,28 @@
                                     <div class="f-row d-flex gap-4">
                                         <div>
                                             <label class="d-block mb-1" for="name">الاسم</label>
-                                            <input type="text" name="name" id="name" value="{{ $rent->name }}"
-                                                class="category-input">
+                                            <input type="text" name="name" id="name"
+                                                value="{{ $rent->name }}" class="category-input" placeholder="الاسم">
                                         </div>
                                         <div>
                                             <label class="d-block mb-1" for="sale-rent">سعر الايجار</label>
                                             <input type="text" name="rent_price" id="sale-rent"
-                                                value="{{ $rent->rent_price }}" class="category-input">
+                                                value="{{ $rent->rent_price }}" class="category-input"
+                                                placeholder="سعر الايجار">
                                         </div>
                                     </div>
                                     <div class="f-row d-flex gap-4">
                                         <div>
                                             <label class="d-block mb-1" for="user-name">سعر البيع</label>
                                             <input type="text" name="sale_price" id="user-name"
-                                                value="{{ $rent->sale_price }}" class="category-input">
+                                                value="{{ $rent->sale_price }}" class="category-input"
+                                                placeholder="سعر البيع">
                                         </div>
                                         <div>
                                             <label class="d-block mb-1" for="gmail">الكميه</label>
                                             <input type="number" name="quantity" id="gmail"
-                                                value="{{ $rent->quantity }}" class="category-input">
+                                                value="{{ $rent->quantity }}" class="category-input"
+                                                placeholder="الكميه">
                                         </div>
                                     </div>
                                     {{-- <div class="form-check form-switch d-flex align-items-center  ms-2 me-2">

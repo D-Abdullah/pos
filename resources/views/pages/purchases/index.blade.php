@@ -164,6 +164,7 @@
                     <th>الكميه</th>
                     <th>الاجمالي</th>
                     <th>بواسطه</th>
+                    <th>التاريخ</th>
                     <th>
                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 25"
                             fill="none">
@@ -201,6 +202,7 @@
                         <td>{{ $purchase->quantity }}</td>
                         <td>{{ $purchase->total_price }}</td>
                         <td>{{ $purchase->added_by }}</td>
+                        <td>{{ $purchase->updated_at->format('Y/m/d') }}</td>
                         <td>
                             <div class="edit d-flex align-items-center justify-content-center">
                                 <img src="{{ asset('Assets/imgs/edit-circle.png') }}" alt="" id="edit"
@@ -214,12 +216,12 @@
                         <td class="p-0">
                             <div
                                 class="popup-edit id-{{ $purchase->id }} popup close shadow-sm rounded-3 position-fixed text-end">
-                                <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
-                                    alt="">
                                 <form method="post" action="{{ route('purchase.update', $purchase->id) }}"
                                     id="purchaseFormUpdate">
                                     @csrf
                                     @method('put')
+                                    <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
+                                        alt="">
                                     <h2 class="text-center mt-4 mb-4 opacity-75">تحديث دفعات عملية شراء</h2>
 
                                     <div class="f-row d-flex gap-4">
@@ -342,21 +344,19 @@
 
                                 </form>
                             </div>
-
-                        </td>
-
-                        <div class="popup-delete popup close shadow-sm rounded-3 position-fixed">
-                            <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
-                            <h3 class="fs-5 fw-bold mb-3">حذف العنصر</h3>
-                            <p>هل تريد الحذف متاكد !!</p>
-                            <div class="buttons mt-5 d-flex">
-                                <button class="agree rounded-2">نعم
-                                    أريد</button>
-                                <button class="disagree me-3 text-light rounded-2 main-btn">لا أريد</button>
+                            <div
+                                class="popup-delete id-{{ $purchase->id }} popup close shadow-sm rounded-3 position-fixed">
+                                <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
+                                    alt="">
+                                <h3 class="fs-5 fw-bold mb-3">حذف العنصر</h3>
+                                <p>هل تريد الحذف متاكد !!</p>
+                                <div class="buttons mt-5 d-flex">
+                                    <button class="agree rounded-2">نعم
+                                        أريد</button>
+                                    <button class="disagree me-3 text-light rounded-2 main-btn">لا أريد</button>
+                                </div>
                             </div>
-                        </div>
-
-
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
@@ -746,8 +746,10 @@
                     });
             });
         });
+    </script>
 
 
+    <script>
         function fnDelete(id) {
             // Get the form element
             var form = document.createElement('form');

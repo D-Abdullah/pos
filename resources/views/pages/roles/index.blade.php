@@ -30,8 +30,7 @@
                 <form action="" class="gap-4 d-flex align-items-end mb-0">
                     <div>
                         <label>بحث بالاسم</label>
-
-                        <input type="search" placeholder="بحث" id="search">
+                        <input type="search" name="q" placeholder="بحث" id="search">
                     </div>
                     <!-- Filter by Date From -->
                     <div class="dateInp">
@@ -106,7 +105,7 @@
                 @foreach ($roles as $role)
                     <tr>
                         <td>{{ $role->name }}</td>
-                        <td>{{ $role->date }}</td>
+                        <td> {{ $role->updated_at->format('Y/m/d') }}</td>
                         <td>
                             <div class="edit d-flex align-items-center justify-content-center">
                                 <img src="{{ asset('Assets/imgs/edit-circle.png') }}" alt=""
@@ -161,14 +160,16 @@
                                             @endif
                                         </div>
                                     </div> --}}
-
+                                    
                                         <div class="d-flex gap-3 flex-wrap">
                                             @foreach ($permissions as $permission)
                                                 <div class="form-check d-flex align-items-center">
-                                                    <input class="form-check-input  check-box" type="checkbox"
-                                                        value="{{ $permission['org'] }}" id="flexCheckDefault"
+                                                    <input class="form-check-input ms-2  check-box" name="permissions[]"
+                                                        type="checkbox" value="{{ $permission['org'] }}"
+                                                        id="{{ preg_replace('/\s+/', '', $permission['org']) }}"
                                                         {{ in_array($permission['name'], (array) old('permissions')) ? 'selected' : '' }}>
-                                                    <label class="form-check-label px-3 d-block" for="flexCheckDefault">
+                                                    <label class="form-check-label pe-1 d-block"
+                                                        for="{{ preg_replace('/\s+/', '', $permission['org']) }}">
                                                         {{ $permission['name'] }}
                                                     </label>
                                                 </div>
