@@ -24,7 +24,7 @@ class UserController extends Controller
     public function index()
     {
         try {
-            $users = User::with('roles')->paginate(PAGINATION);
+           return $users = User::with('roles')->paginate(PAGINATION);
             $roles = Role::all();
 
             return view('pages.users.index', compact('users', 'roles'));
