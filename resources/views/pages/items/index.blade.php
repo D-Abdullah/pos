@@ -38,6 +38,13 @@
             width: 280px !important;
         }
     </style>
+    <style>
+        .invalid {
+            color: red;
+            font-size: 12px;
+            text-align: center;
+        }
+    </style>
 
 @endsection
 @section('content')
@@ -443,7 +450,7 @@
         // End Exel Sheet
     </script>
 
-{{-- Validation for edit --}}
+    {{-- Validation for edit --}}
     <script>
         document.querySelectorAll("table #edit").forEach((edit) => {
             let id = edit.dataset.id;

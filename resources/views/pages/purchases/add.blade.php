@@ -5,42 +5,6 @@
         <h2 class="text-center mt-4 mb-4 opacity-75">انشاء عملية شراء</h2>
 
         <div class="f-row d-flex gap-4">
-            {{-- <div>
-                <label class="d-block mb-1" for="purchase-supplier">اسم المورد</label>
-                <select name="supplier_id" id="purchase-supplier"
-                    class="form-control {{ $errors->has('supplier_id') ? 'is-invalid' : '' }}">
-                    <option>اختر المورد</option>
-                    @foreach ($suppliers as $supplier)
-                        <option value="{{ $supplier->id }}" {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
-                            {{ $supplier->name }}
-                        </option>
-                    @endforeach
-                </select>
-                @if ($errors->has('supplier_id'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('supplier_id') }}
-                    </div>
-                @endif
-            </div> --}}
-
-            {{-- <div>
-                <label class="d-block mb-1" for="purchase-product">اسم المنتج</label>
-                <select name="product_id" id="purchase-product"
-                    class="form-control {{ $errors->has('product_id') ? 'is-invalid' : '' }}">
-                    <option value="">اختر المنتج</option>
-                    @foreach ($products as $product)
-                        <option value="{{ $product->id }}" {{ old('product_id') == $product->id ? 'selected' : '' }}>
-                            {{ $product->name }}
-                        </option>
-                    @endforeach
-                </select>
-                @if ($errors->has('product_id'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('product_id') }}
-                    </div>
-                @endif
-            </div> --}}
-
             <div class="dds add">
                 <label class="d-block" for="date_to">اختر المورد</label>
                 <select class="js-example-basic-single supplier add" name="supplier_id">
@@ -108,36 +72,6 @@
                 @endif
             </div>
         </div>
-        {{-- <input type="hidden" name="deposits" id="depositsInput"> --}}
-        {{-- <div id="addDepositsContainer">
-            <div class="f-row d-flex gap-4 align-items-end deposit-section">
-                <div>
-                    <label class="d-block mb-1" for="deposit-amount">المبلغ</label>
-                    <input type="text" name="deposits[0][cost]" class="deposit-amount form-control"
-                        placeholder="المبلغ" value="{{ old('deposits.0.cost') }}">
-                </div>
-                <div>
-                    <label class="d-block mb-1" for="deposit-date">التاريخ</label>
-                    <input type="date" name="deposits[0][date]" class="deposit-date form-control"
-                        placeholder="التاريخ" value="{{ old('deposits.0.date') }}">
-                </div>
-                <button type="button" class="remove-btn" hidden disabled><i class="fa-solid fa-trash"></i></button>
-            </div>
-        </div>
-
-        <button type="button" class="main-btn p-2 ps-3 pe-3 specialBtn m-0 mt-2 mb-2" id="addElement">
-            <svg class="pointer" xmlns="http://www.w3.org/2000/svg" width="26" height="27" viewBox="0 0 26 27"
-                fill="none">
-                <path d="M13 5.52753V20.6942" stroke="#fff" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round" />
-                <path d="M13 5.52753V20.6942" stroke="white" stroke-opacity="0.2" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M5.41663 13.1108H20.5833" stroke="#fff" stroke-width="1.5" stroke-linecap="round"
-                    stroke-linejoin="round" />
-                <path d="M5.41663 13.1108H20.5833" stroke="white" stroke-opacity="0.2" stroke-width="1.5"
-                    stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-        </button> --}}
 
         <button class="main-btn mt-3" type="submit" id="formSubmitBtn">انشاء عملية الشراء</button>
 
@@ -147,25 +81,36 @@
 
 {{-- Validation For Add --}}
 <script>
-    const addForm = document.getElementById("add-purshe");
-    const addInputs = addForm.querySelectorAll(".category-input");
+    const addForm = document.getElementById("add-purchase");
+    const addInputs = addForm.querySelectorAll("input, select");
     const addMessage = document.getElementById("invalidAdd");
 
     addForm.addEventListener('submit', (event) => {
         addMessage.textContent = '';
-        let notValid = false;
+        let emptyFields = [];
 
         for (let i = 0; i < addInputs.length; i++) {
-            if (addInputs[i].value.trim() === "") {
-                event.preventDefault();
-                const inputName = addInputs[i].getAttribute('placeholder');
-                addMessage.textContent = `الحقل ${inputName} مطلوب`;
-                addInputs[i].focus();
-                notValid = true;
-                if (notValid) {
-                    break;
+            const input = addInputs[i];
+            const inputType = input.getAttribute('type');
+            const inputValue = input.value.trim();
+            const inputName = input.getAttribute('placeholder') || input.getAttribute('name');
+
+            if (inputType === 'date' || inputType === 'number' || inputType === 'select-one') {
+                if (inputValue === "") {
+                    emptyFields.push(inputName);
+                }
+            } else {
+                if (inputValue === "") {
+                    emptyFields.push(inputName);
                 }
             }
+        }
+
+        if (emptyFields.length > 0) {
+            event.preventDefault();
+            addMessage.textContent = `الحقول التالية مطلوبة: ${emptyFields.join(', ')}`;
+            // Optionally, you can focus on the first empty field
+            addInputs[0].focus();
         }
     });
 </script>
