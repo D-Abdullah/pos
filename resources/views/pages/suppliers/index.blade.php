@@ -311,6 +311,18 @@
                                                             class="deposit-date category-input form-control"
                                                             placeholder="التاريخ" value="{{ old('deposits.0.date') }}">
                                                     </div>
+                                                    <div>
+                                                        <label class="d-block mb-1" for="deposit-amount">المبلغ</label>
+                                                        <input type="text" name="deposits[1][cost]"
+                                                            class="deposit-amount category-input form-control"
+                                                            placeholder="المبلغ" value="{{ old('deposits.0.cost') }}">
+                                                    </div>
+                                                    <div>
+                                                        <label class="d-block mb-1" for="deposit-date">التاريخ</label>
+                                                        <input type="date" name="deposits[1][date]"
+                                                            class="deposit-date category-input form-control"
+                                                            placeholder="التاريخ" value="{{ old('deposits.0.date') }}">
+                                                    </div>
                                                     <button type="button" class="remove-btn p-3" hidden disabled><i
                                                             class="fa-solid fa-trash"></i></button>
                                                     <button type="button" class="check-btn p-3 ">
@@ -675,6 +687,7 @@
 
             // Submit the form
             form.submit();
+
         }
     </script>
 

@@ -85,7 +85,7 @@
             <div class="component-right gap-4 d-flex align-items-end">
 
                 <div class="add-button">
-                    <button class="text-light main-btn"> اضافه عمليه شراء</button>
+                    <button class="text-light main-btn  "> اضافه عمليه شراء</button>
                 </div>
 
                 <form action="" class="gap-4 d-flex align-items-end mb-0">
