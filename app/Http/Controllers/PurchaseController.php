@@ -6,7 +6,6 @@ use App\Models\Product;
 use App\Models\Purchase;
 use App\Http\Requests\StorePurchaseRequest;
 use App\Http\Requests\UpdatePurchaseRequest;
-use App\Models\Deposit;
 use App\Models\Supplier;
 use App\Models\WarehouseTransaction;
 use Exception;
@@ -67,7 +66,7 @@ class PurchaseController extends Controller
             Log::error('حدث خطأ أثناء اضافه عمليه شراء: ' . $e->getMessage());
 
             return redirect()->back()->withInput($request->all())
-                ->with(['error' => 'حدث خطأ أثناء اضافه عمليه شراء. يرجى المحاولة مرة أخرى.'.$e->getMessage()]);
+                ->with(['error' => 'حدث خطأ أثناء اضافه عمليه شراء. يرجى المحاولة مرة أخرى.' . $e->getMessage()]);
         }
     }
     public function update(UpdatePurchaseRequest $request, int $id)

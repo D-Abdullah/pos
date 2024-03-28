@@ -6,6 +6,8 @@ use App\Models\Product;
 use App\Models\Supplier;
 use App\Http\Requests\StoreSupplierRequest;
 use App\Http\Requests\UpdateSupplierRequest;
+use App\Models\Deposit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -18,10 +20,18 @@ class SupplierController extends Controller
     {
         try {
             $suppliers = Supplier::query();
+            // filters
+            $suppliers = $suppliers->with('deposits', 'purchases')->paginate(PAGINATION);
+            foreach ($suppliers as $supplier) {
+                $totalRequired = $supplier->purchases()->sum('total_price');
+                $totalPaid = $supplier->deposits()->sum('cost');
+                $totalReceivables = $totalRequired - $totalPaid;
 
-            $suppliers = $suppliers->paginate(PAGINATION);
+                $supplier->total_required = $totalRequired;
+                $supplier->total_paid = $totalPaid;
+                $supplier->total_receivables = $totalReceivables;
+            }
             $products = Product::all();
-
             return view('pages.suppliers.index', compact('suppliers', 'products'));
         } catch (\Exception $e) {
             DB::rollBack();
@@ -81,6 +91,23 @@ class SupplierController extends Controller
             return redirect()->back()->withInput($request->all())->with(['error' => 'حدث خطأ أثناء تحديث المورد. يرجى المحاولة مرة أخرى.']);
         }
     }
+    /**
+     * Update the specified resource in storage.
+     */
+    public function deposits(Request $request, $id)
+    {
+        try {
+            return $request->all();
+
+
+            return redirect()->route('supplier.all')->with(['success' => 'تم تحديث المورد ' . $request->input('name') . ' بنجاح.']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('حدث خطأ أثناء تحديث المورد: ' . $e->getMessage());
+
+            return redirect()->back()->withInput($request->all())->with(['error' => 'حدث خطأ أثناء تحديث المورد. يرجى المحاولة مرة أخرى.']);
+        }
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -97,6 +124,5 @@ class SupplierController extends Controller
 
             return redirect()->back()->with(['error' => 'حدث خطأ أثناء حذف المورد. يرجى المحاولة مرة أخرى.']);
         }
-
     }
 }
