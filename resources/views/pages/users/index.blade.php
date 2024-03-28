@@ -173,13 +173,14 @@
                                     data-id="{{ $user->id }}">
 
                                 <img class="ms-2 me-2" src="{{ asset('Assets/imgs/trash (1).png') }}" alt=""
-                                    id="trash">
+                                    data-id="{{ $user->id }}" id="trash">
 
                             </div>
                         </td>
                         <td class="p-0">
                             <div class="popup-edit id-{{ $user->id }} popup close shadow-sm rounded-3 position-fixed">
-                                <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
+                                <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
+                                    alt="">
                                 <form action="{{ route('user.update', ['id' => $user->id]) }}" method="post"
                                     id="edit-cate">
                                     @csrf
