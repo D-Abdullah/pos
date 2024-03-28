@@ -121,7 +121,7 @@
                         <td>{{ $wt->quantity }}</td>
                         <td>{{ $wt->from }}</td>
                         <td>{{ $wt->to }}</td>
-                        <td>{{ $wt->date }}</td>
+                        <td> {{ $wt->updated_at->format('Y/m/d') }}</td>
                     </tr>
                 @endforeach
 

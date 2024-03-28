@@ -15,7 +15,7 @@
 
             <div>
                 <label class="d-block"> اختر المنتج</label>
-                <select class="js-example-basic-single add" name="product">
+                <select class="js-example-basic-single add" name="product_id">
                     <option value="" {{ request('product') ? 'disabled hidden' : 'selected disabled hidden' }}>
                         اختر المنتج
                     </option>

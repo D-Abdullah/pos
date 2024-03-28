@@ -32,6 +32,14 @@
             cursor: pointer;
             border-radius: 5px;
         }
+
+
+        .dollar-btn {
+            background: #7367f0;
+            color: white;
+            border-radius: 4px;
+            padding: 10px;
+        }
     </style>
 @endsection
 
@@ -66,53 +74,7 @@
                     </div>
 
 
-                    {{-- <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
-                        <button onclick="dropdown('valuePay', 'listPay')">
-                            <span class="fw-bold opacity-50 valueDropdown" id="valuePay">نوع الدفع</span>
-                            <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
-                        </button>
-                        <div class="options none">
-                            <ul id="listPay">
-                                <li>كاش</li>
-                                <li>دفعات</li>
-                            </ul>
-                        </div>
-                     </div>
 
-                     <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
-                        <button onclick="dropdown('valueStatus', 'listStatus')">
-                            <span class="fw-bold opacity-50 valueDropdown" id="valueStatus">الحاله</span>
-                            <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
-                        </button>
-                        <div class="options none">
-                            <ul id="listStatus">
-                                <li class="p-0" id="search">
-                                    <input class="search" type="search" placeholder="بحث">
-                                </li>
-                                <li class="active">الحاله</li>
-                                <li>الحاله 1</li>
-                                <li>الحاله 2</li>
-                            </ul>
-                        </div>
-                     </div>
-
-                     <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
-                        <button onclick="dropdown('valueCategories', 'listCategories')">
-                            <span class="fw-bold opacity-50 valueDropdown" id="valueCategories">الفئه</span>
-                            <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
-                        </button>
-                        <div class="options none">
-                            <ul id="listCategories">
-                                <li class="p-0" id="search">
-                                    <input class="search" type="search" placeholder="بحث">
-                                </li>
-                                <li class="active">الفئة</li>
-                                <li>فئه 1</li>
-                                <li>فئه 2</li>
-                                <li>فئه 3</li>
-                            </ul>
-                        </div>
-                    </div> --}}
                     <div>
                         <label for="startDate">من تاريخ:</label>
                         <input type="date" id="startDate" name="date_from" value="{{ request('date_from') }}">
@@ -329,24 +291,25 @@
                                     </p>
 
                                 </div>
-                                <form action="{{ route('supplier.deposits', $supplier->id) }}" method="post">
+                                <form id="dolar-form" action="{{ route('supplier.deposits', $supplier->id) }}"
+                                    method="post">
                                     @csrf
                                     @method('PATCH')
                                     <div class="buttons mt-5 d-flex justify-content-center">
-                                        <div class="elements">
+                                        <div class="elements w-100">
                                             <div id="addDepositsContainer">
                                                 <div class="f-row d-flex gap-4 align-items-end deposit-section">
                                                     <div>
                                                         <label class="d-block mb-1" for="deposit-amount">المبلغ</label>
                                                         <input type="text" name="deposits[0][cost]"
-                                                            class="deposit-amount form-control" placeholder="المبلغ"
-                                                            value="{{ old('deposits.0.cost') }}">
+                                                            class="deposit-amount category-input form-control"
+                                                            placeholder="المبلغ" value="{{ old('deposits.0.cost') }}">
                                                     </div>
                                                     <div>
                                                         <label class="d-block mb-1" for="deposit-date">التاريخ</label>
                                                         <input type="date" name="deposits[0][date]"
-                                                            class="deposit-date form-control" placeholder="التاريخ"
-                                                            value="{{ old('deposits.0.date') }}">
+                                                            class="deposit-date category-input form-control"
+                                                            placeholder="التاريخ" value="{{ old('deposits.0.date') }}">
                                                     </div>
                                                     <button type="button" class="remove-btn p-3" hidden disabled><i
                                                             class="fa-solid fa-trash"></i></button>
@@ -374,7 +337,10 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <button type="submit">
+
+                                    <div id="invalidDolar" class="invalid invalidDolar my-3"></div>
+
+                                    <button class="dollar-btn" type="submit">
                                         تـأكيد
                                     </button>
                                 </form>
@@ -611,6 +577,31 @@
         });
     </script>
 
+    {{-- Validation For Dollar popup --}}
+    <script>
+        const dolarForm = document.getElementById("dolar-form");
+        const dolarInputs = dolarForm.querySelectorAll(".category-input");
+        const dolarMessage = document.getElementById("invalidAdd");
+
+        dolarForm.addEventListener('submit', (event) => {
+            dolarMessage.textContent = '';
+            let notValid = false;
+
+            for (let i = 0; i < dolarInputs.length; i++) {
+                if (dolarInputs[i].value.trim() === "") {
+                    event.preventDefault();
+                    const inputName = dolarInputs[i].getAttribute('placeholder');
+                    dolarMessage.textContent = `الحقل ${inputName} مطلوب`;
+                    dolarInputs[i].focus();
+                    notValid = true;
+                    if (notValid) {
+                        break;
+                    }
+                }
+            }
+        });
+    </script>
+
     {{-- Delete --}}
     <script>
         document.querySelectorAll("#trash").forEach((trash) => {
@@ -734,25 +725,46 @@
     </script>
 
     <script>
+        // function addElement() {
+        //     let depositsContainer = document.getElementById('addDepositsContainer');
+        //     let newDepositSection = depositsContainer.querySelector('.deposit-section').cloneNode(true);
+        //     var I = depositsContainer.childElementCount;
+
+        //     newDepositSection.querySelectorAll('input').forEach(function(input) {
+        //         input.value = '';
+        //         let name = input.name;
+        //         let index = name.match(/\d+/g);
+        //         if (index == null) {
+        //             return;
+        //         } else {
+        //             finalName = name.replace(/(\d)+/, I);
+        //         }
+        //         input.setAttribute('name', finalName);
+        //     });
+
+        //     newDepositSection.querySelector('.remove-btn').removeAttribute('disabled');
+        //     newDepositSection.querySelector('.remove-btn').removeAttribute('hidden');
+
+        //     depositsContainer.appendChild(newDepositSection);
+
+        //     initRemoveButtons(); // Initialize remove buttons after adding a new section
+        // }
+
         function addElement() {
             let depositsContainer = document.getElementById('addDepositsContainer');
             let newDepositSection = depositsContainer.querySelector('.deposit-section').cloneNode(true);
-            var I = depositsContainer.childElementCount;
-            newDepositSection.querySelectorAll('input').forEach(function(input) {
+            let inputs = newDepositSection.querySelectorAll('input');
+            let index = depositsContainer.childElementCount;
+
+            inputs.forEach(function(input) {
                 input.value = '';
-                let name = input.name;
-                let index = name.match(/\d+/g);
-                if (index == null) {
-                    return;
-                } else {
-                    finalName = name.replace(/(\d)+/, I);
-                }
-                input.setAttribute('name', finalName);
+                let name = input.getAttribute('name');
+                let type = name.includes('date') ? 'date' : 'cost';
+                input.setAttribute('name', `deposits[${index}][${type}]`);
             });
 
             newDepositSection.querySelector('.remove-btn').removeAttribute('disabled');
             newDepositSection.querySelector('.remove-btn').removeAttribute('hidden');
-
             depositsContainer.appendChild(newDepositSection);
 
             initRemoveButtons(); // Initialize remove buttons after adding a new section

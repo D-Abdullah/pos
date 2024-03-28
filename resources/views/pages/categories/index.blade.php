@@ -139,8 +139,8 @@
                                         @csrf
                                         @method('put')
 
-                                        <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
-                                            alt="">
+                                        <img class="position-absolute close-icon"
+                                            src="{{ asset('Assets/imgs/Close.png') }}" alt="">
                                         <h2 class="text-center mt-4 mb-4 opacity-75"> تعديل: {{ $department->name }} </h2>
                                         <div>
                                             <span class="d-block mb-1">اسم القسم</span>

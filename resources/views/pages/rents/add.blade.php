@@ -1,23 +1,3 @@
-<style>
-    #name:invalid,
-    #user-name:invalid,
-    #sale-rent:invalid {
-        border: 1px solid red
-    }
-
-    #name:valid,
-    #user-name:valid,
-    #sale-rent:valid {
-        border: 1px solid #0075ff
-    }
-
-    .invalid {
-        color: red;
-        font-size: 12px;
-        text-align: center;
-    }
-</style>
-
 <div class="popup-add popup close shadow-sm rounded-3 position-fixed">
     <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
     <form action="{{ route('rent.add') }}" method="post" id="add-cate">

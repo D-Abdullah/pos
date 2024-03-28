@@ -4,26 +4,28 @@
 [login]
     -login validation enhancement => check on loading page if input is valid
 [category]
-    -popup dismiss on click "X" => not Work on edit
+    -popup dismiss on click "X" => not Work on edit =>Test
 	-responsive design
 [products]
-    -popup dismiss on click "X" => not Work on edit
+    -popup dismiss on click "X" => not Work on edit =>Test
 	-test responsive design
 [supplier]
-    -popup dismiss on click "X" => not Work on edit
+    -popup dismiss on click "X" => not Work on edit =>Test
 	[$]
-		-validation
+		-validation =>Test
         -check popup value
     -test responsive design
 [purchase]
-    -add date on table
+    -add date on table =>Test
 	-test responsive design
+
 [warehouse]
 	-move front into system page
 	-filter with ( products, categories ) dropdown with search
 	-just table without any filter or actions like delete or edit without status
 	-just with only product name and category and qty and
 	-test responsive design
+
 [warehouse transaction]
 
 [clients]
@@ -37,15 +39,15 @@
 	-filter with ( product name[dropdown with search], date ) =>Test
 	-remove reason from the table and add date added => Test
 	-export table data as pdf and print and excel =>Test
-	-add and edit javascript validation before submit and product input must dropdown with search and also remove status btn
+	-add and edit javascript validation before submit and product input must dropdown with search and also remove status btn => Test
 	-delete btn on true result must be send delete method request to eol/<eol id> =>Test
 	-test responsive design
 [users]
-	-filter with ( name, phone, email, role[dropdown with search], date )
-	-table add date added
-	-export table data as pdf and print and excel
-	-add and edit javascript validation before submit
-	-delete btn on true result must be send delete method request to user/<user id>
+	-filter with ( name, phone, email, role[dropdown with search], date ) =>Test
+	-table add date added =>Test
+	-export table data as pdf and print and excel=>Test
+	-add and edit javascript validation before submit=>Test
+	-delete btn on true result must be send delete method request to user/<user id> =>Test
 	-test responsive design
 [roles]
 	-filter with ( name, date ) =>Test
@@ -56,12 +58,26 @@
 	-delete btn on true result must be send delete method request to role/<role id> =>Test
 	-test responsive design
 [rents]
-	-filter with ( name, date )
-	-table add date added and remove status
-	-export table data as pdf and print and excel
-	-add and edit javascript validation before submit and remove status btn
-	-delete btn on true result must be send delete method request to rent/<rent id>
+	-filter with ( name, date ) =>Test
+	-table add date added and remove status =>Test
+	-export table data as pdf and print and excel =>Test
+	-add and edit javascript validation before submit and remove status btn =>Test
+	-delete btn on true result must be send delete method request to rent/<rent id> =>Test
 	-test responsive design
 
 [home] [reports] [party] [bill]
 	-at the end !!
+
+===========================================Cases===========================================
+1-validation [purchase,eol]
+2-delete [purchase,users]
+3-deposit in suppliers
+
+[warehouse]
+	-move front into system page
+	-filter with ( products, categories ) dropdown with search
+	-just table without any filter or actions like delete or edit without status
+	-just with only product name and category and qty and
+	-test responsive design
+===========================================Backend===========================================
+1-filter

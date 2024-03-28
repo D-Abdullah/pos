@@ -122,7 +122,7 @@
                                 <span class="fw-bold">{{ $client->added_by }}</span>
                             </div>
                         </td>
-                        <td>{{ $client->date }}</td>
+                        <td> {{ $client->updated_at->format('Y/m/d') }}</td>
 
                         <td>
                             <div class="edit d-flex align-items-center justify-content-center">

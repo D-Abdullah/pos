@@ -12,7 +12,7 @@
     .dateInp,
     .search-input,
     .search-div {
-        max-width: 180px;
+        max-width: 160px;
     }
 
     .select2-container--default .select2-search--dropdown .select2-search__field {
@@ -38,7 +38,7 @@
     }
 
     .select2-container {
-        width: 280px !important;
+        width: 160px !important;
     }
 
     .invalid {
@@ -166,7 +166,7 @@
                         <td>{{ $user->phone }}</td>
                         <td>{{ $user->roles->first()->name }}</td>
                         <td>{{ $user->added_by }}</td>
-                        <td>{{ $user->date }}</td>
+                        <td> {{ $user->updated_at->format('Y/m/d') }}</td>
                         <td>
                             <div class="edit d-flex align-items-center justify-content-center">
                                 <img src="{{ asset('Assets/imgs/edit-circle.png') }}" alt="" id="edit"
@@ -250,17 +250,19 @@
                                 </form>
                             </div>
 
-                        </td>
-                        <div class="popup-delete popup close shadow-sm rounded-3 position-fixed">
-                            <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
-                            <h3 class="fs-5 fw-bold mb-3">حذف العنصر</h3>
-                            <p>هل تريد الحذف متاكد !!</p>
-                            <div class="buttons mt-5 d-flex">
-                                <button class="agree rounded-2">نعم
-                                    أريد</button>
-                                <button class="disagree me-3 text-light rounded-2 main-btn">لا أريد</button>
+                            <div
+                                class="popup-delete  id-{{ $user->id }}  popup close shadow-sm rounded-3 position-fixed">
+                                <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
+                                    alt="">
+                                <h3 class="fs-5 fw-bold mb-3">حذف العنصر</h3>
+                                <p>هل تريد الحذف متاكد !!</p>
+                                <div class="buttons mt-5 d-flex">
+                                    <button class="agree rounded-2">نعم
+                                        أريد</button>
+                                    <button class="disagree me-3 text-light rounded-2 main-btn">لا أريد</button>
+                                </div>
                             </div>
-                        </div>
+                        </td>
 
 
 

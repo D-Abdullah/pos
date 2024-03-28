@@ -41,10 +41,11 @@
             <div class="d-flex gap-3 flex-wrap">
                 @foreach ($permissions as $permission)
                     <div class="form-check d-flex align-items-center">
-                        <input class="form-check-input  check-box" type="checkbox" value="{{ $permission['org'] }}"
-                            id="flexCheckDefault"
+                        <input class="form-check-input  check-box" name="permissions[]" type="checkbox"
+                            value="{{ $permission['org'] }}" id="{{ preg_replace('/\s+/', '', $permission['org']) }}"
                             {{ in_array($permission['name'], (array) old('permissions')) ? 'selected' : '' }}>
-                        <label class="form-check-label px-3 d-block" for="flexCheckDefault">
+                        <label class="form-check-label px-3 d-block"
+                            for="{{ preg_replace('/\s+/', '', $permission['org']) }}">
                             {{ $permission['name'] }}
                         </label>
                     </div>
