@@ -1,6 +1,14 @@
+<style>
+    .invalid {
+        color: red;
+        font-size: 12px;
+        text-align: center;
+    }
+</style>
+
 <div class="popup-add popup pb-5 close shadow-sm rounded-3 position-fixed ">
     <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
-    <form id="add-purshe" action="{{ route('purchase.add') }}" method="post" id="purchaseForm">
+    <form id="add-purchase" action="{{ route('purchase.add') }}" method="post" id="purchaseForm">
         @csrf
         <h2 class="text-center mt-4 mb-4 opacity-75">انشاء عملية شراء</h2>
 
@@ -37,8 +45,8 @@
             <div>
                 <label class="d-block mb-1" for="purchase-date">تاريخ الشراء</label>
                 <input type="date" name="date" id="purchase-date"
-                    class="form-control {{ $errors->has('date') ? 'is-invalid' : '' }}" value="{{ old('date') }}"
-                    placeholder="تاريخ الشراء">
+                    class="form-control {{ $errors->has('date') ? 'is-invalid' : '' }} category-input"
+                    value="{{ old('date') }} category-input" placeholder="تاريخ الشراء">
                 @if ($errors->has('date'))
                     <div class="invalid-feedback">
                         {{ $errors->first('date') }}
@@ -49,7 +57,7 @@
             <div>
                 <label class="d-block mb-1" for="purchase-quantity">الكمية</label>
                 <input type="number" name="quantity" id="purchase-quantity"
-                    class="form-control {{ $errors->has('quantity') ? 'is-invalid' : '' }}"
+                    class="form-control {{ $errors->has('quantity') ? 'is-invalid' : '' }} category-input"
                     value="{{ old('quantity') }}" placeholder="الكمية">
                 @if ($errors->has('quantity'))
                     <div class="invalid-feedback">
@@ -63,7 +71,7 @@
             <div>
                 <label class="d-block mb-1" for="purchase-total-price">سعر الوحده</label>
                 <input type="text" name="unit_price" id="purchase-total-price"
-                    class="form-control {{ $errors->has('total_price') ? 'is-invalid' : '' }}"
+                    class="form-control {{ $errors->has('total_price') ? 'is-invalid' : '' }} category-input"
                     value="{{ old('total_price') }}" placeholder="السعر الإجمالي">
                 @if ($errors->has('total_price'))
                     <div class="invalid-feedback">
