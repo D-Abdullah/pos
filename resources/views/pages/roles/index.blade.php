@@ -141,33 +141,14 @@
                                         </div>
 
 
-                                        {{-- <div class="f-row d-flex gap-4">
-                                        <div>
-                                            <label class="d-block mb-1" for="role-permissions">الصلاحيات</label>
-                                            <select name="permissions[]" id="role-permissions" multiple
-                                                class="form-control {{ $errors->has('permissions') ? 'is-invalid' : '' }}">
-                                                @foreach ($permissions as $permission)
-                                                    <option value="{{ $permission['org'] }}"
-                                                        {{ in_array($permission['org'], $role->permissions->pluck('name')->toArray()) ? 'selected' : '' }}>
-                                                        {{ $permission['name'] }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            @if ($errors->has('permissions'))
-                                                <div class="invalid-feedback">
-                                                    {{ $errors->first('permissions') }}
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div> --}}
-                                    
+
                                         <div class="d-flex gap-3 flex-wrap">
                                             @foreach ($permissions as $permission)
                                                 <div class="form-check d-flex align-items-center">
                                                     <input class="form-check-input ms-2  check-box" name="permissions[]"
                                                         type="checkbox" value="{{ $permission['org'] }}"
-                                                        id="{{ preg_replace('/\s+/', '', $permission['org']) }}"
-                                                        {{ in_array($permission['name'], (array) old('permissions')) ? 'selected' : '' }}>
+                                                        id="{{ preg_replace('/\s+/', '', $permission['org']) }}">
+                                                        
                                                     <label class="form-check-label pe-1 d-block"
                                                         for="{{ preg_replace('/\s+/', '', $permission['org']) }}">
                                                         {{ $permission['name'] }}
@@ -175,6 +156,7 @@
                                                 </div>
                                             @endforeach
                                         </div>
+
                                     </div>
 
                                     <div id="invalidEdit" class="invalid my-3"></div>
