@@ -230,7 +230,7 @@
                     <!-- end of buttons -->
 
                     <!-- end of frame-5 (header) -->
-                    <h2 class="mb-5">المستودع</h2>
+                    <h2 class="mb-5">المخزن</h2>
                     <!-- start of body -->
 
                     <section class="pt-0 rounded-3 position-relative shadow-sm overflow-auto one" id="one">
