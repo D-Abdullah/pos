@@ -209,7 +209,7 @@
                                     data-id="{{ $purchase->id }}">
 
                                 <img class="ms-2 me-2" src="{{ asset('Assets/imgs/trash (1).png') }}" alt=""
-                                    id="trash">
+                                    data-id="{{ $purchase->id }}" id="trash">
 
                             </div>
                         </td>
