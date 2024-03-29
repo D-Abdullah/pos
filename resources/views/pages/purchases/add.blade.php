@@ -15,7 +15,7 @@
         <div class="f-row d-flex gap-4">
             <div class="dds add">
                 <label class="d-block" for="date_to">اختر المورد</label>
-                <select class="js-example-basic-single supplier add" name="supplier_id">
+                <select class="js-example-basic-single supplier add" name="supplier_id" aria-placeholder="اختر المورد">
                     <option value="" {{ old('supplier_id') ? 'disabled hidden' : 'selected disabled hidden' }}>
                         اختر المورد
                     </option>
@@ -28,7 +28,7 @@
             </div>
             <div class="dds add">
                 <label class="d-block" for="date_to">اختر المنتج</label>
-                <select class="js-example-basic-single product add" name="product_id">
+                <select class="js-example-basic-single product add" name="product_id" aria-placeholder="اختر المنتج">
                     <option value="" {{ old('product_id') ? 'disabled hidden' : 'selected disabled hidden' }}>
                         اختر المنتج
                     </option>
@@ -87,39 +87,3 @@
     </form>
 
 </div>
-
-{{-- Validation For Add --}}
-<script>
-    const addForm = document.getElementById("add-purchase");
-    const addInputs = addForm.querySelectorAll("input, select");
-    const addMessage = document.getElementById("invalidAdd");
-
-    addForm.addEventListener('submit', (event) => {
-        addMessage.textContent = '';
-        let emptyFields = [];
-
-        for (let i = 0; i < addInputs.length; i++) {
-            const input = addInputs[i];
-            const inputType = input.getAttribute('type');
-            const inputValue = input.value.trim();
-            const inputName = input.getAttribute('placeholder') || input.getAttribute('name');
-
-            if (inputType === 'date' || inputType === 'number' || inputType === 'select-one') {
-                if (inputValue === "") {
-                    emptyFields.push(inputName);
-                }
-            } else {
-                if (inputValue === "") {
-                    emptyFields.push(inputName);
-                }
-            }
-        }
-
-        if (emptyFields.length > 0) {
-            event.preventDefault();
-            addMessage.textContent = `الحقول التالية مطلوبة: ${emptyFields.join(', ')}`;
-            // Optionally, you can focus on the first empty field
-            addInputs[0].focus();
-        }
-    });
-</script>

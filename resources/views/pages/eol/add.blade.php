@@ -15,12 +15,13 @@
 
             <div>
                 <label class="d-block"> اختر المنتج</label>
-                <select class="js-example-basic-single add" name="product_id">
-                    <option value="" {{ request('product') ? 'disabled hidden' : 'selected disabled hidden' }}>
+                <select class="js-example-basic-single add" name="product_id" aria-placeholder="اختر المنتج">
+                    <option value="" {{ request('product_id') ? 'disabled hidden' : 'selected disabled hidden' }}>
                         اختر المنتج
                     </option>
                     @foreach ($products as $product)
-                        <option value="{{ $product->id }}" {{ request('product') == $product->id ? 'selected' : '' }}>
+                        <option value="{{ $product->id }}"
+                            {{ request('product_id') == $product->id ? 'selected' : '' }}>
                             {{ $product->name }}
                         </option>
                     @endforeach
@@ -42,29 +43,3 @@
         <button class="main-btn mt-5">اضافه</button>
     </form>
 </div>
-
-
-{{-- Validation For Add --}}
-<script>
-    const addForm = document.getElementById("add-cate");
-    const addInputs = addForm.querySelectorAll(".category-input");
-    const addMessage = document.getElementById("invalidAdd");
-
-    addForm.addEventListener('submit', (event) => {
-        addMessage.textContent = '';
-        let notValid = false;
-
-        for (let i = 0; i < addInputs.length; i++) {
-            if (addInputs[i].value.trim() === "") {
-                event.preventDefault();
-                const inputName = addInputs[i].getAttribute('placeholder');
-                addMessage.textContent = `الحقل ${inputName} مطلوب`;
-                addInputs[i].focus();
-                notValid = true;
-                if (notValid) {
-                    break;
-                }
-            }
-        }
-    });
-</script>

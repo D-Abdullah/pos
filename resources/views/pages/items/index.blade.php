@@ -458,24 +458,39 @@
             edit.addEventListener("click", () => {
                 let popUp = document.querySelector(".popup-edit.id-" + id),
                     editForm = popUp.querySelector("#edit-cate"),
-                    editInputs = editForm.querySelectorAll(".category-input"),
+                    editInputs = editForm.querySelectorAll("input, select,textarea"),
                     editMessage = editForm.querySelector("#invalidEdit");
+
 
                 editForm.addEventListener('submit', (event) => {
                     editMessage.textContent = '';
-                    let notValid = false;
-                    for (let i = 0; i < editInputs.length; i++) {
-                        if (editInputs[i].value.trim() === "") {
-                            event.preventDefault();
-                            const inputName = editInputs[i].getAttribute('placeholder');
-                            editMessage.textContent = `الحقل ${inputName} مطلوب`;
-                            editInputs[i].focus();
-                            notValid = true;
-                            if (notValid) {
-                                break;
-                            }
+                    let emptyFields = [];
 
+                    for (let i = 0; i < editInputs.length; i++) {
+                        const input = editInputs[i];
+                        const inputType = input.getAttribute('type');
+                        const inputValue = input.value.trim();
+                        const inputName = input.getAttribute('placeholder') || input.getAttribute(
+                            'aria-placeholder');
+
+                        if (inputType === 'date' || inputType === 'number' || inputType ===
+                            'select-one') {
+                            if (inputValue === "") {
+                                emptyFields.push(inputName);
+                            }
+                        } else {
+                            if (inputValue === "") {
+                                emptyFields.push(inputName);
+                            }
                         }
+                    }
+
+                    if (emptyFields.length > 0) {
+                        event.preventDefault();
+                        editMessage.textContent =
+                            `الحقول التالية مطلوبة: ${emptyFields.join(', ')}`;
+                        // Optionally, you can focus on the first empty field
+                        editInputs[0].focus();
                     }
                 });
             });
@@ -485,27 +500,39 @@
     {{-- Validation For Add --}}
     <script>
         const addForm = document.getElementById("add-cate");
-        const addInputs = addForm.querySelectorAll(".category-input");
+        const addInputs = addForm.querySelectorAll("input, select,textarea");
         const addMessage = document.getElementById("invalidAdd");
 
         addForm.addEventListener('submit', (event) => {
             addMessage.textContent = '';
-            let notValid = false;
+            let emptyFields = [];
 
             for (let i = 0; i < addInputs.length; i++) {
-                if (addInputs[i].value.trim() === "") {
-                    event.preventDefault();
-                    const inputName = addInputs[i].getAttribute('placeholder');
-                    addMessage.textContent = `الحقل ${inputName} مطلوب`;
-                    addInputs[i].focus();
-                    notValid = true;
-                    if (notValid) {
-                        break;
+                const input = addInputs[i];
+                const inputType = input.getAttribute('type');
+                const inputValue = input.value.trim();
+                const inputName = input.getAttribute('placeholder') || input.getAttribute('aria-placeholder');
+
+                if (inputType === 'date' || inputType === 'number' || inputType === 'select-one') {
+                    if (inputValue === "") {
+                        emptyFields.push(inputName);
+                    }
+                } else {
+                    if (inputValue === "") {
+                        emptyFields.push(inputName);
                     }
                 }
             }
+
+            if (emptyFields.length > 0) {
+                event.preventDefault();
+                addMessage.textContent = `الحقول التالية مطلوبة: ${emptyFields.join(', ')}`;
+                // Optionally, you can focus on the first empty field
+                addInputs[0].focus();
+            }
         });
     </script>
+
 
     {{-- Delete --}}
     <script>
