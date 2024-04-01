@@ -20,7 +20,8 @@
             <div>
 
                 <label for="add-select">اختر القسم</label>
-                <select id="add-select" class="js-example-basic-single add" name="department_id">
+                <select id="add-select" class="js-example-basic-single add" name="department_id"
+                    aria-placeholder="اختر القسم">
 
                     <option value="" selected disabled hidden>اختر القسم</option>
                     @foreach ($departments as $department)

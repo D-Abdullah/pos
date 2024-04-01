@@ -90,38 +90,6 @@ button {
     border: none;
     outline: none;
 }
-.loading {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 9999;
-}
-
-.spinner {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 50px;
-    height: 50px;
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid #3498db;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
 
 .main-btn {
     font-weight: 300;
@@ -948,7 +916,24 @@ button.concert {
     background-color: var(--main-btn-hover);
     color: var(--active-btn);
 }
-/* specail classes */
-.popup{
-    z-index: 99999;
+
+/* Start Loader */
+#spinner {
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#spinner .spinner-border {
+    /* display: block;
+    position: fixed;
+    top: 47%;
+    left: 47%;
+    z-index: 999; */
 }

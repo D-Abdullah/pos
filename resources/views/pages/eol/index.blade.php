@@ -187,14 +187,15 @@
 
                                         <div>
                                             <label class="d-block"> اختر المنتج</label>
-                                            <select class="js-example-basic-single edit" name="product">
+                                            <select class="js-example-basic-single edit" name="product_id"
+                                                aria-placeholder="اختر المنتج">
                                                 <option value=""
-                                                    {{ request('product') ? 'disabled hidden' : 'selected disabled hidden' }}>
+                                                    {{ request('product_id') ? 'disabled hidden' : 'selected disabled hidden' }}>
                                                     اختر المنتج
                                                 </option>
                                                 @foreach ($products as $product)
                                                     <option value="{{ $product->id }}"
-                                                        {{ request('product') == $product->id ? 'selected' : '' }}>
+                                                        {{ request('product_id') == $product->id ? 'selected' : '' }}>
                                                         {{ $product->name }}
                                                     </option>
                                                 @endforeach
@@ -204,7 +205,7 @@
                                         <div>
                                             <label class="d-block mb-1" for="category">الكميه</label>
                                             <input class="category-input" type="number" name="quantity" id="category"
-                                                value="{{ $eol->quantity }}">
+                                                value="{{ $eol->quantity }}" placeholder="الكميه">
                                         </div>
                                     </div>
                                     <div>
@@ -487,29 +488,82 @@
             edit.addEventListener("click", () => {
                 let popUp = document.querySelector(".popup-edit.id-" + id),
                     editForm = popUp.querySelector("#edit-cate"),
-                    editInputs = editForm.querySelectorAll(".category-input"),
+                    editInputs = editForm.querySelectorAll("input, select,textarea"),
                     editMessage = editForm.querySelector("#invalidEdit");
+
 
                 editForm.addEventListener('submit', (event) => {
                     editMessage.textContent = '';
-                    let notValid = false;
-                    for (let i = 0; i < editInputs.length; i++) {
-                        if (editInputs[i].value.trim() === "") {
-                            event.preventDefault();
-                            const inputName = editInputs[i].getAttribute('placeholder');
-                            editMessage.textContent = `الحقل ${inputName} مطلوب`;
-                            editInputs[i].focus();
-                            notValid = true;
-                            if (notValid) {
-                                break;
-                            }
+                    let emptyFields = [];
 
+                    for (let i = 0; i < editInputs.length; i++) {
+                        const input = editInputs[i];
+                        const inputType = input.getAttribute('type');
+                        const inputValue = input.value.trim();
+                        const inputName = input.getAttribute('placeholder') || input.getAttribute(
+                            'aria-placeholder');
+
+                        if (inputType === 'date' || inputType === 'number' || inputType ===
+                            'select-one') {
+                            if (inputValue === "") {
+                                emptyFields.push(inputName);
+                            }
+                        } else {
+                            if (inputValue === "") {
+                                emptyFields.push(inputName);
+                            }
                         }
+                    }
+
+                    if (emptyFields.length > 0) {
+                        event.preventDefault();
+                        editMessage.textContent =
+                            `الحقول التالية مطلوبة: ${emptyFields.join(', ')}`;
+                        // Optionally, you can focus on the first empty field
+                        editInputs[0].focus();
                     }
                 });
             });
         });
     </script>
+
+    {{-- Validation For Add --}}
+    <script>
+        const addForm = document.getElementById("add-cate");
+        const addInputs = addForm.querySelectorAll("input, select,textarea");
+        const addMessage = document.getElementById("invalidAdd");
+
+        addForm.addEventListener('submit', (event) => {
+            addMessage.textContent = '';
+            let emptyFields = [];
+
+            for (let i = 0; i < addInputs.length; i++) {
+                const input = addInputs[i];
+                const inputType = input.getAttribute('type');
+                const inputValue = input.value.trim();
+                const inputName = input.getAttribute('placeholder') || input.getAttribute('aria-placeholder');
+
+                if (inputType === 'date' || inputType === 'number' || inputType === 'select-one') {
+                    if (inputValue === "") {
+                        emptyFields.push(inputName);
+                    }
+                } else {
+                    if (inputValue === "") {
+                        emptyFields.push(inputName);
+                    }
+                }
+            }
+
+            if (emptyFields.length > 0) {
+                event.preventDefault();
+                addMessage.textContent = `الحقول التالية مطلوبة: ${emptyFields.join(', ')}`;
+                // Optionally, you can focus on the first empty field
+                addInputs[0].focus();
+            }
+        });
+    </script>
+
+
 
 
     {{-- For Select JQuery  --}}

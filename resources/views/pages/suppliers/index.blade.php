@@ -278,7 +278,7 @@
                             </div>
 
                             <div
-                                class="popup-dolar id-{{ $supplier->id }} popup close shadow-sm rounded-3 position-fixed">
+                                class="popup-dolar id-{{ $supplier->id }} popup close shadow-sm rounded-3 position-fixed overflow-auto">
                                 <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
                                     alt="">
                                 <div class="dolar-container p-5 d-flex flex-column">
@@ -302,8 +302,31 @@
                                         @method('PATCH')
                                         <div class="buttons mt-5 d-flex justify-content-center">
                                             <div class="elements w-100">
-                                                <div id="addDepositsContainer">
-                                                    <div class="f-row d-flex gap-4 align-items-end deposit-section">
+                                                <div class="d-flex justify-content-start">
+                                                    <button type="button"
+                                                        class="addElement  id-{{ $supplier->id }} main-btn p-2 ps-3 pe-3 specialBtn m-0 mt-2 mb-2"
+                                                        id="addElement">
+                                                        <svg class="pointer" xmlns="http://www.w3.org/2000/svg"
+                                                            width="26" height="27" viewBox="0 0 26 27"
+                                                            fill="none">
+                                                            <path d="M13 5.52753V20.6942" stroke="#fff" stroke-width="2"
+                                                                stroke-linecap="round" stroke-linejoin="round" />
+                                                            <path d="M13 5.52753V20.6942" stroke="white"
+                                                                stroke-opacity="0.2" stroke-width="2"
+                                                                stroke-linecap="round" stroke-linejoin="round" />
+                                                            <path d="M5.41663 13.1108H20.5833" stroke="#fff"
+                                                                stroke-width="1.5" stroke-linecap="round"
+                                                                stroke-linejoin="round" />
+                                                            <path d="M5.41663 13.1108H20.5833" stroke="white"
+                                                                stroke-opacity="0.2" stroke-width="1.5"
+                                                                stroke-linecap="round" stroke-linejoin="round" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                                <div id="addDepositsContainer"
+                                                    class="addDepositsContainer id-{{ $supplier->id }}">
+                                                    <div
+                                                        class="f-row d-flex gap-4 align-items-end deposit-section id-{{ $supplier->id }}">
                                                         <div>
                                                             <label class="d-block mb-1"
                                                                 for="deposit-amount">المبلغ</label>
@@ -327,31 +350,12 @@
                                                     </div>
                                                 </div>
 
-                                                <button type="button"
-                                                    class="main-btn p-2 ps-3 pe-3 specialBtn m-0 mt-2 mb-2"
-                                                    id="addElement">
-                                                    <svg class="pointer" xmlns="http://www.w3.org/2000/svg"
-                                                        width="26" height="27" viewBox="0 0 26 27"
-                                                        fill="none">
-                                                        <path d="M13 5.52753V20.6942" stroke="#fff" stroke-width="2"
-                                                            stroke-linecap="round" stroke-linejoin="round" />
-                                                        <path d="M13 5.52753V20.6942" stroke="white" stroke-opacity="0.2"
-                                                            stroke-width="2" stroke-linecap="round"
-                                                            stroke-linejoin="round" />
-                                                        <path d="M5.41663 13.1108H20.5833" stroke="#fff"
-                                                            stroke-width="1.5" stroke-linecap="round"
-                                                            stroke-linejoin="round" />
-                                                        <path d="M5.41663 13.1108H20.5833" stroke="white"
-                                                            stroke-opacity="0.2" stroke-width="1.5"
-                                                            stroke-linecap="round" stroke-linejoin="round" />
-                                                    </svg>
-                                                </button>
                                             </div>
                                         </div>
 
                                         <div id="invalidDolar" class="invalid invalidDolar my-3"></div>
 
-                                        <button class="dollar-btn" type="submit">
+                                        <button class="dollar-btn w-100" type="submit">
                                             تـأكيد
                                         </button>
                                     </form>
@@ -592,7 +596,7 @@
     <script>
         const dolarForm = document.getElementById("dolar-form");
         const dolarInputs = dolarForm.querySelectorAll(".category-input");
-        const dolarMessage = document.getElementById("invalidAdd");
+        const dolarMessage = document.getElementById("invalidDolar");
 
         dolarForm.addEventListener('submit', (event) => {
             dolarMessage.textContent = '';
@@ -706,51 +710,34 @@
         });
     </script>
 
-    <script>
-        // function addElement() {
-        //     let depositsContainer = document.getElementById('addDepositsContainer');
-        //     let newDepositSection = depositsContainer.querySelector('.deposit-section').cloneNode(true);
-        //     var I = depositsContainer.childElementCount;
-
-        //     newDepositSection.querySelectorAll('input').forEach(function(input) {
-        //         input.value = '';
-        //         let name = input.name;
-        //         let index = name.match(/\d+/g);
-        //         if (index == null) {
-        //             return;
-        //         } else {
-        //             finalName = name.replace(/(\d)+/, I);
-        //         }
-        //         input.setAttribute('name', finalName);
-        //     });
-
-        //     newDepositSection.querySelector('.remove-btn').removeAttribute('disabled');
-        //     newDepositSection.querySelector('.remove-btn').removeAttribute('hidden');
-
-        //     depositsContainer.appendChild(newDepositSection);
-
-        //     initRemoveButtons(); // Initialize remove buttons after adding a new section
-        // }
-
+    {{-- <script>
         function addElement() {
-            let depositsContainer = document.getElementById('addDepositsContainer');
-            let newDepositSection = depositsContainer.querySelector('.deposit-section').cloneNode(true);
-            let inputs = newDepositSection.querySelectorAll('input');
-            let index = depositsContainer.childElementCount;
+            let depositsContainer = document.querySelector(`.addDepositsContainer`);
+            let newDepositSection = depositsContainer.querySelector(`.deposit-section`).cloneNode(true);
+            var I = depositsContainer.childElementCount;
 
-            inputs.forEach(function(input) {
+            newDepositSection.querySelectorAll('input').forEach(function(input) {
                 input.value = '';
-                let name = input.getAttribute('name');
-                let type = name.includes('date') ? 'date' : 'cost';
-                input.setAttribute('name', `deposits[${index}][${type}]`);
+                let name = input.name;
+                let index = name.match(/\d+/g);
+                if (index == null) {
+                    return;
+                } else {
+                    finalName = name.replace(/(\d)+/, I);
+                }
+                input.setAttribute('name', finalName);
             });
 
             newDepositSection.querySelector('.remove-btn').removeAttribute('disabled');
-            newDepositSection.querySelector('.remove-btn').removeAttribute('hidden');
+            newDepositSection
+                .querySelector('.remove-btn').removeAttribute('hidden');
+
             depositsContainer.appendChild(newDepositSection);
 
             initRemoveButtons(); // Initialize remove buttons after adding a new section
         }
+
+
 
         function removeElement(button) {
             let depositsContainer = document.getElementById('addDepositsContainer');
@@ -775,6 +762,70 @@
 
         // Initialize remove buttons on page load
         initRemoveButtons();
+    </script> --}}
+
+    <script>
+        document.querySelectorAll("table #dolar").forEach((dolar) => {
+            let id = dolar.dataset.id;
+
+            dolar.addEventListener("click", () => {
+                function addElement() {
+                    console.log(id);
+                    let depositsContainer = document.querySelector(`.addDepositsContainer.id-` + id);
+                    let newDepositSection = depositsContainer.querySelector(`.deposit-section.id-` + id)
+                        .cloneNode(
+                            true);
+                    var I = depositsContainer.childElementCount;
+
+                    newDepositSection.querySelectorAll('input').forEach(function(input) {
+                        input.value = '';
+                        let name = input.name;
+                        let index = name.match(/\d+/g);
+                        if (index == null) {
+                            return;
+                        } else {
+                            finalName = name.replace(/(\d)+/, I);
+                        }
+                        input.setAttribute('name', finalName);
+                    });
+
+                    newDepositSection.querySelector('.remove-btn').removeAttribute('disabled');
+                    newDepositSection
+                        .querySelector('.remove-btn').removeAttribute('hidden');
+
+                    depositsContainer.appendChild(newDepositSection);
+
+                    initRemoveButtons(); // Initialize remove buttons after adding a new section
+                }
+
+
+
+                function removeElement(button) {
+                    let depositsContainer = document.getElementById('addDepositsContainer');
+
+                    if (depositsContainer.childElementCount > 1) {
+                        depositsContainer.removeChild(button.parentNode);
+                    } else {
+                        button.setAttribute('disabled', 'disabled');
+                        button.setAttribute('hidden', 'hidden');
+                    }
+                }
+
+                function initRemoveButtons() {
+                    document.querySelectorAll('.remove-btn').forEach(function(button) {
+                        button.addEventListener('click', function() {
+                            removeElement(button);
+                        });
+                    });
+                }
+
+                document.querySelector('.addElement.id-' + id).addEventListener('click', addElement);
+
+                // Initialize remove buttons on page load
+                initRemoveButtons();
+
+            });
+        });
     </script>
 
 @endsection
