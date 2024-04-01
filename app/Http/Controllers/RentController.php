@@ -14,16 +14,38 @@ class RentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $rents = Rent::query();
+            $rules = [
+                'name' => 'nullable|string',
+                'date_from' => 'nullable|date',
+                'date_to' => 'nullable|date',
+            ];
 
+            $messages = [
+                'name.string' => 'الاسم غير صالح.',
+                'date_from.date' => 'تاريخ "من" غير صالح.',
+                'date_to.date' => 'تاريخ "إلى" غير صالح.',
+            ];
+
+            $validatedData = $request->validate($rules, $messages);
+            $rents = Rent::query();
+            if ($request->filled('name')) {
+                $rents->where('name', 'LIKE', '%' . $request->input('name') . '%');
+            }
+
+            if ($request->filled('date_from')) {
+                $rents->whereDate('updated_at', '>=', $request->input('date_from'));
+            }
+
+            if ($request->filled('date_to')) {
+                $rents->whereDate('updated_at', '<=', $request->input('date_to'));
+            }
             $rents = $rents->paginate(PAGINATION);
 
             return view('pages.rents.index', compact('rents'));
         } catch (\Exception $e) {
-            DB::rollBack();
             Log::error('حدث خطأ أثناء جلب الايجار: ' . $e->getMessage());
 
             return redirect()->back()->with(['error' => 'حدث خطأ أثناء جلب عنصر الايجار. يرجى المحاولة مرة أخرى.']);

@@ -33,12 +33,12 @@
                     <div>
                         <label>بحث بالاسم</label>
 
-                        <input type="search" placeholder="بحث بالاسم" id="search">
+                        <input type="search" name="name" value="{{ request('name') }}" placeholder="بحث بالاسم" id="search">
                     </div>
 
                     <div>
                         <label>بحث برقم الهاتف</label>
-                        <input type="search" placeholder="بحث رقم الهاتف" id="searchPhone">
+                        <input type="search" name="phone" value="{{ request('phone') }}" placeholder="بحث رقم الهاتف" id="searchPhone">
                     </div>
 
                     <div>

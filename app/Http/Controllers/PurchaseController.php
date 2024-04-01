@@ -18,13 +18,42 @@ class PurchaseController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
+            $rules = [
+                'product' => 'nullable|exists:products,id',
+                'supplier' => 'nullable|exists:suppliers,id',
+                'date_from' => 'nullable|date',
+                'date_to' => 'nullable|date',
+            ];
+
+            $messages = [
+                'product.exists' => 'المنتج غير موجود.',
+                'supplier.exists' => 'المورد غير موجود.',
+                'date_from.date' => 'تاريخ "من" غير صالح.',
+                'date_to.date' => 'تاريخ "إلى" غير صالح.',
+            ];
+
+            $validatedData = $request->validate($rules, $messages);
             $purchases = Purchase::query();
+            if ($request->filled('product')) {
+                $purchases->where('product_id', $request->input('product'));
+            }
+            if ($request->filled('supplier')) {
+                $purchases->where('supplier_id', $request->input('supplier'));
+            }
+
+            if ($request->filled('date_from')) {
+                $purchases->whereDate('updated_at', '>=', $request->input('date_from'));
+            }
+
+            if ($request->filled('date_to')) {
+                $purchases->whereDate('updated_at', '<=', $request->input('date_to'));
+            }
+
 
             $purchases = $purchases->with(['supplier', 'product'])->paginate(PAGINATION);
-
             $suppliers = Supplier::all();
             $products = Product::all();
 

@@ -89,23 +89,11 @@
                 </div>
 
                 <form action="" class="gap-4 d-flex align-items-end mb-0">
-                    <div class="search-div">
+                    {{-- <div class="search-div">
                         <label for="search">ابحث بالاسم:</label>
                         <input type="text" id="search" name="q" value="{{ request('q') }}"
                             placeholder="ابحث بإسم المنتج">
-                    </div>
-
-                    <!-- Filter by Date From -->
-                    <div class="dateInp">
-                        <label for="startDate">من تاريخ:</label>
-                        <input type="date" id="startDate" name="date_from" value="{{ request('date_from') }}">
-                    </div>
-
-                    <!-- Filter by Date To -->
-                    <div class="dateInp">
-                        <label for="date_to">إلى تاريخ:</label>
-                        <input type="date" id="date_to" name="date_to" value="{{ request('date_to') }}">
-                    </div>
+                    </div> --}}
 
                     <div class="dds">
                         <label for="date_to">اختر المورد</label>
@@ -133,6 +121,19 @@
                             @endforeach
                         </select>
                     </div>
+
+                    <!-- Filter by Date From -->
+                    <div class="dateInp">
+                        <label for="startDate">من تاريخ:</label>
+                        <input type="date" id="startDate" name="date_from" value="{{ request('date_from') }}">
+                    </div>
+
+                    <!-- Filter by Date To -->
+                    <div class="dateInp">
+                        <label for="date_to">إلى تاريخ:</label>
+                        <input type="date" id="date_to" name="date_to" value="{{ request('date_to') }}">
+                    </div>
+
 
                     <button type="submit" class="main-btn" id="form">تأكيد</button>
                 </form>

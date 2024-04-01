@@ -43,11 +43,11 @@ class DepartmentController extends Controller
             }
             // Apply Date Filters
             if ($request->filled('date_from')) {
-                $departments->whereDate('created_at', '>=', $request->input('date_from'));
+                $departments->whereDate('updated_at', '>=', $request->input('date_from'));
             }
 
             if ($request->filled('date_to')) {
-                $departments->whereDate('created_at', '<=', $request->input('date_to'));
+                $departments->whereDate('updated_at', '<=', $request->input('date_to'));
             }
             $departments = $departments->paginate(PAGINATION);
 

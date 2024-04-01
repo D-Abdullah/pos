@@ -16,13 +16,37 @@ class EolController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
+            $rules = [
+                'product' => 'nullable|exists:products,id',
+                'date_from' => 'nullable|date',
+                'date_to' => 'nullable|date',
+            ];
+
+            $messages = [
+                'product.exists' => 'المنتج غير موجود.',
+                'date_from.date' => 'تاريخ "من" غير صالح.',
+                'date_to.date' => 'تاريخ "إلى" غير صالح.',
+            ];
+
+            $validatedData = $request->validate($rules, $messages);
             $eols = Eol::query();
 
-            $eols = $eols->with('product')->paginate(PAGINATION);
+            if ($request->filled('product')) {
+                $eols->where('product_id', $request->input('product'));
+            }
 
+            if ($request->filled('date_from')) {
+                $eols->whereDate('updated_at', '>=', $request->input('date_from'));
+            }
+
+            if ($request->filled('date_to')) {
+                $eols->whereDate('updated_at', '<=', $request->input('date_to'));
+            }
+
+            $eols = $eols->with('product')->paginate(PAGINATION);
             $products = Product::all();
             return view('pages.eol.index', compact('eols', 'products'));
         } catch (\Exception $e) {
