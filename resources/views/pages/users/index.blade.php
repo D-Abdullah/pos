@@ -231,7 +231,7 @@
                                         <div>
                                             <label class="d-block mb-1" for="user-phone">رقم الهاتف</label>
                                             <input type="number" name="phone" id="user-phone" maxlength="11"
-                                                placeholder="ادخل رقم الهاتف" value="{{ old('phone', $user->phone) }}"
+                                                placeholder="ادخل رقم الهاتف" value="{{ $user->phone}}"
                                                 class="{{ $errors->has('phone') ? 'is-invalid' : '' }} category-input">
                                             @if ($errors->has('phone'))
                                                 <div class="invalid-feedback">

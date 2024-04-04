@@ -286,7 +286,7 @@
                                     alt="">
                                 <div class="dolar-container p-5 d-flex flex-column">
                                     <div
-                                        class="dolar-info d-flex  flex-column justify-content-center  align-items-center gap-3">
+                                        class="dolar-info d-flex  flex-column justify-content-center  align-items-start gap-3">
                                         <p> <span class="fw-bold"> التكلفة الإجمالية المطلوبة :</span>
                                             <span>{{ number_format($supplier->total_required, 0, ',', ',') }} جنيه</span>
                                         </p>

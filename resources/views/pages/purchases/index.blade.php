@@ -265,7 +265,7 @@
                                             <label class="d-block mb-1" for="purchase-date">تاريخ الشراء</label>
                                             <input type="date" name="date" id="purchase-date"
                                                 class="form-control {{ $errors->has('date') ? 'is-invalid' : '' }}"
-                                                value="{{ old('date') }}" placeholder="تاريخ الشراء">
+                                                value="{{ $purchase->date }}" placeholder="تاريخ الشراء">
                                             @if ($errors->has('date'))
                                                 <div class="invalid-feedback">
                                                     {{ $errors->first('date') }}
@@ -277,7 +277,7 @@
                                             <label class="d-block mb-1" for="purchase-quantity">الكمية</label>
                                             <input type="number" name="quantity" id="purchase-quantity"
                                                 class="form-control {{ $errors->has('quantity') ? 'is-invalid' : '' }}"
-                                                value="{{ old('quantity') }}" placeholder="الكمية">
+                                                value="{{ $purchase->quantity }}" placeholder="الكمية">
                                             @if ($errors->has('quantity'))
                                                 <div class="invalid-feedback">
                                                     {{ $errors->first('quantity') }}
@@ -291,7 +291,7 @@
                                             <label class="d-block mb-1" for="purchase-total-price">سعر الوحده</label>
                                             <input type="text" name="unit_price" id="purchase-total-price"
                                                 class="form-control {{ $errors->has('total_price') ? 'is-invalid' : '' }}"
-                                                value="{{ old('total_price') }}" placeholder="السعر الإجمالي">
+                                                value="{{ $purchase->total_price }}" placeholder="السعر الإجمالي">
                                             @if ($errors->has('total_price'))
                                                 <div class="invalid-feedback">
                                                     {{ $errors->first('total_price') }}

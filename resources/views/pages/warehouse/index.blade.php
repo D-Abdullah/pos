@@ -5,205 +5,8 @@
 @section('styles')
     <link rel="stylesheet" href="{{ asset('Assets/Css files/warehouse.css') }}">
 @endsection
-{{-- First One Style --}}
-<style>
-    .select-btn,
-    li {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-    }
 
-    .select-btn {
-        padding: 10px 20px;
-        gap: 10px;
-        border-radius: 5px;
-        justify-content: space-between;
-        border: 1px solid #eee;
-        min-width: 160px;
-    }
 
-    .select-btn i {
-        font-size: 14px;
-        transition: transform 0.3s linear;
-    }
-
-    .wrapper.active .select-btn i {
-        transform: rotate(-180deg);
-    }
-
-    .content {
-        display: none;
-        padding: 20px;
-        margin-top: 15px;
-        background: #fff;
-        border-radius: 5px;
-        border: 1px solid #eee;
-        position: fixed;
-    }
-
-    .wrapper.active .content {
-        display: block;
-    }
-
-    .content .search {
-        position: relative;
-    }
-
-    .search input {
-        height: 50px;
-        width: 100%;
-        outline: none;
-        font-size: 17px;
-        border-radius: 5px;
-        padding: 0 20px 0 43px;
-        border: 1px solid #B3B3B3;
-    }
-
-    .search input:focus {
-        padding-left: 42px;
-        border: 2px solid #4285f4;
-    }
-
-    .search input::placeholder {
-        color: #bfbfbf;
-    }
-
-    .content .options {
-        margin-top: 10px;
-        max-height: 250px;
-        overflow-y: auto;
-        padding-right: 7px;
-    }
-
-    .options::-webkit-scrollbar {
-        width: 7px;
-    }
-
-    .options::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 25px;
-    }
-
-    .options::-webkit-scrollbar-thumb {
-        background: #ccc;
-        border-radius: 25px;
-    }
-
-    .options::-webkit-scrollbar-thumb:hover {
-        background: #b3b3b3;
-    }
-
-    .options li {
-        padding: 5px 13px;
-    }
-
-    .options li:hover,
-    li.selected {
-        border-radius: 5px;
-        background: #f2f2f2;
-    }
-</style>
-{{-- Second One Style --}}
-
-<style>
-    .select-btn,
-    li {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-    }
-
-    .select-btn-add {
-        padding: 10px 20px;
-        gap: 10px;
-        border-radius: 5px;
-        justify-content: space-between;
-        border: 1px solid #eee;
-        min-width: 160px;
-    }
-
-    .select-btn i {
-        font-size: 14px;
-        transition: transform 0.3s linear;
-    }
-
-    .dropdown.active .select-btn i {
-        transform: rotate(-180deg);
-    }
-
-    .content {
-        display: none;
-        padding: 20px;
-        margin-top: 15px;
-        background: #fff;
-        border-radius: 5px;
-        border: 1px solid #eee;
-        position: fixed;
-    }
-
-    .dropdown.active .content {
-        display: block;
-    }
-
-    .content .search {
-        position: relative;
-    }
-
-    .search input {
-        height: 50px;
-        width: 100%;
-        outline: none;
-        font-size: 17px;
-        border-radius: 5px;
-        padding: 0 20px 0 43px;
-        border: 1px solid #B3B3B3;
-    }
-
-    .search input:focus {
-        padding-left: 42px;
-        border: 2px solid #4285f4;
-    }
-
-    .search input::placeholder {
-        color: #bfbfbf;
-    }
-
-    .content .options {
-        margin-top: 10px;
-        max-height: 250px;
-        overflow-y: auto;
-        padding-right: 7px;
-    }
-
-    .options::-webkit-scrollbar {
-        width: 7px;
-    }
-
-    .options::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 25px;
-    }
-
-    .options::-webkit-scrollbar-thumb {
-        background: #ccc;
-        border-radius: 25px;
-    }
-
-    .options::-webkit-scrollbar-thumb:hover {
-        background: #b3b3b3;
-    }
-
-    .options li {
-        padding: 5px 13px;
-    }
-
-    .options li:hover,
-    li.selected {
-        border-radius: 5px;
-        background: #f2f2f2;
-    }
-</style>
 @section('content')
 
                 <!-- start of main-container -->
@@ -338,7 +141,7 @@
 
                     </section>
 
-                    {{-- <section class="pt-0 rounded-3 position-relative shadow-sm overflow-auto none two" id="two">
+                    <section class="pt-0 rounded-3 position-relative shadow-sm overflow-auto none two" id="two">
 
                         <div class="features shadow-sm p-4 d-flex justify-content-between align-items-center">
                             <div class="component-right gap-4 d-flex align-items-center">
@@ -601,7 +404,7 @@
                             </div>
                         </div>
 
-                    </section> --}}
+                    </section>
 
                     <!-- end of body -->
 
@@ -615,89 +418,6 @@
 
 @section('script')
     <script src="{{ asset('Assets/JS files/warehouse.js') }}"></script>
-
-
-
-    {{-- For Drobdown input --}}
-    <script>
-        const wrapper = document.querySelector(".wrapper"),
-            selectBtn = wrapper.querySelector(".select-btn"),
-            searchInp = wrapper.querySelector("input"),
-            options = wrapper.querySelector(".options");
-
-        let countries = ["Afghanistan", "Algeria", "Argentina"];
-
-        function addCountry(selectedCountry) {
-            options.innerHTML = "";
-            countries.forEach(country => {
-                let isSelected = country == selectedCountry ? "selected" : "";
-                let li = `<li onclick="updateName(this)" class="${isSelected}">${country}</li>`;
-                options.insertAdjacentHTML("beforeend", li);
-            });
-        }
-        addCountry();
-
-        function updateName(selectedLi) {
-            searchInp.value = "";
-            addCountry(selectedLi.innerText);
-            wrapper.classList.remove("active");
-            selectBtn.firstElementChild.innerText = selectedLi.innerText;
-        }
-
-        searchInp.addEventListener("keyup", () => {
-            let arr = [];
-            let searchWord = searchInp.value.toLowerCase();
-            arr = countries.filter(data => {
-                return data.toLowerCase().startsWith(searchWord);
-            }).map(data => {
-                let isSelected = data == selectBtn.firstElementChild.innerText ? "selected" : "";
-                return `<li onclick="updateName(this)" class="${isSelected}">${data}</li>`;
-            }).join("");
-            options.innerHTML = arr ? arr : `<p style="margin-top: 10px;">Oops! not found</p>`;
-        });
-
-        selectBtn.addEventListener("click", () => wrapper.classList.toggle("active"));
-    </script>
-    {{-- Second One Script --}}
-    <script>
-        const wrapperAdd = document.querySelector(".dropdown"),
-            selectBtnAdd = wrapperAdd.querySelector(".select-btn-add"),
-            searchInpAdd = wrapperAdd.querySelector("input"),
-            optionsAdd = wrapperAdd.querySelector(".options");
-
-        let parts = ["part 1", "part 3", "part 2"];
-
-        function addCate(selectedPart) {
-            optionsAdd.innerHTML = "";
-            parts.forEach(category => {
-                let isSelectedAdd = category == selectedPart ? "selected" : "";
-                let li = `<li onclick="update(this)" class="${isSelectedAdd}">${category}</li>`;
-                optionsAdd.insertAdjacentHTML("beforeend", li);
-            });
-        }
-        addCate();
-
-        function update(selectedli) {
-            searchInpAdd.value = "";
-            addCate(selectedli.innerText);
-            wrapperAdd.classList.remove("active");
-            selectBtnAdd.firstElementChild.innerText = selectedli.innerText;
-        }
-
-        searchInpAdd.addEventListener("keyup", () => {
-            let arr = [];
-            let searchWord = searchInpAdd.value.toLowerCase();
-            arr = parts.filter(onePart => {
-                return onePart.toLowerCase().startsWith(searchWord);
-            }).map(onePart => {
-                let isSelectedAdd = onePart == selectBtnAdd.firstElementChild.innerText ? "selected" : "";
-                return `<li onclick="update(this)" class="${isSelectedAdd}">${onePart}</li>`;
-            }).join("");
-            optionsAdd.innerHTML = arr ? arr : `<p style="margin-top: 10px;">Oops! not found</p>`;
-        });
-
-        selectBtnAdd.addEventListener("click", () => wrapperAdd.classList.toggle("active"));
-    </script>
 
 
 @endsection

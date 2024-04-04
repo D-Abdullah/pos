@@ -70,7 +70,7 @@
 
 
                     <div class="">
-                        <label for="department">اختر القسم</label>
+                        <label for="department" class="d-block">اختر القسم</label>
                         <select class="js-example-basic-single" name="department" id="department">
                             <option value=""
                                 {{ request('department') ? 'disabled hidden' : 'selected disabled hidden' }}>اختر القسم
