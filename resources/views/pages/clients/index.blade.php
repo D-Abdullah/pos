@@ -29,7 +29,7 @@
                     <button class="text-light main-btn ms-4"> اضافه عميل</button>
                 </div>
 
-                <form action="" class="mb-0 gap-4 d-flex align-items-end">
+                <form action="{{ url()->current() }}" method="GET" class="mb-0 gap-4 d-flex align-items-end">
                     <div>
                         <label>بحث بالاسم</label>
 

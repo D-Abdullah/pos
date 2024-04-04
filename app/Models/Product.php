@@ -12,6 +12,7 @@ class Product extends Model
         'description',
         'department_id',
         'added_by',
+        'quantity',
         'created_at',
         'updated_at'
     ];

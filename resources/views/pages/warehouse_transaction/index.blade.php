@@ -117,7 +117,7 @@
             <tbody>
                 @foreach ($wts as $wt)
                     <tr>
-                        <td>{{ $wt->product_id }}</td>
+                        <td>{{ $wt->product->name }}</td>
                         <td>{{ $wt->quantity }}</td>
                         <td>{{ $wt->from }}</td>
                         <td>{{ $wt->to }}</td>

@@ -16,11 +16,45 @@ class SupplierController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
+            $rules = [
+                'name' => 'nullable|string',
+                'email' => 'nullable|string',
+                'phone' => 'nullable|string',
+                'date_from' => 'nullable|date',
+                'date_to' => 'nullable|date',
+            ];
+
+            $messages = [
+                'name.string' => 'الاسم غير صالح.',
+                'email.string' => 'البريد الإلكتروني غير صالح.',
+                'phone.string' => 'رقم الهاتف غير صالح.',
+                'date_from.date' => 'تاريخ "من" غير صالح.',
+                'date_to.date' => 'تاريخ "إلى" غير صالح.',
+            ];
+
+            $validatedData = $request->validate($rules, $messages);
             $suppliers = Supplier::query();
             // filters
+            if ($request->filled('name')) {
+                $suppliers->where('name', 'LIKE', '%' . $request->input('name') . '%');
+            }
+            if ($request->filled('email')) {
+                $suppliers->where('email', 'LIKE', '%' . $request->input('email') . '%');
+            }
+            if ($request->filled('phone')) {
+                $suppliers->where('phone', 'LIKE', '%' . $request->input('phone') . '%');
+            }
+
+            if ($request->filled('date_from')) {
+                $suppliers->whereDate('updated_at', '>=', $request->input('date_from'));
+            }
+
+            if ($request->filled('date_to')) {
+                $suppliers->whereDate('updated_at', '<=', $request->input('date_to'));
+            }
             $suppliers = $suppliers->with('deposits', 'purchases')->paginate(PAGINATION);
             foreach ($suppliers as $supplier) {
                 $totalRequired = $supplier->purchases()->sum('total_price');

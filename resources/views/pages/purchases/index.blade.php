@@ -88,7 +88,7 @@
                     <button class="text-light main-btn  "> اضافه عمليه شراء</button>
                 </div>
 
-                <form action="" class="gap-4 d-flex align-items-end mb-0">
+                <form action="{{ url()->current() }}" class="gap-4 d-flex align-items-end mb-0" method="GET">
                     {{-- <div class="search-div">
                         <label for="search">ابحث بالاسم:</label>
                         <input type="text" id="search" name="q" value="{{ request('q') }}"

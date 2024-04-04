@@ -59,7 +59,7 @@
                 </div>
 
 
-                <form action="" class="mb-0 gap-4 d-flex align-items-end">
+                <form action="{{ url()->current() }}" method="GET" class="mb-0 gap-4 d-flex align-items-end">
 
                     <div>
 
@@ -157,10 +157,10 @@
 
                 @foreach ($eols as $eol)
                     <tr>
-                        <td>{{ $eol->product_id }}</td>
+                        <td>{{ $eol->product->name }}</td>
                         <td>{{ $eol->quantity }}</td>
                         <td>{{ $eol->added_by }}</td>
-                        <td>{{ $eol->date }}</td>
+                        <td> {{ $eol->updated_at->format('Y/m/d') }}</td>
                         <td>
                             <div class="edit d-flex align-items-center justify-content-center">
                                 <img src="{{ asset('Assets/imgs/edit-circle.png') }}" data-id="{{ $eol->id }}"

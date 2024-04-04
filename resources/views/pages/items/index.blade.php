@@ -69,6 +69,19 @@
                     </div>
 
 
+                    <div class="">
+                        <label for="department">اختر القسم</label>
+                        <select class="js-example-basic-single" name="department" id="department">
+                            <option value=""
+                                {{ request('department') ? 'disabled hidden' : 'selected disabled hidden' }}>اختر القسم
+                            </option>
+                            @foreach ($departments as $department)
+                                <option value="{{ $department->id }}"
+                                    {{ request('department') == $department->id ? 'selected' : '' }}>{{ $department->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
 
                     <!-- Filter by Date From -->
                     <div class="dateInp">
@@ -81,22 +94,7 @@
                         <label for="date_to">إلى تاريخ:</label>
                         <input type="date" id="date_to" name="date_to" value="{{ request('date_to') }}">
                     </div>
-                    <div>
 
-                        <label for="date_to">اختر القسم</label>
-                        <select class="js-example-basic-single" name="department">
-
-                            <option value=""
-                                {{ request('department') ? 'disabled hidden' : 'selected disabled hidden' }}>اختر القسم
-                            </option>
-                            @foreach ($departments as $department)
-                                <option value="{{ $department->id }}"
-                                    {{ request('department') == $department->id ? 'selected' : '' }}>{{ $department->name }}
-                                </option>
-                            @endforeach
-
-                        </select>
-                    </div>
 
 
                     <button type="submit" class="main-btn" id="form">تأكيد</button>
@@ -129,7 +127,7 @@
                 <tr>
                     <th>المنتج</th>
                     <th>القسم</th>
-                    {{-- <th>الكميه</th> --}}
+                    <th>الكميه</th>
                     <th>بواسطه</th>
                     <th>التاريخ</th>
                     <th class="print-hidden">
@@ -167,7 +165,7 @@
                         </td>
                         <td>{{ $product->department->name }}</td>
                         {{-- <td>{{ $product->description }}</td> --}}
-                        {{-- <td>{{ $product->quantity }}</td> --}}
+                        <td>{{ $product->quantity }}</td>
                         <td>
                             {{ $product->added_by }}
                         </td>

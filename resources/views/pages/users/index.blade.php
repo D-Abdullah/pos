@@ -4,7 +4,7 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('Assets/Css files/data-users.css') }}">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />.select-btn,
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 @endsection
 
@@ -65,37 +65,46 @@
                 <form action="" class="gap-4 d-flex align-items-center mb-0">
 
                     <div class="search-input">
-                        <label for="search-name">بحث بالمورد</label>
-                        <input type="search" placeholder="بحث بالاسم" id="search-name">
+                        <label for="search-name">بحث بالأسم</label>
+                        <input type="search" name="name" value="{{ request('name') }}" placeholder="بحث بالاسم"
+                            id="search-name">
                     </div>
                     <div class="search-email">
                         <label for="search-email">بحث بالبريد</label>
-                        <input type="search" placeholder="بحث البريد الالكتروني" id="search-email">
+                        <input type="search" name="email" value="{{ request('email') }}"
+                            placeholder="بحث البريد الالكتروني" id="search-email">
                     </div>
                     <div class="search-mobile">
-                        <label for="search-mobile">بحث بلهاتف</label>
-                        <input type="search" placeholder="بحث رقم الهاتف" id="search-mobile">
+                        <label for="search-mobile">بحث بالهاتف</label>
+                        <input type="search" name="phone" value="{{ request('phone') }}" placeholder="بحث رقم الهاتف"
+                            id="search-mobile">
                     </div>
-                    <div>
-                        <label for="startDate">من تاريخ:</label>
-                        <input id="startDate" name="categoryDate" class="" type="date" />
-                    </div>
-
-                    <div>
-                        <label for="date_to">اختر القسم</label>
-                        <select class="js-example-basic-single" name="role">
-
+                    <div class="">
+                        <label for="role">اختر الصلاحيه</label>
+                        <select class="js-example-basic-single" name="role" id="role">
                             <option value="" {{ request('role') ? 'disabled hidden' : 'selected disabled hidden' }}>
-                                اختر القسم
+                                اختر الصلاحيه
                             </option>
                             @foreach ($roles as $role)
                                 <option value="{{ $role->id }}" {{ request('role') == $role->id ? 'selected' : '' }}>
                                     {{ $role->name }}
                                 </option>
                             @endforeach
-
                         </select>
                     </div>
+                    <!-- Filter by Date From -->
+                    <div class="dateInp">
+                        <label for="startDate">من تاريخ:</label>
+                        <input type="date" id="startDate" name="date_from" value="{{ request('date_from') }}">
+                    </div>
+
+                    <!-- Filter by Date To -->
+                    <div class="dateInp">
+                        <label for="date_to">إلى تاريخ:</label>
+                        <input type="date" id="date_to" name="date_to" value="{{ request('date_to') }}">
+                    </div>
+
+
 
 
 

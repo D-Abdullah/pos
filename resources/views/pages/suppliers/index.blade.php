@@ -62,15 +62,18 @@
                 <form action="" class="gap-4 mb-0 d-flex align-items-center">
                     <div class="search-input">
                         <label for="search-name">بحث بالمورد</label>
-                        <input type="search" placeholder="بحث بالاسم" id="search-name">
+                        <input type="search" name="name" value="{{ request('name') }}" placeholder="بحث بالاسم"
+                            id="search-name">
                     </div>
                     <div class="search-email">
                         <label for="search-email">بحث بالبريد</label>
-                        <input type="search" placeholder="بحث البريد الالكتروني" id="search-email">
+                        <input type="search" name="email" value="{{ request('email') }}"
+                            placeholder="بحث البريد الالكتروني" id="search-email">
                     </div>
                     <div class="search-mobile">
                         <label for="search-mobile">بحث برقم الهاتف</label>
-                        <input type="search" placeholder="بحث رقم الهاتف" id="search-mobile">
+                        <input type="search" name="phone" value="{{ request('phone') }}" placeholder="بحث رقم الهاتف"
+                            id="search-mobile">
                     </div>
 
 

@@ -73,10 +73,35 @@ class RoleController extends Controller
         ];
     }
 
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $roles = Role::with('permissions')->paginate(PAGINATION);
+            $rules = [
+                'q' => 'nullable|string',
+                'date_from' => 'nullable|date',
+                'date_to' => 'nullable|date',
+            ];
+
+            $messages = [
+                'q.string' => 'الاسم غير صالح.',
+                'date_from.date' => 'تاريخ "من" غير صالح.',
+                'date_to.date' => 'تاريخ "إلى" غير صالح.',
+            ];
+
+            $validatedData = $request->validate($rules, $messages);
+            $roles = Role::query();
+            if ($request->filled('q')) {
+                $roles->where('name', 'LIKE', '%' . $request->input('q') . '%');
+            }
+
+            if ($request->filled('date_from')) {
+                $roles->whereDate('updated_at', '>=', $request->input('date_from'));
+            }
+
+            if ($request->filled('date_to')) {
+                $roles->whereDate('updated_at', '<=', $request->input('date_to'));
+            }
+            $roles = $roles->with('permissions')->paginate(PAGINATION);
             $permissions = collect($this->translated_permissions)->map(function ($translation, $permission) {
                 return [
                     'name' => $translation,

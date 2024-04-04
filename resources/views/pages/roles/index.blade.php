@@ -30,7 +30,7 @@
                 <form action="" class="gap-4 d-flex align-items-end mb-0">
                     <div>
                         <label>بحث بالاسم</label>
-                        <input type="search" name="q" placeholder="بحث" id="search">
+                        <input type="search" name="q" value="{{ request('q') }}" placeholder="بحث" id="search">
                     </div>
                     <!-- Filter by Date From -->
                     <div class="dateInp">
@@ -148,7 +148,8 @@
 
                                                     <input class="form-check-input ms-2  check-box" name="permissions[]"
                                                         type="checkbox" value="{{ $permission['org'] }}"
-                                                        id="{{ preg_replace('/\s+/', '', $permission['org']) . $role->id }}" {{ $role->permissions->pluck('name')->contains($permission['org']) ? 'checked' : '' }}>
+                                                        id="{{ preg_replace('/\s+/', '', $permission['org']) . $role->id }}"
+                                                        {{ $role->permissions->pluck('name')->contains($permission['org']) ? 'checked' : '' }}>
 
                                                     {{-- {{ in_array($permission['name'], (array) $role->permissions) ? "checked" : '' }} --}}
                                                     <label class="form-check-label pe-1 d-block"
