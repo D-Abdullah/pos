@@ -206,66 +206,66 @@
 </style>
 @section('content')
 
-                <!-- start of main-container -->
-                <div class="main-container pt-4 d-flex flex-column overflow-hidden">
+    <!-- start of main-container -->
+    <div class="main-container pt-4 d-flex flex-column overflow-hidden">
 
-                    <!-- start of buttons -->
-                    <div class="mt-5 mb-5 special ">
-                        <button class="p-2 ps-4 pe-4 secound-btn active-btn mb-2" data-count="one">
-                            <img class="dark" src="./Assets/imgs/box.png" alt="">
-                            <img class="light" src="./Assets/imgs/box-light.png" alt="">
-                            اجمالي المخزن
+        <!-- start of buttons -->
+        <div class="mt-5 mb-5 special ">
+            <button class="p-2 ps-4 pe-4 secound-btn active-btn mb-2" data-count="one">
+                <img class="dark" src="./Assets/imgs/box.png" alt="">
+                <img class="light" src="./Assets/imgs/box-light.png" alt="">
+                اجمالي المخزن
+            </button>
+            <button class="p-2 ps-4 pe-4 ms-2 me-2 secound-btn mb-2" data-count="two">
+                <img class="dark" src="./Assets/imgs/file-check.png" alt="">
+                <img class="light" src="./Assets/imgs/file-check-light.png" alt="">
+                عناصر المتاحه
+            </button>
+            <button class="p-2 ps-4 pe-4 secound-btn mb-2" data-count="three">
+                <img class="dark" src="./Assets/imgs/file-import.png" alt="">
+                <img class="light" src="./Assets/imgs/file-import-light.png" alt="">
+                عناصر في الحفلات
+            </button>
+        </div>
+        <!-- end of buttons -->
+
+        <!-- end of frame-5 (header) -->
+        <h2 class="mb-5">المخزن</h2>
+        <!-- start of body -->
+
+        <section class="pt-0 rounded-3 position-relative shadow-sm overflow-auto one" id="one">
+
+            <div class="features shadow-sm p-4 d-flex justify-content-between align-items-center">
+
+
+
+                <div class="component-left me-3 gap-4 d-flex align-items-center">
+
+                    <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
+                        <button onclick="dropdown('valueRelease', 'listRelease')">
+                            <span class="fw-bold opacity-50 valueDropdown" id="valueRelease">اصدار</span>
+                            <img src="./Assets/imgs/chevron-down.png" alt="">
                         </button>
-                        <button class="p-2 ps-4 pe-4 ms-2 me-2 secound-btn mb-2" data-count="two">
-                            <img class="dark" src="./Assets/imgs/file-check.png" alt="">
-                            <img class="light" src="./Assets/imgs/file-check-light.png" alt="">
-                            عناصر المتاحه
-                        </button>
-                        <button class="p-2 ps-4 pe-4 secound-btn mb-2" data-count="three">
-                            <img class="dark" src="./Assets/imgs/file-import.png" alt="">
-                            <img class="light" src="./Assets/imgs/file-import-light.png" alt="">
-                            عناصر في الحفلات
-                        </button>
-                    </div>
-                    <!-- end of buttons -->
-
-                    <!-- end of frame-5 (header) -->
-                    <h2 class="mb-5">المخزن</h2>
-                    <!-- start of body -->
-
-                    <section class="pt-0 rounded-3 position-relative shadow-sm overflow-auto one" id="one">
-
-                        <div class="features shadow-sm p-4 d-flex justify-content-between align-items-center">
-
-
-
-                            <div class="component-left me-3 gap-4 d-flex align-items-center">
-
-                                <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
-                                    <button onclick="dropdown('valueRelease', 'listRelease')">
-                                        <span class="fw-bold opacity-50 valueDropdown" id="valueRelease">اصدار</span>
-                                        <img src="./Assets/imgs/chevron-down.png" alt="">
-                                    </button>
-                                    <div class="options none">
-                                        <ul id="listRelease">
-                                            <li>PDF</li>
-                                            <li>EXCEL</li>
-                                            <li>PRINT</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-
+                        <div class="options none">
+                            <ul id="listRelease">
+                                <li>PDF</li>
+                                <li>EXCEL</li>
+                                <li>PRINT</li>
+                            </ul>
                         </div>
+                    </div>
+                </div>
 
-                        <table class="w-100 mb-4 border">
+            </div>
 
-                            <thead class="head">
-                                <tr>
-                                    <th>اسم المنتج</th>
-                                    <th>الفئه</th>
-                                    <th>الكميه</th>
-                                    {{-- <th>الحاله</th>
+            <table class="w-100 mb-4 border">
+
+                <thead class="head">
+                    <tr>
+                        <th>اسم المنتج</th>
+                        <th>الفئه</th>
+                        <th>الكميه</th>
+                        {{-- <th>الحاله</th>
                                     <th>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
                                             viewBox="0 0 24 25" fill="none">
@@ -284,15 +284,15 @@
                                                 stroke-linejoin="round" />
                                         </svg>
                                     </th> --}}
-                                </tr>
-                            </thead>
+                    </tr>
+                </thead>
 
-                            <tbody>
-                                <tr>
-                                    <td>...</td>
-                                    <td>...</td>
-                                    <td>150</td>
-                                    {{-- <td><span class="live">نشط</span></td>
+                <tbody>
+                    <tr>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>150</td>
+                        {{-- <td><span class="live">نشط</span></td>
                                     <td>
                                         <div class="edit d-flex align-items-center justify-content-center">
                                             <img src="./Assets/imgs/edit-circle.png" alt="" id="edit">
@@ -303,12 +303,12 @@
                                             <img src="./Assets/imgs/trash (1).png" alt="" id="trash">
                                         </div>
                                     </td> --}}
-                                </tr>
-                                <tr>
-                                    <td>...</td>
-                                    <td>...</td>
-                                    <td>150</td>
-                                    {{-- <td><span class="died">غير نشط</span></td>
+                    </tr>
+                    <tr>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>150</td>
+                        {{-- <td><span class="died">غير نشط</span></td>
                                     <td>
                                         <div class="edit d-flex align-items-center justify-content-center">
                                             <img src="./Assets/imgs/edit-circle.png" alt="" id="edit">
@@ -319,26 +319,26 @@
                                             <img src="./Assets/imgs/trash (1).png" alt="" id="trash">
                                         </div>
                                     </td> --}}
-                                </tr>
-                            </tbody>
+                    </tr>
+                </tbody>
 
 
-                        </table>
+            </table>
 
-                        <div class="table-control d-flex justify-content-between align-items-center">
-                            <div class="buttons">
-                                <button class="p-2 rounded-3">التالي</button>
-                                <span class="number-pages main-btn text-light ms-1 me-1">1</span>
-                                <button class="p-2 rounded-3">السابق</button>
-                            </div>
-                            <div class="info-table opacity-50">
-                                <p>عرض <span>1</span> الي <span>10</span> من <span>1</span> مدخلات</p>
-                            </div>
-                        </div>
+            <div class="table-control d-flex justify-content-between align-items-center">
+                <div class="buttons">
+                    <button class="p-2 rounded-3">التالي</button>
+                    <span class="number-pages main-btn text-light ms-1 me-1">1</span>
+                    <button class="p-2 rounded-3">السابق</button>
+                </div>
+                <div class="info-table opacity-50">
+                    <p>عرض <span>1</span> الي <span>10</span> من <span>1</span> مدخلات</p>
+                </div>
+            </div>
 
-                    </section>
+        </section>
 
-                    {{-- <section class="pt-0 rounded-3 position-relative shadow-sm overflow-auto none two" id="two">
+        {{-- <section class="pt-0 rounded-3 position-relative shadow-sm overflow-auto none two" id="two">
 
                         <div class="features shadow-sm p-4 d-flex justify-content-between align-items-center">
                             <div class="component-right gap-4 d-flex align-items-center">
@@ -603,12 +603,12 @@
 
                     </section> --}}
 
-                    <!-- end of body -->
+        <!-- end of body -->
 
 
 
-                </div>
-                <!-- end of main-container -->
+    </div>
+    <!-- end of main-container -->
 
 
 @endsection
