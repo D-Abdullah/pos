@@ -36,7 +36,9 @@
         height: 0px !important;
         top: 50% !important;
     }
-
+    .select2-container--default .select2-selection--single{
+        border-color:#ddd !important;
+    }
     .select2-container {
         width: 160px !important;
     }
@@ -54,15 +56,15 @@
     <h2 class="mt-5 mb-5">أعضاء الاداره</h2>
     <section class="pt-0 rounded-3 position-relative shadow-sm overflow-auto">
 
-        <div class="features shadow-sm p-4 d-flex justify-content-between align-items-center">
+        <div class="features shadow-sm p-4 d-flex justify-content-between align-items-end">
 
-            <div class="component-right gap-4 d-flex align-items-center">
+            <div class="component-right gap-4 d-flex align-items-end">
 
                 <div class="add-button">
                     <button class="text-light main-btn"> اضافه عضو جديد</button>
                 </div>
 
-                <form action="" class="gap-4 d-flex align-items-center mb-0">
+                <form action="" class="gap-4 d-flex align-items-end mb-0">
 
                     <div class="search-input">
                         <label for="search-name">بحث بالأسم</label>
@@ -186,11 +188,11 @@
 
                             </div>
                         </td>
-                        <td class="p-0">
+                        <td class="p-0 ">
                             <div class="popup-edit id-{{ $user->id }} popup close shadow-sm rounded-3 position-fixed">
                                 <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
                                     alt="">
-                                <form action="{{ route('user.update', ['id' => $user->id]) }}" method="post"
+                                <form class="text-end" action="{{ route('user.update', ['id' => $user->id]) }}" method="post"
                                     id="edit-cate">
                                     @csrf
                                     @method('put')

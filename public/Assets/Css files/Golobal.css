@@ -93,7 +93,7 @@ button {
 
 .main-btn {
     font-weight: 300;
-    font-size: 12px;
+    white-space: nowrap;
 }
 .none {
     display: none !important;
@@ -465,6 +465,7 @@ section {
 .page section .features .add-button button:first-child {
     padding: 10px 20px;
     min-width: 130px;
+    white-space: nowrap;
 }
 
 .page section table thead {

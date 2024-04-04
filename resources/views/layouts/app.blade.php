@@ -40,6 +40,22 @@
     </div>
 
     @include('includes.scripts')
+
+<script>
+    // Start Loader
+const loader = document.querySelector("#spinner");
+
+window.addEventListener("DOMContentLoaded", () => {
+    loader.style.display = "flex";
+});
+
+window.addEventListener("load", () => {
+    loader.style.display = "none";
+});
+
+</script>
+
+
 </body>
 
 </html>

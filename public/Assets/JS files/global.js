@@ -137,14 +137,3 @@ document.onkeyup = function (e) {
         });
     }
 };
-
-// Start Loader
-const loader = document.querySelector("#spinner");
-
-window.addEventListener("load", () => {
-    loader.style.display = "none";
-});
-
-window.addEventListener("DOMContentLoaded", () => {
-    loader.style.display = "flex";
-});
