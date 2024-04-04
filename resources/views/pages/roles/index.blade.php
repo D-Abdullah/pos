@@ -27,7 +27,7 @@
                     <button class="main-btn"> اضافة صلاحيه جديده</button>
                 </div>
 
-                <form action="" class="gap-4 d-flex align-items-end mb-0">
+                <form action="{{ url()->current() }}" class="gap-4 d-flex align-items-end mb-0">
                     <div>
                         <label>بحث بالاسم</label>
                         <input type="search" name="q" value="{{ request('q') }}" placeholder="بحث" id="search">

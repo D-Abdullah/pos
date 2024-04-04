@@ -48,42 +48,47 @@
 
         <div class="features shadow-sm p-4 d-flex justify-content-between align-items-end">
             <div class="component-right gap-4 d-flex align-items-end">
-                <div class="search-input">
-                    <label class="d-block">بحث بالاسم</label>
-                    <input type="search" placeholder="بحث" id="search">
-                </div>
+                <form action="{{ url()->current() }}" method="GET" class="gap-4 d-flex align-items-end mb-0">
 
-                <div>
+                    <div>
 
-                    <label class="d-block">اختر المنتج</label>
-                    <select class="js-example-basic-single" name="product">
+                        <label class="d-block">اختر المنتج</label>
+                        <select class="js-example-basic-single" name="product">
 
-                        <option value="" {{ request('product') ? 'disabled hidden' : 'selected disabled hidden' }}>
-                            اختر المنتج
-                        </option>
-                        @foreach ($products as $product)
-                            <option value="{{ $product->id }}" {{ request('product') == $product->id ? 'selected' : '' }}>
-                                {{ $product->name }}
+                            <option value=""
+                                {{ request('product') ? 'disabled hidden' : 'selected disabled hidden' }}>
+                                اختر المنتج
                             </option>
-                        @endforeach
+                            @foreach ($products as $product)
+                                <option value="{{ $product->id }}"
+                                    {{ request('product') == $product->id ? 'selected' : '' }}>
+                                    {{ $product->name }}
+                                </option>
+                            @endforeach
 
+                        </select>
+                    </div>
+                    <div class="search-input">
+                        <label class="d-block">من</label>
+                        <input type="search" name="from" value="{{ request('from') }}" placeholder="بحث">
+                    </div>
+                    <div class="search-input">
+                        <label class="d-block">الى</label>
+                        <input type="search" name="to" value="{{ request('to') }}" placeholder="بحث">
+                    </div>
+                    <div>
+                        <label for="startDate">من تاريخ:</label>
+                        <input type="date" id="startDate" name="date_from" value="{{ request('date_from') }}">
+                    </div>
 
+                    <!-- Filter by Date To -->
+                    <div>
+                        <label for="date_to">إلى تاريخ:</label>
+                        <input type="date" id="date_to" name="date_to" value="{{ request('date_to') }}">
+                    </div>
 
-                    </select>
-                </div>
-
-                <div>
-                    <label for="startDate">من تاريخ:</label>
-                    <input type="date" id="startDate" name="date_from" value="{{ request('date_from') }}">
-                </div>
-
-                <!-- Filter by Date To -->
-                <div>
-                    <label for="date_to">إلى تاريخ:</label>
-                    <input type="date" id="date_to" name="date_to" value="{{ request('date_to') }}">
-                </div>
-
-                <button type="submit" class="main-btn" id="form">تأكيد</button>
+                    <button type="submit" class="main-btn" id="form">تأكيد</button>
+                </form>
             </div>
             <div class="component-left me-3 gap-4 d-flex align-items-center">
                 <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
@@ -115,6 +120,13 @@
             </thead>
 
             <tbody>
+                @if (count($wts) === 0)
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            لا توجد بيانات
+                        </td>
+                    </tr>
+                @endif
                 @foreach ($wts as $wt)
                     <tr>
                         <td>{{ $wt->product->name }}</td>

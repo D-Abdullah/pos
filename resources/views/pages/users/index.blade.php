@@ -36,9 +36,11 @@
         height: 0px !important;
         top: 50% !important;
     }
-    .select2-container--default .select2-selection--single{
-        border-color:#ddd !important;
+
+    .select2-container--default .select2-selection--single {
+        border-color: #ddd !important;
     }
+
     .select2-container {
         width: 160px !important;
     }
@@ -64,7 +66,7 @@
                     <button class="text-light main-btn"> اضافه عضو جديد</button>
                 </div>
 
-                <form action="" class="gap-4 d-flex align-items-end mb-0">
+                <form action="{{ url()->current() }}" class="gap-4 d-flex align-items-end mb-0">
 
                     <div class="search-input">
                         <label for="search-name">بحث بالأسم</label>
@@ -192,8 +194,8 @@
                             <div class="popup-edit id-{{ $user->id }} popup close shadow-sm rounded-3 position-fixed">
                                 <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
                                     alt="">
-                                <form class="text-end" action="{{ route('user.update', ['id' => $user->id]) }}" method="post"
-                                    id="edit-cate">
+                                <form class="text-end" action="{{ route('user.update', ['id' => $user->id]) }}"
+                                    method="post" id="edit-cate">
                                     @csrf
                                     @method('put')
 

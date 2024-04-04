@@ -26,7 +26,7 @@
                     <button class="main-btn mt-4"> اضافه ايجار</button>
                 </div>
 
-                <form action="" class="gap-4 d-flex align-items-center mb-0">
+                <form action="{{ url()->current() }}" class="gap-4 d-flex align-items-center mb-0">
 
                     <div class="search-input">
                         <label for="search-name">بحث بالاسم</label>

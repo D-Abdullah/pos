@@ -59,7 +59,7 @@
                     <button class="text-light main-btn mt-4"> اضافه مورد</button>
                 </div>
 
-                <form action="" class="gap-4 mb-0 d-flex align-items-center">
+                <form action="{{ url()->current() }}" class="gap-4 mb-0 d-flex align-items-center">
                     <div class="search-input">
                         <label for="search-name">بحث بالمورد</label>
                         <input type="search" name="name" value="{{ request('name') }}" placeholder="بحث بالاسم"

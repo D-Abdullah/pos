@@ -60,19 +60,26 @@ class EolController extends Controller
     public function store(StoreEolRequest $request)
     {
         try {
+            DB::beginTransaction();
+            $product = Product::find($request->input('product_id'))->first();
+            if ($product->quantity < $request->input('quantity')) {
+                return redirect()->back()->withInput($request->all())->with(['error' => 'الكمية المطلوبة للمنتج غير كافية.']);
+            }
             Eol::create([
                 'product_id' => $request->input('product_id'),
                 'reason' => $request->input('reason'),
                 'quantity' => $request->input('quantity'),
                 'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
-
+            $product->update([
+                'quantity' => $product->quantity - $request->input('quantity'),
+            ]);
+            DB::commit();
             return redirect()->route('eol.all')->with(['success' => 'تم إنشاء الهالك ' . Product::find($request->input('product_id'))->name . ' بنجاح.']);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('حدث خطأ أثناء انشاء الهالك: ' . $e->getMessage());
 
-            // return $e->getMessage();
             return redirect()->back()->withInput($request->all())->with(['error' => 'حدث خطأ أثناء انشاء الهالك. يرجى المحاولة مرة أخرى.']);
         }
     }
@@ -83,14 +90,22 @@ class EolController extends Controller
     public function update(UpdateEolRequest $request, $id)
     {
         try {
+            DB::beginTransaction();
             $eol = Eol::findOrFail($id);
+            $product = Product::find($request->input('product_id'))->first();
+            if ($product->quantity < $request->input('quantity')) {
+                return redirect()->back()->withInput($request->all())->with(['error' => 'الكمية المطلوبة للمنتج غير كافية.']);
+            }
             $eol->update([
                 'product_id' => $request->input('product_id'),
                 'reason' => $request->input('reason'),
                 'quantity' => $request->input('quantity'),
                 'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
-
+            $product->update([
+                'quantity' => $product->quantity - $request->input('quantity'),
+            ]);
+            DB::commit();
             return redirect()->route('eol.all')->with(['success' => 'تم تحديث الهالك ' . Product::find($request->input('product_id'))->name . ' ' . $request->input('quantity') . ' بنجاح.']);
         } catch (\Exception $e) {
             DB::rollBack();
