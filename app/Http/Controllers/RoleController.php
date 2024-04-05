@@ -41,6 +41,10 @@ class RoleController extends Controller
             'update purchase' => 'تحديث عملية الشراء',
             'delete purchase' => 'حذف عملية الشراء',
 
+            'read warehouse' => 'قراءة المخزن',
+
+            'read warehouseTransaction' => 'قراءة معاملات المخزن',
+
             'create client' => 'إنشاء العميل',
             'read client' => 'قراءة العميل',
             'update client' => 'تحديث العميل',
@@ -61,15 +65,17 @@ class RoleController extends Controller
             'update role' => 'تحديث الصلاحيات',
             'delete role' => 'حذف الصلاحيات',
 
+            'create rent' => 'إنشاء الإيجار',
+            'read rent' => 'قراءة الإيجار',
+            'update rent' => 'تحديث الإيجار',
+            'delete rent' => 'حذف الإيجار',
+
             'create party' => 'إنشاء الحفله',
             'read party' => 'قراءة الحفله',
             'update party' => 'تحديث الحفله',
             'delete party' => 'حذف الحفله',
 
-            'create rent' => 'إنشاء الإيجار',
-            'read rent' => 'قراءة الإيجار',
-            'update rent' => 'تحديث الإيجار',
-            'delete rent' => 'حذف الإيجار',
+            'read report' => 'قراءة التقارير',
         ];
     }
 

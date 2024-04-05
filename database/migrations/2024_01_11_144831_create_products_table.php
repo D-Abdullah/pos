@@ -27,11 +27,6 @@ return new class extends Migration
                 ->constrained('users')
                 ->onDelete('set null')
                 ->onUpdate('cascade');
-
-            $table->foreignId('party_id')->nullable()
-                ->constrained('parties')
-                ->onDelete('set null')
-                ->onUpdate('cascade');
         });
     }
 

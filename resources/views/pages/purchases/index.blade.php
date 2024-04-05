@@ -198,8 +198,16 @@
 
                 @foreach ($purchases as $purchase)
                     <tr>
-                        <td>{{ $purchase->product->name }}</td>
-                        <td>{{ $purchase->supplier->name }}</td>
+                        @if ($purchase->product)
+                            <td>{{ $purchase->product->name }}</td>
+                        @else
+                            <td class="text-danger fw-bold">لم يتم التحديد</td>
+                        @endif
+                        @if ($purchase->supplier)
+                            <td>{{ $purchase->supplier->name }}</td>
+                        @else
+                            <td class="text-danger fw-bold">لم يتم التحديد</td>
+                        @endif
                         <td>{{ $purchase->quantity }}</td>
                         <td>{{ $purchase->total_price }}</td>
                         <td>{{ $purchase->added_by }}</td>

@@ -163,7 +163,11 @@
                         <td class="opacity-50">
                             {{ $product->name }}
                         </td>
-                        <td>{{ $product->department->name }}</td>
+                        @if ($product->department)
+                            <td>{{ $product->department->name }}</td>
+                        @else
+                            <td class="text-danger fw-bold">لم يتم التحديد</td>
+                        @endif
                         {{-- <td>{{ $product->description }}</td> --}}
                         <td>{{ $product->quantity }}</td>
                         <td>

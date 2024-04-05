@@ -157,7 +157,11 @@
 
                 @foreach ($eols as $eol)
                     <tr>
-                        <td>{{ $eol->product->name }}</td>
+                        @if ($eol->product)
+                            <td>{{ $eol->product->name }}</td>
+                        @else
+                            <td class="text-danger fw-bold">لم يتم التحديد</td>
+                        @endif
                         <td>{{ $eol->quantity }}</td>
                         <td>{{ $eol->added_by }}</td>
                         <td> {{ $eol->updated_at->format('Y/m/d') }}</td>

@@ -281,14 +281,15 @@
                 @foreach ($wts as $wt)
                     <tr>
                         <td>{{ $wt->name }}</td>
-                        <td>{{ $wt->department->name }}</td>
+                        @if ($wt->department)
+                            <td>{{ $wt->department->name }}</td>
+                        @else
+                            <td class="text-danger fw-bold">لم يتم التحديد</td>
+                        @endif
                         <td>{{ $wt->quantity }}</td>
                     </tr>
                 @endforeach
-
             </tbody>
-
-
         </table>
 
         <div class="table-control d-flex justify-content-between align-items-center">
