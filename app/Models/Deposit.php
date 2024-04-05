@@ -10,8 +10,8 @@ class Deposit extends Model
         'id',
         'cost',
         'date',
-        'is_paid',
-        'type',
+        'is_paid', # bool
+        'type', # supplier or party
         'supplier_id',
         'party_id',
         'created_at',

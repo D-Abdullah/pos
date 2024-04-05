@@ -23,7 +23,7 @@ return new class extends Migration
 
             $table->foreignId('added_by')->nullable()
                 ->constrained('users')
-                ->onDelete('cascade')
+                ->onDelete('set null')
                 ->onUpdate('cascade');
         });
     }

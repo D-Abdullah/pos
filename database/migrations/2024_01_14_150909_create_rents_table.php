@@ -19,9 +19,9 @@ return new class extends Migration
             $table->integer('quantity');
             $table->timestamps();
 
-            $table->foreignId('added_by')
+            $table->foreignId('added_by')->nullable()
                 ->constrained('users')
-                ->onDelete('cascade')
+                ->onDelete('set null')
                 ->onUpdate('cascade');
         });
     }

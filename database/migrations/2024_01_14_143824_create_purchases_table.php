@@ -19,19 +19,19 @@ return new class extends Migration
             $table->double('unit_price');
             $table->timestamps();
 
-            $table->foreignId('added_by')
+            $table->foreignId('added_by')->nullable()
                 ->constrained('users')
-                ->onDelete('cascade')
+                ->onDelete('set null')
                 ->onUpdate('cascade');
 
-            $table->foreignId('product_id')
+            $table->foreignId('product_id')->nullable()
                 ->constrained('products')
-                ->onDelete('cascade')
+                ->onDelete('set null')
                 ->onUpdate('cascade');
 
-            $table->foreignId('supplier_id')
+            $table->foreignId('supplier_id')->nullable()
                 ->constrained('suppliers')
-                ->onDelete('cascade')
+                ->onDelete('set null')
                 ->onUpdate('cascade');
         });
     }

@@ -21,12 +21,12 @@ return new class extends Migration
 
             $table->foreignId('supplier_id')->nullable()
                 ->constrained('suppliers')
-                ->onDelete('cascade')
+                ->onDelete('set null')
                 ->onUpdate('cascade');
 
             $table->foreignId('party_id')->nullable()
                 ->constrained('parties')
-                ->onDelete('cascade')
+                ->onDelete('set null')
                 ->onUpdate('cascade');
         });
     }
