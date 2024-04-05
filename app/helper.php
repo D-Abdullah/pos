@@ -1,6 +1,6 @@
 <?php
 
-const PAGINATION = 10;
+const PAGINATION = 1; // 30 is Default
 const PERMISSIONS = [
     'create target', 'read target', 'update target', 'delete target',
     'create department', 'read department', 'update department', 'delete department',
