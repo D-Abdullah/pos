@@ -236,7 +236,7 @@
                                                 </option>
                                                 @foreach ($suppliers as $supplier)
                                                     <option value="{{ $supplier->id }}"
-                                                        {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
+                                                        {{ $purchase->supplier_id == $supplier->id ? 'selected' : '' }}>
                                                         {{ $supplier->name }}
                                                     </option>
                                                 @endforeach
@@ -252,7 +252,7 @@
                                                 </option>
                                                 @foreach ($products as $product)
                                                     <option value="{{ $product->id }}"
-                                                        {{ old('product_id') == $product->id ? 'selected' : '' }}>
+                                                        {{ $purchase->product_id == $product->id ? 'selected' : '' }}>
                                                         {{ $product->name }}
                                                     </option>
                                                 @endforeach
