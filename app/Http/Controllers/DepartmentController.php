@@ -65,6 +65,7 @@ class DepartmentController extends Controller
 
     public function store(StoreDepartmentRequest $request)
     {
+        // return auth()->user()->getAuthIdentifier();
         try {
             Department::create([
                 'name' => $request->input('name'),

@@ -20,7 +20,10 @@ class Supplier extends Model
 
     public function getAddedByAttribute($value)
     {
-        return User::find($value)->first()->name;
+        if ($value === null) {
+            return "لم يتم التعيين";
+        }
+        return User::where('id', $value)->first()->name;
     }
     public function deposits()
     {

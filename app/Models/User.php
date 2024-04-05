@@ -55,6 +55,6 @@ class User extends Authenticatable
         if ($value === null) {
             return "المطور";
         }
-        return User::find($value)->first()->name;
+        return User::where('id', $value)->first()->name;
     }
 }
