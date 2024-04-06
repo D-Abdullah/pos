@@ -29,9 +29,8 @@
 <body>
     <div class="error-container">
 
-        <img src="{{ asset('Assets/imgs/409.png') }}" alt="Error 404 Image" class="error-img img-fluid mb-0">
-        <h1 class="h4 fw-bolder mt-2 mb-4">عذرًا، الطلب الحالي يتعارض مع حالة الموارد الحالية على الخادم. يرجى التحقق من
-            البيانات المرسلة مع الطلب ومحاولة إعادة المحاولة بطريقة تتجنب أي تعارض.</h1>
+        <img src="{{ asset('Assets/imgs/402.png') }}" alt="Error 404 Image" class="error-img img-fluid mb-0">
+        <h1 class="h4 fw-bolder mt-2 mb-4">عذرًا، لم يتم استكمال الطلب بسبب عدم توفر الدفع المطلوب</h1>
 
         <a href="{{ url()->previous() }}"
             class="btn btn-primary d-flex align-items-center justify-content-between m-auto"
