@@ -29,11 +29,14 @@
 <body>
     <div class="error-container">
 
-        <img src="{{ asset('Assets/imgs/404.png') }}" alt="Error 404 Image" class="error-img img-fluid mb-0">
-        <h1 class="h4 fw-bolder mt-2 mb-4">عذرًا، حدث خطأ داخلي في الخادم ولم يتمكن من معالجة طلبك. يُرجى المحاولة مرة أخرى في وقت لاحق.</h1>
+        <img src="{{ asset('Assets/imgs/500.png') }}" alt="Error 404 Image" class="error-img img-fluid mb-0">
+        <h1 class="h4 fw-bolder mt-2 mb-4">عذرًا، حدث خطأ داخلي في الخادم ولم يتمكن من معالجة طلبك. يُرجى المحاولة مرة
+            أخرى في وقت لاحق.</h1>
 
-        <a href="{{ url()->previous() }}" class="btn btn-primary d-flex align-items-center justify-content-between m-auto" style="width: fit-content;">
-            <img src="{{ asset('Assets/imgs/arrow-circle-right.png') }}" class="mr-2" alt="arrow"/>
+        <a href="{{ url()->previous() }}"
+            class="btn btn-primary d-flex align-items-center justify-content-between m-auto"
+            style="width: fit-content;">
+            <img src="{{ asset('Assets/imgs/arrow-circle-right.png') }}" class="mr-2" alt="arrow" />
             <span>العوده للخلف</span>
         </a>
     </div>
