@@ -157,7 +157,7 @@
             </div>
         @endcan
         @can('read report')
-            <div class="list reports d-flex gap-0 align-items-center">
+            <div class="list {{ Request::is('report/*') ? 'active' : '' }} reports d-flex gap-0 align-items-center">
                 <a href="{{ route('report.all') }}" class="dark">
                     <img class="dark" src="{{ asset('Assets/imgs/report-analytics.png') }}" alt="">
                 </a>
