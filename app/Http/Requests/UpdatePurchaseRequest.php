@@ -38,7 +38,7 @@ class UpdatePurchaseRequest extends FormRequest
         return [
             'supplier_id.required' => 'حقل مُزوّد المنتج مطلوب.',
             'supplier_id.integer' => 'حقل مُزوّد المنتج يجب أن يكون عبارة عن رقم صحيح.',
-            'supplier_id.exists' => 'المُزوّد المحدد غير موجود.',
+            'supplier_id.exists' => 'المورد المحدد غير موجود.',
             'product_id.required' => 'حقل المنتج مطلوب.',
             'product_id.integer' => 'حقل المنتج يجب أن يكون عبارة عن رقم صحيح.',
             'product_id.exists' => 'المنتج المحدد غير موجود.',

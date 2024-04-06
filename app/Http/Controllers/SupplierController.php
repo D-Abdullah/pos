@@ -131,10 +131,20 @@ class SupplierController extends Controller
     public function deposits(Request $request, $id)
     {
         try {
-            return $request->all();
-
-
-            return redirect()->route('supplier.all')->with(['success' => 'تم تحديث المورد ' . $request->input('name') . ' بنجاح.']);
+            $supplier = Supplier::find($id);
+            if (!$supplier) {
+                return redirect()->back()->with(['error' => 'حدث خطأ انت تحاول تحديث مورد غير موجود.']);
+            }
+            foreach ($request->input('deposits') as $deposit) {
+                Deposit::create([
+                    'cost' => $deposit['cost'],
+                    'date' => $deposit['date'],
+                    'type' => "supplier",
+                    'is_paid' => $deposit['is_paid'] ?? 0,
+                    'supplier_id' => $supplier->id,
+                ]);
+            }
+            return redirect()->route('supplier.all')->with(['success' => 'تم تحديث دفعات المورد ' . $supplier->name . ' بنجاح.']);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('حدث خطأ أثناء تحديث المورد: ' . $e->getMessage());
