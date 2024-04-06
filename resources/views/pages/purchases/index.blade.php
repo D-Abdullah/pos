@@ -189,7 +189,7 @@
 
                 @if (count($purchases) === 0)
                     <tr>
-                        <td colspan="6" class="text-center">
+                        <td colspan="7" class="text-center">
                             لا توجد بيانات
                         </td>
                     </tr>
