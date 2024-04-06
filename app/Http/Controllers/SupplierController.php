@@ -58,7 +58,7 @@ class SupplierController extends Controller
             $suppliers = $suppliers->with('deposits', 'purchases')->paginate(PAGINATION);
             foreach ($suppliers as $supplier) {
                 $totalRequired = $supplier->purchases()->sum('total_price');
-                $totalPaid = $supplier->deposits()->sum('cost');
+                $totalPaid = $supplier->deposits()->where('is_paid', '1')->sum('cost');
                 $totalReceivables = $totalRequired - $totalPaid;
 
                 $supplier->total_required = $totalRequired;
@@ -135,14 +135,18 @@ class SupplierController extends Controller
             if (!$supplier) {
                 return redirect()->back()->with(['error' => 'حدث خطأ انت تحاول تحديث مورد غير موجود.']);
             }
+            // if ($supplier->deposits->count() > 0) {
+
+            // } else {
             foreach ($request->input('deposits') as $deposit) {
-                Deposit::create([
+                Deposit::updateOrCreate([
                     'cost' => $deposit['cost'],
                     'date' => $deposit['date'],
                     'type' => "supplier",
                     'is_paid' => $deposit['is_paid'] ?? 0,
                     'supplier_id' => $supplier->id,
                 ]);
+                // }
             }
             return redirect()->route('supplier.all')->with(['success' => 'تم تحديث دفعات المورد ' . $supplier->name . ' بنجاح.']);
         } catch (\Exception $e) {

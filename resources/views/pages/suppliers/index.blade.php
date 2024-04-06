@@ -350,8 +350,8 @@
                                                                         placeholder="التاريخ"
                                                                         value="{{ $deposit->date }}">
                                                                 </div>
-                                                                <button type="button" class="remove-btn p-3" hidden
-                                                                    disabled><i class="fa-solid fa-trash"></i></button>
+                                                                <button type="button" class="remove-btn p-3"><i
+                                                                        class="fa-solid fa-trash"></i></button>
                                                                 @if ($deposit->is_paid == 0)
                                                                     <button type="button" class="check-btn p-3 ">
                                                                         <i class="fa-solid fa-check"></i>
