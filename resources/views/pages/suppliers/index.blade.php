@@ -347,9 +347,12 @@
                                                         </div>
                                                         <button type="button" class="remove-btn p-3" hidden disabled><i
                                                                 class="fa-solid fa-trash"></i></button>
+
                                                         <button type="button" class="check-btn p-3 ">
                                                             <i class="fa-solid fa-check"></i>
                                                         </button>
+                                                        <input class="is-paid" type="hidden" value="0"
+                                                            name="deposits[0][is_paid]">
                                                     </div>
                                                 </div>
 
@@ -595,30 +598,9 @@
         });
     </script>
 
-    {{-- Validation For Dollar popup --}}
-    <script>
-        const dolarForm = document.getElementById("dolar-form");
-        const dolarInputs = dolarForm.querySelectorAll(".category-input");
-        const dolarMessage = document.getElementById("invalidDolar");
 
-        dolarForm.addEventListener('submit', (event) => {
-            dolarMessage.textContent = '';
-            let notValid = false;
 
-            for (let i = 0; i < dolarInputs.length; i++) {
-                if (dolarInputs[i].value.trim() === "") {
-                    event.preventDefault();
-                    const inputName = dolarInputs[i].getAttribute('placeholder');
-                    dolarMessage.textContent = `الحقل ${inputName} مطلوب`;
-                    dolarInputs[i].focus();
-                    notValid = true;
-                    if (notValid) {
-                        break;
-                    }
-                }
-            }
-        });
-    </script>
+
 
     {{-- Delete --}}
     <script>
@@ -713,67 +695,12 @@
         });
     </script>
 
-    {{-- <script>
-        function addElement() {
-            let depositsContainer = document.querySelector(`.addDepositsContainer`);
-            let newDepositSection = depositsContainer.querySelector(`.deposit-section`).cloneNode(true);
-            var I = depositsContainer.childElementCount;
-
-            newDepositSection.querySelectorAll('input').forEach(function(input) {
-                input.value = '';
-                let name = input.name;
-                let index = name.match(/\d+/g);
-                if (index == null) {
-                    return;
-                } else {
-                    finalName = name.replace(/(\d)+/, I);
-                }
-                input.setAttribute('name', finalName);
-            });
-
-            newDepositSection.querySelector('.remove-btn').removeAttribute('disabled');
-            newDepositSection
-                .querySelector('.remove-btn').removeAttribute('hidden');
-
-            depositsContainer.appendChild(newDepositSection);
-
-            initRemoveButtons(); // Initialize remove buttons after adding a new section
-        }
-
-
-
-        function removeElement(button) {
-            let depositsContainer = document.getElementById('addDepositsContainer');
-
-            if (depositsContainer.childElementCount > 1) {
-                depositsContainer.removeChild(button.parentNode);
-            } else {
-                button.setAttribute('disabled', 'disabled');
-                button.setAttribute('hidden', 'hidden');
-            }
-        }
-
-        function initRemoveButtons() {
-            document.querySelectorAll('.remove-btn').forEach(function(button) {
-                button.addEventListener('click', function() {
-                    removeElement(button);
-                });
-            });
-        }
-
-        document.getElementById('addElement').addEventListener('click', addElement);
-
-        // Initialize remove buttons on page load
-        initRemoveButtons();
-    </script> --}}
-
     <script>
         document.querySelectorAll("table #dolar").forEach((dolar) => {
             let id = dolar.dataset.id;
 
             dolar.addEventListener("click", () => {
                 function addElement() {
-                    console.log(id);
                     let depositsContainer = document.querySelector(`.addDepositsContainer.id-` + id);
                     let newDepositSection = depositsContainer.querySelector(`.deposit-section.id-` + id)
                         .cloneNode(
@@ -782,6 +709,11 @@
 
                     newDepositSection.querySelectorAll('input').forEach(function(input) {
                         input.value = '';
+
+                        if (input.className == 'is-paid') {
+                            input.value = '0'
+                        }
+
                         let name = input.name;
                         let index = name.match(/\d+/g);
                         if (index == null) {
@@ -799,6 +731,8 @@
                     depositsContainer.appendChild(newDepositSection);
 
                     initRemoveButtons(); // Initialize remove buttons after adding a new section
+                    validationInputs()
+                    isPaid()
                 }
 
 
@@ -822,12 +756,56 @@
                     });
                 }
 
+                function validationInputs() {
+                    const dolarForm = document.getElementById("dolar-form");
+                    const dolarInputs = dolarForm.querySelectorAll(".category-input");
+                    const dolarMessage = document.getElementById("invalidDolar");
+
+                    dolarForm.addEventListener('submit', (event) => {
+                        dolarMessage.textContent = '';
+                        let notValid = false;
+
+                        for (let i = 0; i < dolarInputs.length; i++) {
+                            if (dolarInputs[i].value.trim() === "") {
+                                event.preventDefault();
+                                const inputName = dolarInputs[i].getAttribute('placeholder');
+                                dolarMessage.textContent = `الحقل ${inputName} مطلوب`;
+                                dolarInputs[i].focus();
+                                notValid = true;
+                                if (notValid) {
+                                    break;
+                                }
+                            }
+                        }
+                    });
+                }
+
+                function isPaid() {
+
+                    document.querySelectorAll(".check-btn").forEach(btn => {
+                        const input = btn.nextElementSibling;
+                        btn.addEventListener('click', () => {
+
+                            if (confirm('هل انت متأكد من تأكيد الدفع لهذا المورد')) {
+
+                                input.value = "1"
+                                btn.style.display = "none"
+                            }
+                        })
+                    })
+
+
+
+                }
+
                 document.querySelector('.addElement.id-' + id).addEventListener('click', addElement);
 
                 // Initialize remove buttons on page load
                 initRemoveButtons();
-
+                validationInputs()
+                isPaid()
             });
+
         });
     </script>
 
