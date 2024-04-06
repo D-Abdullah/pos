@@ -326,35 +326,76 @@
                                                         </svg>
                                                     </button>
                                                 </div>
-                                                <div id="addDepositsContainer"
-                                                    class="addDepositsContainer id-{{ $supplier->id }}">
-                                                    <div
-                                                        class="f-row d-flex gap-4 align-items-end deposit-section id-{{ $supplier->id }}">
-                                                        <div>
-                                                            <label class="d-block mb-1"
-                                                                for="deposit-amount">المبلغ</label>
-                                                            <input type="text" name="deposits[0][cost]"
-                                                                class="deposit-amount category-input form-control"
-                                                                placeholder="المبلغ"
-                                                                value="{{ old('deposits.0.cost') }}">
+                                                @if ($supplier->deposits->count() > 0)
+                                                    @foreach ($supplier->deposits as $i => $deposit)
+                                                        <div id="addDepositsContainer"
+                                                            class="addDepositsContainer id-{{ $supplier->id }}">
+                                                            <div
+                                                                class="f-row d-flex gap-4 align-items-end deposit-section id-{{ $supplier->id }}">
+                                                                <div>
+                                                                    <label class="d-block mb-1"
+                                                                        for="deposit-amount">المبلغ</label>
+                                                                    <input type="text"
+                                                                        name="deposits[{{ $i }}][cost]"
+                                                                        class="deposit-amount category-input form-control"
+                                                                        placeholder="المبلغ"
+                                                                        value="{{ $deposit->cost }}">
+                                                                </div>
+                                                                <div>
+                                                                    <label class="d-block mb-1"
+                                                                        for="deposit-date">التاريخ</label>
+                                                                    <input type="date"
+                                                                        name="deposits[{{ $i }}][date]"
+                                                                        class="deposit-date category-input form-control"
+                                                                        placeholder="التاريخ"
+                                                                        value="{{ $deposit->date }}">
+                                                                </div>
+                                                                <button type="button" class="remove-btn p-3" hidden
+                                                                    disabled><i class="fa-solid fa-trash"></i></button>
+                                                                @if ($deposit->is_paid == 0)
+                                                                    <button type="button" class="check-btn p-3 ">
+                                                                        <i class="fa-solid fa-check"></i>
+                                                                    </button>
+                                                                @endif
+                                                                <input class="is-paid" type="hidden"
+                                                                    value="{{ $deposit->is_paid }}"
+                                                                    name="deposits[{{ $i }}][is_paid]">
+                                                            </div>
                                                         </div>
-                                                        <div>
-                                                            <label class="d-block mb-1" for="deposit-date">التاريخ</label>
-                                                            <input type="date" name="deposits[0][date]"
-                                                                class="deposit-date category-input form-control"
-                                                                placeholder="التاريخ"
-                                                                value="{{ old('deposits.0.date') }}">
-                                                        </div>
-                                                        <button type="button" class="remove-btn p-3" hidden disabled><i
-                                                                class="fa-solid fa-trash"></i></button>
+                                                    @endforeach
+                                                @else
+                                                    <div id="addDepositsContainer"
+                                                        class="addDepositsContainer id-{{ $supplier->id }}">
+                                                        <div
+                                                            class="f-row d-flex gap-4 align-items-end deposit-section id-{{ $supplier->id }}">
+                                                            <div>
+                                                                <label class="d-block mb-1"
+                                                                    for="deposit-amount">المبلغ</label>
+                                                                <input type="text" name="deposits[0][cost]"
+                                                                    class="deposit-amount category-input form-control"
+                                                                    placeholder="المبلغ"
+                                                                    value="{{ old('deposits.0.cost') }}">
+                                                            </div>
+                                                            <div>
+                                                                <label class="d-block mb-1"
+                                                                    for="deposit-date">التاريخ</label>
+                                                                <input type="date" name="deposits[0][date]"
+                                                                    class="deposit-date category-input form-control"
+                                                                    placeholder="التاريخ"
+                                                                    value="{{ old('deposits.0.date') }}">
+                                                            </div>
+                                                            <button type="button" class="remove-btn p-3" hidden
+                                                                disabled><i class="fa-solid fa-trash"></i></button>
 
-                                                        <button type="button" class="check-btn p-3 ">
-                                                            <i class="fa-solid fa-check"></i>
-                                                        </button>
-                                                        <input class="is-paid" type="hidden" value="0"
-                                                            name="deposits[0][is_paid]">
+                                                            <button type="button" class="check-btn p-3 ">
+                                                                <i class="fa-solid fa-check"></i>
+                                                            </button>
+                                                            <input class="is-paid" type="hidden" value="0"
+                                                                name="deposits[0][is_paid]">
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                @endif
+
 
                                             </div>
                                         </div>
