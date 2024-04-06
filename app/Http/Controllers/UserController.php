@@ -23,57 +23,57 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        // try {
-        $rules = [
-            'name' => 'nullable|string',
-            'email' => 'nullable|string',
-            'phone' => 'nullable|string',
-            'role' => 'nullable|string|exists:roles,id',
-            'date_from' => 'nullable|date',
-            'date_to' => 'nullable|date',
-        ];
+        try {
+            $rules = [
+                'name' => 'nullable|string',
+                'email' => 'nullable|string',
+                'phone' => 'nullable|string',
+                'role' => 'nullable|string|exists:roles,id',
+                'date_from' => 'nullable|date',
+                'date_to' => 'nullable|date',
+            ];
 
-        $messages = [
-            'name.string' => 'الاسم غير صالح.',
-            'email.string' => 'البريد الإلكتروني غير صالح.',
-            'phone.string' => 'رقم الهاتف غير صالح.',
-            'role.exists' => 'الصلاحيه المحدد غير موجود.',
-            'date_from.date' => 'تاريخ "من" غير صالح.',
-            'date_to.date' => 'تاريخ "إلى" غير صالح.',
-        ];
-        $validatedData = $request->validate($rules, $messages);
+            $messages = [
+                'name.string' => 'الاسم غير صالح.',
+                'email.string' => 'البريد الإلكتروني غير صالح.',
+                'phone.string' => 'رقم الهاتف غير صالح.',
+                'role.exists' => 'الصلاحيه المحدد غير موجود.',
+                'date_from.date' => 'تاريخ "من" غير صالح.',
+                'date_to.date' => 'تاريخ "إلى" غير صالح.',
+            ];
+            $validatedData = $request->validate($rules, $messages);
 
-        $users = User::query();
-        if ($request->filled('name')) {
-            $users->where('name', 'LIKE', '%' . $request->input('name') . '%');
+            $users = User::query();
+            if ($request->filled('name')) {
+                $users->where('name', 'LIKE', '%' . $request->input('name') . '%');
+            }
+            if ($request->filled('email')) {
+                $users->where('email', 'LIKE', '%' . $request->input('email') . '%');
+            }
+            if ($request->filled('phone')) {
+                $users->where('phone', 'LIKE', '%' . $request->input('phone') . '%');
+            }
+            if ($request->filled('role')) {
+                $users->role(Role::find($request->input('role'))->name);
+            }
+
+            if ($request->filled('date_from')) {
+                $users->whereDate('updated_at', '>=', $request->input('date_from'));
+            }
+
+            if ($request->filled('date_to')) {
+                $users->whereDate('updated_at', '<=', $request->input('date_to'));
+            }
+
+            $users = $users->with('roles')->paginate(PAGINATION);
+            $roles = Role::all();
+
+            return view('pages.users.index', compact('users', 'roles'));
+        } catch (\Exception $e) {
+            Log::error('حدث خطأ أثناء جلب الأعضاء: ' . $e->getMessage());
+
+            return redirect()->back()->with(['error' => 'حدث خطأ أثناء جلب الأعضاء. يرجى المحاولة مرة أخرى.']);
         }
-        if ($request->filled('email')) {
-            $users->where('email', 'LIKE', '%' . $request->input('email') . '%');
-        }
-        if ($request->filled('phone')) {
-            $users->where('phone', 'LIKE', '%' . $request->input('phone') . '%');
-        }
-        if ($request->filled('role')) {
-            $users->role(Role::find($request->input('role'))->name);
-        }
-
-        if ($request->filled('date_from')) {
-            $users->whereDate('updated_at', '>=', $request->input('date_from'));
-        }
-
-        if ($request->filled('date_to')) {
-            $users->whereDate('updated_at', '<=', $request->input('date_to'));
-        }
-
-        $users = $users->with('roles')->paginate(PAGINATION);
-        $roles = Role::all();
-
-        return view('pages.users.index', compact('users', 'roles'));
-        // } catch (\Exception $e) {
-        //     Log::error('حدث خطأ أثناء جلب الأعضاء: ' . $e->getMessage());
-
-        //     return redirect()->back()->with(['error' => 'حدث خطأ أثناء جلب الأعضاء. يرجى المحاولة مرة أخرى.']);
-        // }
     }
 
     /**

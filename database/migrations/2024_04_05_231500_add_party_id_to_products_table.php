@@ -11,15 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('warehouse_transactions', function (Blueprint $table) {
-            $table->id();
-            $table->integer('quantity');
-            $table->string('from');
-            $table->string('to');
-            $table->timestamps();
-
-            $table->foreignId('product_id')->nullable()
-                ->constrained('products')
+        Schema::table('products', function (Blueprint $table) {
+            $table->foreignId('party_id')->nullable()
+                ->constrained('parties')
                 ->onDelete('set null')
                 ->onUpdate('cascade');
         });
@@ -30,6 +24,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('warehouse_transactions');
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropForeign('products_party_id_foreign');
+            $table->dropColumn('party_id');
+        });
     }
 };

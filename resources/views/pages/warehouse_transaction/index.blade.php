@@ -129,7 +129,11 @@
                 @endif
                 @foreach ($wts as $wt)
                     <tr>
-                        <td>{{ $wt->product->name }}</td>
+                        @if ($wt->product)
+                            <td>{{ $wt->product->name }}</td>
+                        @else
+                            <td class="text-danger fw-bold">لم يتم التحديد</td>
+                        @endif
                         <td>{{ $wt->quantity }}</td>
                         <td>{{ $wt->from }}</td>
                         <td>{{ $wt->to }}</td>

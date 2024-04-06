@@ -20,9 +20,9 @@ return new class extends Migration
             $table->enum('payment_type', ['cash', 'deposit', 'both']);
             $table->timestamps();
 
-            $table->foreignId('added_by')
+            $table->foreignId('added_by')->nullable()
                 ->constrained('users')
-                ->onDelete('cascade')
+                ->onDelete('set null')
                 ->onUpdate('cascade');
         });
     }

@@ -17,11 +17,10 @@ return new class extends Migration
             $table->date('date');
             $table->timestamps();
 
-            $table->foreignId('added_by')
-            ->constrained('users')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
-                
+            $table->foreignId('added_by')->nullable()
+                ->constrained('users')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
         });
     }
 

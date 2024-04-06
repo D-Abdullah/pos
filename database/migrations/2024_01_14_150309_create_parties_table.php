@@ -19,15 +19,15 @@ return new class extends Migration
             $table->enum('status', ['contracted', 'transported', 'completed']);
             $table->timestamps();
 
-            $table->foreignId('added_by')
-            ->constrained('users')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
+            $table->foreignId('added_by')->nullable()
+                ->constrained('users')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
 
-            $table->foreignId('client_id')
-            ->constrained('clients')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
+            $table->foreignId('client_id')->nullable()
+                ->constrained('clients')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
         });
     }
 

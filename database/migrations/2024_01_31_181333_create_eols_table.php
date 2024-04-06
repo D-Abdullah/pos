@@ -17,15 +17,15 @@ return new class extends Migration
             $table->text('reason');
             $table->timestamps();
 
-            $table->foreignId('product_id')
-            ->constrained('products')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
+            $table->foreignId('product_id')->nullable()
+                ->constrained('products')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
 
-                $table->foreignId('added_by')
-            ->constrained('users')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
+            $table->foreignId('added_by')->nullable()
+                ->constrained('users')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
         });
     }
 

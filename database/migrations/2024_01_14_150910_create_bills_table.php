@@ -22,22 +22,21 @@ return new class extends Migration
             $table->enum('status', ['ready', 'preparing'])->nullable();
             $table->timestamps();
 
-           
-                $table->foreignId('party_id')
 
-            ->constrained('parties')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
+            $table->foreignId('party_id')->nullable()
+                ->constrained('parties')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
 
-                $table->foreignId('product_id')->nullable()
-            ->constrained('products')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
+            $table->foreignId('product_id')->nullable()
+                ->constrained('products')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
 
-                $table->foreignId('rent_id')->nullable()
-            ->constrained('rents')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
+            $table->foreignId('rent_id')->nullable()
+                ->constrained('rents')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
         });
     }
 

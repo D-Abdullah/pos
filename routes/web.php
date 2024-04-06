@@ -39,8 +39,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('profile-password', [AuthController::class, 'profilePasswordUpdate'])->name('profile.password');
 
     // index
-    Route::middleware('role:super_admin')
-        ->get(RouteServiceProvider::HOME, [DashboardController::class, "index"])
+    Route::get(RouteServiceProvider::HOME, [DashboardController::class, "index"])
         ->name('dashboard');
 
     // Departments
@@ -202,12 +201,12 @@ Route::group(['middleware' => 'auth'], function () {
 
     //warehouse
     Route::group(['prefix' => 'warehouse'], function () {
-        Route::get('/all', [WarehouseController::class, 'index'])->name('warehouse.all');
+        Route::middleware('permission:read warehouse')->get('/all', [WarehouseController::class, 'index'])->name('warehouse.all');
     });
 
     //warehouse transaction
     Route::group(['prefix' => 'warehouse-transaction'], function () {
-        Route::get('/all', [WarehouseTransactionController::class, 'index'])->name('warehouse-transaction.all');
+        Route::middleware('permission:read warehouseTransaction')->get('/all', [WarehouseTransactionController::class, 'index'])->name('warehouse-transaction.all');
     });
 
     //roles
@@ -237,6 +236,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     //reports
     Route::group(['prefix' => 'report'], function () {
-        Route::get('/all', [ReportController::class, 'index'])->name('report.all');
+        Route::middleware('permission:read report')->get('/all', [ReportController::class, 'index'])->name('report.all');
     });
 });

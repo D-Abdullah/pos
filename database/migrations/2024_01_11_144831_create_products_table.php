@@ -18,14 +18,14 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->timestamps();
 
-            $table->foreignId('department_id')
+            $table->foreignId('department_id')->nullable()
                 ->constrained('departments')
-                ->onDelete('cascade')
+                ->onDelete('set null')
                 ->onUpdate('cascade');
 
-            $table->foreignId('added_by')
+            $table->foreignId('added_by')->nullable()
                 ->constrained('users')
-                ->onDelete('cascade')
+                ->onDelete('set null')
                 ->onUpdate('cascade');
         });
     }
