@@ -135,18 +135,32 @@ class SupplierController extends Controller
             if (!$supplier) {
                 return redirect()->back()->with(['error' => 'حدث خطأ انت تحاول تحديث مورد غير موجود.']);
             }
-            // if ($supplier->deposits->count() > 0) {
 
-            // } else {
-            foreach ($request->input('deposits') as $deposit) {
-                Deposit::updateOrCreate([
-                    'cost' => $deposit['cost'],
-                    'date' => $deposit['date'],
-                    'type' => "supplier",
-                    'is_paid' => $deposit['is_paid'] ?? 0,
-                    'supplier_id' => $supplier->id,
-                ]);
-                // }
+            # equations
+            $totalRequired = $supplier->purchases()->sum('total_price');
+            $totalPaid = $supplier->deposits()->where('is_paid', '1')->sum('cost');
+            $totalReceivables = $totalRequired - $totalPaid;
+            $supplier->total_required = $totalRequired;
+            $supplier->total_paid = $totalPaid;
+            $supplier->total_receivables = $totalReceivables;
+            ##################################################
+            $depositsCollection = collect($request->input('deposits'));
+            $totalCost = $depositsCollection->sum('cost');
+            if ($supplier->total_receivables < $totalCost) {
+                return redirect()->back()->withInput($request->all())->with(['error' => 'المبلغ المدفوع اكبر من المبلغ المطلوب.']);
+            }
+            if ($supplier->deposits->count() > 0) {
+                return $request->all();
+            } else {
+                foreach ($request->input('deposits') as $deposit) {
+                    Deposit::create([
+                        'cost' => $deposit['cost'],
+                        'date' => $deposit['date'],
+                        'type' => "supplier",
+                        'is_paid' => $deposit['is_paid'] ?? 0,
+                        'supplier_id' => $supplier->id,
+                    ]);
+                }
             }
             return redirect()->route('supplier.all')->with(['success' => 'تم تحديث دفعات المورد ' . $supplier->name . ' بنجاح.']);
         } catch (\Exception $e) {

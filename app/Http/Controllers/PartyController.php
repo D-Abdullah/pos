@@ -63,8 +63,10 @@ class PartyController extends Controller
         } catch (\Exception $e) {
             Log::error('حدث خطأ أثناء جلب صفحه اضافه الحفله: ' . $e->getMessage());
 
-            return redirect()->back()->with(['error' =>
-            'حدث خطأ أثناء جلب صفحه اضافه الحفله. يرجى المحاولة مرة أخرى.']);
+            return redirect()->back()->with([
+                'error' =>
+                    'حدث خطأ أثناء جلب صفحه اضافه الحفله. يرجى المحاولة مرة أخرى.'
+            ]);
         }
     }
 
@@ -74,6 +76,7 @@ class PartyController extends Controller
      */
     public function store(StorePartyRequest $request)
     {
+        return $request->all();
         try {
             DB::beginTransaction();
             $party = Party::create([
@@ -134,6 +137,7 @@ class PartyController extends Controller
      */
     public function storeBill(Request $request, int $id)
     {
+        return $request->all();
         try {
             DB::beginTransaction();
             $party = Party::findOrFail($id);
