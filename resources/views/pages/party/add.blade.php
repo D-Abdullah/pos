@@ -81,7 +81,7 @@
 
                     <div>
                         <label for="client" class="d-block">اختر العميل</label>
-                        <select class="js-example-basic-single add" name="client_name" id="client">
+                        <select class="js-example-basic-single add" name="client_id" id="client">
                             <option value="" {{ request('client') ? 'disabled hidden' : 'selected disabled hidden' }}>
                                 اختر العميل
                             </option>
