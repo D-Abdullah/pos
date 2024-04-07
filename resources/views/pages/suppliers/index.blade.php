@@ -825,7 +825,7 @@
 
 
                 function removeElement(button, id = null) {
-                    // debugger;
+                    debugger;
                     if (id) {
                         let depositsContainer = document.querySelector(`.addDepositsContainer.id-` + id +
                             "-edit");
@@ -856,7 +856,7 @@
                 }
 
                 function validationInputs() {
-                    debugger;
+                    // debugger;
                     const dolarForm = document.querySelector("#dolar-form.id-" + id);
                     const dolarInputs = dolarForm.querySelectorAll(".category-input");
                     const dolarMessage = dolarForm.querySelector("#invalidDolar");
