@@ -299,8 +299,8 @@
                                         </p>
 
                                     </div>
-                                    <form id="dolar-form" action="{{ route('supplier.deposits', $supplier->id) }}"
-                                        method="post">
+                                    <form id="dolar-form" class="id-{{ $supplier->id }}"
+                                        action="{{ route('supplier.deposits', $supplier->id) }}" method="post">
                                         @csrf
                                         @method('PATCH')
                                         <div class="buttons mt-5 d-flex justify-content-center">
@@ -330,11 +330,14 @@
                                                     </div>
                                                 @endif
                                                 @if ($supplier->deposits->count() > 0)
-                                                    @foreach ($supplier->deposits as $i => $deposit)
-                                                        <div id="addDepositsContainer"
-                                                            class="addDepositsContainer id-{{ $supplier->id }}">
+                                                    <div id="addDepositsContainer"
+                                                        class="addDepositsContainer id-{{ $supplier->id }}-edit">
+                                                        @foreach ($supplier->deposits as $i => $deposit)
                                                             <div
-                                                                class="f-row d-flex gap-4 align-items-end deposit-section id-{{ $supplier->id }}">
+                                                                class="f-row d-flex gap-4 align-items-end deposit-section id-{{ $supplier->id }}-edit">
+                                                                <input type="hidden"
+                                                                    name="deposits[{{ $i }}][id]"
+                                                                    value="{{ $deposit->id }}">
                                                                 <div>
                                                                     <label class="d-block mb-1"
                                                                         for="deposit-amount">المبلغ</label>
@@ -353,10 +356,11 @@
                                                                         placeholder="التاريخ"
                                                                         value="{{ $deposit->date }}">
                                                                 </div>
-                                                                <button type="button" class="remove-btn p-3"><i
-                                                                        class="fa-solid fa-trash"></i></button>
+                                                                <button type="button" class="remove-btn p-3" hidden
+                                                                    disabled><i class="fa-solid fa-trash"></i></button>
                                                                 @if ($deposit->is_paid == 0)
-                                                                    <button type="button" class="check-btn p-3 ">
+                                                                    <button type="button"
+                                                                        class="check-btn id-{{ $supplier->id }} p-3 ">
                                                                         <i class="fa-solid fa-check"></i>
                                                                     </button>
                                                                 @endif
@@ -364,8 +368,8 @@
                                                                     value="{{ $deposit->is_paid }}"
                                                                     name="deposits[{{ $i }}][is_paid]">
                                                             </div>
-                                                        </div>
-                                                    @endforeach
+                                                        @endforeach
+                                                    </div>
                                                 @else
                                                     @if ($supplier->total_receivables > 0)
                                                         <div id="addDepositsContainer"
@@ -748,65 +752,114 @@
 
             dolar.addEventListener("click", () => {
                 function addElement() {
+
                     let depositsContainer = document.querySelector(`.addDepositsContainer.id-` + id);
-                    let newDepositSection = depositsContainer.querySelector(`.deposit-section.id-` + id)
-                        .cloneNode(
-                            true);
-                    var I = depositsContainer.childElementCount;
+                    let depositsContainerEdit = document.querySelector(`.addDepositsContainer.id-` + id +
+                        "-edit");
+                    if (depositsContainerEdit) {
+                        let newDepositSectionEdit = depositsContainerEdit.querySelector(
+                                `.deposit-section.id-` +
+                                id + '-edit')
+                            .cloneNode(
+                                true);
+                        var I = depositsContainerEdit.childElementCount;
+                        newDepositSectionEdit.querySelectorAll('input').forEach(function(input) {
+                            input.value = '';
 
-                    newDepositSection.querySelectorAll('input').forEach(function(input) {
-                        input.value = '';
+                            if (input.className == 'is-paid') {
+                                input.value = '0'
+                            }
 
-                        if (input.className == 'is-paid') {
-                            input.value = '0'
-                        }
+                            let name = input.name;
+                            let index = name.match(/\d+/g);
+                            if (index == null) {
+                                return;
+                            } else {
+                                finalName = name.replace(/(\d)+/, I);
+                            }
+                            input.setAttribute('name', finalName);
+                        });
 
-                        let name = input.name;
-                        let index = name.match(/\d+/g);
-                        if (index == null) {
-                            return;
-                        } else {
-                            finalName = name.replace(/(\d)+/, I);
-                        }
-                        input.setAttribute('name', finalName);
-                    });
+                        newDepositSectionEdit.querySelector('.remove-btn').removeAttribute('disabled');
+                        newDepositSectionEdit
+                            .querySelector('.remove-btn').removeAttribute('hidden');
+                        let depositsContainerEditAppendOnLast = document.querySelectorAll(
+                            `.addDepositsContainer.id-` + id +
+                            "-edit")[document.querySelectorAll(`.addDepositsContainer.id-` + id +
+                            "-edit").length - 1];
+                        depositsContainerEditAppendOnLast.appendChild(newDepositSectionEdit);
+                    } else {
+                        let newDepositSection = depositsContainer.querySelector(`.deposit-section.id-` + id)
+                            .cloneNode(
+                                true);
+                        var I = depositsContainer.childElementCount;
+                        newDepositSection.querySelectorAll('input').forEach(function(input) {
+                            input.value = '';
 
-                    newDepositSection.querySelector('.remove-btn').removeAttribute('disabled');
-                    newDepositSection
-                        .querySelector('.remove-btn').removeAttribute('hidden');
+                            if (input.className == 'is-paid') {
+                                input.value = '0'
+                            }
 
-                    depositsContainer.appendChild(newDepositSection);
+                            let name = input.name;
+                            let index = name.match(/\d+/g);
+                            if (index == null) {
+                                return;
+                            } else {
+                                finalName = name.replace(/(\d)+/, I);
+                            }
+                            input.setAttribute('name', finalName);
+                        });
 
-                    initRemoveButtons(); // Initialize remove buttons after adding a new section
+                        newDepositSection.querySelector('.remove-btn').removeAttribute('disabled');
+                        newDepositSection
+                            .querySelector('.remove-btn').removeAttribute('hidden');
+
+                        depositsContainer.appendChild(newDepositSection);
+                    }
+
+                    initRemoveButtons(id); // Initialize remove buttons after adding a new section
                     validationInputs()
                     isPaid()
                 }
 
 
 
-                function removeElement(button) {
-                    let depositsContainer = document.getElementById('addDepositsContainer');
-
-                    if (depositsContainer.childElementCount > 1) {
-                        depositsContainer.removeChild(button.parentNode);
+                function removeElement(button, id = null) {
+                    // debugger;
+                    if (id) {
+                        let depositsContainer = document.querySelector(`.addDepositsContainer.id-` + id +
+                            "-edit");
+                        if (depositsContainer.childElementCount > 1) {
+                            depositsContainer.removeChild(button.parentNode);
+                        } else {
+                            button.setAttribute('disabled', 'disabled');
+                            button.setAttribute('hidden', 'hidden');
+                        }
                     } else {
-                        button.setAttribute('disabled', 'disabled');
-                        button.setAttribute('hidden', 'hidden');
+                        let depositsContainer = document.getElementById('addDepositsContainer');
+                        if (depositsContainer.childElementCount > 1) {
+                            depositsContainer.removeChild(button.parentNode);
+                        } else {
+                            button.setAttribute('disabled', 'disabled');
+                            button.setAttribute('hidden', 'hidden');
+                        }
                     }
+
                 }
 
-                function initRemoveButtons() {
+                function initRemoveButtons(id = null) {
                     document.querySelectorAll('.remove-btn').forEach(function(button) {
                         button.addEventListener('click', function() {
-                            removeElement(button);
+                            removeElement(button, id);
                         });
                     });
                 }
 
                 function validationInputs() {
-                    const dolarForm = document.getElementById("dolar-form");
+                    debugger;
+                    const dolarForm = document.querySelector("#dolar-form.id-" + id);
                     const dolarInputs = dolarForm.querySelectorAll(".category-input");
-                    const dolarMessage = document.getElementById("invalidDolar");
+                    const dolarMessage = dolarForm.querySelector("#invalidDolar");
 
                     dolarForm.addEventListener('submit', (event) => {
                         dolarMessage.textContent = '';
@@ -829,26 +882,24 @@
 
                 function isPaid() {
 
-                    document.querySelectorAll(".check-btn").forEach(btn => {
+                    document.querySelectorAll(".check-btn.id-" + id).forEach(btn => {
                         const input = btn.nextElementSibling;
                         btn.addEventListener('click', () => {
 
                             if (confirm('هل انت متأكد من تأكيد الدفع لهذا المورد')) {
-
                                 input.value = "1"
                                 btn.style.display = "none"
+                                return;
                             }
+
                         })
                     })
-
-
-
                 }
 
                 document.querySelector('.addElement.id-' + id).addEventListener('click', addElement);
 
                 // Initialize remove buttons on page load
-                initRemoveButtons();
+                initRemoveButtons(null);
                 validationInputs()
                 isPaid()
             });
