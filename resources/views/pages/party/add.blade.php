@@ -4,6 +4,41 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('Assets/Css files/add-concert.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <style>
+        .dateInp,
+        .search-input,
+        .search-div {
+            max-width: 180px;
+        }
+
+        .select2-container--default .select2-search--dropdown .select2-search__field {
+            padding: 0;
+            outline: none;
+            border: 1px solid #ddd;
+            height: 30px !important;
+
+        }
+
+        .select2-container--default .select2-selection--single {
+            height: 49px !important;
+            border: 1px solid #ddd;
+        }
+
+        .select2-container[dir="rtl"] .select2-selection--single .select2-selection__rendered {
+            padding-top: 7px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 0px !important;
+            top: 50% !important;
+        }
+
+        label {
+            margin-bottom: 0.25rem;
+        }
+    </style>
     <style>
         /* Style for the remove button */
         .remove-btn {
@@ -24,6 +59,12 @@
         .deposit-section {
             margin-bottom: 10px;
         }
+
+        .invalid {
+            color: red;
+            font-size: 12px;
+            text-align: center;
+        }
     </style>
 @endsection
 
@@ -33,23 +74,30 @@
     <!-- start of body -->
 
     <div class="w-100 d-flex justify-content-end mt-5 mb-5" id="addNewProduct">
-        <form action="{{ route('party.addStore') }}" method="post" class="w-100">
+        <form id="add-from" action="{{ route('party.addStore') }}" method="post" class="w-100">
             @csrf
             <div class="components">
                 <div class="parent gap-3 mb-3 d-flex">
-                    <div class="select-form">
-                        <label class="mb-1">العميل</label>
-                        <select name="client_id" id="" class="rounded-3 p-1">
-                            <option selected hidden disabled>اختر العميل</option>
+
+                    <div>
+                        <label for="client" class="d-block">اختر العميل</label>
+                        <select class="js-example-basic-single add" name="client_name" id="client">
+                            <option value="" {{ request('client') ? 'disabled hidden' : 'selected disabled hidden' }}>
+                                اختر العميل
+                            </option>
                             @foreach ($clients as $client)
-                                <option value="{{ $client->id }}" {{ old('client_id') == $client->id ? 'selected' : '' }}>
-                                    {{ $client->name }}</option>
+                                <option value="{{ $client->id }}"
+                                    {{ request('client') == $client->id ? 'selected' : '' }}>
+                                    {{ $client->name }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
+
                     <div>
                         <label class="d-block mb-1" for="party-name">اسم الحفله</label>
-                        <input type="text" name="name" value="{{ old('name') }}" id="party-name" placeholder="">
+                        <input type="text" name="name" value="{{ old('name') }}" id="party-name"
+                            placeholder="اسم الحفله">
                     </div>
                     <div>
                         <label class="d-block mb-1" for="party-date">تاريخ الحفله</label>
@@ -70,7 +118,7 @@
                 <div class="parent d-flex mb-4">
                     <div>
                         <label class="d-block mb-1" for="party-address">عنوان الحفله</label>
-                        <textarea class="w-100" name="address" id="" cols="30" rows="4">{{ old('address') }}</textarea>
+                        <textarea class="w-100" name="address" id="" cols="30" rows="4" placeholder="عنوان الحفله">{{ old('address') }}</textarea>
                     </div>
                 </div>
                 <div class="elements">
@@ -106,6 +154,7 @@
                     </button>
                 </div>
             </div>
+            <div id="invalidAdd" class="invalid invalidAdd my-3"></div>
             <button class="submit main-btn p-3 w-100 mt-4 fs-5" type="submit">اضافه</button>
         @endsection
     </form>
@@ -114,6 +163,9 @@
 
 @section('script')
     <script src="{{ asset('Assets/JS files/add-concert.js') }}"></script>
+    {{-- For JQuery --}}
+    <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script>
         function addElement() {
@@ -164,4 +216,51 @@
         // Initialize remove buttons on page load
         initRemoveButtons();
     </script>
+
+    <script>
+        $(document).ready(function() {
+            $('.js-example-basic-single.add').select2();
+        });
+
+        console.log(document.querySelector(".js-example-basic-single.add"));
+    </script>
+
+
+
+    {{-- Validation For Add --}}
+    <script>
+        const addForm = document.getElementById("add-from");
+        const addInputs = addForm.querySelectorAll("input, select,textarea");
+        const addMessage = document.getElementById("invalidAdd");
+
+        addForm.addEventListener('submit', (event) => {
+            addMessage.textContent = '';
+            let emptyFields = [];
+
+            for (let i = 0; i < addInputs.length; i++) {
+                const input = addInputs[i];
+                const inputType = input.getAttribute('type');
+                const inputValue = input.value.trim();
+                const inputName = input.getAttribute('placeholder') || input.getAttribute('aria-placeholder');
+
+                if (inputType === 'date' || inputType === 'number' || inputType === 'select-one') {
+                    if (inputValue === "") {
+                        emptyFields.push(inputName);
+                    }
+                } else {
+                    if (inputValue === "") {
+                        emptyFields.push(inputName);
+                    }
+                }
+            }
+
+            if (emptyFields.length > 0) {
+                event.preventDefault();
+                addMessage.textContent = `الحقول التالية مطلوبة: ${emptyFields.join(', ')}`;
+                // Optionally, you can focus on the first empty field
+                addInputs[0].focus();
+            }
+        });
+    </script>
+
 @endsection
