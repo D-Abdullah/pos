@@ -27,9 +27,10 @@ class PartyController extends Controller
     {
         try {
             $parties = Party::query();
+            $clients = Client::all();
 
             $parties = $parties->with('client')->paginate(PAGINATION);
-            return view('pages.party.index', compact('parties'));
+            return view('pages.party.index', compact('parties','clients'));
         } catch (\Exception $e) {
             Log::error('حدث خطأ أثناء جلب الحفلات: ' . $e->getMessage());
 
@@ -76,7 +77,7 @@ class PartyController extends Controller
      */
     public function store(StorePartyRequest $request)
     {
-        return $request->all();
+        // return $request->all();
         try {
             DB::beginTransaction();
             $party = Party::create([
