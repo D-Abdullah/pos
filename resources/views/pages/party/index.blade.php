@@ -36,8 +36,12 @@
             top: 50% !important;
         }
 
-        .select2-container {
-            width: 160px !important;
+        .js-example-basic-single.client {
+            min-width: 160px;
+        }
+
+        .js-example-basic-single.the-state {
+            min-width: 120px;
         }
     </style>
 @endsection
@@ -66,7 +70,7 @@
 
                 <div>
                     <label for="client" class="d-block">اختر العميل</label>
-                    <select class="js-example-basic-single" name="client_name" id="client">
+                    <select class="js-example-basic-single client" name="client_id" id="client">
                         <option value="" {{ request('client') ? 'disabled hidden' : 'selected disabled hidden' }}>
                             اختر العميل
                         </option>
@@ -91,7 +95,7 @@
                 </div>
 
 
-                <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
+                {{-- <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
                     <button onclick="dropdown('valueStatus', 'listStatus')">
                         <span class="fw-bold opacity-50 valueDropdown" id="valueStatus">الحاله</span>
                         <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
@@ -101,11 +105,23 @@
                             <li class="p-0" id="search">
                                 <input class="search" type="search" placeholder="بحث">
                             </li>
-                            <li class="active">الحاله</li>
-                            <li>الحاله 1</li>
-                            <li>الحاله 2</li>
+                            <li class="active">متعاقد</li>
+                            <li>منقول</li>
+                            <li>منتهي</li>
                         </ul>
                     </div>
+                </div> --}}
+
+                <div class="w-100">
+                    <select class="js-example-basic-single the-state" id="">
+                        <option disabled selected>
+                            الحاله
+                        </option>
+
+                        <option value="">متعاقد</option>
+                        <option value="">منقول</option>
+                        <option value="">منتهي</option>
+                    </select>
                 </div>
 
                 <button class="main-btn" id="form">تأكيد</button>
@@ -385,6 +401,9 @@
     <script>
         $(document).ready(function() {
             $('.js-example-basic-single').select2();
+        });
+        $(document).ready(function() {
+            $('.js-example-basic-single.the-state').select2();
         });
     </script>
 

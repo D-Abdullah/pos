@@ -104,7 +104,8 @@
                         <input type="date" name="date" value="{{ old('date') }}" class="deposit-date form-control"
                             placeholder="التاريخ">
                     </div>
-                    <div class="select-form">
+
+                    {{-- <div class="select-form">
                         <label class="mb-1">الحاله</label>
                         <select name="status" id="" class="rounded-3 p-1">
                             <option selected hidden disabled>اختر الحاله</option>
@@ -113,7 +114,22 @@
                                     {{ $s['name'] }}</option>
                             @endforeach
                         </select>
+                    </div> --}}
+
+                    <div>
+                        <label for="state" class="d-block">الحاله </label>
+                        <select class="js-example-basic-single status" name="status" id="state">
+                            <option selected hidden disabled>
+                                الحاله
+                            </option>
+                            @foreach ($status as $s)
+                                <option value="{{ $s['value'] }}" {{ old('status') == $s['value'] ? 'selected' : '' }}>
+                                    {{ $s['name'] }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
+
                 </div>
                 <div class="parent d-flex mb-4">
                     <div>
@@ -222,7 +238,9 @@
             $('.js-example-basic-single.add').select2();
         });
 
-        console.log(document.querySelector(".js-example-basic-single.add"));
+        $(document).ready(function() {
+            $('.js-example-basic-single.status').select2();
+        });
     </script>
 
 

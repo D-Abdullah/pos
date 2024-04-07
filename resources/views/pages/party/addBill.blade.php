@@ -4,6 +4,52 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('Assets/Css files/add-concert.css') }}">
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <style>
+        .dateInp,
+        .search-input,
+        .search-div {
+            max-width: 180px;
+            min-width: 180px;
+        }
+
+        .select2-container--default .select2-search--dropdown .select2-search__field {
+            padding: 0;
+            outline: none;
+            border: 1px solid #ddd;
+            height: 30px !important;
+
+        }
+
+        .select2-container--default .select2-selection--single {
+            height: 45px !important;
+            border: 1px solid #ddd;
+        }
+
+        .select2-container[dir="rtl"] .select2-selection--single .select2-selection__rendered {
+            padding-top: 7px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 0px !important;
+            top: 50% !important;
+        }
+
+        .select2-container {
+            min-width: 160px !important;
+            min-width: 100% !important;
+
+        }
+
+        #totalPrice {
+            width: fit-content;
+            background: transparent !important;
+            color: black !important;
+            margin-right: auto;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -26,7 +72,7 @@
                 <div class="w-50">
                     <input type="search" name="search" id="search-name" placeholder="بحث">
                 </div>
-                <div class="select-btn w-50 select position-relative rounded-3 d-flex align-items-center">
+                {{-- <div class="select-btn w-50 select position-relative rounded-3 d-flex align-items-center">
                     <button class="w-100 d-flex justify-content-between"
                         onclick="dropdown('valueDateAddLast3', 'listDateAddLast3')">
                         <span class="fw-bold opacity-50 valueDropdown" id="valueDateAddLast3">الحاله</span>
@@ -40,18 +86,30 @@
                             <li>النوع 3</li>
                         </ul>
                     </div>
+                </div> --}}
+                <div class="w-100">
+                    <select class="js-example-basic-single product" id="">
+                        <option disabled selected>
+                            اختر الحاله
+                        </option>
+
+                        <option value="">متعاقد</option>
+                        <option value="">منقول</option>
+                        <option value="">منتهي</option>
+                    </select>
                 </div>
             </div>
-            <div class="up p-2 d-flex justify-content-between ">
-                <div class="box">
-                    @foreach ($products as $product)
+            <div class="up p-2 d-flex justify-content-between overflow-auto">
+                @foreach ($products as $product)
+                    <div class="box id-{{ $product->id }}">
                         <div class="info-box p-3">
-                            {{ $product->id }}
-                            <span class="d-block fs-5">{{ $product->name }}</span>
+
+                            <span class="d-block fs-5">اسم المنتج: {{ $product->name }}</span>
+                            <span class="d-block fs-5">القسم: {{ $product->department->name }}</span>
                             <span class="fs-5">الكميه المتاحه: {{ $product->quantity }}</span>
                         </div>
-                    @endforeach
-                </div>
+                    </div>
+                @endforeach
             </div>
         </div>
     </div>
@@ -62,7 +120,7 @@
                 <div class="w-50">
                     <input type="search" name="search" id="search-name" placeholder="بحث">
                 </div>
-                <div class="select-btn w-50 select position-relative rounded-3 d-flex align-items-center">
+                {{-- <div class="select-btn w-50 select position-relative rounded-3 d-flex align-items-center">
                     <button class="w-100 d-flex justify-content-between"
                         onclick="dropdown('valueDateAddLast3', 'listDateAddLast3')">
                         <span class="fw-bold opacity-50 valueDropdown" id="valueDateAddLast3">الحاله</span>
@@ -75,16 +133,28 @@
                             <li>النوع 3</li>
                         </ul>
                     </div>
+                </div> --}}
+                <div class="w-100">
+                    <select class="js-example-basic-single rent" id="">
+                        <option disabled selected>
+                            اختر الحاله
+                        </option>
+
+                        <option value="">متعاقد</option>
+                        <option value="">منقول</option>
+                        <option value="">منتهي</option>
+                    </select>
                 </div>
             </div>
+
+
             <div class="up p-2 d-flex justify-content-between overflow-auto">
                 @foreach ($rents as $rent)
-                    <div class="box">
+                    <div data-id="{{ $rent->id }}" data-type="rent" class="box id-{{ $rent->id }}">
                         <div class="info-box p-3">
-                            {{ $rent->id }}
-                            <dib class="d-block fs-5">{{ $rent->name }}</dib>
+                            <div class="d-block fs-5">اسم المنتج: {{ $rent->name }}</div>
                             <div class="fs-5">السعر: {{ $rent->sale_price }}</div>
-                            <div class="fs-5">الكميه المتاحه: {{ $rent->quantity }}</div>
+                            <div class="fs-5">الكميه: {{ $rent->quantity }}</div>
                         </div>
                     </div>
                 @endforeach
@@ -116,18 +186,7 @@
                         stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </div>
-            {{-- <div class="element" id="element">
-                <span class="productName">شنطه</span>
-                <span class="countity"> 2 </span>
-                <span class="price">300</span>
-                <span class="totalPrice">1300</span>
-                <span class="type ">بيع</span>
-                <span class="status live">جاهز</span>
-                <div class="edit">
-                    <img src="{{ asset('Assets/imgs/edit-circle.png') }}" alt="" id="edit">
-                    <img src="{{ asset('Assets/imgs/trash (1).png') }}" alt="" id="trash">
-                </div>
-            </div> --}}
+
             <div class="total active-btn mt-2" id="totalPrice">اجمالي السعر 900</div>
         </div>
     </div>
@@ -150,7 +209,7 @@
         <div class="f-row">
             <div class="select-form gap-2">
                 <label for="" class="mb-2">النوع</label>
-                <select name="" id="" class="w-100 p-2 rounded-2" id="type">
+                <select name="" id="select-type" class="w-100 p-2 rounded-2 select-type" id="type">
                     <option value="rent">ايجار</option>
                     <option value="sale">بيع</option>
                     <option value="eol">هالك</option>
@@ -158,7 +217,7 @@
             </div>
 
         </div>
-        <div class="eolReason ">
+        <div class="eolReason">
             <label class="d-block" for="textarea">سبب الهلاك</label>
             <textarea name="textarea" id="textarea" cols="30" rows="10" placeholder=".."></textarea>
         </div>
@@ -209,7 +268,7 @@
             </div>
 
         </div>
-        <div>
+        <div class="eolReason">
             <label class="d-block" for="textarea">سبب الهلاك (لو هالك)</label>
             <textarea name="textarea" id="textarea" cols="30" rows="10" placeholder=".."></textarea>
         </div>
@@ -234,7 +293,7 @@
             <div class="select-form">
                 <label for="" class="mb-1">النوع</label>
                 <div class="select-form gap-2">
-                    <select name="" id="" class="w-100 p-2 rounded-2" id="type">
+                    <select name="" id="select-type" class="w-100 p-2 rounded-2 select-type" id="type">
                         <option value="rent">ايجار</option>
                         <option value="sale">بيع</option>
                         <option value="eol">هالك</option>
@@ -242,7 +301,7 @@
                 </div>
             </div>
         </div>
-        <div>
+        <div class="eolReason">
             <label class="d-block" for="textarea">سبب الهلاك (لو هالك)</label>
             <textarea name="textarea" id="textarea" cols="30" rows="10" placeholder=".."></textarea>
         </div>
@@ -282,7 +341,7 @@
                 </div>
             </div>
         </div>
-        <div>
+        <div class="eolReason">
             <label class="d-block" for="textarea">سبب الهلاك (لو هالك)</label>
             <textarea name="textarea" id="textarea" cols="30" rows="10" placeholder=".."></textarea>
         </div>
@@ -302,13 +361,13 @@
         <div class="f-row d-flex gap-4">
             <div>
                 <label class="d-block mb-1" for="category-name">الاسم</label>
-                <input type="text" name="text" id="category-name" placeholder="...">
+                <input type="text" name="text" id="category-name" placeholder="الاسم">
             </div>
         </div>
         <div class="f-row d-flex gap-4">
             <div>
                 <label class="d-block mb-1" for="category-name">السعر </label>
-                <input type="text" name="text" id="category-name" placeholder="...">
+                <input type="text" name="text" id="category-name" placeholder="السعر">
             </div>
         </div>
         <div class="form-check-2 form-check-checkbox">
@@ -365,6 +424,11 @@
 
 @section('script')
     <script src="{{ asset('Assets/JS files/add-concert.js') }}"></script>
+    {{-- For JQuery --}}
+    <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
     <script>
         let name = document.querySelector("#popupAddOurProduct h2 span");
         let quantity = document.querySelector("#popupAddOurProduct #countity");
@@ -415,7 +479,6 @@
                 }
 
             })
-            // console.log(mainProducts);
 
             let values = JSON.stringify(mainProducts);
             localStorage.setItem("products", values);
@@ -498,4 +561,44 @@
 
         })
     </script>
+
+
+    <script>
+        function hideEolReason() {
+            const types = document.querySelectorAll('.select-type');
+            const eolReason = document.querySelectorAll('.eolReason');
+
+            types.forEach(type => {
+                if (type.value !== "eol") {
+                    eolReason.forEach(box => {
+                        box.style.display = "none";
+                    });
+                } else {
+                    eolReason.forEach(box => {
+                        box.style.display = "block";
+                    });
+                }
+            });
+        }
+
+        document.querySelectorAll('.box').forEach(box => {
+            box.addEventListener('click', hideEolReason);
+        });
+
+        document.querySelectorAll('.select-type').forEach(select => {
+            select.addEventListener('change', hideEolReason);
+        });
+    </script>
+
+    {{-- For Select JQuery  --}}
+    <script>
+        $(document).ready(function() {
+            $('.js-example-basic-single.rent').select2();
+        });
+        $(document).ready(function() {
+            $('.js-example-basic-single.product').select2();
+        });
+    </script>
+
+
 @endsection
