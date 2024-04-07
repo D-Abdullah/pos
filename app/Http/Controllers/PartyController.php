@@ -8,6 +8,7 @@ use App\Models\Party;
 use App\Http\Requests\StorePartyRequest;
 use App\Http\Requests\UpdatePartyRequest;
 use App\Models\Client;
+use App\Models\Department;
 use App\Models\Eol;
 use App\Models\Product;
 use App\Models\Rent;
@@ -30,7 +31,7 @@ class PartyController extends Controller
             $clients = Client::all();
 
             $parties = $parties->with('client')->paginate(PAGINATION);
-            return view('pages.party.index', compact('parties','clients'));
+            return view('pages.party.index', compact('parties', 'clients'));
         } catch (\Exception $e) {
             Log::error('حدث خطأ أثناء جلب الحفلات: ' . $e->getMessage());
 
@@ -122,7 +123,8 @@ class PartyController extends Controller
             $party = Party::with('client')->findOrFail($id);
             $products = Product::all();
             $rents = Rent::all();
-            return view('pages.party.addBill', compact('id', 'products', 'rents', 'party'));
+            $categories = Department::all();
+            return view('pages.party.addBill', compact('id', 'products', 'rents', 'party', 'categories'));
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('حدث خطأ أثناء عرض صفحه بيانات الفاتوره: ' . $e->getMessage());

@@ -95,12 +95,14 @@ document.querySelectorAll(".features .add-button button").forEach((button) => {
 });
 
 popupsExit.forEach((exit) => {
-    if (!exit.parentElement.classList.contains("none")) {
-        exit.addEventListener("click", (e) => {
-            e.preventDefault();
+    if (exit.id != "dismiss") {
+        if (!exit.parentElement.classList.contains("none")) {
+            exit.addEventListener("click", (e) => {
+                e.preventDefault();
 
-            closePopups();
-        });
+                closePopups();
+            });
+        }
     }
 });
 

@@ -54,59 +54,41 @@
 
 @section('content')
     <!-- start of body -->
-    {{ $party->id }}
-    <h2 class="mb-2 mt-5">اضافه معلومات الفاتوره للحفله "{{ $party->name }}"</h2>
+    <h2 class="mb-2 mt-5">اضافه الفاتوره للحفله "{{ $party->name }}"</h2>
 
     <div class="mt-5 mb-5 special">
-        <button class="secound-btn active-btn total-product mb-2 tabs"
-            id="ourProduct"style="padding: 15px; width: 170px;">منتجاتنا</button>
-        <button class="me-2 secound-btn element-found mb-2 tabs" id="rent"
-            style="padding: 15px; width: 170px;">ايجار</button>
-        <button class="secound-btn element-not-found mb-2 style="
-            id="specialConcert"style="padding: 15px; width: 170px;">مخصص</button>
+        <button class="secound-btn active-btn total-product mb-2 tabs" style="padding: 15px; width: 170px;"
+            data-goto="product">منتجاتنا</button>
+        <button class="me-2 secound-btn element-found mb-2 tabs" style="padding: 15px; width: 170px;"
+            data-goto="rent">ايجار</button>
+        <button class="secound-btn element-not-found mb-2 open-modal" style="padding: 15px; width: 170px;"
+            data-type="custom" data-id="">مخصص</button>
     </div>
 
-    <div class="part show gap-4" id="ourProduct">
+    <div class="part show gap-4" id="product">
         <div class="products ps-2 pe-2">
             <div class="info p-2 mb-1 d-flex gap-4 align-items-center">
                 <div class="w-50">
-                    <input type="search" name="search" id="search-name" placeholder="بحث">
+                    <input type="search" name="search" id="search-name" placeholder="بحث بإسم المنتج">
                 </div>
-                {{-- <div class="select-btn w-50 select position-relative rounded-3 d-flex align-items-center">
-                    <button class="w-100 d-flex justify-content-between"
-                        onclick="dropdown('valueDateAddLast3', 'listDateAddLast3')">
-                        <span class="fw-bold opacity-50 valueDropdown" id="valueDateAddLast3">الحاله</span>
-                        <img src="{{ asset('Assets/imgs/chevron-down.png') }}" alt="">
-
-                    </button>
-                    <div class="options none">
-                        <ul id="listDateAddLast3">
-                            <li>النوع 1</li>
-                            <li>النوع 2</li>
-                            <li>النوع 3</li>
-                        </ul>
-                    </div>
-                </div> --}}
                 <div class="w-100">
-                    <select class="js-example-basic-single product" id="">
-                        <option disabled selected>
-                            اختر الحاله
+                    <select class="js-example-basic-single product">
+                        <option disabled selected value="">
+                            بحث بالقسم
                         </option>
-
-                        <option value="">متعاقد</option>
-                        <option value="">منقول</option>
-                        <option value="">منتهي</option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
-            <div class="up p-2 d-flex justify-content-between overflow-auto">
+            <div class="up p-2 d-flex overflow-auto">
                 @foreach ($products as $product)
-                    <div class="box id-{{ $product->id }}">
+                    <div class="box open-modal" data-type="items" data-id="{{ $product->id }}">
                         <div class="info-box p-3">
-
-                            <span class="d-block fs-5">اسم المنتج: {{ $product->name }}</span>
-                            <span class="d-block fs-5">القسم: {{ $product->department->name }}</span>
-                            <span class="fs-5">الكميه المتاحه: {{ $product->quantity }}</span>
+                            <span class="d-block fs-5"><b>اسم المنتج:</b> {{ $product->name }}</span>
+                            <span class="d-block fs-5"><b>القسم:</b> {{ $product->department->name }}</span>
+                            <span class="fs-5"><b>الكميه المتاحه:</b> {{ $product->quantity }}</span>
                         </div>
                     </div>
                 @endforeach
@@ -118,43 +100,18 @@
         <div class="products">
             <div class="info p-2 mb-1 d-flex gap-4 align-items-center">
                 <div class="w-50">
-                    <input type="search" name="search" id="search-name" placeholder="بحث">
-                </div>
-                {{-- <div class="select-btn w-50 select position-relative rounded-3 d-flex align-items-center">
-                    <button class="w-100 d-flex justify-content-between"
-                        onclick="dropdown('valueDateAddLast3', 'listDateAddLast3')">
-                        <span class="fw-bold opacity-50 valueDropdown" id="valueDateAddLast3">الحاله</span>
-                        <img src="./Assets/imgs/chevron-down.png" alt="">
-                    </button>
-                    <div class="options none">
-                        <ul id="listDateAddLast3">
-                            <li>النوع 1</li>
-                            <li>النوع 2</li>
-                            <li>النوع 3</li>
-                        </ul>
-                    </div>
-                </div> --}}
-                <div class="w-100">
-                    <select class="js-example-basic-single rent" id="">
-                        <option disabled selected>
-                            اختر الحاله
-                        </option>
-
-                        <option value="">متعاقد</option>
-                        <option value="">منقول</option>
-                        <option value="">منتهي</option>
-                    </select>
+                    <input type="search" name="search" id="search-name" placeholder="بحث بإسم المنتج">
                 </div>
             </div>
 
 
-            <div class="up p-2 d-flex justify-content-between overflow-auto">
+            <div class="up p-2 d-flex overflow-auto">
                 @foreach ($rents as $rent)
-                    <div data-id="{{ $rent->id }}" data-type="rent" class="box id-{{ $rent->id }}">
+                    <div class="box open-modal" data-type="rent" data-id="{{ $rent->id }}">
                         <div class="info-box p-3">
-                            <div class="d-block fs-5">اسم المنتج: {{ $rent->name }}</div>
-                            <div class="fs-5">السعر: {{ $rent->sale_price }}</div>
-                            <div class="fs-5">الكميه: {{ $rent->quantity }}</div>
+                            <div class="d-block fs-5"><b>اسم المنتج:</b> {{ $rent->name }}</div>
+                            <div class="fs-5"><b>السعر:</b> {{ $rent->sale_price }} جنيه</div>
+                            <div class="fs-5"><b>الكميه:</b> {{ $rent->quantity }}</div>
                         </div>
                     </div>
                 @endforeach
@@ -186,240 +143,72 @@
                         stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </div>
-
             <div class="total active-btn mt-2" id="totalPrice">اجمالي السعر 900</div>
         </div>
     </div>
 
 
-    <div class="popup-add popup close shadow-sm rounded-3 position-fixed" id="popupAddOurProduct" data-type="items">
-        <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
+    <div class="popup-add popup close shadow-sm rounded-3 position-absolute overflow-auto" id="popupModal">
+        <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" id="dismiss" alt="">
+        <h2 class="text-center mt-4 mb-4 opacity-75" id="modalTitle"></h2>
+        <input type="hidden" id="productId">
+        <input type="hidden" id="rentId">
+        <input type="hidden" id="from">
+        <input type="hidden" id="partyId">
 
-        <h2 class="text-center mt-4 mb-4 opacity-75">اضافة <span id="nameProduct"></span></h2>
-        <div class="f-row d-flex gap-4">
-            <div>
-                <label class="d-block mb-1" for="countity">الكميه</label>
-                <input type="text" name="text" id="countity" placeholder="...">
-            </div>
-            <div>
-                <label class="d-block mb-1" for="unit-price">سعر الوحده</label>
-                <input type="text" name="text" id="unit-price" placeholder="...">
-            </div>
-        </div>
-        <div class="f-row">
-            <div class="select-form gap-2">
-                <label for="" class="mb-2">النوع</label>
-                <select name="" id="select-type" class="w-100 p-2 rounded-2 select-type" id="type">
-                    <option value="rent">ايجار</option>
-                    <option value="sale">بيع</option>
-                    <option value="eol">هالك</option>
-                </select>
-            </div>
 
+        <div class="modalInputsContainers" id="nameContainer" style="display: none">
+            <label class="d-block mb-1" for="name">الاسم</label>
+            <input type="text" id="name" placeholder="ضع اسم">
         </div>
-        <div class="eolReason">
-            <label class="d-block" for="textarea">سبب الهلاك</label>
-            <textarea name="textarea" id="textarea" cols="30" rows="10" placeholder=".."></textarea>
+
+        <div class="modalInputsContainers" id="totalPriceContainer" style="display: none">
+            <label class="d-block mb-1" for="totalPrice">السعر الاجمالي</label>
+            <input type="number" step="0.1" id="totalPrice" placeholder="ضع السعر الاجمالي">
         </div>
-        <div class="form-check-2 form-check-checkbox">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault20" checked>
+
+        <div class="modalInputsContainers" id="quantityContainer" style="display: none">
+            <label class="d-block mb-1" for="quantity">الكميه</label>
+            <input type="number" id="quantity" placeholder="ضع الكميه المطلوبه">
+        </div>
+
+        <div class="modalInputsContainers" id="unitPriceContainer" style="display: none">
+            <label class="d-block mb-1" for="unitPrice">سعر الوحده</label>
+            <input type="number" step="0.1" id="unitPrice" placeholder="ضع سعر الوحده">
+        </div>
+
+        <div class="modalInputsContainers" id="typeInputContainer" style="display: none">
+            <label class="d-block mb-1" for="typeInput">النوع</label>
+            <select class="js-example-basic-single type" id="typeInput">
+                <option value="" disabled selected>اختر النوع</option>
+                <option value="rent">ايجار</option>
+                <option value="sale">بيع</option>
+                <option value="eol">هالك</option>
+            </select>
+        </div>
+
+        <div class="modalInputsContainers" id="eolReasonContainer" style="display: none">
+            <label class="d-block" for="eolReason">سبب الهلاك</label>
+            <textarea name="textarea" id="eolReason" cols="30" rows="10" placeholder="ضع سبب الهلاك"></textarea>
+        </div>
+
+        <div class="form-check-2 form-check-checkbox modalInputsContainers" id="statusContainer" style="display: none">
+            <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault20" checked>
             <label class="form-check-label" for="flexCheckDefault20" id="status">جاهز</label>
         </div>
-        <button class="main-btn" id="AddToCart">اضافه</button>
-    </div>
 
-    <div class="popup-edit popup close shadow-sm rounded-3 position-fixed" id="popupEditOurProduct" data-type="items">
-        <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
-        <h2 class="text-center mt-4 mb-4 opacity-75">تعديل <span id="nameProduct"></span></h2>
-        <div class="f-row d-flex gap-4">
-            <div>
-                <label class="d-block mb-1" for="category-name">الكميه</label>
-                <input type="text" name="text" id="category-name" placeholder="...">
-            </div>
-            <div>
-                <label class="d-block mb-1" for="category-name">سعر الوحده</label>
-                <input type="text" name="text" id="category-name" placeholder="...">
-            </div>
-        </div>
-        <div class="f-row d-flex gap-4">
-            <div>
-                <label class="d-block mb-1" for="buy-price">اجمالي السعر</label>
-                <input type="text" name="text" id="buy-price" placeholder="...">
-            </div>
-            <div class="select-form">
-                <label for="">النوع</label>
-                <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
-                    <button class="w-100 d-flex justify-content-between"
-                        onclick="dropdown('valueCategoriesNameEdit', 'listCategoriesNameEdit')">
-                        <span class="fw-bold opacity-50 valueDropdown" id="valueCategoriesNameEdit"></span>
-                        <img src="./Assets/imgs/chevron-down.png" alt="">
-                    </button>
-                    <div class="options none">
-                        <ul id="listCategoriesNameEdit">
-                            <li class="p-0" id="search">
-                                <input class="search" type="search" placeholder="بحث">
-                            </li>
-                            <li>النوع</li>
-                            <li>النوع 1</li>
-                            <li>النوع 2</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <div class="eolReason">
-            <label class="d-block" for="textarea">سبب الهلاك (لو هالك)</label>
-            <textarea name="textarea" id="textarea" cols="30" rows="10" placeholder=".."></textarea>
-        </div>
-        <div class="form-check-2 form-check-checkbox">
-            <input class="form-check-input children" type="checkbox" value="" id="flexCheckDefault2">
-            <label class="form-check-label children" for="flexCheckDefault2">قيد التحضير</label>
-            <!-- <label class="form-check-label beReady none" for="flexCheckDefault2">جاهز</label> -->
-        </div>
-        <button class="main-btn">اضافه</button>
+        <button class="main-btn" id="modalSubmitBtn"></button>
     </div>
     <!-- end of popup  ourProduct-->
 
-    <!-- start of popup rent -->
-    <div class="popup-add popup close shadow-sm rounded-3 position-fixed" id="popupAddRent" data-type="rent">
-        <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
-        <h2 class="text-center mt-4 mb-4 opacity-75">اضافة <span id="nameProduct"></span></h2>
-        <div class="f-row d-flex gap-4">
-            <div>
-                <label class="d-block mb-1" for="category-name">الكميه</label>
-                <input type="text" name="text" id="category-name countity" placeholder="...">
-            </div>
-            <div class="select-form">
-                <label for="" class="mb-1">النوع</label>
-                <div class="select-form gap-2">
-                    <select name="" id="select-type" class="w-100 p-2 rounded-2 select-type" id="type">
-                        <option value="rent">ايجار</option>
-                        <option value="sale">بيع</option>
-                        <option value="eol">هالك</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="eolReason">
-            <label class="d-block" for="textarea">سبب الهلاك (لو هالك)</label>
-            <textarea name="textarea" id="textarea" cols="30" rows="10" placeholder=".."></textarea>
-        </div>
-        <div class="form-check-2 form-check-checkbox">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault23" checked>
-            <label class="form-check-label" for="flexCheckDefault23">جاهز</label>
-        </div>
-        <button class="main-btn" id="AddToCart">اضافه</button>
-    </div>
+    <div class="overlay-alfa position-absolute none w-100 h-100"></div>
 
-    <div class="popup-edit popup close shadow-sm rounded-3 position-fixed" id="popupEditRent" data-type="rent">
-        <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
-        <h2 class="text-center mt-4 mb-4 opacity-75">تعديل <span id="nameProduct"></span></h2>
-        <div class="f-row d-flex gap-4">
-            <div>
-                <label class="d-block mb-1" for="category-name">الكميه</label>
-                <input type="text" name="text" id="category-name" placeholder="...">
-            </div>
-            <div class="select-form">
-                <label for="">النوع</label>
-                <div class="select-btn select position-relative rounded-3 d-flex align-items-center">
-                    <button class="w-100 d-flex justify-content-between"
-                        onclick="dropdown('valueCategoriesNameEdit3', 'listCategoriesNameEdit3')">
-                        <span class="fw-bold opacity-50 valueDropdown" id="valueCategoriesNameEdit3"></span>
-                        <img src="./Assets/imgs/chevron-down.png" alt="">
-                    </button>
-                    <div class="options none">
-                        <ul id="listCategoriesNameEdit3">
-                            <li class="p-0" id="search">
-                                <input class="search" type="search" placeholder="بحث">
-                            </li>
-                            <li>النوع</li>
-                            <li>النوع 1</li>
-                            <li>النوع 2</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="eolReason">
-            <label class="d-block" for="textarea">سبب الهلاك (لو هالك)</label>
-            <textarea name="textarea" id="textarea" cols="30" rows="10" placeholder=".."></textarea>
-        </div>
-        <div class="form-check-2 form-check-checkbox">
-            <input class="form-check-input children" type="checkbox" value="" id="flexCheckDefault25">
-            <label class="form-check-label children" for="flexCheckDefault25">قيد التحضير</label>
-            <!-- <label class="form-check-label beReady none" for="flexCheckDefault2">جاهز</label> -->
-        </div>
-        <button class="main-btn">اضافه</button>
-    </div>
-    <!-- end of popup rent -->
-
-    <!-- start of popuo special -->
-    <div class="popup-add popup close shadow-sm rounded-3 position-fixed" id="popupAddSpecial" data-type="custom">
-        <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
-        <h2 class="text-center mt-4 mb-4 opacity-75">تكلفه اضافيه مخصصه</h2>
-        <div class="f-row d-flex gap-4">
-            <div>
-                <label class="d-block mb-1" for="category-name">الاسم</label>
-                <input type="text" name="text" id="category-name" placeholder="الاسم">
-            </div>
-        </div>
-        <div class="f-row d-flex gap-4">
-            <div>
-                <label class="d-block mb-1" for="category-name">السعر </label>
-                <input type="text" name="text" id="category-name" placeholder="السعر">
-            </div>
-        </div>
-        <div class="form-check-2 form-check-checkbox">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault29" checked>
-            <label class="form-check-label" for="flexCheckDefault29">جاهز</label>
-        </div>
-        <button class="main-btn" id="AddToCart">اضافه</button>
-    </div>
-
-    <div class="popup-edit popup close shadow-sm rounded-3 position-fixed" id="popupEditSpecial" data-type="custom">
-        <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
-        <h2 class="text-center mt-4 mb-4 opacity-75">تعديل تكلفه اضافيه</h2>
-        <div class="f-row d-flex gap-4">
-            <div>
-                <label class="d-block mb-1" for="category-name">الاسم</label>
-                <input type="text" name="text" id="category-name" placeholder="...">
-            </div>
-        </div>
-        <div class="f-row d-flex gap-4">
-            <div>
-                <label class="d-block mb-1" for="category-name">السعر </label>
-                <input type="text" name="text" id="category-name" placeholder="...">
-            </div>
-        </div>
-        <div class="form-check-2 form-check-checkbox">
-            <input class="form-check-input children" type="checkbox" value="" id="flexCheckDefault27">
-            <label class="form-check-label children" for="flexCheckDefault27">قيد التحضير</label>
-            <!-- <label class="form-check-label beReady none" for="flexCheckDefault2">جاهز</label> -->
-        </div>
-        <button class="main-btn">اضافه</button>
-    </div>
-    <!-- end of popuo special -->
-
-    <div class="popup-delete popup close shadow-sm rounded-3 position-fixed">
-        <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
-        <h3 class="fs-5 fw-bold mb-3">حذف العنصر</h3>
-        <p>هل تريد الحذف متاكد !!</p>
-        <div class="buttons mt-5 d-flex">
-            <button class="agree rounded-2">نعم أريد</button>
-            <button class="disagree me-3 text-light rounded-2 main-btn">لا أريد</button>
-        </div>
-    </div>
-
-    <div class="overlay position-absolute none w-100 h-100"></div>
-
-    <div class="w-100 d-flex justify-content-end mt-5 mb-5" id="addNewProduct">
+    <div class="w-100 d-flex justify-content-end mt-5 mb-5">
         <form action="{{ route('party.addBillStore', $id) }}" method="post">
             @csrf
             <button class="submit main-btn p-3 ps-4 pe-4" type="submit">اضافه</button>
         </form>
     </div>
-    {{-- @endif --}}
 @endsection
 
 @section('script')
@@ -430,175 +219,179 @@
 
 
     <script>
-        let name = document.querySelector("#popupAddOurProduct h2 span");
-        let quantity = document.querySelector("#popupAddOurProduct #countity");
-        let unitPrice = document.querySelector("#popupAddOurProduct #unit-price");
-        let select = document.querySelector("#popupAddOurProduct select");
-
-        // select.addEventListener("change", () => {
-
-
-        // })
-
-        let textarea = document.querySelector("#popupAddOurProduct textarea");
-        let checbox = document.querySelector("#popupAddOurProduct .form-check-2 label");
-        let type = document.querySelector("#popupAddOurProduct").dataset.type;
-        // let boxs = document.querySelectorAll("#ourProduct .products .box");
-        let mainProducts = [];
-
-        document.querySelector("#popupAddOurProduct #AddToCart").addEventListener("click", () => {
-            if (checbox.innerHTML === "جاهز") {
-                checbox.classList.add("ready")
-                checbox.classList.remove("perparing");
-            } else {
-                checbox.classList.remove("ready");
-                checbox.classList.add("perparing");
-            }
-
-            let popupAdd = document.querySelectorAll(".popup-add")
-            popupAdd.forEach(popup => {
-
-                if (!popup.classList.contains("close")) {
-
-                    mainProducts.push(
-                        bill = {
-                            "party_id": "",
-                            "from": type,
-                            "product_id": "",
-                            "rent_id": "",
-                            "name": name.innerHTML,
-                            "quantity": quantity.value,
-                            "unitPrice": unitPrice.value,
-                            "totalPrice": totalPrice.value,
-                            "type": select.value,
-                            "eol_ression": textarea.value,
-                            "status": checbox.classList[1]
-                        }
-                    )
-
-                }
-
-            })
-
-            let values = JSON.stringify(mainProducts);
-            localStorage.setItem("products", values);
-
-            let object = localStorage.getItem("products");
-            let realObject = JSON.parse(object)
-            let lastObject = realObject[mainProducts.length - 1];
-
-            let element = document.createElement("div");
-            element.classList.add("element");
-
-            let productName = document.createElement("span");
-            let productNameText = document.createTextNode(lastObject.name)
-            productName.appendChild(productNameText);
-            productName.classList.add("productName");
-
-            let countity = document.createElement("span");
-            let countityText = document.createTextNode(lastObject.quantity);
-            countity.appendChild(countityText);
-            countity.classList.add("countity");
-
-            let price = document.createElement("span");
-            let priceText = document.createTextNode(lastObject.unitPrice);
-            price.appendChild(priceText);
-            price.classList.add("price");
-
-            let totalPricee = document.createElement("span");
-            let totalPriceeText = document.createTextNode(lastObject.unitPrice * lastObject.quantity);
-            totalPricee.appendChild(totalPriceeText);
-            totalPricee.classList.add("totalPrice");
-
-            let typeA = document.createElement("span");
-            let typeAText = document.createTextNode(lastObject.type);
-            typeA.appendChild(typeAText);
-            typeA.classList.add("type");
-
-            let status = document.createElement("span");
-            let statusText = document.createTextNode(lastObject.status);
-            status.appendChild(statusText);
-            status.classList.add("status");
-
-            let edit = document.createElement("div");
-            edit.classList.add("edit");
-            let editIcon = document.createElement("img");
-            editIcon.src = "{{ asset('Assets/imgs/edit-circle.png') }}";
-            let removeIcon = document.createElement("img");
-            removeIcon.src = "{{ asset('Assets/imgs/trash (1).png') }}";
-            edit.appendChild(editIcon);
-            edit.appendChild(removeIcon);
-
-
-            element.appendChild(productName);
-            element.appendChild(countity);
-            element.appendChild(price);
-            element.appendChild(totalPricee);
-            element.appendChild(typeA);
-            element.appendChild(status);
-            element.appendChild(edit);
-
-            console.log(element);
-            if (typeA.innerHTML === "sale") {
-                typeA.innerHTML = "بيع"
-            } else if (typeA.innerHTML === "rent") {
-                typeA.innerHTML = "ايجار"
-            } else {
-                typeA.innerHTML = "هالك"
-            }
-
-            if (status.innerHTML === "ready") {
-                status.innerHTML = "جاهز"
-                status.classList.add("live");
-            } else {
-                status.innerHTML = "قيد التحضير"
-                status.classList.add("died");
-            }
-            document.querySelector(".elements .total").before(element);
-            document.querySelector("#popupAddOurProduct").classList.add("close");
-            document.querySelector(".overlay").classList.add("none");
-            document.querySelector("body").classList.remove("overflow-hidden");
-
-        })
-    </script>
-
-
-    <script>
-        function hideEolReason() {
-            const types = document.querySelectorAll('.select-type');
-            const eolReason = document.querySelectorAll('.eolReason');
-
-            types.forEach(type => {
-                if (type.value !== "eol") {
-                    eolReason.forEach(box => {
-                        box.style.display = "none";
-                    });
-                } else {
-                    eolReason.forEach(box => {
-                        box.style.display = "block";
-                    });
-                }
+        $(document).ready(function() {
+            //init ddws
+            $('.js-example-basic-single.product').select2({
+                placeholder: 'ابحث بالقسم'
             });
-        }
+            $('.js-example-basic-single.type').select2({
+                placeholder: 'اختر النوع'
+            });
 
-        document.querySelectorAll('.box').forEach(box => {
-            box.addEventListener('click', hideEolReason);
-        });
+            //tabs btns
+            $(".tabs").on("click", function() {
+                let $button = $(this);
+                let goto = $(this).data("goto");
 
-        document.querySelectorAll('.select-type').forEach(select => {
-            select.addEventListener('change', hideEolReason);
+                $(".tabs").removeClass("active-btn");
+                $button.addClass("active-btn");
+
+                $(".part").hide().removeClass("show");
+
+                $(`#${goto}`).css("display", "flex").addClass("show");
+            });
+
+            //init hide modal inputs
+            function hideModalInputs(modal) {
+                modal.find('.modalInputsContainers').hide();
+            }
+
+            //init modal reset
+            function resetModalInputs(modal) {
+                modal.find('input#productId').val('');
+                modal.find('input#rentId').val('');
+                modal.find('input#from').val('');
+                modal.find('input#partyId').val('');
+
+                modal.find('#nameContainer input#name').val('');
+                modal.find('#totalPriceContainer input#totalPrice').val('');
+                modal.find('#quantityContainer input#quantity').val('');
+                modal.find('#unitPriceContainer input#unitPrice').val('');
+                modal.find('#typeInputContainer select#typeInput').val('').trigger('change');
+                modal.find('#typeInputContainer select#typeInput').val(modal.find(
+                    '#typeInputContainer select#typeInput').prop('defaultSelected'));
+                modal.find('#eolReasonContainer textarea#eolReason').val('');
+                modal.find('#statusContainer input#name').val('');
+                modal.find('#statusContainer input#name').prop('checked', true);
+
+                hideModalInputs(modal);
+            }
+
+            //init modal open
+            function openModal(modal) {
+                modal.removeClass('close');
+                $('body').addClass('overflow-hidden');
+                $('.overlay-alfa').removeClass('none');
+            }
+
+            //init close modal
+            function closeModal(modal) {
+                modal.addClass('close');
+                $('body').removeClass('overflow-hidden');
+                $('.overlay-alfa').addClass('none');
+                resetModalInputs(modal);
+            }
+
+            //init product inputs
+            function productInputs(modal, id) {
+                modal.find('#productId').val(id);
+                modal.find('#unitPriceContainer').show();
+            }
+
+            //init rent inputs
+            function rentInputs(modal, id) {
+                modal.find('#rentId').val(id);
+            }
+
+            //init product and rents inputs
+            function productAndRentInputs(modal) {
+                modal.find('#quantityContainer').show();
+                modal.find('#typeInputContainer').show();
+                modal.find('#statusContainer').show();
+            }
+
+            //init custom inputs
+            function customInputs(modal) {
+                modal.find('#nameContainer').show();
+                modal.find('#totalPriceContainer').show();
+            }
+
+
+            //modals actions
+            $('.open-modal').click(function() {
+                let type = $(this).data('type');
+                let id = $(this).data('id');
+                let action = $(this).data('action');
+                let modal = $('#popupModal');
+                let title = modal.find('#modalTitle');
+                let formBtn = modal.find('#modalSubmitBtn');
+
+                // status checkbox change inner text
+                modal.find('.form-check-2 input').on("change", function() {
+                    let $parent = $(this).parent();
+                    let $lable = $parent.find('label#status');
+                    $parent.toggleClass("notReady");
+
+                    if ($parent.hasClass("notReady")) {
+                        $lable.text("قيد التحضير");
+                        $(this).val(0);
+                    } else {
+                        $lable.text("جاهز");
+                        $(this).val(1);
+                    }
+                });
+
+                //eol reason toggle
+                modal.find('#typeInputContainer select#typeInput').on('change', function() {
+                    if ($(this).val() == 'eol') {
+                        modal.find('#eolReasonContainer').show();
+                    }
+                });
+
+                // form button name
+                if (!action) {
+                    formBtn.text('اضافه الى الفاتوره')
+
+                    //init default values
+                    modal.find('#from').val(type);
+                    modal.find('#partyId').val('{{ $id }}');
+
+                    // modal inputs data debend on type
+                    switch (type) {
+                        case 'items':
+                            title.text('اضافه عنصر من المخزن');
+                            productInputs(modal, id);
+                            break;
+                        case 'rent':
+                            title.text('اضافه عنصر من قايمه الإيجار');
+                            rentInputs(modal, id);
+                            break;
+                        case 'custom':
+                            title.text('اضافه عنصر مخصص');
+                            customInputs(modal);
+                            break;
+                        default:
+                            break;
+                    }
+                    if (type === 'items' || type === 'rent') {
+                        productAndRentInputs(modal);
+                    }
+                } else if (action == 'edit') {
+                    formBtn.text('تعديل الفاتوره')
+                } else if (action == 'delete') {
+                    formBtn.text('حذف الفاتوره')
+                } else {
+                    formBtn.text('حفظ التعديلات')
+                }
+
+
+                // open this modal
+                openModal(modal);
+
+                // listen on dismiss modal
+                $(".popup img#dismiss").click(function() {
+                    if (!$(this).parent().hasClass("none")) {
+                        closeModal(modal);
+                    }
+                });
+
+                $(".overlay-alfa").on("click", function(e) {
+                    if ($(e.target).hasClass("overlay-alfa")) {
+                        closeModal(modal);
+                    }
+                });
+            });
+
         });
     </script>
-
-    {{-- For Select JQuery  --}}
-    <script>
-        $(document).ready(function() {
-            $('.js-example-basic-single.rent').select2();
-        });
-        $(document).ready(function() {
-            $('.js-example-basic-single.product').select2();
-        });
-    </script>
-
-
 @endsection
