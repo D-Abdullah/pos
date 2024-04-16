@@ -130,35 +130,46 @@ class SupplierController extends Controller
      */
     public function deposits(Request $request, $id)
     {
-        // try {
-        $supplier = Supplier::find($id);
-        if (!$supplier) {
-            return redirect()->back()->with(['error' => 'حدث خطأ انت تحاول تحديث مورد غير موجود.']);
-        }
+        try {
+            $supplier = Supplier::find($id);
+            if (!$supplier) {
+                return redirect()->back()->with(['error' => 'حدث خطأ انت تحاول تحديث مورد غير موجود.']);
+            }
 
-        # equations
-        $totalRequired = $supplier->purchases()->sum('total_price');
-        $totalPaid = $supplier->deposits()->where('is_paid', '1')->sum('cost');
-        $totalReceivables = $totalRequired - $totalPaid;
-        $supplier->total_required = $totalRequired;
-        $supplier->total_paid = $totalPaid;
-        $supplier->total_receivables = $totalReceivables;
-        ##################################################
-        $depositsCollection = collect($request->input('deposits'));
-        $totalCost = $depositsCollection->sum('cost');
-        if ($supplier->total_receivables < $totalCost) {
-            return redirect()->back()->withInput($request->all())->with(['error' => 'المبلغ المدفوع اكبر من المبلغ المطلوب.']);
-        }
-        if ($supplier->deposits->count() > 0) {
-            foreach ($request->input('deposits') as $deposit) {
-                if (isset($deposit['id'])) {
-                    $depositM = Deposit::where('id', $deposit['id']);
-                    $depositM->update([
-                        'cost' => $deposit['cost'],
-                        'date' => $deposit['date'],
-                        'is_paid' => $deposit['is_paid'] ?? 0,
-                    ]);
-                } else {
+            # equations
+            $totalRequired = $supplier->purchases()->sum('total_price');
+            $totalPaid = $supplier->deposits()->where('is_paid', '1')->sum('cost');
+            $totalReceivables = $totalRequired - $totalPaid;
+            $supplier->total_required = $totalRequired;
+            $supplier->total_paid = $totalPaid;
+            $supplier->total_receivables = $totalReceivables;
+            ##################################################
+            $depositsCollection = collect($request->input('deposits'));
+            $totalCost = $depositsCollection->sum('cost');
+            if ($supplier->total_receivables < $totalCost) {
+                return redirect()->back()->withInput($request->all())->with(['error' => 'المبلغ المدفوع اكبر من المبلغ المطلوب.']);
+            }
+            if ($supplier->deposits->count() > 0) {
+                foreach ($request->input('deposits') as $deposit) {
+                    if (isset($deposit['id'])) {
+                        $depositM = Deposit::where('id', $deposit['id']);
+                        $depositM->update([
+                            'cost' => $deposit['cost'],
+                            'date' => $deposit['date'],
+                            'is_paid' => $deposit['is_paid'] ?? 0,
+                        ]);
+                    } else {
+                        Deposit::create([
+                            'cost' => $deposit['cost'],
+                            'date' => $deposit['date'],
+                            'type' => "supplier",
+                            'is_paid' => $deposit['is_paid'] ?? 0,
+                            'supplier_id' => $supplier->id,
+                        ]);
+                    }
+                }
+            } else {
+                foreach ($request->input('deposits') as $deposit) {
                     Deposit::create([
                         'cost' => $deposit['cost'],
                         'date' => $deposit['date'],
@@ -168,24 +179,13 @@ class SupplierController extends Controller
                     ]);
                 }
             }
-        } else {
-            foreach ($request->input('deposits') as $deposit) {
-                Deposit::create([
-                    'cost' => $deposit['cost'],
-                    'date' => $deposit['date'],
-                    'type' => "supplier",
-                    'is_paid' => $deposit['is_paid'] ?? 0,
-                    'supplier_id' => $supplier->id,
-                ]);
-            }
-        }
-        return redirect()->route('supplier.all')->with(['success' => 'تم تحديث دفعات المورد ' . $supplier->name . ' بنجاح.']);
-        // } catch (\Exception $e) {
-        //     DB::rollBack();
-        //     Log::error('حدث خطأ أثناء تحديث المورد: ' . $e->getMessage());
+            return redirect()->route('supplier.all')->with(['success' => 'تم تحديث دفعات المورد ' . $supplier->name . ' بنجاح.']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('حدث خطأ أثناء تحديث المورد: ' . $e->getMessage());
 
-        //     return redirect()->back()->withInput($request->all())->with(['error' => 'حدث خطأ أثناء تحديث المورد. يرجى المحاولة مرة أخرى.']);
-        // }
+            return redirect()->back()->withInput($request->all())->with(['error' => 'حدث خطأ أثناء تحديث المورد. يرجى المحاولة مرة أخرى.']);
+        }
     }
 
     /**

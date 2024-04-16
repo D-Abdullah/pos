@@ -196,7 +196,9 @@
                                     data-id="{{ $supplier->id }}" alt="" id="trash">
 
                                 <img class="ms-2 me-2 dolar-icon" src="{{ asset('Assets/imgs/dolar.svg') }}"
-                                    data-id="{{ $supplier->id }}" alt="" id="dolar">
+                                    data-action="{{ $supplier->deposits->count() > 0 ? 'edit' : 'add' }}"
+                                    data-pt="{{ $supplier->payment_type }}" data-id="{{ $supplier->id }}"
+                                    alt="" id="dolar">
 
                             </div>
                         </td>
@@ -264,9 +266,6 @@
                                     <button class="main-btn">تحديث</button>
                                 </form>
                             </div>
-
-
-
                             <div
                                 class="popup-delete id-{{ $supplier->id }} popup close shadow-sm rounded-3 position-fixed">
                                 <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
@@ -282,11 +281,12 @@
 
                             <div
                                 class="popup-dolar id-{{ $supplier->id }} popup close shadow-sm rounded-3 position-fixed overflow-auto">
-                                <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
+                                <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" id="dismiss"
                                     alt="">
+                                <h3 class="mt-3">كشف حساب المورد {{ $supplier->name }}</h3>
                                 <div class="dolar-container p-5 d-flex flex-column">
                                     <div
-                                        class="dolar-info d-flex  flex-column justify-content-center  align-items-start gap-3">
+                                        class="dolar-info d-flex flex-column justify-content-center  align-items-start gap-3">
                                         <p> <span class="fw-bold"> التكلفة الإجمالية المطلوبة :</span>
                                             <span>{{ number_format($supplier->total_required, 0, ',', ',') }} جنيه</span>
                                         </p>
@@ -299,14 +299,15 @@
                                         </p>
 
                                     </div>
-                                    <form id="dolar-form" class="id-{{ $supplier->id }}"
-                                        action="{{ route('supplier.deposits', $supplier->id) }}" method="post">
-                                        @csrf
-                                        @method('PATCH')
-                                        <div class="buttons mt-5 d-flex justify-content-center">
-                                            <div class="elements w-100">
-                                                @if ($supplier->total_receivables > 0)
-                                                    <div class="d-flex justify-content-start">
+                                    @if ($supplier->total_receivables > 0)
+                                        <form id="dolar-form" action="{{ route('supplier.deposits', $supplier->id) }}"
+                                            method="post">
+                                            @csrf
+                                            @method('PATCH')
+                                            <div class="buttons mt-5 d-flex justify-content-center">
+                                                <div class="elements w-100">
+
+                                                    <div class="d-flex justify-content-start" id="addElementContainerBtn">
                                                         <button type="button"
                                                             class="addElement  id-{{ $supplier->id }} main-btn p-2 ps-3 pe-3 specialBtn m-0 mt-2 mb-2"
                                                             id="addElement">
@@ -328,94 +329,51 @@
                                                             </svg>
                                                         </button>
                                                     </div>
-                                                @endif
-                                                @if ($supplier->deposits->count() > 0)
+
                                                     <div id="addDepositsContainer"
-                                                        class="addDepositsContainer id-{{ $supplier->id }}-edit">
-                                                        @foreach ($supplier->deposits as $i => $deposit)
-                                                            <div
-                                                                class="f-row d-flex gap-4 align-items-end deposit-section id-{{ $supplier->id }}-edit">
-                                                                <input type="hidden"
-                                                                    name="deposits[{{ $i }}][id]"
-                                                                    value="{{ $deposit->id }}">
-                                                                <div>
-                                                                    <label class="d-block mb-1"
-                                                                        for="deposit-amount">المبلغ</label>
-                                                                    <input type="text"
-                                                                        name="deposits[{{ $i }}][cost]"
-                                                                        class="deposit-amount category-input form-control"
-                                                                        placeholder="المبلغ"
-                                                                        value="{{ $deposit->cost }}">
-                                                                </div>
-                                                                <div>
-                                                                    <label class="d-block mb-1"
-                                                                        for="deposit-date">التاريخ</label>
-                                                                    <input type="date"
-                                                                        name="deposits[{{ $i }}][date]"
-                                                                        class="deposit-date category-input form-control"
-                                                                        placeholder="التاريخ"
-                                                                        value="{{ $deposit->date }}">
-                                                                </div>
-                                                                <button type="button" class="remove-btn p-3" hidden
-                                                                    disabled><i class="fa-solid fa-trash"></i></button>
-                                                                @if ($deposit->is_paid == 0)
-                                                                    <button type="button"
-                                                                        class="check-btn id-{{ $supplier->id }} p-3 ">
-                                                                        <i class="fa-solid fa-check"></i>
-                                                                    </button>
-                                                                @endif
-                                                                <input class="is-paid" type="hidden"
-                                                                    value="{{ $deposit->is_paid }}"
-                                                                    name="deposits[{{ $i }}][is_paid]">
+                                                        class="addDepositsContainer id-{{ $supplier->id }}">
+                                                        <div
+                                                            class="f-row d-flex gap-4 align-items-end deposit-section id-{{ $supplier->id }}">
+                                                            <div>
+                                                                <label class="d-block mb-1"
+                                                                    for="deposit-amount">المبلغ</label>
+                                                                <input type="text" name="deposits[0][cost]"
+                                                                    class="deposit-amount category-input form-control"
+                                                                    placeholder="المبلغ" required>
                                                             </div>
-                                                        @endforeach
-                                                    </div>
-                                                @else
-                                                    @if ($supplier->total_receivables > 0)
-                                                        <div id="addDepositsContainer"
-                                                            class="addDepositsContainer id-{{ $supplier->id }}">
-                                                            <div
-                                                                class="f-row d-flex gap-4 align-items-end deposit-section id-{{ $supplier->id }}">
-                                                                <div>
-                                                                    <label class="d-block mb-1"
-                                                                        for="deposit-amount">المبلغ</label>
-                                                                    <input type="text" name="deposits[0][cost]"
-                                                                        class="deposit-amount category-input form-control"
-                                                                        placeholder="المبلغ"
-                                                                        value="{{ old('deposits.0.cost') }}">
-                                                                </div>
-                                                                <div>
-                                                                    <label class="d-block mb-1"
-                                                                        for="deposit-date">التاريخ</label>
-                                                                    <input type="date" name="deposits[0][date]"
-                                                                        class="deposit-date category-input form-control"
-                                                                        placeholder="التاريخ"
-                                                                        value="{{ old('deposits.0.date') }}">
-                                                                </div>
-                                                                <button type="button" class="remove-btn p-3" hidden
-                                                                    disabled><i class="fa-solid fa-trash"></i></button>
+                                                            <div>
+                                                                <label class="d-block mb-1"
+                                                                    for="deposit-date">التاريخ</label>
+                                                                <input type="date" name="deposits[0][date]"
+                                                                    class="deposit-date category-input form-control"
+                                                                    placeholder="التاريخ" required>
+                                                            </div>
+                                                            <button type="button" class="remove-btn p-3" disabled><i
+                                                                    class="fa-solid fa-trash"></i></button>
 
-                                                                <button type="button" class="check-btn p-3 ">
-                                                                    <i class="fa-solid fa-check"></i>
-                                                                </button>
-                                                                <input class="is-paid" type="hidden" value="0"
-                                                                    name="deposits[0][is_paid]">
-                                                            </div>
+                                                            <button type="button" class="check-btn p-3 ">
+                                                                <i class="fa-solid fa-check"></i>
+                                                            </button>
+                                                            <input class="is-paid" type="hidden" value="0"
+                                                                name="deposits[0][is_paid]">
                                                         </div>
-                                                    @endif
-                                                @endif
+                                                    </div>
 
-
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div id="invalidDolar" class="invalid invalidDolar my-3"></div>
-                                        @if ($supplier->total_receivables > 0)
-                                            <button class="dollar-btn w-100" type="submit">
-                                                تـأكيد
-                                            </button>
-                                        @endif
-                                    </form>
+                                            <div id="invalidDolar" class="invalid invalidDolar my-3">
+                                            </div>
+                                            @if ($supplier->total_receivables > 0)
+                                                <button class="dollar-btn w-100" type="submit"
+                                                    id="modalSubmitBtnDollar">
+                                                    تـأكيد
+                                                </button>
+                                            @endif
+                                        </form>
+                                    @else
+                                        <h3 class="text-danger mt-3">لا يوجد مستحقات </h3>
+                                    @endif
                                 </div>
 
                             </div>
@@ -458,6 +416,7 @@
 
 
     <div class="overlay position-fixed none w-100 h-100"></div>
+    <div class="overlay-alfa position-fixed none w-100 h-100"></div>
 
 @endsection
 
@@ -636,6 +595,9 @@
 
             for (let i = 0; i < addInputs.length; i++) {
                 if (addInputs[i].value.trim() === "") {
+                    if (addInputs[i].name == 'email') {
+                        continue;
+                    }
                     event.preventDefault();
                     const inputName = addInputs[i].getAttribute('placeholder');
                     addMessage.textContent = `الحقل ${inputName} مطلوب`;
@@ -648,10 +610,6 @@
             }
         });
     </script>
-
-
-
-
 
     {{-- Delete --}}
     <script>
@@ -726,182 +684,124 @@
 
             // Submit the form
             form.submit();
-
         }
     </script>
 
-    <script>
-        document.querySelectorAll("#dolar").forEach((dolar) => {
-            let id = dolar.dataset.id;
-
-            dolar.addEventListener("click", (e) => {
-                document.querySelector("body").classList.add("overflow-hidden");
-
-                document.querySelector(".overlay").classList.remove("none");
-
-                document.querySelector(`.popup-dolar.id-${id}`).classList.remove("close");
-
-
-            });
-        });
-    </script>
+    {{-- deposits --}}
+    <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        document.querySelectorAll("table #dolar").forEach((dolar) => {
-            let id = dolar.dataset.id;
+        $(document).ready(function() {
+            //init modal open
+            function openModal(modal) {
+                modal.removeClass('close');
+                $('body').addClass('overflow-hidden');
+                $('.overlay-alfa').removeClass('none');
+            }
 
-            dolar.addEventListener("click", () => {
-                function addElement() {
+            //init close modal
+            function closeModal(modal) {
+                modal.addClass('close');
+                $('body').removeClass('overflow-hidden');
+                $('.overlay-alfa').addClass('none');
+            }
 
-                    let depositsContainer = document.querySelector(`.addDepositsContainer.id-` + id);
-                    let depositsContainerEdit = document.querySelector(`.addDepositsContainer.id-` + id +
-                        "-edit");
-                    if (depositsContainerEdit) {
-                        let newDepositSectionEdit = depositsContainerEdit.querySelector(
-                                `.deposit-section.id-` +
-                                id + '-edit')
-                            .cloneNode(
-                                true);
-                        var I = depositsContainerEdit.childElementCount;
-                        newDepositSectionEdit.querySelectorAll('input').forEach(function(input) {
-                            input.value = '';
+            //modals actions
+            $('.dolar-icon').click(function() {
+                let id = $(this).data('id');
+                let action = $(this).data('action');
+                let pt = $(this).data('pt');
+                let modal = $(`.popup-dolar.id-${id}`);
+                let addContainer = modal.find('#addElementContainerBtn');
+                let addElement = modal.find('#addElement');
+                let addDepositsContainer = modal.find('#addDepositsContainer');
+                let removeElement = addDepositsContainer.find('.remove-btn');
+                let checkElement = addDepositsContainer.find('.check-btn');
+                let formBtn = modal.find('#modalSubmitBtnDollar');
 
-                            if (input.className == 'is-paid') {
-                                input.value = '0'
-                            }
-
-                            let name = input.name;
-                            let index = name.match(/\d+/g);
-                            if (index == null) {
-                                return;
-                            } else {
-                                finalName = name.replace(/(\d)+/, I);
-                            }
-                            input.setAttribute('name', finalName);
-                        });
-
-                        newDepositSectionEdit.querySelector('.remove-btn').removeAttribute('disabled');
-                        newDepositSectionEdit
-                            .querySelector('.remove-btn').removeAttribute('hidden');
-                        let depositsContainerEditAppendOnLast = document.querySelectorAll(
-                            `.addDepositsContainer.id-` + id +
-                            "-edit")[document.querySelectorAll(`.addDepositsContainer.id-` + id +
-                            "-edit").length - 1];
-                        depositsContainerEditAppendOnLast.appendChild(newDepositSectionEdit);
+                // form button name
+                if (action == 'add') {
+                    if (pt == 'cash') {
+                        addContainer.removeClass('d-flex');
+                        addContainer.hide();
+                        addDepositsContainer.find('.is-paid').val('1');
+                        addDepositsContainer.find('.check-btn').hide();
+                        addDepositsContainer.find('.remove-btn').hide();
+                        formBtn.text('دفع تكلفه المورد')
                     } else {
-                        let newDepositSection = depositsContainer.querySelector(`.deposit-section.id-` + id)
-                            .cloneNode(
-                                true);
-                        var I = depositsContainer.childElementCount;
-                        newDepositSection.querySelectorAll('input').forEach(function(input) {
-                            input.value = '';
-
-                            if (input.className == 'is-paid') {
-                                input.value = '0'
-                            }
-
-                            let name = input.name;
-                            let index = name.match(/\d+/g);
-                            if (index == null) {
-                                return;
-                            } else {
-                                finalName = name.replace(/(\d)+/, I);
-                            }
-                            input.setAttribute('name', finalName);
-                        });
-
-                        newDepositSection.querySelector('.remove-btn').removeAttribute('disabled');
-                        newDepositSection
-                            .querySelector('.remove-btn').removeAttribute('hidden');
-
-                        depositsContainer.appendChild(newDepositSection);
-                    }
-
-                    initRemoveButtons(id); // Initialize remove buttons after adding a new section
-                    validationInputs()
-                    isPaid()
-                }
-
-
-
-                function removeElement(button, id = null) {
-                    debugger;
-                    if (id) {
-                        let depositsContainer = document.querySelector(`.addDepositsContainer.id-` + id +
-                            "-edit");
-                        if (depositsContainer.childElementCount > 1) {
-                            depositsContainer.removeChild(button.parentNode);
-                        } else {
-                            button.setAttribute('disabled', 'disabled');
-                            button.setAttribute('hidden', 'hidden');
-                        }
-                    } else {
-                        let depositsContainer = document.getElementById('addDepositsContainer');
-                        if (depositsContainer.childElementCount > 1) {
-                            depositsContainer.removeChild(button.parentNode);
-                        } else {
-                            button.setAttribute('disabled', 'disabled');
-                            button.setAttribute('hidden', 'hidden');
-                        }
-                    }
-
-                }
-
-                function initRemoveButtons(id = null) {
-                    document.querySelectorAll('.remove-btn').forEach(function(button) {
-                        button.addEventListener('click', function() {
-                            removeElement(button, id);
-                        });
-                    });
-                }
-
-                function validationInputs() {
-                    // debugger;
-                    const dolarForm = document.querySelector("#dolar-form.id-" + id);
-                    const dolarInputs = dolarForm.querySelectorAll(".category-input");
-                    const dolarMessage = dolarForm.querySelector("#invalidDolar");
-
-                    dolarForm.addEventListener('submit', (event) => {
-                        dolarMessage.textContent = '';
-                        let notValid = false;
-
-                        for (let i = 0; i < dolarInputs.length; i++) {
-                            if (dolarInputs[i].value.trim() === "") {
-                                event.preventDefault();
-                                const inputName = dolarInputs[i].getAttribute('placeholder');
-                                dolarMessage.textContent = `الحقل ${inputName} مطلوب`;
-                                dolarInputs[i].focus();
-                                notValid = true;
-                                if (notValid) {
-                                    break;
+                        formBtn.text('اضافه الدفعات')
+                        addElement.click(function() {
+                            let newDepositSection = addDepositsContainer.find('.deposit-section')
+                                .first().clone(true);
+                            var I = addDepositsContainer.children().length;
+                            newDepositSection.find('.check-btn').show();
+                            newDepositSection.find('input').each(function() {
+                                let name = $(this).attr('name');
+                                let index = name.match(/\d+/g);
+                                if (index != null) {
+                                    let finalName = name.replace(/(\d)+/, I);
+                                    $(this).attr('name', finalName);
+                                    $(this).val('');
+                                    if ($(this).hasClass('is-paid')) {
+                                        $(this).val('0');
+                                    }
                                 }
+                            });
+                            newDepositSection.find('.remove-btn').removeAttr('disabled');
+                            newDepositSection.hide().appendTo(addDepositsContainer).slideDown(
+                                300);
+
+                        });
+                        removeElement.click(function() {
+                            if (addDepositsContainer.children().length > 1) {
+                                $(this).parent().slideUp(300, function() {
+                                    $(this).remove();
+                                });
                             }
-                        }
-                    });
+                        });
+
+                        checkElement.click(function() {
+                            new Swal({
+                                    title: "هل انت متأكد؟",
+                                    text: "سوف تتم عملية الدفع بالفعل ولا يمكن التراجع عنها",
+                                    icon: "warning",
+                                    showCancelButton: true,
+                                    // buttons: {
+                                    //     confirm: "تأكيد الدفع",
+                                    //     cancel: "الغاء"
+                                    // },
+                                    confirmButtonText: "تأكيد الدفع",
+                                    cancelButtonText: "الغاء",
+                                    dangerMode: true,
+                                })
+                                .then((willDelete) => {
+                                    if (willDelete.isConfirmed) {
+                                        $(this).parent().find('.is-paid').val('1');
+                                        $(this).fadeOut(300);
+                                    }
+                                });
+                        });
+                    }
+                } else if (action == 'edit') {
+                    formBtn.text('تعديل الفاتوره')
                 }
 
-                function isPaid() {
+                // open this modal
+                openModal(modal);
 
-                    document.querySelectorAll(".check-btn.id-" + id).forEach(btn => {
-                        const input = btn.nextElementSibling;
-                        btn.addEventListener('click', () => {
+                // listen on dismiss modal
+                $(".popup img#dismiss").click(function() {
+                    if (!$(this).parent().hasClass("none")) {
+                        closeModal(modal);
+                    }
+                });
 
-                            if (confirm('هل انت متأكد من تأكيد الدفع لهذا المورد')) {
-                                input.value = "1"
-                                btn.style.display = "none"
-                                return;
-                            }
-
-                        })
-                    })
-                }
-
-                document.querySelector('.addElement.id-' + id).addEventListener('click', addElement);
-
-                // Initialize remove buttons on page load
-                initRemoveButtons(null);
-                validationInputs()
-                isPaid()
+                $(".overlay-alfa").on("click", function(e) {
+                    if ($(e.target).hasClass("overlay-alfa")) {
+                        closeModal(modal);
+                    }
+                });
             });
 
         });
