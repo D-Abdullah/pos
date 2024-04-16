@@ -57,7 +57,7 @@ class SupplierController extends Controller
             }
             $suppliers = $suppliers->with('deposits', 'purchases')->paginate(PAGINATION);
             foreach ($suppliers as $supplier) {
-                $totalRequired = $supplier->purchases()->sum('total_price');
+                $totalRequired = $supplier->purchases()->sum('total_price') + $supplier->rents()->sum('total_price');
                 $totalPaid = $supplier->deposits()->where('is_paid', '1')->sum('cost');
                 $totalReceivables = $totalRequired - $totalPaid;
 
@@ -138,7 +138,7 @@ class SupplierController extends Controller
         }
 
         # equations
-        $totalRequired = $supplier->purchases()->sum('total_price');
+        $totalRequired = $supplier->purchases()->sum('total_price') + $supplier->rents()->sum('total_price');
         $totalPaid = $supplier->deposits()->where('is_paid', '1')->sum('cost');
         $totalReceivables = $totalRequired - $totalPaid;
         ##################################################
