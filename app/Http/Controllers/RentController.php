@@ -6,6 +6,7 @@ use App\Http\Requests\StoreRentRequest;
 use App\Http\Requests\UpdateRentRequest;
 use App\Models\Rent;
 use App\Models\Supplier;
+use App\Models\WarehouseTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -73,7 +74,7 @@ class RentController extends Controller
                 $image->move(base_path('imgs'), $imageName);
                 $imagePath = 'imgs/' . $imageName;
             }
-            Rent::create([
+            $rent = Rent::create([
                 'name' => $request->input('name'),
                 'sale_price' => $request->input('sale_price'),
                 'rent_price' => $request->input('rent_price'),
@@ -82,6 +83,14 @@ class RentController extends Controller
                 'image' => $imagePath ?? 'imgs/default.png',
                 'supplier_id' => $request->input('supplier_id'),
                 'added_by' => auth()->user()->getAuthIdentifier(),
+            ]);
+
+
+            WarehouseTransaction::create([
+                'rent_id' => $rent->id,
+                'quantity' => $request->input('quantity'),
+                'from' => 'المورد: ' . Supplier::findOrFail($request->input('supplier_id'))->name,
+                'to' => "مخزن الإيجار",
             ]);
 
             return redirect()->route('rent.all')->with(['success' => 'تم إنشاء الايجار ' . $request->input('name') . ' بنجاح.']);
@@ -100,6 +109,7 @@ class RentController extends Controller
     {
         try {
             $rent = Rent::findOrFail($id);
+            $oldQty = $rent->quantity;
             if ($request->hasFile('image')) {
                 $oldImage = $rent->image;
                 if (!empty($oldImage)) {
@@ -125,7 +135,12 @@ class RentController extends Controller
                 'added_by' => auth()->user()->getAuthIdentifier(),
                 'supplier_id' => $request->input('supplier_id'),
             ]);
-
+            WarehouseTransaction::create([
+                'rent_id' => $rent->id,
+                'quantity' => abs($request->input('quantity') - $oldQty),
+                'from' => 'المورد: ' . Supplier::findOrFail($request->input('supplier_id'))->name,
+                'to' => "مخزن الإيجار",
+            ]);
             return redirect()->route('rent.all')->with(['success' => 'تم تحديث الايجار ' . $request->input('name') . ' بنجاح.']);
         } catch (\Exception $e) {
             DB::rollBack();

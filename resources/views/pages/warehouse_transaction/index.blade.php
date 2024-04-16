@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'تحويلات المستودع')
+@section('title', 'تحويلات المخزن')
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('Assets/Css files/transaction.css') }}">
@@ -131,6 +131,8 @@
                     <tr>
                         @if ($wt->product)
                             <td>{{ $wt->product->name }}</td>
+                        @elseif($wt->rent)
+                            <td><span class="text-danger">(مستأجر)</span> {{ $wt->rent->name }}</td>
                         @else
                             <td class="text-danger fw-bold">لم يتم التحديد</td>
                         @endif

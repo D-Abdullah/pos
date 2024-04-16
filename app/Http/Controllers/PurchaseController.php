@@ -118,7 +118,7 @@ class PurchaseController extends Controller
 
             WarehouseTransaction::create([
                 'product_id' => $product->id,
-                'quantity' => $request->input('quantity') - $oldQty,
+                'quantity' => abs($request->input('quantity') - $oldQty),
                 'from' => 'المورد: ' . Supplier::findOrFail($request->input('supplier_id'))->name,
                 'to' => "المخزن",
             ]);

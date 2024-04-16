@@ -13,6 +13,7 @@ class WarehouseTransaction extends Model
         'from',
         'to',
         'product_id',
+        'rent_id',
         'created_at',
         'updated_at'
     ];
@@ -20,5 +21,9 @@ class WarehouseTransaction extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+    public function rent()
+    {
+        return $this->belongsTo(Rent::class);
     }
 }

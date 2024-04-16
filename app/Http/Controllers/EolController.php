@@ -6,6 +6,7 @@ use App\Models\Eol;
 use App\Http\Requests\StoreEolRequest;
 use App\Http\Requests\UpdateEolRequest;
 use App\Models\Product;
+use App\Models\WarehouseTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -74,6 +75,12 @@ class EolController extends Controller
             $product->update([
                 'quantity' => $product->quantity - $request->input('quantity'),
             ]);
+            WarehouseTransaction::create([
+                'product_id' => $product->id,
+                'quantity' => $request->input('quantity'),
+                'from' => "المخزن",
+                'to' => 'هالك',
+            ]);
             DB::commit();
             return redirect()->route('eol.all')->with(['success' => 'تم إنشاء الهالك ' . Product::find($request->input('product_id'))->name . ' بنجاح.']);
         } catch (\Exception $e) {
@@ -92,6 +99,7 @@ class EolController extends Controller
         try {
             DB::beginTransaction();
             $eol = Eol::findOrFail($id);
+            $oldQty = $eol->quantity;
             $product = Product::find($request->input('product_id'))->first();
             if ($product->quantity < $request->input('quantity')) {
                 return redirect()->back()->withInput($request->all())->with(['error' => 'الكمية المطلوبة للمنتج غير كافية.']);
@@ -104,6 +112,12 @@ class EolController extends Controller
             ]);
             $product->update([
                 'quantity' => $product->quantity - $request->input('quantity'),
+            ]);
+            WarehouseTransaction::create([
+                'product_id' => $product->id,
+                'quantity' => max($request->input('quantity') - $oldQty),
+                'from' => "المخزن",
+                'to' => 'هالك',
             ]);
             DB::commit();
             return redirect()->route('eol.all')->with(['success' => 'تم تحديث الهالك ' . Product::find($request->input('product_id'))->name . ' ' . $request->input('quantity') . ' بنجاح.']);
