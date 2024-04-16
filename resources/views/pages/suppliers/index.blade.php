@@ -332,8 +332,50 @@
 
                                                     <div id="addDepositsContainer"
                                                         class="addDepositsContainer id-{{ $supplier->id }}">
-                                                        <div
-                                                            class="f-row d-flex gap-4 align-items-end deposit-section id-{{ $supplier->id }}">
+                                                        @foreach ($supplier->deposits as $i => $deposit)
+                                                            <div
+                                                                class="f-row d-flex gap-4 align-items-end deposit-section id-{{ $supplier->id }}">
+                                                                <div>
+                                                                    <label class="d-block mb-1"
+                                                                        for="deposit-amount">المبلغ</label>
+                                                                    <input type="hidden" class="deleteThis"
+                                                                        name="deposits[{{ $i }}][cost]"
+                                                                        value="{{ $deposit->cost }}">
+                                                                    <input type="text" disabled
+                                                                        name="deposits[{{ $i }}][cost]"
+                                                                        class="deposit-amount category-input form-control"
+                                                                        value="{{ $deposit->cost }}" placeholder="المبلغ"
+                                                                        required>
+                                                                    <input type="hidden" class="deleteThis"
+                                                                        name="deposits[{{ $i }}][id]"
+                                                                        class="input-id" value="{{ $deposit->id }}">
+                                                                </div>
+                                                                <div>
+                                                                    <label class="d-block mb-1"
+                                                                        for="deposit-date">التاريخ</label>
+                                                                    <input type="hidden" class="deleteThis"
+                                                                        name="deposits[{{ $i }}][date]"
+                                                                        value="{{ $deposit->date }}">
+                                                                    <input type="date" disabled
+                                                                        name="deposits[{{ $i }}][date]"
+                                                                        class="deposit-date category-input form-control"
+                                                                        value="{{ $deposit->date }}"
+                                                                        placeholder="التاريخ" required>
+                                                                </div>
+                                                                <button type="button" class="remove-btn p-3" hidden
+                                                                    disabled><i class="fa-solid fa-trash"></i></button>
+
+                                                                <button type="button" class="check-btn p-3 "
+                                                                    {{ $deposit->is_paid ? 'hidden' : '' }}>
+                                                                    <i class="fa-solid fa-check"></i>
+                                                                </button>
+                                                                <input class="is-paid" type="hidden"
+                                                                    value="{{ $deposit->is_paid }}"
+                                                                    name="deposits[{{ $i }}][is_paid]">
+                                                            </div>
+                                                        @endforeach
+                                                        <div class="f-row d-flex gap-4 align-items-end deposit-section id-{{ $supplier->id }}"
+                                                            id="initialDepositMultiSection">
                                                             <div>
                                                                 <label class="d-block mb-1"
                                                                     for="deposit-amount">المبلغ</label>
@@ -348,8 +390,8 @@
                                                                     class="deposit-date category-input form-control"
                                                                     placeholder="التاريخ" required>
                                                             </div>
-                                                            <button type="button" class="remove-btn p-3" disabled><i
-                                                                    class="fa-solid fa-trash"></i></button>
+                                                            <button type="button" class="remove-btn p-3" hidden
+                                                                disabled><i class="fa-solid fa-trash"></i></button>
 
                                                             <button type="button" class="check-btn p-3 ">
                                                                 <i class="fa-solid fa-check"></i>
@@ -720,73 +762,82 @@
                 let checkElement = addDepositsContainer.find('.check-btn');
                 let formBtn = modal.find('#modalSubmitBtnDollar');
 
-                // form button name
-                if (action == 'add') {
-                    if (pt == 'cash') {
-                        addContainer.removeClass('d-flex');
-                        addContainer.hide();
-                        addDepositsContainer.find('.is-paid').val('1');
-                        addDepositsContainer.find('.check-btn').hide();
-                        addDepositsContainer.find('.remove-btn').hide();
-                        formBtn.text('دفع تكلفه المورد')
-                    } else {
-                        formBtn.text('اضافه الدفعات')
-                        addElement.click(function() {
-                            let newDepositSection = addDepositsContainer.find('.deposit-section')
-                                .first().clone(true);
-                            var I = addDepositsContainer.children().length;
-                            newDepositSection.find('.check-btn').show();
-                            newDepositSection.find('input').each(function() {
-                                let name = $(this).attr('name');
-                                let index = name.match(/\d+/g);
-                                if (index != null) {
+                if (pt == 'cash') {
+                    addContainer.removeClass('d-flex');
+                    addContainer.hide();
+                    addDepositsContainer.find('.is-paid').val('1');
+                    addDepositsContainer.find('.check-btn').hide();
+                    addDepositsContainer.find('.remove-btn').hide();
+                    formBtn.text('دفع تكلفه المورد')
+                } else {
+                    formBtn.text('اضافه الدفعات')
+                    addElement.click(function() {
+                        let newDepositSection = addDepositsContainer.find('.deposit-section')
+                            .last().clone(true);
+                        var I = addDepositsContainer.children().not('input').length;
+                        newDepositSection.find('.check-btn').removeAttr('hidden');
+                        newDepositSection.find('.remove-btn').removeAttr('hidden');
+                        newDepositSection.find('.check-btn').removeAttr('disabled');
+                        newDepositSection.find('.remove-btn').removeAttr('disabled');
+                        newDepositSection.find('.check-btn').fadeIn(300);
+                        newDepositSection.find('input').each(function() {
+                            let name = $(this).attr('name');
+                            if (name != undefined) {
+                                if ($(this).hasClass('deleteThis')) {
+                                    $(this).remove();
+                                }
+                                console.log(name);
+                                let index = name.match(/\[(\d+)\]/);
+                                if (index != undefined) {
                                     let finalName = name.replace(/(\d)+/, I);
                                     $(this).attr('name', finalName);
                                     $(this).val('');
+                                    $(this).removeAttr('disabled');
                                     if ($(this).hasClass('is-paid')) {
                                         $(this).val('0');
                                     }
+                                    if ($(this).hasClass('input-id')) {
+                                        $(this).remove();
+                                    }
                                 }
-                            });
-                            newDepositSection.find('.remove-btn').removeAttr('disabled');
-                            newDepositSection.hide().appendTo(addDepositsContainer).slideDown(
-                                300);
-
-                        });
-                        removeElement.click(function() {
-                            if (addDepositsContainer.children().length > 1) {
-                                $(this).parent().slideUp(300, function() {
-                                    $(this).remove();
-                                });
                             }
                         });
+                        newDepositSection.find('.remove-btn').removeAttr('disabled');
+                        newDepositSection.hide().appendTo(addDepositsContainer).slideDown(
+                            300);
 
-                        checkElement.click(function() {
-                            new Swal({
-                                    title: "هل انت متأكد؟",
-                                    text: "سوف تتم عملية الدفع بالفعل ولا يمكن التراجع عنها",
-                                    icon: "warning",
-                                    showCancelButton: true,
-                                    // buttons: {
-                                    //     confirm: "تأكيد الدفع",
-                                    //     cancel: "الغاء"
-                                    // },
-                                    confirmButtonText: "تأكيد الدفع",
-                                    cancelButtonText: "الغاء",
-                                    dangerMode: true,
-                                })
-                                .then((willDelete) => {
-                                    if (willDelete.isConfirmed) {
-                                        $(this).parent().find('.is-paid').val('1');
-                                        $(this).fadeOut(300);
-                                    }
-                                });
-                        });
-                    }
-                } else if (action == 'edit') {
-                    formBtn.text('تعديل الفاتوره')
+                    });
+                    removeElement.click(function() {
+                        if (addDepositsContainer.children().length > 1) {
+                            $(this).parent().slideUp(300, function() {
+                                $(this).remove();
+                            });
+                        }
+                    });
+                    checkElement.click(function() {
+                        new Swal({
+                                title: "هل انت متأكد؟",
+                                text: "سوف تتم عملية الدفع بالفعل ولا يمكن التراجع عنها",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonText: "تأكيد الدفع",
+                                cancelButtonText: "الغاء",
+                                dangerMode: true,
+                            })
+                            .then((willDelete) => {
+                                if (willDelete.isConfirmed) {
+                                    $(this).parent().find('.is-paid').val('1');
+                                    $(this).fadeOut(300);
+                                }
+                            });
+                    });
                 }
 
+                if (action == 'edit') {
+                    formBtn.text('تـأكيد')
+                    addDepositsContainer.find('#initialDepositMultiSection').remove();
+                    // addElement.click();
+                }
                 // open this modal
                 openModal(modal);
 
