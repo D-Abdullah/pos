@@ -29,6 +29,8 @@ class StoreRentRequest extends FormRequest
             'rent_price' => 'required|numeric',
             'sale_price' => 'required|numeric',
             'quantity' => 'required|integer',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'supplier_id' => 'required|exists:suppliers,id',
         ];
     }
 
@@ -43,6 +45,11 @@ class StoreRentRequest extends FormRequest
             'sale_price.integer' => 'يجب ان يكون سعر البيع صحيحا',
             'rent_price.required' => 'يجب ان يكون حقل سعر الايجار مطلوب',
             'rent_price.integer' => 'يجب ان يكون سعر الايجار صحيحا',
+            'image.image' => 'يجب أن يكون الملف ملف صورة.',
+            'image.mimes' => 'يجب أن يكون الصورة من نوع jpeg, png, jpg, أو gif.',
+            'image.max' => 'يجب ألا يتجاوز حجم الصورة 2 ميجابايت.',
+            'supplier_id.required' => 'المورد مطلوب',
+            'supplier_id.exists' => 'المورد غير موجود',
         ];
     }
     /**

@@ -87,7 +87,7 @@ class ProductController extends Controller
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),
                 'department_id' => $request->input('department_id'),
-                'image' => $imagePath,
+                'image' => $imagePath ?? 'imgs/default.png',
                 'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
 

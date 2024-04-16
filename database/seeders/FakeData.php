@@ -21,7 +21,7 @@ class FakeData extends Seeder
     public function run(): void
     {
         // Create 100 departments
-        for ($i = 0; $i < 200; $i++) {
+        for ($i = 0; $i < 500; $i++) {
             Department::create([
                 'name' => 'Department ' . ($i + 1),
                 'description' => 'Description ' . ($i + 1),
@@ -29,7 +29,7 @@ class FakeData extends Seeder
             ]);
         }
 
-        for ($i = 0; $i < 400; $i++) {
+        for ($i = 0; $i < 500; $i++) {
             $department = Department::inRandomOrder()->first();
             Product::create([
                 'name' => 'Product ' . ($i + 1),
@@ -40,7 +40,7 @@ class FakeData extends Seeder
         }
 
         $pt = ['cash', 'deposit', 'both'];
-        for ($i = 0; $i < 200; $i++) {
+        for ($i = 0; $i < 500; $i++) {
             Supplier::create([
                 'name' => 'Supplier ' . ($i + 1),
                 'email' => 'supplier' . ($i + 1) . '@example.com',
@@ -51,7 +51,7 @@ class FakeData extends Seeder
             ]);
         }
 
-        for ($i = 0; $i < 200; $i++) {
+        for ($i = 0; $i < 500; $i++) {
             $supplier = Supplier::inRandomOrder()->first();
             $product = Product::inRandomOrder()->first();
             $quantity = rand(100, 10000);
@@ -68,7 +68,7 @@ class FakeData extends Seeder
             ]);
         }
 
-        for ($i = 0; $i < 200; $i++) {
+        for ($i = 0; $i < 500; $i++) {
             Client::create([
                 'name' => 'Client ' . ($i + 1),
                 'phone' => '0123456789',
@@ -76,7 +76,7 @@ class FakeData extends Seeder
             ]);
         }
 
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 500; $i++) {
             $product = Product::inRandomOrder()->first();
             Eol::create([
                 'product_id' => $product->id,
@@ -86,16 +86,19 @@ class FakeData extends Seeder
             ]);
         }
 
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 500; $i++) {
             $rentPrice = rand(1, 1000);
             $salePrice = $rentPrice + rand(100, 500);
-
+            $supplier = Supplier::inRandomOrder()->first();
+            $qty = rand(200, 1000);
             Rent::create([
                 'name' => 'Rent Item ' . ($i + 1),
                 'rent_price' => $rentPrice,
                 'sale_price' => $salePrice,
-                'quantity' => rand(200, 1000),
+                'quantity' => $qty,
                 'added_by' => User::first()->id,
+                'supplier_id' => $supplier->id,
+                'total_price' => $qty * $rentPrice
             ]);
         }
     }

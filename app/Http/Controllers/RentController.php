@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreRentRequest;
 use App\Http\Requests\UpdateRentRequest;
 use App\Models\Rent;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 
 class RentController extends Controller
@@ -18,12 +20,14 @@ class RentController extends Controller
     {
         try {
             $rules = [
+                'supplier' => 'nullable|exists:suppliers,id',
                 'name' => 'nullable|string',
                 'date_from' => 'nullable|date',
                 'date_to' => 'nullable|date',
             ];
 
             $messages = [
+                'supplier.exists' => 'المورد غير موجود.',
                 'name.string' => 'الاسم غير صالح.',
                 'date_from.date' => 'تاريخ "من" غير صالح.',
                 'date_to.date' => 'تاريخ "إلى" غير صالح.',
@@ -31,8 +35,8 @@ class RentController extends Controller
 
             $validatedData = $request->validate($rules, $messages);
             $rents = Rent::query();
-            if ($request->filled('name')) {
-                $rents->where('name', 'LIKE', '%' . $request->input('name') . '%');
+            if ($request->filled('q')) {
+                $rents->where('name', 'LIKE', '%' . $request->input('q') . '%');
             }
 
             if ($request->filled('date_from')) {
@@ -42,9 +46,12 @@ class RentController extends Controller
             if ($request->filled('date_to')) {
                 $rents->whereDate('updated_at', '<=', $request->input('date_to'));
             }
+            if ($request->filled('supplier')) {
+                $rents->where('supplier_id', $request->input('supplier'));
+            }
             $rents = $rents->paginate(PAGINATION);
-
-            return view('pages.rents.index', compact('rents'));
+            $suppliers = Supplier::all();
+            return view('pages.rents.index', compact('rents', 'suppliers'));
         } catch (\Exception $e) {
             Log::error('حدث خطأ أثناء جلب الايجار: ' . $e->getMessage());
 
@@ -59,12 +66,21 @@ class RentController extends Controller
     public function store(StoreRentRequest $request)
     {
         try {
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
 
+                $imageName = time() . '_' . $image->hashName();
+                $image->move(base_path('imgs'), $imageName);
+                $imagePath = 'imgs/' . $imageName;
+            }
             Rent::create([
                 'name' => $request->input('name'),
                 'sale_price' => $request->input('sale_price'),
                 'rent_price' => $request->input('rent_price'),
                 'quantity' => $request->input('quantity'),
+                'total_price' => $request->input('rent_price') * $request->input('quantity'),
+                'image' => $imagePath ?? 'imgs/default.png',
+                'supplier_id' => $request->input('supplier_id'),
                 'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
 
@@ -84,13 +100,30 @@ class RentController extends Controller
     {
         try {
             $rent = Rent::findOrFail($id);
+            if ($request->hasFile('image')) {
+                $oldImage = $rent->image;
+                if (!empty($oldImage)) {
+                    if ($oldImage != "imgs/default.png") {
+                        $oldImagePath = base_path($oldImage);
+                        if (File::exists($oldImagePath)) {
+                            File::delete($oldImagePath);
+                        }
+                    }
+                }
+                $image = $request->file('image');
+                $imageName = time() . '_' . $image->hashName();
+                $image->move(base_path('imgs'), $imageName);
 
+                $rent->image = 'imgs/' . $imageName;
+            }
             $rent->update([
                 'name' => $request->input('name'),
                 'sale_price' => $request->input('sale_price'),
                 'rent_price' => $request->input('rent_price'),
                 'quantity' => $request->input('quantity'),
+                'total_price' => $request->input('rent_price') * $request->input('quantity'),
                 'added_by' => auth()->user()->getAuthIdentifier(),
+                'supplier_id' => $request->input('supplier_id'),
             ]);
 
             return redirect()->route('rent.all')->with(['success' => 'تم تحديث الايجار ' . $request->input('name') . ' بنجاح.']);

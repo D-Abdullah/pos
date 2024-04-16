@@ -125,7 +125,7 @@
 
             <thead class="head">
                 <tr>
-                    <th>صوره</th>
+                    <th class="text-center">الصوره</th>
                     <th>المنتج</th>
                     <th>القسم</th>
                     <th>الكميه</th>
@@ -201,7 +201,7 @@
                         </td>
                         <td class="p-0">
                             <div
-                                class="popup-edit id-{{ $product->id }} popup close shadow-sm rounded-3 position-fixed text-end">
+                                class="popup-edit id-{{ $product->id }} popup close shadow-sm rounded-3 position-fixed text-end overflow-auto">
                                 <form id="edit-cate" method="post" action="{{ route('product.update', $product->id) }}"
                                     enctype="multipart/form-data">
                                     @csrf

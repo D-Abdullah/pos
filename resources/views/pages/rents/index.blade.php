@@ -4,14 +4,48 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('Assets/Css files/rent.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .dateInp,
+        .search-input,
+        .search-div {
+            max-width: 180px;
+        }
+
+        .select2-container--default .select2-search--dropdown .select2-search__field {
+            padding: 0;
+            outline: none;
+            border: 1px solid #ddd;
+            height: 30px !important;
+
+        }
+
+        .select2-container--default .select2-selection--single {
+            height: 45px !important;
+            border: 1px solid #ddd;
+        }
+
+        .select2-container[dir="rtl"] .select2-selection--single .select2-selection__rendered {
+            padding-top: 7px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 0px !important;
+            top: 50% !important;
+        }
+
+        .select2-container {
+            width: 280px !important;
+        }
+
+        .invalid {
+            color: red;
+            font-size: 12px;
+            text-align: center;
+        }
+    </style>
 @endsection
-<style>
-    .invalid {
-        color: red;
-        font-size: 12px;
-        text-align: center;
-    }
-</style>
+
 @section('content')
 
     <h2 class="mt-5 mb-5">الايجار</h2>
@@ -31,6 +65,19 @@
                     <div class="search-input">
                         <label for="search-name">بحث بالاسم</label>
                         <input type="search" name="q" placeholder="بحث بالاسم" id="search-name">
+                    </div>
+                    <div class="">
+                        <label for="supplier" class="d-block">اختر المورد</label>
+                        <select class="js-example-basic-single filter" name="supplier" id="supplier">
+                            <option value=""
+                                {{ request('supplier') ? 'disabled hidden' : 'selected disabled hidden' }}>اختر المورد
+                            </option>
+                            @foreach ($suppliers as $supplier)
+                                <option value="{{ $supplier->id }}"
+                                    {{ request('supplier') == $supplier->id ? 'selected' : '' }}>{{ $supplier->name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div>
@@ -71,10 +118,12 @@
 
             <thead class="head">
                 <tr>
+                    <th class="text-center">الصوره</th>
                     <th>الاسم</th>
                     <th>سعر الايجار</th>
                     <th> سعر البيع</th>
                     <th>الكميه</th>
+                    <th>المورد</th>
                     <th>بواسطة</th>
                     <th>التاريخ</th>
                     <th>
@@ -100,7 +149,7 @@
 
                 @if (count($rents) === 0)
                     <tr>
-                        <td colspan="7" class="text-center">
+                        <td colspan="9" class="text-center">
                             لا توجد بيانات
                         </td>
                     </tr>
@@ -108,10 +157,15 @@
 
                 @foreach ($rents as $rent)
                     <tr>
+                        <td class="text-center">
+                            <img src="{{ asset($rent->image) }}" alt="" width="70" height="70"
+                                style="border-radius: 50%; border: solid 1px #00000048">
+                        </td>
                         <td>{{ $rent->name }}</td>
                         <td>{{ $rent->rent_price }}</td>
                         <td>{{ $rent->sale_price }}</td>
                         <td>{{ $rent->quantity }}</td>
+                        <td>{{ $rent->supplier->name }}</td>
                         <td>{{ $rent->added_by }}</td>
                         <td> {{ $rent->updated_at->format('Y/m/d') }}</td>
                         {{-- <td>
@@ -132,8 +186,10 @@
                             </div>
                         </td>
                         <td class="p-0">
-                            <div class="popup-edit id-{{ $rent->id }} popup close shadow-sm rounded-3 position-fixed">
-                                <form method="post" action="{{ route('rent.update', $rent->id) }}" id="edit-cate">
+                            <div
+                                class="popup-edit id-{{ $rent->id }} popup close shadow-sm rounded-3 position-fixed overflow-auto">
+                                <form method="post" action="{{ route('rent.update', $rent->id) }}" id="edit-cate"
+                                    enctype="multipart/form-data">
                                     @csrf
                                     @method('put')
                                     <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
@@ -165,6 +221,29 @@
                                                 value="{{ $rent->quantity }}" class="category-input"
                                                 placeholder="الكميه">
                                         </div>
+                                    </div>
+                                    <div>
+                                        <label for="supplierEdit" class="d-block">اختر المورد</label>
+                                        <select class="js-example-basic-single edit" name="supplier_id"
+                                            id="supplierEdit">
+                                            <option value="" disabled selected>اختر
+                                                المورد
+                                            </option>
+                                            @foreach ($suppliers as $supplier)
+                                                <option value="{{ $supplier->id }}"
+                                                    {{ $rent->supplier->id == $supplier->id ? 'selected' : '' }}>
+
+                                                    {{ $supplier->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="text-center" style="margin-top: 30px">
+                                        <img src="{{ asset($rent->image) }}" alt="" width="200"
+                                            height="200" style="border: solid 1px #000;border-radius: 50%"
+                                            id="image">
+                                        <label class="d-block" for="image">تعديل صوره المنتج</label>
+                                        <input name="image" id="image" type="file" accept="image/*" />
                                     </div>
                                     {{-- <div class="form-check form-switch d-flex align-items-center  ms-2 me-2">
                                                 <input class="form-check-input ms-3"
@@ -239,8 +318,8 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js">
     </script>
-
-
+    <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     {{-- Print and Pdf and Excel  --}}
     <script>
@@ -496,6 +575,13 @@
             // Submit the form
             form.submit();
         }
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('.js-example-basic-single.filter').select2();
+            $('.js-example-basic-single.add').select2();
+            $('.js-example-basic-single.edit').select2();
+        });
     </script>
 
 @endsection
