@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateProductRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
@@ -75,10 +76,18 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         try {
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+
+                $imageName = time() . '_' . $image->hashName();
+                $image->move(base_path('imgs'), $imageName);
+                $imagePath = 'imgs/' . $imageName;
+            }
             Product::create([
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),
                 'department_id' => $request->input('department_id'),
+                'image' => $imagePath,
                 'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
 
@@ -98,7 +107,22 @@ class ProductController extends Controller
     {
         try {
             $product = Product::findOrFail($id);
+            if ($request->hasFile('image')) {
+                $oldImage = $product->image;
+                if (!empty($oldImage)) {
+                    if ($oldImage != "imgs/default.png") {
+                        $oldImagePath = base_path($oldImage);
+                        if (File::exists($oldImagePath)) {
+                            File::delete($oldImagePath);
+                        }
+                    }
+                }
+                $image = $request->file('image');
+                $imageName = time() . '_' . $image->hashName();
+                $image->move(base_path('imgs'), $imageName);
 
+                $product->image = 'imgs/' . $imageName;
+            }
             $product->update([
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),

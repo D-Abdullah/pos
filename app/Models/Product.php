@@ -13,6 +13,7 @@ class Product extends Model
         'department_id',
         'added_by',
         'quantity',
+        'image',
         'created_at',
         'updated_at'
     ];

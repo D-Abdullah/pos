@@ -9,7 +9,7 @@
 <div class="popup-add popup close shadow-sm rounded-3 position-fixed">
     <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
     <h2 class="text-center mt-4 mb-4 opacity-75">اضافة منتج جديد</h2>
-    <form id="add-cate" method="post" action="{{ route('product.add') }}">
+    <form id="add-cate" method="post" action="{{ route('product.add') }}" enctype="multipart/form-data">
         @csrf
         <div class="f-row d-flex gap-4">
             <div>
@@ -46,6 +46,12 @@
             <textarea class="category-input" name="description" id="textarea" cols="30" rows="10"
                 placeholder=" وصف المنتج"></textarea>
         </div>
+
+        <div>
+            <label class="d-block" for="image">اضافه صوره للمنتج</label>
+            <input name="image" id="image" type="file" accept="image/*" />
+        </div>
+
 
         {{-- <div class="form-check form-switch d-flex align-items-center  ms-2 me-2">
             <input value="1" name="is_active" class="form-check-input ms-3" checked type="checkbox" role="switch"

@@ -125,6 +125,7 @@
 
             <thead class="head">
                 <tr>
+                    <th>صوره</th>
                     <th>المنتج</th>
                     <th>القسم</th>
                     <th>الكميه</th>
@@ -152,7 +153,7 @@
             <tbody>
                 @if (count($products) === 0)
                     <tr>
-                        <td colspan="6" class="text-center">
+                        <td colspan="7" class="text-center">
                             لا توجد بيانات
                         </td>
                     </tr>
@@ -160,6 +161,10 @@
 
                 @foreach ($products as $product)
                     <tr>
+                        <td class="text-center">
+                            <img src="{{ asset($product->image) }}" alt="" width="70" height="70"
+                                style="border-radius: 50%; border: solid 1px #00000048">
+                        </td>
                         <td class="opacity-50">
                             {{ $product->name }}
                         </td>
@@ -197,8 +202,8 @@
                         <td class="p-0">
                             <div
                                 class="popup-edit id-{{ $product->id }} popup close shadow-sm rounded-3 position-fixed text-end">
-                                <form id="edit-cate" method="post"
-                                    action="{{ route('product.update', $product->id) }}">
+                                <form id="edit-cate" method="post" action="{{ route('product.update', $product->id) }}"
+                                    enctype="multipart/form-data">
                                     @csrf
                                     @method('put')
 
@@ -243,6 +248,13 @@
                                         <label class="d-block" for="textarea">وصف المنتج</label>
                                         <textarea name="description" class="category-input" id="textarea" cols="30" rows="10"
                                             placeholder="وصف المنتج">{{ $product->description }}</textarea>
+                                    </div>
+                                    <div class="text-center">
+                                        <img src="{{ asset($product->image) }}" alt="" width="200"
+                                            height="200" style="border: solid 1px #000;border-radius: 50%"
+                                            id="image">
+                                        <label class="d-block" for="image">تعديل صوره المنتج</label>
+                                        <input name="image" id="image" type="file" accept="image/*" />
                                     </div>
                                     {{-- <div class="form-check form-switch d-flex align-items-center  ms-2 me-2">
                                                 <input class="form-check-input ms-3"
@@ -474,6 +486,9 @@
                         const inputValue = input.value.trim();
                         const inputName = input.getAttribute('placeholder') || input.getAttribute(
                             'aria-placeholder');
+                        if (input.name == 'image') {
+                            continue;
+                        }
 
                         if (inputType === 'date' || inputType === 'number' || inputType ===
                             'select-one') {

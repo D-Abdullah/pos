@@ -27,6 +27,7 @@ class StoreProductRequest extends FormRequest
             'name' => 'required|string',
             'department_id' => 'required|integer|exists:departments,id',
             'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 
@@ -45,6 +46,9 @@ class StoreProductRequest extends FormRequest
             'department_id.exists' => 'القسم المحدد غير صحيح.',
             'description.required' => 'حقل الوصف مطلوب.',
             'description.string' => 'يجب أن يكون الوصف نصًا.',
+            'image.image' => 'يجب أن يكون الملف ملف صورة.',
+            'image.mimes' => 'يجب أن يكون الصورة من نوع jpeg, png, jpg, أو gif.',
+            'image.max' => 'يجب ألا يتجاوز حجم الصورة 2 ميجابايت.',
         ];
     }
 

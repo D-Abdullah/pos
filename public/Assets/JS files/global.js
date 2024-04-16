@@ -95,7 +95,7 @@ document.querySelectorAll(".features .add-button button").forEach((button) => {
 });
 
 popupsExit.forEach((exit) => {
-    if (exit.id != "dismiss") {
+    if (exit.id != "dismiss" && exit.id != "image") {
         if (!exit.parentElement.classList.contains("none")) {
             exit.addEventListener("click", (e) => {
                 e.preventDefault();
