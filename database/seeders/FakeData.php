@@ -10,6 +10,7 @@ use App\Models\Purchase;
 use App\Models\Rent;
 use App\Models\Supplier;
 use App\Models\User;
+use App\Models\WarehouseTransaction;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -66,6 +67,14 @@ class FakeData extends Seeder
                 'added_by' => User::first()->id,
                 'product_id' => $product->id,
             ]);
+            $product->update(['quantity' => $product->quantity + $quantity]);
+
+            WarehouseTransaction::create([
+                'product_id' => $product->id,
+                'quantity' => $quantity,
+                'from' => 'المورد: ' . $supplier->name,
+                'to' => "المخزن",
+            ]);
         }
 
         for ($i = 0; $i < 500; $i++) {
@@ -78,11 +87,19 @@ class FakeData extends Seeder
 
         for ($i = 0; $i < 500; $i++) {
             $product = Product::inRandomOrder()->first();
+            $qty = rand(1, 1000);
             Eol::create([
                 'product_id' => $product->id,
-                'quantity' => rand(1, 1000),
+                'quantity' => $qty,
                 'reason' => 'reason ' . ($i + 1),
                 'added_by' => User::first()->id,
+            ]);
+
+            WarehouseTransaction::create([
+                'product_id' => $product->id,
+                'quantity' => $qty,
+                'from' => "المخزن",
+                'to' => 'هالك',
             ]);
         }
 
@@ -91,7 +108,7 @@ class FakeData extends Seeder
             $salePrice = $rentPrice + rand(100, 500);
             $supplier = Supplier::inRandomOrder()->first();
             $qty = rand(200, 1000);
-            Rent::create([
+            $rent = Rent::create([
                 'name' => 'Rent Item ' . ($i + 1),
                 'rent_price' => $rentPrice,
                 'sale_price' => $salePrice,
@@ -99,6 +116,12 @@ class FakeData extends Seeder
                 'added_by' => User::first()->id,
                 'supplier_id' => $supplier->id,
                 'total_price' => $qty * $rentPrice
+            ]);
+            WarehouseTransaction::create([
+                'rent_id' => $rent->id,
+                'quantity' => $qty,
+                'from' => 'المورد: ' . $supplier->name,
+                'to' => "مخزن الإيجار",
             ]);
         }
     }
