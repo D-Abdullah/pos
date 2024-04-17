@@ -293,8 +293,10 @@
                 modal.find('#typeInputContainer select#typeInput').val(modal.find(
                     '#typeInputContainer select#typeInput').prop('defaultSelected'));
                 modal.find('#eolReasonContainer textarea#eolReason').val('');
-                modal.find('#statusContainer input#name').val('');
-                modal.find('#statusContainer input#name').prop('checked', true);
+                modal.find('#statusContainer').removeClass('notReady');
+                modal.find('#statusContainer label#status').text('جاهز');
+                modal.find('#statusContainer input#flexCheckDefault20').val('');
+                modal.find('#statusContainer input#flexCheckDefault20').prop('checked', true);
 
                 hideModalInputs(modal);
             }
@@ -343,12 +345,12 @@
 
             // calculate and update total price
             function updateTotalPrice(modal) {
-                // var totalPrice = 0;
-                // $('#dataTableBody tr').each(function() {
-                //     var rowTotal = parseFloat($(this).find('td#totalPriceTableItem').text());
-                //     totalPrice += +rowTotal;
-                // });
-                // $('#totalPriceCell').text('الاجمالي: ' + totalPrice);
+                var totalPrice = 0;
+                $('#dataTableBody tr').each(function() {
+                    var rowTotal = parseFloat($(this).find('td#totalPriceTableItem').text());
+                    totalPrice += +rowTotal;
+                });
+                $('#totalPriceCell').text('الاجمالي: ' + totalPrice);
                 closeModal(modal);
             }
 
@@ -365,7 +367,7 @@
                 newRow.append('<td>' + data.name + '</td>');
                 newRow.append('<td>' + data.quantity + '</td>');
                 newRow.append('<td>' + data.unit_price + '</td>');
-                newRow.append('<td id="totalPriceTableItem">' + data.totalPrice + '</td>');
+                newRow.append('<td id="totalPriceTableItem">' + data.total_price + '</td>');
                 newRow.append('<td>' + data.type + '</td>');
                 newRow.append('<td>' + data.status + '</td>');
                 newRow.append('<td>' + data.product_id + '</td>');
@@ -382,7 +384,7 @@
                 $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
                     '][unit_price]" value="' + data.unit_price + '">');
                 $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
-                    '][totalPrice]" value="' + data.totalPrice + '">');
+                    '][total_price]" value="' + data.total_price + '">');
                 $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
                     '][type]" value="' + data.type + '">');
                 $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
@@ -398,31 +400,40 @@
 
 
                 // Append the new row to the table body
-                // $('#dataTableBody').append(newRow);
+                $('#dataTableBody').append(newRow);
 
                 // Calculate and update total price
                 updateTotalPrice(modal);
             }
 
             // validate modal
-            function validateModal(salePrice, modal, type, e) {
+            function validateModal(salePrice, modal, type) {
                 //data object for the request
                 let data = {
                     from: modal.find('#from').val() ? modal.find('#from').val() : "----",
                     name: modal.find('#name').val() ? modal.find('#name').val() : "----",
-                    quantity: +modal.find('#quantity').val() ? +modal.find('#quantity').val() : "----",
-                    unit_price: +salePrice ? +salePrice : "----",
+                    quantity: modal.find('#quantity').val() ? +modal.find('#quantity').val() : "----",
+                    unit_price: salePrice ? salePrice : "----",
                     type: modal.find('#typeInput').val() ? modal.find('#typeInput').val() : "----",
                     status: modal.find('#statusContainer input#flexCheckDefault20').prop('checked') ? "ready" :
                         "preparing",
-                    party_id: +modal.find('#partyId').val() ? +modal.find('#partyId').val() : "----",
-                    product_id: +modal.find('#productId').val() ? +modal.find('#productId').val() : "----",
-                    rent_id: +modal.find('#rentId').val() ? +modal.find('#rentId').val() : "----",
+                    party_id: modal.find('#partyId').val() ? +modal.find('#partyId').val() : "----",
+                    product_id: modal.find('#productId').val() ? +modal.find('#productId').val() : "----",
+                    rent_id: modal.find('#rentId').val() ? +modal.find('#rentId').val() : "----",
                     eol_reason: modal.find('#eolReason').val() ? modal.find('#eolReason').val() : "----",
-                    total_price: +modal.find('#totalPrice').val() ? +modal.find('#totalPrice').val() : "----",
-                }
+                    total_price: 0,
+                };
+
                 if (type == 'items' || type == 'rent') {
-                    data.total_price = +modal.find('#quantity').val() * +salePrice;
+                    const quantity = +modal.find('input#quantity').val();
+                    if (!isNaN(quantity) && salePrice) {
+                        data.total_price = quantity * salePrice;
+                    }
+                } else {
+                    const totalPriceInput = modal.find('input#totalPrice').val();
+                    if (totalPriceInput) {
+                        data.total_price = +totalPriceInput;
+                    }
                 }
                 console.log(data);
                 addToTable(data, modal);
@@ -446,17 +457,18 @@
                 });
 
                 // status checkbox change inner text
-                modal.find('.form-check-2 input').on("change", function() {
+                modal.find('#statusContainer input#flexCheckDefault20').on("change", function() {
                     let $parent = $(this).parent();
                     let $lable = $parent.find('label#status');
-                    $parent.toggleClass("notReady");
-
+                    if ($parent.hasClass("notReady")) {
+                        $parent.removeClass("notReady");
+                    } else {
+                        $parent.addClass("notReady");
+                    }
                     if ($parent.hasClass("notReady")) {
                         $lable.text("قيد التحضير");
-                        $(this).val(0);
                     } else {
                         $lable.text("جاهز");
-                        $(this).val(1);
                     }
                 });
 
@@ -508,10 +520,23 @@
                 // open this modal
                 openModal(modal);
 
+                // stop modal form submit
                 modalForm.submit(function(e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    validateModal(salePrice, modal, type, e);
+                    e.stopImmediatePropagation();
+                });
+
+                // click event on submit btn for the modal form
+                modalForm.find('button#modalSubmitBtn').click(function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    if (modalForm.find('[required="required"]').val() == "") {
+                        return;
+                    } else {
+                        validateModal(salePrice, modal, type);
+                    }
                 });
 
                 // listen on dismiss modal
