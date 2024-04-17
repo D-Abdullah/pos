@@ -162,7 +162,7 @@
                     <img class="dark" src="{{ asset('Assets/imgs/report-analytics.png') }}" alt="">
                 </a>
                 <a href="{{ route('report.all') }}" class="light">
-                    <img class="none" src="{{ asset('Assets/imgs/report-analytics-light.png') }}" alt="">
+                    <img class="none" src="{{ asset('Assets/imgs/report-analytics.png') }}" alt="">
                 </a>
                 <a class="mb-0" href="{{ route('report.all') }}"> التقارير</a>
             </div>

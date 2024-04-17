@@ -255,7 +255,7 @@
 
 @section('script')
     <script src="{{ asset('Assets/JS files/concerts.js') }}"></script>
-    <script src="{{ asset('Assets/JS files/dropdown.js"') }}"></script>
+    {{-- <script src="{{ asset('Assets/JS files/dropdown.js"') }}"></script> --}}
 
     {{-- For Exel --}}
     <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>

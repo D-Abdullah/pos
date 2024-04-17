@@ -1,5 +1,5 @@
 <script src="{{ asset('Assets/JS files/global.js') }}"></script>
-<script src="{{ asset('Assets/JS files/dropdown.js') }}"></script>
+{{-- <script src="{{ asset('Assets/JS files/dropdown.js') }}"></script> --}}
 <script src="{{ asset('Assets/JS files/all.min.js') }}"></script>
 
 <script>

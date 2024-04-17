@@ -106,11 +106,11 @@ popupsExit.forEach((exit) => {
     }
 });
 
-document.querySelector(".overlay").addEventListener("click", (e) => {
-    if (e.target.classList.contains("overlay")) {
-        closePopups();
-    }
-});
+// document.querySelector(".overlay").addEventListener("click", (e) => {
+//     if (e.target.classList.contains("overlay")) {
+//         closePopups();
+//     }
+// });
 
 function closePopups() {
     document.querySelector(".overlay").classList.add("none");
