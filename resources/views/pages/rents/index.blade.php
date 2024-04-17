@@ -35,7 +35,7 @@
         }
 
         .select2-container {
-            width: 280px !important;
+            width: 100% !important;
         }
 
         .invalid {
@@ -222,10 +222,11 @@
                                                 placeholder="الكميه">
                                         </div>
                                     </div>
+
                                     <div>
-                                        <label for="supplierEdit" class="d-block">اختر المورد</label>
-                                        <select class="js-example-basic-single edit" name="supplier_id"
-                                            id="supplierEdit">
+                                        <label class="d-block">اختر المورد</label>
+
+                                        <select class="js-example-basic-single edit" id="test" name="supplier_id">
                                             <option value="" disabled selected>اختر
                                                 المورد
                                             </option>
@@ -238,6 +239,7 @@
                                             @endforeach
                                         </select>
                                     </div>
+
                                     <div class="text-center" style="margin-top: 30px">
                                         <img src="{{ asset($rent->image) }}" alt="" width="200"
                                             height="200" style="border: solid 1px #000;border-radius: 50%"
@@ -318,6 +320,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js">
     </script>
+    {{-- For JQuery --}}
     <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
