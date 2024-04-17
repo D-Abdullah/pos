@@ -106,28 +106,26 @@ popupsExit.forEach((exit) => {
     }
 });
 
-// document.querySelector(".overlay").addEventListener("click", (e) => {
-//     if (e.target.classList.contains("overlay")) {
-//         closePopups();
-//     }
-// });
-
-function closePopups() {
-    document.querySelector(".overlay").classList.add("none");
-
-    popups.forEach((popup) => {
-        if (!popup.classList.contains("close")) {
-            popup.classList.add("close");
-
-            document.querySelector("body").classList.remove("overflow-hidden");
+let overlay = document.querySelector(".overlay");
+if (overlay) {
+    overlay.addEventListener("click", (e) => {
+        if (e.target.classList.contains("overlay")) {
+            closePopups();
+        }
+    });
+} else {
+    let overlayA = document.querySelector(".overlay-alfa");
+    overlayA.addEventListener("click", (e) => {
+        if (e.target.classList.contains("overlay-alfa")) {
+            closePopups();
         }
     });
 }
 
-document.onkeyup = function (e) {
-    if (e.key === "Escape") {
-        document.querySelector(".overlay").classList.add("none");
-
+function closePopups() {
+    let overlay = document.querySelector(".overlay");
+    if (overlay) {
+        overlay.classList.add("none");
         popups.forEach((popup) => {
             if (!popup.classList.contains("close")) {
                 popup.classList.add("close");
@@ -137,5 +135,49 @@ document.onkeyup = function (e) {
                     .classList.remove("overflow-hidden");
             }
         });
+    } else {
+        let overlayB = document.querySelector(".overlay-alfa");
+        overlayB.classList.add("none");
+        popups.forEach((popup) => {
+            if (!popup.classList.contains("close")) {
+                popup.classList.add("close");
+
+                document
+                    .querySelector("body")
+                    .classList.remove("overflow-hidden");
+            }
+        });
+    }
+}
+
+document.onkeyup = function (e) {
+    let overlay = document.querySelector(".overlay");
+    if (e.key === "Escape") {
+        if (overlay) {
+            overlay.classList.add("none");
+
+            popups.forEach((popup) => {
+                if (!popup.classList.contains("close")) {
+                    popup.classList.add("close");
+
+                    document
+                        .querySelector("body")
+                        .classList.remove("overflow-hidden");
+                }
+            });
+        } else {
+            let overlayC = document.querySelector(".overlay-alfa");
+            overlayC.classList.add("none");
+
+            popups.forEach((popup) => {
+                if (!popup.classList.contains("close")) {
+                    popup.classList.add("close");
+
+                    document
+                        .querySelector("body")
+                        .classList.remove("overflow-hidden");
+                }
+            });
+        }
     }
 };

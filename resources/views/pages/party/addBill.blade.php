@@ -89,12 +89,14 @@
             </div>
             <div class="up p-2 d-flex overflow-auto">
                 @foreach ($products as $product)
-                    <div class="box open-modal" data-type="items" data-id="{{ $product->id }}">
+                    <div class="box open-modal" data-type="items" data-id="{{ $product->id }}"
+                        data-saleprice="{{ $product->avg_price }}">
                         <img src="{{ asset($product->image) }}" alt="">
                         <div class="info-box p-3">
                             <span class="d-block fs-5"><b>اسم المنتج:</b> {{ $product->name }}</span>
                             <span class="d-block fs-5"><b>القسم:</b> {{ $product->department->name }}</span>
-                            <span class="fs-5"><b>الكميه المتاحه:</b> {{ $product->quantity }}</span>
+                            <span class="d-block fs-5"><b>الكميه المتاحه:</b> {{ $product->quantity }}</span>
+                            <span class="d-block fs-5"><b>السعر:</b> {{ $product->avg_price }}</span>
                         </div>
                     </div>
                 @endforeach
@@ -118,8 +120,8 @@
                         <img src="{{ asset($rent->image) }}" alt="">
                         <div class="info-box p-3">
                             <div class="d-block fs-5"><b>اسم المنتج:</b> {{ $rent->name }}</div>
-                            <div class="fs-5"><b>السعر:</b> {{ $rent->sale_price }} جنيه</div>
-                            <div class="fs-5"><b>الكميه:</b> {{ $rent->quantity }}</div>
+                            <div class="d-block fs-5"><b>السعر:</b> {{ $rent->sale_price }} جنيه</div>
+                            <div class="d-block fs-5"><b>الكميه:</b> {{ $rent->quantity }}</div>
                         </div>
                     </div>
                 @endforeach
@@ -173,7 +175,7 @@
                 <td colspan="4"></td>
                 <td id="totalPriceCell">الاجمالي: 0</td>
                 <td colspan="6">
-                    <form action="{{ route('party.addBillStore', $id) }}" method="post">
+                    <form action="{{ route('party.addBillStore', $id) }}" method="post" id="requestBillForm">
                         @csrf
                         <button id="payButton" class="submit main-btn p-3 ps-4 pe-4 w-100" type="submit">تأكيد معلومات
                             الفاتوره</button>
@@ -273,10 +275,7 @@
 
             //init hide modal inputs
             function hideModalInputs(modal) {
-                modal.find('.modalInputsContainers').each(function() {
-                    $(this).find('input, select, textarea').attr('required', false);
-                    $(this).hide();
-                });
+                modal.find('.modalInputsContainers').hide();
             }
 
             //init modal reset
@@ -318,8 +317,6 @@
             //init product inputs
             function productInputs(modal, id) {
                 modal.find('#productId').val(id);
-                modal.find('#unitPriceContainer').show();
-                modal.find('#unitPriceContainer').find('input#unitPrice').attr('required', true);
             }
 
             //init rent inputs
@@ -346,12 +343,12 @@
 
             // calculate and update total price
             function updateTotalPrice(modal) {
-                var totalPrice = 0;
-                $('#dataTableBody tr').each(function() {
-                    var rowTotal = parseFloat($(this).find('td:eq(4)').text());
-                    totalPrice += rowTotal;
-                });
-                $('#totalPriceCell').text('الاجمالي: ' + totalPrice);
+                // var totalPrice = 0;
+                // $('#dataTableBody tr').each(function() {
+                //     var rowTotal = parseFloat($(this).find('td#totalPriceTableItem').text());
+                //     totalPrice += +rowTotal;
+                // });
+                // $('#totalPriceCell').text('الاجمالي: ' + totalPrice);
                 closeModal(modal);
             }
 
@@ -368,38 +365,40 @@
                 newRow.append('<td>' + data.name + '</td>');
                 newRow.append('<td>' + data.quantity + '</td>');
                 newRow.append('<td>' + data.unit_price + '</td>');
-                newRow.append('<td>' + data.totalPrice + '</td>');
+                newRow.append('<td id="totalPriceTableItem">' + data.totalPrice + '</td>');
                 newRow.append('<td>' + data.type + '</td>');
                 newRow.append('<td>' + data.status + '</td>');
-                newRow.append('<td>' + data.party_id + '</td>');
                 newRow.append('<td>' + data.product_id + '</td>');
                 newRow.append('<td>' + data.rent_id + '</td>');
                 newRow.append('<td>' + data.eol_reason + '</td>');
 
                 // Append hidden input fields for each item
-                newRow.append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
+                $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
                     '][from]" value="' + data.from + '">');
-                newRow.append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
+                $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
                     '][name]" value="' + data.name + '">');
-                newRow.append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
+                $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
                     '][quantity]" value="' + data.quantity + '">');
-                newRow.append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
+                $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
                     '][unit_price]" value="' + data.unit_price + '">');
-                newRow.append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
+                $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
+                    '][totalPrice]" value="' + data.totalPrice + '">');
+                $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
                     '][type]" value="' + data.type + '">');
-                newRow.append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
+                $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
                     '][status]" value="' + data.status + '">');
-                newRow.append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
+                $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
                     '][party_id]" value="' + data.party_id + '">');
-                newRow.append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
+                $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
                     '][product_id]" value="' + data.product_id + '">');
-                newRow.append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
+                $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
                     '][rent_id]" value="' + data.rent_id + '">');
-                newRow.append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
+                $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
                     '][eol_reason]" value="' + data.eol_reason + '">');
 
+
                 // Append the new row to the table body
-                $('#dataTableBody').append(newRow);
+                // $('#dataTableBody').append(newRow);
 
                 // Calculate and update total price
                 updateTotalPrice(modal);
@@ -407,23 +406,25 @@
 
             // validate modal
             function validateModal(salePrice, modal, type, e) {
+                //data object for the request
                 let data = {
-                    from: modal.find('#from').val(),
-                    name: modal.find('#name').val(),
-                    quantity: modal.find('#quantity').val(),
-                    unit_price: modal.find('#unitPrice').val(),
-                    type: modal.find('#typeInput').val(),
-                    status: modal.find('#statusContainer input#name').prop('checked'),
-                    party_id: modal.find('#partyId').val(),
-                    product_id: modal.find('#productId').val(),
-                    rent_id: modal.find('#rentId').val(),
-                    eol_reason: modal.find('#eolReason').val(),
+                    from: modal.find('#from').val() ? modal.find('#from').val() : "----",
+                    name: modal.find('#name').val() ? modal.find('#name').val() : "----",
+                    quantity: +modal.find('#quantity').val() ? +modal.find('#quantity').val() : "----",
+                    unit_price: +salePrice ? +salePrice : "----",
+                    type: modal.find('#typeInput').val() ? modal.find('#typeInput').val() : "----",
+                    status: modal.find('#statusContainer input#flexCheckDefault20').prop('checked') ? "ready" :
+                        "preparing",
+                    party_id: +modal.find('#partyId').val() ? +modal.find('#partyId').val() : "----",
+                    product_id: +modal.find('#productId').val() ? +modal.find('#productId').val() : "----",
+                    rent_id: +modal.find('#rentId').val() ? +modal.find('#rentId').val() : "----",
+                    eol_reason: modal.find('#eolReason').val() ? modal.find('#eolReason').val() : "----",
+                    total_price: +modal.find('#totalPrice').val() ? +modal.find('#totalPrice').val() : "----",
                 }
-                if (type == 'items') {
-                    data.total_price = modal.find('#quantity').val() * modal.find('#unitPrice').val();
-                } else if (type == 'rent') {
+                if (type == 'items' || type == 'rent') {
                     data.total_price = +modal.find('#quantity').val() * +salePrice;
                 }
+                console.log(data);
                 addToTable(data, modal);
             }
 
@@ -438,6 +439,11 @@
                 let title = modal.find('#modalTitle');
                 let modalForm = modal.find('#modalFormElement');
                 let formBtn = modal.find('#modalSubmitBtn');
+
+                //reset inputs required
+                modal.find('.modalInputsContainers').each(function() {
+                    $(this).find('input, select, textarea').attr('required', false);
+                });
 
                 // status checkbox change inner text
                 modal.find('.form-check-2 input').on("change", function() {
@@ -457,7 +463,9 @@
                 //eol reason toggle
                 modal.find('#typeInputContainer select#typeInput').on('change', function() {
                     if ($(this).val() == 'eol') {
-                        modal.find('#eolReasonContainer').show();
+                        modal.find('#eolReasonContainer').slideDown(300);
+                    } else {
+                        modal.find('#eolReasonContainer').slideUp(300);
                     }
                 });
 
@@ -489,10 +497,6 @@
                     if (type === 'items' || type === 'rent') {
                         productAndRentInputs(modal);
                     }
-                    modalForm.submit(function(e) {
-                        e.preventDefault();
-                        validateModal(salePrice, modal, type, e);
-                    });
                 } else if (action == 'edit') {
                     formBtn.text('تعديل الفاتوره')
                 } else if (action == 'delete') {
@@ -501,9 +505,14 @@
                     formBtn.text('حفظ التعديلات')
                 }
 
-
                 // open this modal
                 openModal(modal);
+
+                modalForm.submit(function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    validateModal(salePrice, modal, type, e);
+                });
 
                 // listen on dismiss modal
                 $(".popup img#dismiss").click(function() {

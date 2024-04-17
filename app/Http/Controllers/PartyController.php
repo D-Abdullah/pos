@@ -11,6 +11,7 @@ use App\Models\Client;
 use App\Models\Department;
 use App\Models\Eol;
 use App\Models\Product;
+use App\Models\Purchase;
 use App\Models\Rent;
 use App\Models\WarehouseTransaction;
 use Illuminate\Http\Request;
@@ -124,6 +125,27 @@ class PartyController extends Controller
             $products = Product::all();
             $rents = Rent::all();
             $categories = Department::all();
+
+            // Initialize an array to store average unit prices for each product
+            $averagePrices = [];
+
+            // Loop through each product to calculate average unit price
+            foreach ($products as $product) {
+                // Fetch all purchases for the current product
+                $purchases = Purchase::where('product_id', $product->id)->pluck('unit_price');
+
+                // Calculate the average unit price for the current product
+                $averagePrice = $purchases->avg();
+
+                // Add the average price to the array
+                $averagePrices[$product->id] = $averagePrice;
+            }
+
+            // Now, add a new item to each product with the calculated average price
+            foreach ($products as $product) {
+                $product->avg_price = $averagePrices[$product->id] ?? 0;
+            }
+
             return view('pages.party.addBill', compact('id', 'products', 'rents', 'party', 'categories'));
         } catch (\Exception $e) {
             DB::rollBack();

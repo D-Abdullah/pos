@@ -117,6 +117,7 @@ class FakeData extends Seeder
                 'supplier_id' => $supplier->id,
                 'total_price' => $qty * $rentPrice
             ]);
+
             WarehouseTransaction::create([
                 'rent_id' => $rent->id,
                 'quantity' => $qty,
