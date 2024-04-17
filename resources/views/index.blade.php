@@ -4,6 +4,44 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('Assets/Css files/statistics.css') }}">
+
+    <style>
+        .dropdown-target {
+            position: relative;
+        }
+
+        .dropdown-target svg {
+            cursor: pointer;
+        }
+
+        .dropdown-target ul {
+            background-color: white;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 10;
+            display: none;
+        }
+
+        .dropdown-target ul li {
+            padding: 7px 30px;
+            cursor: pointer;
+        }
+
+        .dropdown-target ul li:hover {
+            background: #ddd;
+        }
+
+        .show-hide {
+
+            display: block !important;
+        }
+
+        .open {
+            opacity: 1 !important;
+            top: 50% !important;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -17,7 +55,7 @@
                     <h4 class="fw-medium fs-3">تقارير الارباح</h4>
                     <p class="text-color">نظرة عامة على الأرباح الأسبوعية</p>
                 </div>
-                <div class="left">
+                {{-- <div class="left">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22"
                         fill="none">
                         <circle cx="10.9997" cy="10.9999" r="0.916667" stroke="#4B465C" stroke-width="1.5"
@@ -33,7 +71,7 @@
                         <ellipse cx="10.9997" cy="4.58341" rx="0.916667" ry="0.916667" stroke="white"
                             stroke-opacity="0.5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                </div>
+                </div> --}}
             </div>
             <div class="chart d-flex justify-content-between align-items-center mb-3">
                 <div class="right">
@@ -84,7 +122,7 @@
                     <h4 class="text-color">تارجت العمل</h4>
                     <p class="text-color">باقي 7 ايام علي انتهاء التارجت</p>
                 </div>
-                <div class="left">
+                <div class="left dropdown-target">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22"
                         fill="none">
                         <circle cx="10.9997" cy="10.9999" r="0.916667" stroke="#4B465C" stroke-width="1.5"
@@ -100,6 +138,32 @@
                         <ellipse cx="10.9997" cy="4.58341" rx="0.916667" ry="0.916667" stroke="white"
                             stroke-opacity="0.5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
+
+                    <ul>
+                        <li class="add">اضافه</li>
+                        <li class="edit">تعديل</li>
+                        <li class="delete">حذف</li>
+                    </ul>
+
+                    <div class="popup-add popup shadow-sm rounded-3 position-fixed close">
+                        <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
+                        <h2 class="text-center mt-4 mb-4 opacity-75">اضافة تارجيت جديدة</h2>
+                        <form id="add-cate" method="post" action="">
+
+                            <div>
+                                <span class="d-block mb-1">اخر الموعد</span>
+                                <input type="text" name="dead_time" class="dead_time" placeholder="اخر الموعد">
+                            </div>
+                            <div>
+                                <span class="d-block">المبلغ</span>
+                                <input type="text" name="cost" class="cost" placeholder="المبلغ">
+                            </div>
+                            <div id="invalidAdd" class="invalid my-3"></div>
+                            <button class="main-btn mt-5" type="submit">اضافه التارجيت</button>
+                        </form>
+                    </div>
+
+                    <div class="overlay position-absolute none w-100 h-100"></div>
                 </div>
             </div>
             <div class="chart mb-5 d-flex align-items-center">
@@ -113,13 +177,13 @@
                             <span class="fs-5 opacity-50">150 الف من 200 الف</span>
                         </div>
                     </div>
-                    <div class="d-flex d-flex align-items-center gap-3">
+                    {{-- <div class="d-flex d-flex align-items-center gap-3">
                         <img src="./Assets/imgs/ticket.png" alt="">
                         <div class="d-flex flex-column"">
                             <span class="fw-bold fs-5">حفله جديدة</span>
                             <span class="fs-5 opacity-50">122 حفله من 150 حفله</span>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="left w-100 d-flex flex-column align-items-center gap-2 me-5">
                     <span class="fs-5 opacity-50">تقدم التارجت</span>
@@ -145,7 +209,7 @@
                 <canvas id="myChart5"></canvas>
             </div>
             <!-- <div class="up d-flex gap-5">
-                                                                                </div> -->
+                                                                                                                                                                                                                                                                            </div> -->
         </div>
     </div>
 
@@ -155,7 +219,7 @@
                 <h2>تقارير الارباح</h2>
                 <span>نظرة عامة على الأرباح السنوية</span>
             </div>
-            <div class="buttoms d-flex gap-4 mt-4 mb-4">
+            {{-- <div class="buttoms d-flex gap-4 mt-4 mb-4">
                 <div class="d-flex gap-4">
                     <button class="active" data-chart="customChart3">
                         <img src="./Assets/imgs/sales.png" alt="">
@@ -176,7 +240,7 @@
                         اضافه
                     </button>
                 </div>
-            </div>
+            </div> --}}
             <canvas class="canvas" id="customChart3"></canvas>
             <canvas class="canvas none" id="customChart4"></canvas>
             <canvas class="canvas none" id="customChart5"></canvas>
@@ -191,4 +255,20 @@
     <script src="{{ asset('Assets/JS files/chart.js') }}"></script>
     <script src="{{ asset('Assets/JS files/statistics.js') }}"></script>
     <script src="{{ asset('Assets/JS files/global.js') }}"></script>
+
+
+    {{-- open target --}}
+    <script>
+        const icon = document.querySelector(".dropdown-target svg");
+        const menuTarget = document.querySelector(".dropdown-target ul");
+
+        const targetPopup = document.querySelector(".dropdown-target popup");
+
+        const openTarget = document.querySelector(".dropdown-target ul .add");
+        const editTarget = document.querySelector(".dropdown-target ul .edit");
+
+        icon.addEventListener("click", function() {
+            menuTarget.classList.toggle("show-hide")
+        });
+    </script>
 @endsection

@@ -130,7 +130,7 @@
         </div>
     </div>
 
-    <table class="w-100 mb-4 border" id="table">
+    <table id="table" class="table w-100 mb-4 border">
 
         <thead class="head">
             <tr>
@@ -186,7 +186,7 @@
     </table>
 
 
-    <div class="popup-add popup close shadow-sm rounded-3 position-absolute overflow-auto" id="popupModal">
+    <div class="popup-add popup close shadow-sm rounded-3 overflow-auto" id="popupModal">
         <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" id="dismiss" alt="">
         <h2 class="text-center mt-4 mb-4 opacity-75" id="modalTitle"></h2>
         <form action="#" id="modalFormElement">
