@@ -12,6 +12,8 @@ class Product extends Model
         'description',
         'department_id',
         'added_by',
+        'party_id',
+        'party_qty',
         'quantity',
         'image',
         'created_at',

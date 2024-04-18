@@ -17,6 +17,8 @@ class Rent extends Model
         'quantity',
         'supplier_id',
         'total_price',
+        'party_id',
+        'party_qty',
         'added_by',
         'created_at',
         'updated_at'

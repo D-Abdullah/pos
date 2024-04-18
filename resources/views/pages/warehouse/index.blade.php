@@ -88,7 +88,9 @@
                         @else
                             <td class="text-danger fw-bold">لم يتم التحديد</td>
                         @endif
-                        <td>{{ $wt->quantity }}</td>
+                        <td>
+                            {{ request('type') == 'party' ? $wt->party_qty : $wt->quantity }}
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
@@ -124,114 +126,114 @@
 
 @section('script')
     <script src="{{ asset('Assets/JS files/warehouse.js') }}"></script>
-        {{-- For Exel --}}
-        <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
-        {{-- For PDF --}}
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js">
-        </script>
+    {{-- For Exel --}}
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+    {{-- For PDF --}}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js">
+    </script>
 
-        {{-- Print and Pdf and Excel  --}}
-        <script>
-            function printTable() {
-                // Clone the table
-                var myTable = document.getElementById("table").cloneNode(true);
-                myTable.setAttribute('border', '1');
-                myTable.setAttribute('cellpadding', '5');
+    {{-- Print and Pdf and Excel  --}}
+    <script>
+        function printTable() {
+            // Clone the table
+            var myTable = document.getElementById("table").cloneNode(true);
+            myTable.setAttribute('border', '1');
+            myTable.setAttribute('cellpadding', '5');
 
-                // Open a new window for printing
-                var printWindow = window.open('');
-                printWindow.document.write('<html dir="rtl"><head><title>Table Contents</title>');
+            // Open a new window for printing
+            var printWindow = window.open('');
+            printWindow.document.write('<html dir="rtl"><head><title>Table Contents</title>');
 
-                // Print the Table CSS.
-                // var table_style = document.getElementById("table_style").innerHTML;
-                printWindow.document.write('<style type="text/css">');
-                // printWindow.document.write(table_style);
-                printWindow.document.write('.print-hidden{display:none;}')
-                printWindow.document.write('#table{width:100%;}')
-                printWindow.document.write('</style>');
-                printWindow.document.write('</head>');
+            // Print the Table CSS.
+            // var table_style = document.getElementById("table_style").innerHTML;
+            printWindow.document.write('<style type="text/css">');
+            // printWindow.document.write(table_style);
+            printWindow.document.write('.print-hidden{display:none;}')
+            printWindow.document.write('#table{width:100%;}')
+            printWindow.document.write('</style>');
+            printWindow.document.write('</head>');
 
-                // Print the cloned table
-                printWindow.document.write('<body>');
-                printWindow.document.write('<div id="dvContents">');
-                printWindow.document.write(myTable.outerHTML);
-                printWindow.document.write('</div>');
-                printWindow.document.write('</body>');
+            // Print the cloned table
+            printWindow.document.write('<body>');
+            printWindow.document.write('<div id="dvContents">');
+            printWindow.document.write(myTable.outerHTML);
+            printWindow.document.write('</div>');
+            printWindow.document.write('</body>');
 
-                printWindow.document.write('</html>');
-                printWindow.document.close();
-                printWindow.print();
-            }
-            const print = document.getElementById("print");
-            print.addEventListener('click', () => {
-                printTable();
+            printWindow.document.write('</html>');
+            printWindow.document.close();
+            printWindow.print();
+        }
+        const print = document.getElementById("print");
+        print.addEventListener('click', () => {
+            printTable();
+        });
+        //End Print Table
+
+        // Start PDF File
+        function Export() {
+            var table = document.getElementById('table');
+
+            var lastColumnCells = table.querySelectorAll('td:last-child, th:last-child');
+
+
+            var tableCells = table.querySelectorAll('th, td');
+            tableCells.forEach(function(cell) {
+                cell.style.textAlign = "right";
             });
-            //End Print Table
 
-            // Start PDF File
-            function Export() {
-                var table = document.getElementById('table');
+            html2canvas(table, {
+                onrendered: function(canvas) {
+                    lastColumnCells.forEach(function(cell) {
+                        cell.style.display = '';
+                    });
 
-                var lastColumnCells = table.querySelectorAll('td:last-child, th:last-child');
+                    tableCells.forEach(function(cell) {
+                        cell.style.textAlign = "";
+                    });
 
+                    var data = canvas.toDataURL();
 
-                var tableCells = table.querySelectorAll('th, td');
-                tableCells.forEach(function(cell) {
-                    cell.style.textAlign = "right";
-                });
-
-                html2canvas(table, {
-                    onrendered: function(canvas) {
-                        lastColumnCells.forEach(function(cell) {
-                            cell.style.display = '';
-                        });
-
-                        tableCells.forEach(function(cell) {
-                            cell.style.textAlign = "";
-                        });
-
-                        var data = canvas.toDataURL();
-
-                        var docDefinition = {
-                            content: [{
-                                image: data,
-                                width: 500
-                            }]
-                        };
-                        pdfMake.createPdf(docDefinition).download("Table.pdf");
-                    }
-                });
-            }
-
-
-            const pdfBtn = document.getElementById("pdf");
-            pdfBtn.addEventListener('click', () => {
-                Export()
+                    var docDefinition = {
+                        content: [{
+                            image: data,
+                            width: 500
+                        }]
+                    };
+                    pdfMake.createPdf(docDefinition).download("Table.pdf");
+                }
             });
-            // End PDF File
-
-            // Start Exel Sheet
-            function htmlTableToExcel(type) {
-                var data = document.getElementById('table');
+        }
 
 
-                var excelFile = XLSX.utils.table_to_book(data, {
-                    sheet: "sheet1"
-                });
-                XLSX.write(excelFile, {
-                    bookType: type,
-                    bookSST: true,
-                    type: 'base64'
-                });
-                XLSX.writeFile(excelFile, 'ExportedFile:HTMLTableToExcel.' + type);
-            }
+        const pdfBtn = document.getElementById("pdf");
+        pdfBtn.addEventListener('click', () => {
+            Export()
+        });
+        // End PDF File
 
-            const exelBtn = document.getElementById("excel");
-            exelBtn.addEventListener('click', () => {
-                htmlTableToExcel('xlsx')
+        // Start Exel Sheet
+        function htmlTableToExcel(type) {
+            var data = document.getElementById('table');
+
+
+            var excelFile = XLSX.utils.table_to_book(data, {
+                sheet: "sheet1"
             });
-            // End Exel Sheet
-        </script>
+            XLSX.write(excelFile, {
+                bookType: type,
+                bookSST: true,
+                type: 'base64'
+            });
+            XLSX.writeFile(excelFile, 'ExportedFile:HTMLTableToExcel.' + type);
+        }
+
+        const exelBtn = document.getElementById("excel");
+        exelBtn.addEventListener('click', () => {
+            htmlTableToExcel('xlsx')
+        });
+        // End Exel Sheet
+    </script>
 
 @endsection
