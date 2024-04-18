@@ -327,11 +327,13 @@
             }
 
             //init product and rents inputs
-            function productAndRentInputs(modal) {
+            function productAndRentInputs(modal, type) {
                 modal.find('#quantityContainer').show();
                 modal.find('#quantityContainer').find('input#quantity').attr('required', true);
-                modal.find('#typeInputContainer').show();
-                modal.find('#typeInputContainer').find('select#typeInput').attr('required', true);
+                if (type == 'items') {
+                    modal.find('#typeInputContainer').show();
+                    modal.find('#typeInputContainer').find('select#typeInput').attr('required', true);
+                }
                 modal.find('#statusContainer').show();
             }
 
@@ -641,7 +643,7 @@
                             break;
                     }
                     if (type === 'items' || type === 'rent') {
-                        productAndRentInputs(modal);
+                        productAndRentInputs(modal, type);
                     }
                 } else if (action == 'edit') {
                     formBtn.text('تعديل الفاتوره')

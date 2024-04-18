@@ -11,11 +11,11 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('rents', function (Blueprint $table) {
-            $table->double('total_price', 10, 2)->after('quantity')->nullable();
-            $table->foreignId('supplier_id')->nullable()
-                ->constrained('suppliers')
+            $table->foreignId('party_id')->nullable()
+                ->constrained('parties')
                 ->onDelete('set null')
                 ->onUpdate('cascade');
+            $table->integer('party_qty')->nullable();
         });
     }
 
@@ -25,9 +25,9 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table('rents', function (Blueprint $table) {
-            $table->dropForeign('rents_supplier_id_foreign');
-            $table->dropColumn('supplier_id');
-            $table->dropColumn('total_price');
+            $table->dropForeign('rents_party_id_foreign');
+            $table->dropColumn('party_id');
+            $table->dropColumn('party_qty');
         });
     }
 };

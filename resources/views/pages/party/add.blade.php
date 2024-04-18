@@ -116,7 +116,9 @@
                         </select>
                     </div> --}}
 
-                    <div>
+                    <input type="hidden" name="status" value="contracted">
+
+                    {{-- <div class="d-none">
                         <label for="state" class="d-block">الحاله </label>
                         <select class="js-example-basic-single status" name="status" id="state">
                             <option selected hidden disabled>
@@ -128,7 +130,7 @@
                                 </option>
                             @endforeach
                         </select>
-                    </div>
+                    </div> --}}
 
                 </div>
                 <div class="parent d-flex mb-4">

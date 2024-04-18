@@ -162,164 +162,96 @@ class PartyController extends Controller
      */
     public function storeBill(Request $request, int $id)
     {
-        return $request->all();
         try {
             DB::beginTransaction();
             $party = Party::findOrFail($id);
 
-            // deposits
-            if ($request->input('deposits')) {
-                for ($i = 0; $i < count($request->input('deposits')); $i++) {
-                    $deposit = new Deposit();
-                    $deposit->party_id = $party->id;
-                    $deposit->type = "party";
-                    $deposit->cost = $request->input('deposits')[$i]['cost'];
-                    $deposit->date = $request->input('deposits')[$i]['date'];
-                    $deposit->save();
-                }
-            }
-
-            $testRequest = [
-                "_token" => "@csrf",
-                "deposits" => [
-                    [
-                        "cost" => 500,
-                        "date" => "2022-10-03"
-                    ],
-                    [
-                        "cost" => 5000,
-                        "date" => "2022-12-03"
-                    ]
-                ],
-                'bills' => [
-                    [
-                        "party_id" => $party->id,
-                        "from" => 'custom',
-                        "product_id" => null,
-                        "rent_id" => null,
-                        "name" => "نقل الكوشه",
-                        "quantity" => null,
-                        "unit_price" => null,
-                        "total_price" => 500,
-                        "type" => null,
-                        "eol_ression" => null,
-                        "status" => null
-                    ],
-                    [
-                        "party_id" => $party->id,
-                        "from" => 'items',
-                        "product_id" => 1,
-                        "rent_id" => null,
-                        "name" => null,
-                        "quantity" => 16,
-                        "unit_price" => 10,
-                        "total_price" => 160, # unit_price * quantity
-                        "type" => "sale",
-                        "eol_ression" => null,
-                        "status" => "preparing"
-                    ],
-                    [
-                        "party_id" => $party->id,
-                        "from" => 'items',
-                        "product_id" => 1,
-                        "rent_id" => null,
-                        "name" => null,
-                        "quantity" => 2,
-                        "unit_price" => 10,
-                        "total_price" => 20, # unit_price * quantity
-                        "type" => "eol",
-                        "eol_ression" => "eol because ...",
-                        "status" => "ready"
-                    ],
-                    [
-                        "party_id" => $party->id,
-                        "from" => 'items',
-                        "product_id" => 1,
-                        "rent_id" => null,
-                        "name" => null,
-                        "quantity" => 5,
-                        "unit_price" => 10,
-                        "total_price" => 50, # unit_price * quantity
-                        "type" => "rent",
-                        "eol_ression" => null,
-                        "status" => "preparing"
-                    ],
-                    [
-                        "party_id" => $party->id,
-                        "from" => 'rent',
-                        "product_id" => null,
-                        "rent_id" => 1,
-                        "name" => null,
-                        "quantity" => 10,
-                        "unit_price" => 20, # take from rent data
-                        "total_price" => 200, # take from rent data
-                        "type" => "rent",
-                        "eol_ression" => null,
-                        "status" => "preparing"
-                    ]
-                ]
-            ];
-
             // logic
-            foreach ($testRequest['bills'] as $bill) {
-
+            foreach ($request->input('bill') as $bill) {
+                $billDB = new Bill();
                 // rent
                 if ($bill['from'] == 'rent') {
                     $rent = Rent::findOrFail($bill['rent_id']);
-                    $bill['unit_price'] = $rent->sale_price;
-                    $bill['total_price'] = $rent->sale_price * $bill['quantity'];
-
-                    //check rent quantity is enough
-                }
-
-                // product
-                if ($bill['from'] == 'items') {
-                    $product = Product::findOrFail($bill['product_id']);
-                    $bill['total_price'] = $bill['unit_price'] * $bill['quantity'];
-
-                    //check product quantity is enough
-                }
-
-                // eol
-                if ($bill['type'] === 'eol') {
-                    $eol = Eol::create([
-                        'product_id' => $bill['product_id'],
-                        'quantity' => $bill['quantity'],
-                        'added_by' => Auth::user()->id,
-                        'reason' => $bill['eol_ression']
-                    ]);
-                }
-                // werehouse transaction
-                if ($party->status === "transported" && $bill['status'] === "ready") {
-                    if ($bill['from'] === 'items') {
-                        $werehouse_transaction = WarehouseTransaction::create([
-                            "product_id" => $bill['product_id'],
-                            "quantity" => $bill['quantity'],
-                            "from" => "المخزن",
-                            "to" => "الحفله " . $party->name,
+                    $billDB->from = $bill['from'];
+                    $billDB->name = null;
+                    $billDB->quantity = $bill['quantity'];
+                    $billDB->unit_price = $rent->sale_price;
+                    $billDB->total_price = $rent->sale_price * $bill['quantity'];
+                    $billDB->rent_id = $bill['rent_id'];
+                    $billDB->product_id = null;
+                    $billDB->type = 'rent';
+                    $billDB->status = $bill['status'];
+                    $billDB->party_id = $party->id;
+                    if ($party->status === "transported" && $bill['status'] === "ready") {
+                        $rent->update([
+                            "party_id" => $party->id,
+                            "party_qty" => $bill['quantity'],
                         ]);
                     }
+                    $billDB->save();
+                } else if ($bill['from'] == 'items') {
+                    $product = Product::findOrFail($bill['product_id']);
+                    $averagePrices = [];
+                    $purchases = Purchase::where('product_id', $product->id)->pluck('unit_price');
+                    $averagePrice = $purchases->avg();
+                    $averagePrices[$product->id] = $averagePrice;
+                    $product->avg_price = $averagePrices[$product->id] ?? 0;
+                    $billDB->from = $bill['from'];
+                    $billDB->name = null;
+                    $billDB->quantity = $bill['quantity'];
+                    $billDB->unit_price = $product->avg_price;
+                    $billDB->total_price = $product->avg_price * $bill['quantity'];
+                    $billDB->rent_id = null;
+                    $billDB->product_id = $bill['product_id'];
+                    $billDB->type = $bill['type'];
+                    $billDB->status = $bill['status'];
+                    $billDB->party_id = $party->id;
+                    if ($bill['type'] == 'eol') {
+                        Eol::create([
+                            'product_id' => $bill['product_id'],
+                            'quantity' => $bill['quantity'],
+                            'added_by' => Auth::user()->id,
+                            'reason' => $bill['eol_ression']
+                        ]);
+                        Product::where('id', $bill['product_id'])->update([
+                            'quantity' => $product->quantity - $bill['quantity'],
+                        ]);
+                    }
+                    // werehouse transaction
+                    if ($party->status === "transported" && $bill['status'] === "ready") {
+                        if ($bill['type'] == 'rent' || $bill['type'] == 'sale') {
+                            Product::where('id', $bill['product_id'])->update([
+                                "quantity" => $product->quantity - $bill['quantity'],
+                                "party_id" => $party->id,
+                                "party_qty" => $bill['quantity'],
+                            ]);
+                            WarehouseTransaction::create([
+                                "product_id" => $bill['product_id'],
+                                "quantity" => $bill['quantity'],
+                                "from" => "المخزن",
+                                "to" => "الحفله " . $party->name,
+                            ]);
+                        }
+                    }
+                    $billDB->save();
+                } else {
+                    $billDB->from = $bill['from'];
+                    $billDB->name = $bill['name'];
+                    $billDB->quantity = 1;
+                    $billDB->unit_price = null;
+                    $billDB->total_price = $bill['total_price'];
+                    $billDB->rent_id = null;
+                    $billDB->product_id = null;
+                    $billDB->type = 'sale';
+                    $billDB->status = 'ready';
+                    $billDB->party_id = $party->id;
+                    $billDB->save();
                 }
-
-                // store bill data in database
-                $bill = Bill::create([
-                    "party_id" => $party->id,
-                    "from" => $bill['from'],
-                    "product_id" => $bill['product_id'],
-                    "rent_id" => $bill['rent_id'],
-                    "name" => $bill['name'],
-                    "quantity" => $bill['quantity'],
-                    "unit_price" => $bill['unit_price'],
-                    "total_price" => $bill['total_price'],
-                    "type" => $bill['type'],
-                    "status" => $bill['status']
-                ]);
             }
-            // party
 
             DB::commit();
             return redirect()->route('party.all')
-                ->with(['success' => 'تم إنشاء الحفله بنجاح']);
+                ->with(['success' => 'تم إنشاء فاتورة الحفله بنجاح']);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('حدث خطأ أثناء اضافه بيانات الحفله: ' . $e->getMessage());
