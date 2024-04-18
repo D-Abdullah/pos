@@ -352,4 +352,20 @@ class PartyController extends Controller
     public function destroy(Party $party)
     {
     }
+    public function getname(Request $request, $type)
+    {
+
+        if ($type == 'product') {
+            $product = Product::where('id', $request->id)->first();
+            $averagePrices = [];
+            $purchases = Purchase::where('product_id', $product->id)->pluck('unit_price');
+            $averagePrice = $purchases->avg();
+            $averagePrices[$product->id] = $averagePrice;
+            $product->avg_price = $averagePrices[$product->id] ?? 0;
+            return $product;
+        } else if ($type == 'rent') {
+            return Rent::where('id', $request->id)->first();
+        }
+        return null;
+    }
 }

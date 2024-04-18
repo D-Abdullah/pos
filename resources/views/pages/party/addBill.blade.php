@@ -346,12 +346,23 @@
             // calculate and update total price
             function updateTotalPrice(modal) {
                 var totalPrice = 0;
-                $('#dataTableBody tr').each(function() {
+                $('#dataTableBody tr:not(.type-eol)').each(function() {
                     var rowTotal = parseFloat($(this).find('td#totalPriceTableItem').text());
                     totalPrice += +rowTotal;
                 });
                 $('#totalPriceCell').text('الاجمالي: ' + totalPrice);
                 closeModal(modal);
+            }
+
+            // get name of the product or the rent
+            function getNameFromServer(id, type) {
+                return $.ajax({
+                    url: '/party/get-name/' + type + '/',
+                    method: 'GET',
+                    data: {
+                        id: id
+                    }
+                });
             }
 
             // appent into table
@@ -361,49 +372,171 @@
 
                 // Create a new row with data
                 var newRow = $('<tr>');
+                if (data.type == 'eol') {
+                    newRow.addClass("type-eol")
+                }
 
-                // Append table data (td) elements with data values
-                newRow.append('<td>' + data.from + '</td>');
-                newRow.append('<td>' + data.name + '</td>');
-                newRow.append('<td>' + data.quantity + '</td>');
-                newRow.append('<td>' + data.unit_price + '</td>');
-                newRow.append('<td id="totalPriceTableItem">' + data.total_price + '</td>');
-                newRow.append('<td>' + data.type + '</td>');
-                newRow.append('<td>' + data.status + '</td>');
-                newRow.append('<td>' + data.product_id + '</td>');
-                newRow.append('<td>' + data.rent_id + '</td>');
-                newRow.append('<td>' + data.eol_reason + '</td>');
+                let from = data.from == 'items' ? "المنتجات" : (data.from == 'rent' ? "الايجارات" : "مخصص");
+                let type = data.type == 'rent' ? "ايجار" : (data.type == 'sale') ? "بيع" : "هالك"
+                let status = data.status ? "جاهز" : "غير جاهز"
 
-                // Append hidden input fields for each item
-                $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
-                    '][from]" value="' + data.from + '">');
-                $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
-                    '][name]" value="' + data.name + '">');
-                $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
-                    '][quantity]" value="' + data.quantity + '">');
-                $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
-                    '][unit_price]" value="' + data.unit_price + '">');
-                $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
-                    '][total_price]" value="' + data.total_price + '">');
-                $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
-                    '][type]" value="' + data.type + '">');
-                $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
-                    '][status]" value="' + data.status + '">');
-                $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
-                    '][party_id]" value="' + data.party_id + '">');
-                $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
-                    '][product_id]" value="' + data.product_id + '">');
-                $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
-                    '][rent_id]" value="' + data.rent_id + '">');
-                $('#requestBillForm').append('<input type="hidden" name="bill[' + $('#dataTableBody tr').length +
-                    '][eol_reason]" value="' + data.eol_reason + '">');
+                // Usage in your code
+                let productPromise = null;
+                let rentPromise = null;
+                if (data.product_id !== "----") {
+                    productPromise = getNameFromServer(data.product_id, 'product');
+                }
+
+                if (data.rent_id !== "----") {
+                    rentPromise = getNameFromServer(data.rent_id, 'rent');
+                }
+
+                if (data.from == 'custom') {
+                    // Append table data (td) elements with data values
+                    newRow.append('<td>' + from + '</td>');
+                    newRow.append('<td>' + data.name + '</td>');
+                    newRow.append('<td>' + "----" + '</td>');
+                    newRow.append('<td>' + "----" + '</td>');
+                    newRow.append('<td id="totalPriceTableItem">' + data.total_price + '</td>');
+                    newRow.append('<td>' + "----" + '</td>');
+                    newRow.append('<td>' + status + '</td>');
+                    newRow.append('<td>' + "----" + '</td>');
+                    newRow.append('<td>' + "----" + '</td>');
+                    newRow.append('<td>' + "----" + '</td>');
+                    // Append hidden input fields for each item
+                    $('#requestBillForm').append('<input type="hidden" name="bill[' + $(
+                            '#dataTableBody tr')
+                        .length +
+                        '][from]" value="' + data.from + '">');
+                    $('#requestBillForm').append('<input type="hidden" name="bill[' + $(
+                            '#dataTableBody tr')
+                        .length +
+                        '][name]" value="' + data.name + '">');
+                    $('#requestBillForm').append('<input type="hidden" name="bill[' + $(
+                            '#dataTableBody tr')
+                        .length +
+                        '][quantity]" value="' + data.quantity + '">');
+                    $('#requestBillForm').append('<input type="hidden" name="bill[' + $(
+                            '#dataTableBody tr')
+                        .length +
+                        '][unit_price]" value="' + data.unit_price + '">');
+                    $('#requestBillForm').append('<input type="hidden" name="bill[' + $(
+                            '#dataTableBody tr')
+                        .length +
+                        '][total_price]" value="' + data.total_price + '">');
+                    $('#requestBillForm').append('<input type="hidden" name="bill[' + $(
+                            '#dataTableBody tr')
+                        .length +
+                        '][type]" value="' + data.type + '">');
+                    $('#requestBillForm').append('<input type="hidden" name="bill[' + $(
+                            '#dataTableBody tr')
+                        .length +
+                        '][status]" value="' + data.status + '">');
+                    $('#requestBillForm').append('<input type="hidden" name="bill[' + $(
+                            '#dataTableBody tr')
+                        .length +
+                        '][party_id]" value="' + data.party_id + '">');
+                    $('#requestBillForm').append('<input type="hidden" name="bill[' + $(
+                            '#dataTableBody tr')
+                        .length +
+                        '][product_id]" value="' + data.product_id + '">');
+                    $('#requestBillForm').append('<input type="hidden" name="bill[' + $(
+                            '#dataTableBody tr')
+                        .length +
+                        '][rent_id]" value="' + data.rent_id + '">');
+                    $('#requestBillForm').append('<input type="hidden" name="bill[' + $(
+                            '#dataTableBody tr')
+                        .length +
+                        '][eol_reason]" value="' + data.eol_reason + '">');
+                    // Append the new row to the table body
+                    $('#dataTableBody').append(newRow);
+
+                    // Calculate and update total price
+                    updateTotalPrice(modal);
+                } else {
+                    // Resolve promises and set names
+                    $.when(productPromise, rentPromise).done(function(productResponse, rentResponse) {
+                        let res, resPrice
+                        if (productResponse) {
+                            res = productResponse[0];
+                            resPrice = res.avg_price
+                        }
+                        if (rentResponse) {
+                            res = rentResponse[0];
+                            resPrice = res.sale_price
+                        }
+                        // Append table data (td) elements with data values
+                        newRow.append('<td>' + from + '</td>');
+                        newRow.append('<td>' + data.name + '</td>');
+                        newRow.append('<td>' + data.quantity + '</td>');
+                        newRow.append('<td>' + resPrice + '</td>');
+                        newRow.append('<td id="totalPriceTableItem">' + (resPrice * data.quantity) +
+                            '</td>');
+                        newRow.append('<td>' + type + '</td>');
+                        newRow.append('<td>' + status + '</td>');
+                        if (rentResponse) {
+                            newRow.append('<td>' + "----" + '</td>');
+                            newRow.append('<td>' + res.name + '</td>');
+                        }
+                        if (productResponse) {
+                            newRow.append('<td>' + res.name + '</td>');
+                            newRow.append('<td>' + "----" + '</td>');
+                        }
+                        newRow.append('<td>' + data.eol_reason + '</td>');
 
 
-                // Append the new row to the table body
-                $('#dataTableBody').append(newRow);
+                        // Append hidden input fields for each item
+                        $('#requestBillForm').append('<input type="hidden" name="bill[' + $(
+                                '#dataTableBody tr')
+                            .length +
+                            '][from]" value="' + data.from + '">');
+                        $('#requestBillForm').append('<input type="hidden" name="bill[' + $(
+                                '#dataTableBody tr')
+                            .length +
+                            '][name]" value="' + data.name + '">');
+                        $('#requestBillForm').append('<input type="hidden" name="bill[' + $(
+                                '#dataTableBody tr')
+                            .length +
+                            '][quantity]" value="' + data.quantity + '">');
+                        $('#requestBillForm').append('<input type="hidden" name="bill[' + $(
+                                '#dataTableBody tr')
+                            .length +
+                            '][unit_price]" value="' + data.unit_price + '">');
+                        $('#requestBillForm').append('<input type="hidden" name="bill[' + $(
+                                '#dataTableBody tr')
+                            .length +
+                            '][total_price]" value="' + data.total_price + '">');
+                        $('#requestBillForm').append('<input type="hidden" name="bill[' + $(
+                                '#dataTableBody tr')
+                            .length +
+                            '][type]" value="' + data.type + '">');
+                        $('#requestBillForm').append('<input type="hidden" name="bill[' + $(
+                                '#dataTableBody tr')
+                            .length +
+                            '][status]" value="' + data.status + '">');
+                        $('#requestBillForm').append('<input type="hidden" name="bill[' + $(
+                                '#dataTableBody tr')
+                            .length +
+                            '][party_id]" value="' + data.party_id + '">');
+                        $('#requestBillForm').append('<input type="hidden" name="bill[' + $(
+                                '#dataTableBody tr')
+                            .length +
+                            '][product_id]" value="' + data.product_id + '">');
+                        $('#requestBillForm').append('<input type="hidden" name="bill[' + $(
+                                '#dataTableBody tr')
+                            .length +
+                            '][rent_id]" value="' + data.rent_id + '">');
+                        $('#requestBillForm').append('<input type="hidden" name="bill[' + $(
+                                '#dataTableBody tr')
+                            .length +
+                            '][eol_reason]" value="' + data.eol_reason + '">');
+                        // Append the new row to the table body
+                        $('#dataTableBody').append(newRow);
 
-                // Calculate and update total price
-                updateTotalPrice(modal);
+                        // Calculate and update total price
+                        updateTotalPrice(modal);
+                    });
+                }
             }
 
             // validate modal
@@ -424,15 +557,16 @@
                     total_price: 0,
                 };
 
-                if (type == 'items' || type == 'rent') {
-                    const quantity = +modal.find('input#quantity').val();
+                if (data.from == 'items' || data.from == 'rent') {
+                    let quantity = +modal.find('input#quantity').val();
                     if (!isNaN(quantity) && salePrice) {
                         data.total_price = quantity * salePrice;
                     }
                 } else {
-                    const totalPriceInput = modal.find('input#totalPrice').val();
+                    let totalPriceInput = modal.find('#totalPriceContainer input#totalPrice[required="required"]')
+                        .val();
                     if (totalPriceInput) {
-                        data.total_price = +totalPriceInput;
+                        data.total_price = totalPriceInput;
                     }
                 }
                 console.log(data);
@@ -526,7 +660,6 @@
                     e.stopPropagation();
                     e.stopImmediatePropagation();
                 });
-
                 // click event on submit btn for the modal form
                 modalForm.find('button#modalSubmitBtn').click(function(e) {
                     e.preventDefault();
