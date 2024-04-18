@@ -251,7 +251,7 @@
                                     </div>
                                     <div class="text-center">
                                         <img src="{{ asset($product->image) }}" alt="" width="200"
-                                            height="200" style="border: solid 1px #000;border-radius: 50%"
+                                            height="200" class="img"
                                             id="image">
                                         <label class="d-block" for="image">تعديل صوره المنتج</label>
                                         <input name="image" id="image" type="file" accept="image/*" />
@@ -486,7 +486,8 @@
                         const inputValue = input.value.trim();
                         const inputName = input.getAttribute('placeholder') || input.getAttribute(
                             'aria-placeholder');
-                        if (input.name == 'image') {
+
+                        if (input.name == 'image' || input.name == 'description') {
                             continue;
                         }
 
@@ -517,7 +518,7 @@
     {{-- Validation For Add --}}
     <script>
         const addForm = document.getElementById("add-cate");
-        const addInputs = addForm.querySelectorAll("input, select,textarea");
+        const addInputs = addForm.querySelectorAll("input, select, textarea");
         const addMessage = document.getElementById("invalidAdd");
 
         addForm.addEventListener('submit', (event) => {
@@ -529,7 +530,11 @@
                 const inputType = input.getAttribute('type');
                 const inputValue = input.value.trim();
                 const inputName = input.getAttribute('placeholder') || input.getAttribute('aria-placeholder');
+                const isDescription = input.getAttribute('name');
 
+                if (isDescription === 'description') {
+                    continue;
+                }
                 if (inputType === 'date' || inputType === 'number' || inputType === 'select-one') {
                     if (inputValue === "") {
                         emptyFields.push(inputName);

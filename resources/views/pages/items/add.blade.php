@@ -43,8 +43,7 @@
 
         <div>
             <label class="d-block" for="textarea">وصف المنتج</label>
-            <textarea class="category-input" name="description" id="textarea" cols="30" rows="10"
-                placeholder=" وصف المنتج"></textarea>
+            <textarea class="" name="description" id="textarea" cols="30" rows="10" placeholder=" وصف المنتج"></textarea>
         </div>
 
         <div>

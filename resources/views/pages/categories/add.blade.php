@@ -17,7 +17,7 @@
         </div>
         <div>
             <span class="d-block">وصف الفئة</span>
-            <textarea name="description" class="category-input" cols="30" rows="10" placeholder="وصف القسم"></textarea>
+            <textarea name="description" class="" cols="30" rows="10" placeholder="وصف القسم"></textarea>
         </div>
         <div id="invalidAdd" class="invalid invalidAdd my-3"></div>
         <button class="main-btn mt-5" type="submit">اضافه القسم</button>
