@@ -145,26 +145,38 @@
                         <li class="delete">حذف</li>
                     </ul>
 
-                    <div class="popup-add popup shadow-sm rounded-3 position-fixed close">
+                    {{-- Add ,Edit  Popup --}}
+                    <div id="targetPopup" class="popup-add popup shadow-sm rounded-3 position-fixed close">
                         <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
                         <h2 class="text-center mt-4 mb-4 opacity-75">اضافة تارجيت جديدة</h2>
                         <form id="add-cate" method="post" action="">
 
                             <div>
                                 <span class="d-block mb-1">اخر الموعد</span>
-                                <input type="text" name="dead_time" class="dead_time" placeholder="اخر الموعد">
+                                <input type="text" name="dead_time" class="category-input" placeholder="اخر الموعد">
                             </div>
                             <div>
                                 <span class="d-block">المبلغ</span>
-                                <input type="text" name="cost" class="cost" placeholder="المبلغ">
+                                <input type="text" name="cost" class="category-input" placeholder="المبلغ">
                             </div>
                             <div id="invalidAdd" class="invalid my-3"></div>
                             <button class="main-btn mt-5" type="submit">اضافه التارجيت</button>
                         </form>
                     </div>
 
-                    <div class="overlay position-absolute none w-100 h-100"></div>
+                    {{-- Delete Popup --}}
+                    <div id="targetDelete" class="popup-delete popup close shadow-sm rounded-3 position-fixed">
+                        <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
+                        <h3 class="fs-5 fw-bold mb-3">حذف العنصر</h3>
+                        <p>هل تريد الحذف متاكد !!</p>
+                        <div class="buttons mt-5 d-flex">
+                            <button class="agree rounded-2">نعم
+                                أريد</button>
+                            <button class="disagree me-3 text-light rounded-2 main-btn">لا أريد</button>
+                        </div>
+                    </div>
                 </div>
+                <div id="targetOverLay" class="overlay position-absolute none w-100 h-100"></div>
             </div>
             <div class="chart mb-5 d-flex align-items-center">
                 <div class="right w-100 gap-3 d-flex flex-column">
@@ -209,7 +221,7 @@
                 <canvas id="myChart5"></canvas>
             </div>
             <!-- <div class="up d-flex gap-5">
-                                                                                                                                                                                                                                                                            </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                                    </div> -->
         </div>
     </div>
 
@@ -261,14 +273,64 @@
     <script>
         const icon = document.querySelector(".dropdown-target svg");
         const menuTarget = document.querySelector(".dropdown-target ul");
-
-        const targetPopup = document.querySelector(".dropdown-target popup");
-
+        const targetPopup = document.getElementById("targetPopup");
+        const targetDelete = document.getElementById("targetDelete");
+        const targetOverlay = document.getElementById("targetOverLay");
         const openTarget = document.querySelector(".dropdown-target ul .add");
         const editTarget = document.querySelector(".dropdown-target ul .edit");
+        const deleteTarget = document.querySelector(".dropdown-target ul .delete");
 
-        icon.addEventListener("click", function() {
+
+        icon.addEventListener("click", () => {
             menuTarget.classList.toggle("show-hide")
+        });
+
+        // open popup and overlay
+        if (targetPopup) {
+            openTarget.addEventListener('click', () => {
+                targetPopup.classList.remove('close')
+                targetOverlay.classList.remove('none')
+            })
+            editTarget.addEventListener('click', () => {
+                targetPopup.classList.remove('close')
+                targetOverlay.classList.remove('none')
+            })
+        }
+
+        // Delete Target
+        if (targetDelete) {
+            deleteTarget.addEventListener('click', () => {
+                targetDelete.classList.remove('close')
+                targetOverlay.classList.remove('none')
+            })
+
+        }
+    </script>
+
+    {{-- Validation For Add --}}
+    <script>
+        const addForm = document.getElementById("add-cate");
+        const addInputs = addForm.querySelectorAll(".category-input");
+        const addMessage = document.getElementById("invalidAdd");
+
+        addForm.addEventListener('submit', (event) => {
+            addMessage.textContent = '';
+            let notValid = false;
+
+            for (let i = 0; i < addInputs.length; i++) {
+                if (addInputs[i].value.trim() === "") {
+                    event.preventDefault();
+                    const inputName = addInputs[i].getAttribute('placeholder');
+                    addMessage.textContent = `الحقل ${inputName} مطلوب`;
+                    addInputs[i].focus();
+                    notValid = true;
+                    if (notValid) {
+                        break;
+                    }
+
+                }
+            }
+
         });
     </script>
 @endsection

@@ -949,10 +949,16 @@ button.concert {
     align-items: center;
 }
 
-#spinner .spinner-border {
-    /* display: block;
-    position: fixed;
-    top: 47%;
-    left: 47%;
-    z-index: 999; */
+/* New Image */
+.popup .img {
+    border: solid 1px #000;
+    border-radius: 50%;
+    position: relative;
+    padding: 10px;
+    margin: 17px;
+}
+.invalid {
+    color: red;
+    font-size: 12px;
+    text-align: center;
 }

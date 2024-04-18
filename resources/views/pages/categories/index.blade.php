@@ -150,8 +150,7 @@
                                         </div>
                                         <div>
                                             <span class="d-block">وصف القسم</span>
-                                            <textarea name="description" class="category-input" id="textarea" cols="30" rows="10"
-                                                placeholder="تفاصيل القسم">{{ $department->description }}</textarea>
+                                            <textarea name="description" class="" id="textarea" cols="30" rows="10" placeholder="وصف القسم">{{ $department->description }}</textarea>
                                         </div>
                                         <div id="invalidEdit" class="invalid my-3"></div>
                                         <button class="main-btn mt-5" type="submit">تعديل</button>

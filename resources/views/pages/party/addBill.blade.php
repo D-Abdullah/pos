@@ -91,7 +91,7 @@
                 @foreach ($products as $product)
                     <div class="box open-modal" data-type="items" data-id="{{ $product->id }}"
                         data-saleprice="{{ $product->avg_price }}">
-                        <img src="{{ asset($product->image) }}" alt="">
+                        <img src="{{ asset($product->image) }}" style="padding: 25px;border-radius: 22px;" alt="">
                         <div class="info-box p-3">
                             <span class="d-block fs-5"><b>اسم المنتج:</b> {{ $product->name }}</span>
                             <span class="d-block fs-5"><b>القسم:</b> {{ $product->department->name }}</span>
