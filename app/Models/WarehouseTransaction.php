@@ -14,6 +14,7 @@ class WarehouseTransaction extends Model
         'to',
         'product_id',
         'rent_id',
+        'type',
         'created_at',
         'updated_at'
     ];

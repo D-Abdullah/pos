@@ -6,15 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Department extends Model
 {
+    protected $table = 'departments';
     protected $fillable =
-    [
-        'id',
-        'name',
-        'description',
-        'added_by',
-        'created_at',
-        'updated_at'
-    ];
+        [
+            'id',
+            'name',
+            'description',
+            'added_by',
+            'created_at',
+            'updated_at'
+        ];
 
 
     public function product()

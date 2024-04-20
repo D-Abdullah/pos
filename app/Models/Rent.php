@@ -13,7 +13,6 @@ class Rent extends Model
         'name',
         'image',
         'rent_price',
-        'sale_price',
         'quantity',
         'supplier_id',
         'total_price',
@@ -34,5 +33,10 @@ class Rent extends Model
     public function supplier()
     {
         return $this->belongsTo(Supplier::class);
+    }
+
+    public function party()
+    {
+        return $this->belongsTo(Party::class);
     }
 }

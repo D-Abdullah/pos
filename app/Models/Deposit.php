@@ -6,14 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Deposit extends Model
 {
+    protected $table = 'deposits';
     protected $fillable = [
         'id',
         'cost',
         'date',
         'is_paid', # bool
-        'type', # supplier or party
+        'type', # supplier or client
         'supplier_id',
         'party_id',
+        'from',
+        'employee_id',
+        'safe_id',
         'created_at',
         'updated_at'
     ];
@@ -26,5 +30,13 @@ class Deposit extends Model
     public function party()
     {
         return $this->belongsTo(Party::class);
+    }
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
+    public function safe()
+    {
+        return $this->belongsTo(Safe::class);
     }
 }

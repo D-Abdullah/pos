@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Purchase extends Model
 {
+    protected $table = 'purchases';
     protected $fillable = [
         'id',
         'date',
@@ -15,6 +16,7 @@ class Purchase extends Model
         'added_by',
         'product_id',
         'supplier_id',
+        'party_id',
         'created_at',
         'updated_at',
     ];
@@ -34,5 +36,9 @@ class Purchase extends Model
     public function product()
     {
         return $this->hasOne(Product::class, 'id', 'product_id');
+    }
+    public function party()
+    {
+        return $this->belongsTo(Party::class);
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Bill extends Model
 {
+    protected $table = 'bills';
     protected $fillable = [
         'id',
         'party_id',
