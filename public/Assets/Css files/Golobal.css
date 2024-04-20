@@ -5,16 +5,12 @@
     /* main-background */
 
     /* active scroll hover botton and border*/
-    --active-and-scroll: linear-gradient(
-        72deg,
-        #7367f0 22.16%,
-        rgba(115, 103, 240, 0.7) 76.47%
-    );
-    --hover-menu: linear-gradient(
-            0deg,
+    --active-and-scroll: linear-gradient(72deg,
+            #7367f0 22.16%,
+            rgba(115, 103, 240, 0.7) 76.47%);
+    --hover-menu: linear-gradient(0deg,
             rgba(255, 255, 255, 0.8) 0%,
-            rgba(255, 255, 255, 0.8) 100%
-        ),
+            rgba(255, 255, 255, 0.8) 100%),
         #8692d0;
     --main-btn: #7367f0;
     --active-btn: #7367f0;
@@ -309,7 +305,7 @@ label {
     font-size: 22px;
 }
 
-.page .menu > div {
+.page .menu>div {
     padding: 0px 14px;
 }
 
@@ -377,7 +373,7 @@ label {
     flex: 1;
 }
 
-.page .main-container header .info > div {
+.page .main-container header .info>div {
     margin-right: 20px !important;
 }
 
@@ -427,7 +423,7 @@ header .up button.shrink svg {
 /* end of header */
 
 /* h2 */
-.page .main-container > h2 {
+.page .main-container>h2 {
     color: var(--text-color);
 }
 
@@ -461,7 +457,7 @@ section {
     background-color: var(--secound-Background-color);
 }
 
-.component-right > button {
+.component-right>button {
     padding: 10px 30px !important;
 }
 
@@ -620,7 +616,7 @@ header .select-btn ul {
     border: 1px solid var(--main-btn);
 }
 
-.page .basket .up > div {
+.page .basket .up>div {
     display: flex;
     justify-content: space-between !important;
     border-radius: var(--main-radius);
@@ -630,11 +626,11 @@ header .select-btn ul {
     background-color: var(--hover-list-dropdown);
 }
 
-.page .basket .up > div span {
+.page .basket .up>div span {
     font-size: 17px;
 }
 
-.page .basket .up > div img {
+.page .basket .up>div img {
     cursor: pointer;
 }
 
@@ -659,7 +655,7 @@ header .select-btn ul {
     overflow-y: auto !important;
 }
 
-.popup.purchases > img {
+.popup.purchases>img {
     position: sticky absolute !important;
     top: 5px;
     right: 5px;
@@ -704,8 +700,8 @@ input:not([type="checkbox"]) {
     cursor: pointer;
 }
 
-.popup-add > div,
-.popup-edit > div {
+.popup-add>div,
+.popup-edit>div {
     margin-bottom: 15px;
 }
 
@@ -714,7 +710,7 @@ input:not([type="checkbox"]) {
     width: 100% !important;
 }
 
-.f-row > div {
+.f-row>div {
     width: 100% !important;
 }
 
@@ -950,13 +946,7 @@ button.concert {
 }
 
 /* New Image */
-.popup .img {
-    border: solid 1px #000;
-    border-radius: 50%;
-    position: relative;
-    padding: 10px;
-    margin: 17px;
-}
+
 .invalid {
     color: red;
     font-size: 12px;

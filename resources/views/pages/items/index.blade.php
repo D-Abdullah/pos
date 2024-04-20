@@ -44,6 +44,14 @@
             font-size: 12px;
             text-align: center;
         }
+
+        .popup .img {
+            border: solid 1px #000;
+            border-radius: 50%;
+            position: relative;
+            padding: 10px;
+            margin: 17px;
+        }
     </style>
 
 @endsection
@@ -251,8 +259,7 @@
                                     </div>
                                     <div class="text-center">
                                         <img src="{{ asset($product->image) }}" alt="" width="200"
-                                            height="200" class="img"
-                                            id="image">
+                                            height="200" class="img" id="image">
                                         <label class="d-block" for="image">تعديل صوره المنتج</label>
                                         <input name="image" id="image" type="file" accept="image/*" />
                                     </div>
