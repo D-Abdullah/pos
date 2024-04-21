@@ -76,7 +76,6 @@ class RentController extends Controller
             }
             $rent = Rent::create([
                 'name' => $request->input('name'),
-                'sale_price' => $request->input('sale_price'),
                 'rent_price' => $request->input('rent_price'),
                 'quantity' => $request->input('quantity'),
                 'total_price' => $request->input('rent_price') * $request->input('quantity'),
@@ -84,13 +83,13 @@ class RentController extends Controller
                 'supplier_id' => $request->input('supplier_id'),
                 'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
-
-
             WarehouseTransaction::create([
+                'product_id' => null,
                 'rent_id' => $rent->id,
                 'quantity' => $request->input('quantity'),
                 'from' => 'المورد: ' . Supplier::findOrFail($request->input('supplier_id'))->name,
                 'to' => "مخزن الإيجار",
+                'type' => 'rent',
             ]);
 
             return redirect()->route('rent.all')->with(['success' => 'تم إنشاء الايجار ' . $request->input('name') . ' بنجاح.']);
@@ -127,7 +126,6 @@ class RentController extends Controller
             }
             $rent->update([
                 'name' => $request->input('name'),
-                'sale_price' => $request->input('sale_price'),
                 'rent_price' => $request->input('rent_price'),
                 'quantity' => $request->input('quantity'),
                 'total_price' => $request->input('rent_price') * $request->input('quantity'),
@@ -135,12 +133,14 @@ class RentController extends Controller
                 'supplier_id' => $request->input('supplier_id'),
             ]);
             WarehouseTransaction::create([
+                'product_id' => null,
                 'rent_id' => $rent->id,
                 'quantity' => abs($request->input('quantity') - $oldQty),
                 'from' => 'المورد: ' . Supplier::findOrFail($request->input('supplier_id'))->name,
                 'to' => "مخزن الإيجار",
+                'type' => 'rent',
             ]);
-            return redirect()->route('rent.all')->with(['success' => 'تم تحديث الايجار ' . $request->input('name') . ' بنجاح.']);
+            return redirect()->route('rent.all')->with(['success' => 'تم تحديث الايجار "' . $request->input('name') . '" بنجاح.']);
         } catch (\Exception $e) {
             Log::error('حدث خطأ أثناء تحديث الايجار: ' . $e->getMessage());
 

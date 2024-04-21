@@ -27,7 +27,6 @@ class StoreRentRequest extends FormRequest
         return [
             'name' => 'required|string',
             'rent_price' => 'required|numeric',
-            'sale_price' => 'required|numeric',
             'quantity' => 'required|integer',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'supplier_id' => 'required|exists:suppliers,id',
@@ -41,8 +40,6 @@ class StoreRentRequest extends FormRequest
             'name.string' => 'يجب أن يكون الاسم نصًا.',
             'quantity.required' => 'حقل الكمية مطلوب.',
             'quantity.integer' => 'يجب أن تكون الكمية عددًا صحيحًا.',
-            'sale_price.required' => 'يجب ان يكون حقل سعر البيع مطلوب',
-            'sale_price.integer' => 'يجب ان يكون سعر البيع صحيحا',
             'rent_price.required' => 'يجب ان يكون حقل سعر الايجار مطلوب',
             'rent_price.integer' => 'يجب ان يكون سعر الايجار صحيحا',
             'image.image' => 'يجب أن يكون الملف ملف صورة.',

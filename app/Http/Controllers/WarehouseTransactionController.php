@@ -20,14 +20,16 @@ class WarehouseTransactionController extends Controller
                 'product' => 'nullable|exists:products,id',
                 'from' => 'nullable|string',
                 'to' => 'nullable|string',
+                'type' => 'nullable|string',
                 'date_from' => 'nullable|date',
                 'date_to' => 'nullable|date',
             ];
 
             $messages = [
                 'product.exists' => 'المنتج غير موجود.',
-                'from' => 'المخزن من غير صالح.',
-                'to' => 'المخزن الى غير صالح.',
+                'from.string' => 'المخزن من غير صالح.',
+                'to.string' => 'المخزن الى غير صالح.',
+                'type.string' => 'النوع الى غير صالح.',
                 'date_from.date' => 'تاريخ "من" غير صالح.',
                 'date_to.date' => 'تاريخ "إلى" غير صالح.',
             ];
@@ -43,6 +45,9 @@ class WarehouseTransactionController extends Controller
             }
             if ($request->filled('to')) {
                 $wts->where('to', 'LIKE', '%' . $request->input('to') . '%');
+            }
+            if ($request->filled('type')) {
+                $wts->where('type', 'LIKE', '%' . $request->input('type') . '%');
             }
             // Apply Date Filters
             if ($request->filled('date_from')) {

@@ -77,6 +77,30 @@
                         <input type="search" name="to" value="{{ request('to') }}" placeholder="بحث">
                     </div>
                     <div>
+
+                        <label class="d-block">النوع</label>
+                        <select class="js-example-basic-single type" name="type">
+                            <option value="" {{ request('type') ? 'disabled hidden' : 'selected disabled hidden' }}>
+                                اختر النوع
+                            </option>
+                            @php
+                                $types = [
+                                    'purchases' => 'عملية شراء',
+                                    'party_sale' => 'بيع حفله',
+                                    'party_eol' => 'هالك حفله',
+                                    'party_rent' => 'عوائد ايجار حفله',
+                                    'eol' => 'هالك',
+                                    'rent' => 'ايجار',
+                                ];
+                            @endphp
+                            @foreach ($types as $k => $type)
+                                <option value="{{ $k }}" {{ request('type') == $k ? 'selected' : '' }}>
+                                    {{ $type }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
                         <label for="startDate">من تاريخ:</label>
                         <input type="date" id="startDate" name="date_from" value="{{ request('date_from') }}">
                     </div>
@@ -115,6 +139,7 @@
                     <th>الكميه</th>
                     <th>من</th>
                     <th>الي</th>
+                    <th>النوع</th>
                     <th>التاريخ</th>
                 </tr>
             </thead>
@@ -132,13 +157,28 @@
                         @if ($wt->product)
                             <td>{{ $wt->product->name }}</td>
                         @elseif($wt->rent)
-                            <td><span class="text-danger">(مستأجر)</span> {{ $wt->rent->name }}</td>
+                            <td> {{ $wt->rent->name }}</td>
                         @else
                             <td class="text-danger fw-bold">لم يتم التحديد</td>
                         @endif
                         <td>{{ $wt->quantity }}</td>
                         <td>{{ $wt->from }}</td>
                         <td>{{ $wt->to }}</td>
+                        <td>
+                            <b class="text-success">
+                                @php
+                                    $types = [
+                                        'purchases' => 'عملية شراء',
+                                        'party_sale' => 'بيع حفله',
+                                        'party_eol' => 'هالك حفله',
+                                        'party_rent' => 'عوائد ايجار حفله',
+                                        'eol' => 'هالك',
+                                        'rent' => 'ايجار',
+                                    ];
+                                @endphp
+                                {{ $types[$wt->type] }}
+                            </b>
+                        </td>
                         <td> {{ $wt->updated_at->format('Y/m/d') }}</td>
                     </tr>
                 @endforeach
@@ -307,6 +347,7 @@
     <script>
         $(document).ready(function() {
             $('.js-example-basic-single').select2();
+            $('.js-example-basic-single.type').select2();
         });
     </script>
 @endsection

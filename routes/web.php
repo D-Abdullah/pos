@@ -1,23 +1,24 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-use Illuminate\Http\Request;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PurchaseController;
-use App\Http\Controllers\TargetController;
 use App\Http\Controllers\PartyController;
 use App\Http\Controllers\RentController;
 use App\Http\Controllers\EolController;
+use App\Http\Controllers\FinancialTransactionController;
+use App\Http\Controllers\FinancialTransactionTypeController;
 use App\Http\Controllers\WarehouseTransactionController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SafeController;
 use App\Http\Controllers\UserController;
 use App\Providers\RouteServiceProvider;
 
@@ -157,6 +158,110 @@ Route::group(['middleware' => 'auth'], function () {
             ->name('eol.delete');
     });
 
+    //warehouse
+    Route::group(['prefix' => 'warehouse'], function () {
+        Route::middleware('permission:read warehouse')->get('/all', [WarehouseController::class, 'index'])->name('warehouse.all');
+    });
+
+    //warehouse transaction
+    Route::group(['prefix' => 'warehouse-transaction'], function () {
+        Route::middleware('permission:read warehouseTransaction')->get('/all', [WarehouseTransactionController::class, 'index'])->name('warehouse-transaction.all');
+    });
+
+    //roles
+    Route::group(['prefix' => 'role'], function () {
+        Route::middleware('permission:read role')
+            ->get('/all', [RoleController::class, 'index'])->name('role.all');
+        Route::middleware('permission:create role')
+            ->post('/add', [RoleController::class, 'store'])->name('role.add');
+        Route::middleware('permission:update role')
+            ->put('/{id}', [RoleController::class, 'update'])->name('role.update');
+        Route::middleware('permission:delete role')
+            ->delete('/{id}', [RoleController::class, 'destroy'])->name('role.delete');
+    });
+
+    //users
+    Route::group(['prefix' => 'user'], function () {
+        Route::middleware('permission:read user')
+            ->get('/all', [UserController::class, 'index'])->name('user.all');
+        Route::middleware('permission:create user')
+            ->post('/add', [UserController::class, 'store'])->name('user.add');
+        Route::middleware('permission:update user')
+            ->put('/{id}', [UserController::class, 'update'])->name('user.update');
+        Route::middleware('permission:delete user')
+            ->delete('/{id}', [UserController::class, 'destroy'])->name('user.delete');
+    });
+
+    //reports
+    Route::group(['prefix' => 'report'], function () {
+        Route::middleware('permission:read report')->get('/all', [ReportController::class, 'index'])->name('report.all');
+    });
+
+    //Employees
+    Route::group(['prefix' => 'employee'], function () {
+        Route::middleware('permission:read employee')
+            ->get('/all', [EmployeeController::class, 'index'])
+            ->name('employee.all');
+        Route::middleware('permission:create employee')
+            ->post('/add', [EmployeeController::class, 'store'])
+            ->name('employee.add');
+        Route::middleware('permission:update employee')
+            ->put('/{id}', [EmployeeController::class, 'update'])
+            ->name('employee.update');
+        Route::middleware('permission:delete employee')
+            ->delete('/{id}', [EmployeeController::class, 'destroy'])
+            ->name('employee.delete');
+    });
+
+    //Safe
+    Route::group(['prefix' => 'safe'], function () {
+        Route::middleware('permission:read safe')
+            ->get('/all', [SafeController::class, 'index'])
+            ->name('safe.all');
+        Route::middleware('permission:create safe')
+            ->post('/add', [SafeController::class, 'store'])
+            ->name('safe.add');
+        Route::middleware('permission:update safe')
+            ->put('/{id}', [SafeController::class, 'update'])
+            ->name('safe.update');
+        Route::middleware('permission:delete safe')
+            ->delete('/{id}', [SafeController::class, 'destroy'])
+            ->name('safe.delete');
+    });
+
+    //financial transaction type
+    Route::group(['prefix' => 'financial-transaction-type'], function () {
+        Route::middleware('permission:read ft_type')
+            ->get('/all', [FinancialTransactionTypeController::class, 'index'])
+            ->name('ft.type.all');
+        Route::middleware('permission:create ft_type')
+            ->post('/add', [FinancialTransactionTypeController::class, 'store'])
+            ->name('ft.type.add');
+        Route::middleware('permission:update ft_type')
+            ->put('/{id}', [FinancialTransactionTypeController::class, 'update'])
+            ->name('ft.type.update');
+        Route::middleware('permission:delete ft_type')
+            ->delete('/{id}', [FinancialTransactionTypeController::class, 'destroy'])
+            ->name('ft.type.delete');
+    });
+
+    //financial transaction
+    Route::group(['prefix' => 'financial-transaction'], function () {
+        Route::middleware('permission:read ft')
+            ->get('/all', [FinancialTransactionController::class, 'index'])
+            ->name('ft.all');
+        Route::middleware('permission:create ft')
+            ->post('/add', [FinancialTransactionController::class, 'store'])
+            ->name('ft.add');
+        Route::middleware('permission:update ft')
+            ->put('/{id}', [FinancialTransactionController::class, 'update'])
+            ->name('ft.update');
+        Route::middleware('permission:delete ft')
+            ->delete('/{id}', [FinancialTransactionController::class, 'destroy'])
+            ->name('ft.delete');
+    });
+
+
     //party
     Route::group(['prefix' => 'party'], function () {
         Route::middleware('permission:read party')
@@ -200,45 +305,5 @@ Route::group(['middleware' => 'auth'], function () {
         Route::middleware('permission:delete party')
             ->delete('/delete/{id}', [PartyController::class, 'destroy'])
             ->name('party.delete');
-    });
-
-    //warehouse
-    Route::group(['prefix' => 'warehouse'], function () {
-        Route::middleware('permission:read warehouse')->get('/all', [WarehouseController::class, 'index'])->name('warehouse.all');
-    });
-
-    //warehouse transaction
-    Route::group(['prefix' => 'warehouse-transaction'], function () {
-        Route::middleware('permission:read warehouseTransaction')->get('/all', [WarehouseTransactionController::class, 'index'])->name('warehouse-transaction.all');
-    });
-
-    //roles
-    Route::group(['prefix' => 'role'], function () {
-        Route::middleware('permission:read role')
-            ->get('/all', [RoleController::class, 'index'])->name('role.all');
-        Route::middleware('permission:create role')
-            ->post('/add', [RoleController::class, 'store'])->name('role.add');
-        Route::middleware('permission:update role')
-            ->put('/{id}', [RoleController::class, 'update'])->name('role.update');
-        Route::middleware('permission:delete role')
-            ->delete('/{id}', [RoleController::class, 'destroy'])->name('role.delete');
-    });
-
-    //users
-    Route::group(['prefix' => 'user'], function () {
-        Route::middleware('permission:read user')
-            ->get('/all', [UserController::class, 'index'])->name('user.all');
-        Route::middleware('permission:create user')
-            ->post('/add', [UserController::class, 'store'])->name('user.add');
-        Route::middleware('permission:update user')
-            ->put('/{id}', [UserController::class, 'update'])->name('user.update');
-        Route::middleware('permission:delete user')
-            ->delete('/{id}', [UserController::class, 'destroy'])->name('user.delete');
-    });
-
-
-    //reports
-    Route::group(['prefix' => 'report'], function () {
-        Route::middleware('permission:read report')->get('/all', [ReportController::class, 'index'])->name('report.all');
     });
 });

@@ -75,6 +75,26 @@ class RoleController extends Controller
             'update party' => 'تحديث الحفله',
             'delete party' => 'حذف الحفله',
 
+            'create employee' => 'إنشاء الموظف',
+            'read employee' => 'قراءة الموظف',
+            'update employee' => 'تحديث الموظف',
+            'delete employee' => 'حذف الموظف',
+
+            'create safe' => 'إنشاء الخزنه',
+            'read safe' => 'قراءة الخزنه',
+            'update safe' => 'تحديث الخزنه',
+            'delete safe' => 'حذف الخزنه',
+
+            'create ft_type' => 'إنشاء انواع معاملات ماليه',
+            'read ft_type' => 'قراءة انواع معاملات ماليه',
+            'update ft_type' => 'تحديث انواع معاملات ماليه',
+            'delete ft_type' => 'حذف انواع معاملات ماليه',
+
+            'create ft' => 'إنشاء معاملات ماليه',
+            'read ft' => 'قراءة معاملات ماليه',
+            'update ft' => 'تحديث معاملات ماليه',
+            'delete ft' => 'حذف معاملات ماليه',
+
             'read report' => 'قراءة التقارير',
         ];
     }

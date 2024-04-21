@@ -48,5 +48,26 @@ const PERMISSIONS = [
     'read party',
     'update party',
     'delete party',
+
+    'create employee',
+    'read employee',
+    'update employee',
+    'delete employee',
+
+    'create safe',
+    'read safe',
+    'update safe',
+    'delete safe',
+
+    'create ft_type',
+    'read ft_type',
+    'update ft_type',
+    'delete ft_type',
+
+    'create ft',
+    'read ft',
+    'update ft',
+    'delete ft',
+
     'read report',
 ];

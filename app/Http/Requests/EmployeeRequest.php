@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UpdateRentRequest extends FormRequest
+class EmployeeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,27 +25,23 @@ class UpdateRentRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'quantity' => 'required|integer',
-            'rent_price' => 'required|numeric',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'supplier_id' => 'required|exists:suppliers,id',
+            'phone' => 'required|string|regex:/^[0-9+\-]+$/',
         ];
     }
 
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
     public function messages(): array
     {
         return [
             'name.required' => 'حقل الاسم مطلوب.',
             'name.string' => 'يجب أن يكون الاسم نصًا.',
-            'quantity.required' => 'حقل الكمية مطلوب.',
-            'quantity.integer' => 'يجب أن تكون الكمية عددًا صحيحًا.',
-            'rent_price.required' => 'يجب ان يكون حقل سعر الايجار مطلوب',
-            'rent_price.integer' => 'يجب ان يكون سعر الايجار صحيحا',
-            'image.image' => 'يجب أن يكون الملف ملف صورة.',
-            'image.mimes' => 'يجب أن يكون الصورة من نوع jpeg, png, jpg, أو gif.',
-            'image.max' => 'يجب ألا يتجاوز حجم الصورة 2 ميجابايت.',
-            'supplier_id.required' => 'المورد مطلوب',
-            'supplier_id.exists' => 'المورد غير موجود',
+            'phone.required' => 'حقل الهاتف مطلوب.',
+            'phone.string' => 'يجب أن يكون الهاتف نصًا.',
+            'phone.regex' => 'يجب أن يكون الهاتف في صيغة صحيحة.',
         ];
     }
 
