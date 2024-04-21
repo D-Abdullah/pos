@@ -26,6 +26,7 @@ class StoreProductRequest extends FormRequest
         return [
             'name' => 'required|string',
             'department_id' => 'required|integer|exists:departments,id',
+            'unit_price' => 'required|integer',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
@@ -46,6 +47,8 @@ class StoreProductRequest extends FormRequest
             'department_id.exists' => 'القسم المحدد غير صحيح.',
             'description.required' => 'حقل الوصف مطلوب.',
             'description.string' => 'يجب أن يكون الوصف نصًا.',
+            'unit_price.required' => 'سعر الوحده مطلوب',
+            'unit_price.integer' => 'يجب أن يكون حقل سعر الوحده عددًا صحيحًا.',
             'image.image' => 'يجب أن يكون الملف ملف صورة.',
             'image.mimes' => 'يجب أن يكون الصورة من نوع jpeg, png, jpg, أو gif.',
             'image.max' => 'يجب ألا يتجاوز حجم الصورة 2 ميجابايت.',

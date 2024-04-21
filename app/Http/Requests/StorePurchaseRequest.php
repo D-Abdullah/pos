@@ -26,6 +26,7 @@ class StorePurchaseRequest extends FormRequest
         return [
             'supplier_id' => 'required|integer|exists:suppliers,id',
             'product_id' => 'required|integer|exists:products,id',
+            'party_id' => 'nullable|integer|exists:parties,id',
             'date' => 'required|date',
             'quantity' => 'required|integer',
             'unit_price' => 'required|numeric',
@@ -46,6 +47,8 @@ class StorePurchaseRequest extends FormRequest
             'product_id.required' => 'حقل المنتج مطلوب.',
             'product_id.integer' => 'حقل المنتج يجب أن يكون عبارة عن رقم صحيح.',
             'product_id.exists' => 'المنتج المحدد غير موجود.',
+            'party_id.integer' => 'حقل الحفله يجب أن يكون عبارة عن رقم صحيح.',
+            'party_id.exists' => 'الحفله المحدده غير موجود.',
             'date.required' => 'حقل التاريخ مطلوب.',
             'date.date' => 'حقل التاريخ يجب أن يكون تاريخ صحيح.',
             'quantity.required' => 'حقل الكمية مطلوب.',

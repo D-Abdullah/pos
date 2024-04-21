@@ -33,7 +33,11 @@
 
 
         </div>
-
+        <div>
+            <label class="d-block mb-1" for="category-unitPrice">سعر الوحده</label>
+            <input class="category-input" type="number" name="unit_price" id="category-unitPrice"
+                placeholder="سعر الوحده">
+        </div>
         {{-- <div class="f-row d-flex gap-4">
             <div>
                 <label class="d-block mb-1" for="buy-price">الكمية</label>

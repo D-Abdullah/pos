@@ -82,6 +82,16 @@
     min-height: 100vh !important;
 }
 
+@media screen and (max-width: 768px) {
+    .page .vertical-menu {
+        display: none;
+    }
+
+    .main-container {
+        width: 100%;
+    }
+}
+
 button {
     border: none;
     outline: none;
@@ -523,7 +533,7 @@ table .address {
 }
 
 .page section {
-    max-height: 680px;
+    margin: 5px 0 50px 0 !important;
 }
 
 .page section .table-control {

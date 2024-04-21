@@ -91,16 +91,16 @@ class PartyController extends Controller
                 'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
 
-            if ($request->input('deposits')) {
-                for ($i = 0; $i < count($request->input('deposits')); $i++) {
-                    $deposit = new Deposit();
-                    $deposit->party_id = $party->id;
-                    $deposit->type = "party";
-                    $deposit->cost = $request->input('deposits')[$i]['cost'];
-                    $deposit->date = $request->input('deposits')[$i]['date'];
-                    $deposit->save();
-                }
-            }
+            // if ($request->input('deposits')) {
+            //     for ($i = 0; $i < count($request->input('deposits')); $i++) {
+            //         $deposit = new Deposit();
+            //         $deposit->party_id = $party->id;
+            //         $deposit->type = "party";
+            //         $deposit->cost = $request->input('deposits')[$i]['cost'];
+            //         $deposit->date = $request->input('deposits')[$i]['date'];
+            //         $deposit->save();
+            //     }
+            // }
 
             DB::commit();
             return redirect()->route('party.addBill', $party->id)
@@ -148,7 +148,6 @@ class PartyController extends Controller
 
             return view('pages.party.addBill', compact('id', 'products', 'rents', 'party', 'categories'));
         } catch (\Exception $e) {
-            DB::rollBack();
             Log::error('حدث خطأ أثناء عرض صفحه بيانات الفاتوره: ' . $e->getMessage());
 
             return redirect()->back()
@@ -293,39 +292,39 @@ class PartyController extends Controller
 
     public function update(UpdatePartyRequest $request, $id)
     {
-        // try {
-        DB::beginTransaction();
-        $party = Party::findOrFail($id);
-        $party->update([
-            'client_id' => $request->input('client_id'),
-            'name' => $request->input('name'),
-            'address' => $request->input('address'),
-            'date' => $request->input('date'),
-            'status' => $request->input('status'),
-            'added_by' => auth()->user()->getAuthIdentifier(),
-        ]);
+        try {
+            DB::beginTransaction();
+            $party = Party::findOrFail($id);
+            $party->update([
+                'client_id' => $request->input('client_id'),
+                'name' => $request->input('name'),
+                'address' => $request->input('address'),
+                'date' => $request->input('date'),
+                'status' => $request->input('status'),
+                'added_by' => auth()->user()->getAuthIdentifier(),
+            ]);
 
-        // if ($request->input('deposits')) {
-        //     for ($i = 0; $i < count($request->input('deposits')); $i++) {
-        //         $deposit = new Deposit();
-        //         $deposit->party_id = $party->id;
-        //         $deposit->type = "party";
-        //         $deposit->cost = $request->input('deposits')[$i]['cost'];
-        //         $deposit->date = $request->input('deposits')[$i]['date'];
-        //         $deposit->save();
-        //     }
-        // }
+            // if ($request->input('deposits')) {
+            //     for ($i = 0; $i < count($request->input('deposits')); $i++) {
+            //         $deposit = new Deposit();
+            //         $deposit->party_id = $party->id;
+            //         $deposit->type = "party";
+            //         $deposit->cost = $request->input('deposits')[$i]['cost'];
+            //         $deposit->date = $request->input('deposits')[$i]['date'];
+            //         $deposit->save();
+            //     }
+            // }
 
-        DB::commit();
-        return redirect()->route('party.editBill', $party->id)
-            ->with(['success' => 'تم تعديل بيانات الحفله بنجاح, الأن قم بأضافه بيانات الفاتوره']);
-        // } catch (\Exception $e) {
-        //     DB::rollBack();
-        //     Log::error('حدث خطأ أثناء تعديل بيانات الحفله: ' . $e->getMessage());
+            DB::commit();
+            return redirect()->route('party.editBill', $party->id)
+                ->with(['success' => 'تم تعديل بيانات الحفله بنجاح, الأن قم بأضافه بيانات الفاتوره']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('حدث خطأ أثناء تعديل بيانات الحفله: ' . $e->getMessage());
 
-        //     return redirect()->back()->withInput($request->all())
-        //         ->with(['error' => 'حدث خطأ أثناء تعديل بيانات الحفله. يرجى المحاولة مرة أخرى.']);
-        // }
+            return redirect()->back()->withInput($request->all())
+                ->with(['error' => 'حدث خطأ أثناء تعديل بيانات الحفله. يرجى المحاولة مرة أخرى.']);
+        }
     }
 
     public function editBill(Party $party)

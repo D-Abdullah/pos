@@ -41,6 +41,20 @@
             </div>
         </div>
 
+        <div class="dds add party">
+            <label class="d-block">اختر الحفله (اختياري)</label>
+            <select class="js-example-basic-single party add" name="party_id" aria-placeholder="اختر الحفله">
+                <option value="" {{ old('party_id') ? 'disabled hidden' : 'selected disabled hidden' }}>
+                    اختر الحفله
+                </option>
+                @foreach ($parties as $party)
+                    <option value="{{ $party->id }}" {{ old('party_id') == $party->id ? 'selected' : '' }}>
+                        {{ $party->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
         <div class="f-row d-flex gap-4">
             <div>
                 <label class="d-block mb-1" for="purchase-date">تاريخ الشراء</label>
@@ -72,7 +86,7 @@
                 <label class="d-block mb-1" for="purchase-total-price">سعر الوحده</label>
                 <input type="text" name="unit_price" id="purchase-total-price"
                     class="form-control {{ $errors->has('total_price') ? 'is-invalid' : '' }} category-input"
-                    value="{{ old('total_price') }}" placeholder="السعر الإجمالي">
+                    value="{{ old('total_price') }}" placeholder="السعر الوحده">
                 @if ($errors->has('total_price'))
                     <div class="invalid-feedback">
                         {{ $errors->first('total_price') }}

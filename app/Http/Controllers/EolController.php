@@ -51,7 +51,6 @@ class EolController extends Controller
             $products = Product::all();
             return view('pages.eol.index', compact('eols', 'products'));
         } catch (\Exception $e) {
-            DB::rollBack();
             Log::error('حدث خطأ أثناء جلب الهالك: ' . $e->getMessage());
 
             return redirect()->back()->with(['error' => 'حدث خطأ أثناء جلب الهالك. يرجى المحاولة مرة أخرى.']);

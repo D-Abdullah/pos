@@ -58,7 +58,6 @@ class WarehouseTransactionController extends Controller
 
             return view('pages.warehouse_transaction.index', compact('wts', 'products'));
         } catch (\Exception $e) {
-            DB::rollBack();
             Log::error('حدث خطأ أثناء جلب معاملات المخزن: ' . $e->getMessage());
 
             return redirect()->back()->with(['error' => 'حدث خطأ أثناء جلب معاملات المخزن. يرجى المحاولة مرة أخرى.']);

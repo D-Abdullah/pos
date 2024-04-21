@@ -137,6 +137,7 @@
                     <th>المنتج</th>
                     <th>القسم</th>
                     <th>الكميه</th>
+                    <th>سعر الوحده</th>
                     <th>بواسطه</th>
                     <th>التاريخ</th>
                     <th class="print-hidden">
@@ -161,7 +162,7 @@
             <tbody>
                 @if (count($products) === 0)
                     <tr>
-                        <td colspan="7" class="text-center">
+                        <td colspan="8" class="text-center">
                             لا توجد بيانات
                         </td>
                     </tr>
@@ -181,8 +182,8 @@
                         @else
                             <td class="text-danger fw-bold">لم يتم التحديد</td>
                         @endif
-                        {{-- <td>{{ $product->description }}</td> --}}
                         <td>{{ $product->quantity }}</td>
+                        <td>{{ $product->unit_price }}</td>
                         <td>
                             {{ $product->added_by }}
                         </td>
@@ -244,6 +245,12 @@
                                             </select>
                                         </div>
 
+                                    </div>
+                                    <div>
+                                        <label class="d-block mb-1" for="category-unitPrice">سعر الوحده</label>
+                                        <input class="category-input" type="number" name="unit_price"
+                                            id="category-unitPrice" placeholder="سعر الوحده"
+                                            value="{{ $product->unit_price }}">
                                     </div>
                                     {{-- <div class="f-row d-flex gap-4">
                                                 <div>
@@ -514,7 +521,6 @@
                         event.preventDefault();
                         editMessage.textContent =
                             `الحقول التالية مطلوبة: ${emptyFields.join(', ')}`;
-                        // Optionally, you can focus on the first empty field
                         editInputs[0].focus();
                     }
                 });
@@ -539,7 +545,7 @@
                 const inputName = input.getAttribute('placeholder') || input.getAttribute('aria-placeholder');
                 const isDescription = input.getAttribute('name');
 
-                if (isDescription === 'description') {
+                if (input.name == 'image' || input.name == 'description') {
                     continue;
                 }
                 if (inputType === 'date' || inputType === 'number' || inputType === 'select-one') {

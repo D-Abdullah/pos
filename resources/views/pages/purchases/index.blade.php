@@ -41,6 +41,11 @@
             width: 150px !important;
         }
 
+        .select2-container,
+        .dds.party {
+            width: 100% !important;
+        }
+
         .dds.add .select2-container,
         .dds.edit .select2-container {
             width: 100% !important;
@@ -109,7 +114,7 @@
                         </select>
                     </div>
                     <div class="dds">
-                        <label for="date_to">اختر المنتج</label>
+                        <label>اختر المنتج</label>
                         <select class="js-example-basic-single product" name="product">
                             <option value=""
                                 {{ request('product') ? 'disabled hidden' : 'selected disabled hidden' }}>اختر المنتج
@@ -122,6 +127,19 @@
                         </select>
                     </div>
 
+                    <div class="dds">
+                        <label>اختر حفله</label>
+                        <select class="js-example-basic-single party" name="party">
+                            <option value="" {{ request('party') ? 'disabled hidden' : 'selected disabled hidden' }}>
+                                اختر حفله
+                            </option>
+                            @foreach ($parties as $party)
+                                <option value="{{ $party->id }}"
+                                    {{ request('party') == $party->id ? 'selected' : '' }}>{{ $party->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
                     <!-- Filter by Date From -->
                     <div class="dateInp">
                         <label for="startDate">من تاريخ:</label>
@@ -162,6 +180,7 @@
                 <tr>
                     <th>المنتج</th>
                     <th>المورد</th>
+                    <th>الحفله</th>
                     <th>الكميه</th>
                     <th>الاجمالي</th>
                     <th>بواسطه</th>
@@ -189,7 +208,7 @@
 
                 @if (count($purchases) === 0)
                     <tr>
-                        <td colspan="7" class="text-center">
+                        <td colspan="8" class="text-center">
                             لا توجد بيانات
                         </td>
                     </tr>
@@ -205,6 +224,11 @@
                         @endif
                         @if ($purchase->supplier)
                             <td>{{ $purchase->supplier->name }}</td>
+                        @else
+                            <td class="text-danger fw-bold">لم يتم التحديد</td>
+                        @endif
+                        @if ($purchase->party)
+                            <td>{{ $purchase->party->name }}</td>
                         @else
                             <td class="text-danger fw-bold">لم يتم التحديد</td>
                         @endif
@@ -231,12 +255,12 @@
                                     @method('put')
                                     <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
                                         alt="">
-                                    <h2 class="text-center mt-4 mb-4 opacity-75">تحديث دفعات عملية شراء</h2>
+                                    <h2 class="text-center mt-4 mb-4 opacity-75">تحديث عملية شراء</h2>
 
                                     <div class="f-row d-flex gap-4">
                                         <div class="dds add">
                                             <label class="d-block" for="date_to">اختر المورد</label>
-                                            <select class="js-example-basic-single supplier add" name="supplier_id"
+                                            <select class="js-example-basic-single supplier edit" name="supplier_id"
                                                 aria-placeholder="اختر المورد">
                                                 <option value=""
                                                     {{ old('supplier_id') ? 'disabled hidden' : 'selected disabled hidden' }}>
@@ -252,7 +276,7 @@
                                         </div>
                                         <div class="dds add">
                                             <label class="d-block" for="date_to">اختر المنتج</label>
-                                            <select class="js-example-basic-single product add" name="product_id"
+                                            <select class="js-example-basic-single product edit" name="product_id"
                                                 aria-placeholder="اختر المنتج">
                                                 <option value=""
                                                     {{ old('product_id') ? 'disabled hidden' : 'selected disabled hidden' }}>
@@ -266,6 +290,22 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                    </div>
+                                    <div class="dds add party">
+                                        <label class="d-block">اختر الحفله (اختياري)</label>
+                                        <select class="js-example-basic-single party edit" name="party_id"
+                                            aria-placeholder="اختر الحفله">
+                                            <option value=""
+                                                {{ old('party_id') ? 'disabled hidden' : 'selected disabled hidden' }}>
+                                                اختر الحفله
+                                            </option>
+                                            @foreach ($parties as $party)
+                                                <option value="{{ $party->id }}"
+                                                    {{ $purchase->party_id == $party->id ? 'selected' : '' }}>
+                                                    {{ $party->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
 
                                     <div class="f-row d-flex gap-4">
@@ -299,7 +339,7 @@
                                             <label class="d-block mb-1" for="purchase-total-price">سعر الوحده</label>
                                             <input type="text" name="unit_price" id="purchase-total-price"
                                                 class="form-control {{ $errors->has('total_price') ? 'is-invalid' : '' }}"
-                                                value="{{ $purchase->total_price }}" placeholder="السعر الإجمالي">
+                                                value="{{ $purchase->total_price }}" placeholder="السعر الوحده">
                                             @if ($errors->has('total_price'))
                                                 <div class="invalid-feedback">
                                                     {{ $errors->first('total_price') }}
@@ -350,7 +390,7 @@
 
                                     <!-- Submit Button -->
                                     <div id="invalidEdit" class="invalid invalidEdit my-3"></div>
-                                    <button class="main-btn mt-3" type="submit" id="formSubmitBtnUpdate">تحديث دفعات
+                                    <button class="main-btn mt-3" type="submit" id="formSubmitBtnUpdate">تحديث
                                         عملية
                                         الشراء</button>
 
@@ -677,7 +717,9 @@
                         const inputValue = input.value.trim();
                         const inputName = input.getAttribute('placeholder') || input.getAttribute(
                             'aria-placeholder');
-
+                        if (input.name == 'party_id') {
+                            continue;
+                        }
                         if (inputType === 'date' || inputType === 'number' || inputType ===
                             'select-one') {
                             if (inputValue === "") {
@@ -717,6 +759,9 @@
                 const inputType = input.getAttribute('type');
                 const inputValue = input.value.trim();
                 const inputName = input.getAttribute('placeholder') || input.getAttribute('aria-placeholder');
+                if (input.name == 'party_id') {
+                    continue;
+                }
 
                 if (inputType === 'date' || inputType === 'number' || inputType === 'select-one') {
                     if (inputValue === "") {
@@ -823,23 +868,16 @@
     <script>
         $(document).ready(function() {
             $('.js-example-basic-single.product').select2();
-        });
-        $(document).ready(function() {
             $('.js-example-basic-single.supplier').select2();
-        });
+            $('.js-example-basic-single.party').select2();
 
-        $(document).ready(function() {
             $('.js-example-basic-single.product.add').select2();
-        });
-        $(document).ready(function() {
             $('.js-example-basic-single.supplier.add').select2();
-        });
+            $('.js-example-basic-single.party.add').select2();
 
-        $(document).ready(function() {
             $('.js-example-basic-single.product.edit').select2();
-        });
-        $(document).ready(function() {
             $('.js-example-basic-single.supplier.edit').select2();
+            $('.js-example-basic-single.party.add').select2();
         });
     </script>
 

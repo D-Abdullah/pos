@@ -25,7 +25,7 @@ class FakeData extends Seeder
      */
     public function run(): void
     {
-        for ($i = 0; $i < 2; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             // departments
             $department = Department::create([
                 'name' => 'Department ' . ($i + 1),
@@ -122,7 +122,7 @@ class FakeData extends Seeder
             }
         }
         // employee
-        for ($x = 0; $x < 2; $x++) {
+        for ($x = 0; $x < 100; $x++) {
             $emp = Employee::create([
                 'name' => 'employee ' . ($x + 1),
                 'phone' => '0123456789',
@@ -173,7 +173,7 @@ class FakeData extends Seeder
         }
 
         // client
-        for ($i = 0; $i < 2; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             Client::create([
                 'name' => 'Client ' . ($i + 1),
                 'phone' => '0123456789',

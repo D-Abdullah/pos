@@ -55,7 +55,6 @@ class ClientController extends Controller
 
             return view('pages.clients.index', compact('clients'));
         } catch (\Exception $e) {
-            DB::rollBack();
             Log::error('حدث خطأ أثناء جلب العملاء: ' . $e->getMessage());
 
             return redirect()->back()->with(['error' => 'حدث خطأ أثناء جلب العملاء. يرجى المحاولة مرة أخرى.']);
@@ -76,7 +75,6 @@ class ClientController extends Controller
 
             return redirect()->route('client.all')->with(['success' => 'تم إنشاء العميل ' . $request->input('name') . ' بنجاح.']);
         } catch (\Exception $e) {
-            DB::rollBack();
             Log::error('حدث خطأ أثناء انشاء العميل: ' . $e->getMessage());
 
             return redirect()->back()->withInput($request->all())->with(['error' => 'حدث خطأ أثناء انشاء العميل. يرجى المحاولة مرة أخرى.']);
@@ -98,7 +96,6 @@ class ClientController extends Controller
 
             return redirect()->route('client.all')->with(['success' => 'تم تحديث العميل ' . $request->input('name') . ' بنجاح.']);
         } catch (\Exception $e) {
-            DB::rollBack();
             Log::error('حدث خطأ أثناء تحديث العميل: ' . $e->getMessage());
 
             return redirect()->back()->withInput($request->all())->with(['error' => 'حدث خطأ أثناء تحديث العميل. يرجى المحاولة مرة أخرى.']);

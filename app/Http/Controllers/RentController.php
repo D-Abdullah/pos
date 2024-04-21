@@ -95,7 +95,6 @@ class RentController extends Controller
 
             return redirect()->route('rent.all')->with(['success' => 'تم إنشاء الايجار ' . $request->input('name') . ' بنجاح.']);
         } catch (\Exception $e) {
-            DB::rollBack();
             Log::error('حدث خطأ أثناء انشاء ايجار: ' . $e->getMessage());
 
             return redirect()->back()->withInput($request->all())->with(['error' => 'حدث خطأ أثناء انشاء ايجار. يرجى المحاولة مرة أخرى.']);
@@ -143,7 +142,6 @@ class RentController extends Controller
             ]);
             return redirect()->route('rent.all')->with(['success' => 'تم تحديث الايجار ' . $request->input('name') . ' بنجاح.']);
         } catch (\Exception $e) {
-            DB::rollBack();
             Log::error('حدث خطأ أثناء تحديث الايجار: ' . $e->getMessage());
 
             return redirect()->back()->withInput($request->all())->with(['error' => 'حدث خطأ أثناء تحديث الايجار. يرجى المحاولة مرة أخرى.']);

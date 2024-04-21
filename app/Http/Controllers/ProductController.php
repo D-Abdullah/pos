@@ -62,7 +62,6 @@ class ProductController extends Controller
             $departments = Department::all();
             return view('pages.items.index', compact('products', 'departments'));
         } catch (\Exception $e) {
-            DB::rollBack();
             Log::error('حدث خطأ أثناء جلب المنتجات: ' . $e->getMessage());
 
             return redirect()->back()->with(['error' => 'حدث خطأ أثناء جلب المنتجات. يرجى المحاولة مرة أخرى.']);
@@ -76,6 +75,7 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         try {
+            DB::beginTransaction();
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
 
@@ -88,9 +88,10 @@ class ProductController extends Controller
                 'description' => $request->input('description'),
                 'department_id' => $request->input('department_id'),
                 'image' => $imagePath ?? 'imgs/default.png',
+                'unit_price' => $request->input('unit_price'),
                 'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
-
+            DB::commit();
             return redirect()->route('product.all')->with(['success' => 'تم إنشاء المنتج ' . $request->input('name') . ' بنجاح.']);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -106,6 +107,7 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, $id)
     {
         try {
+            DB::beginTransaction();
             $product = Product::findOrFail($id);
             if ($request->hasFile('image')) {
                 $oldImage = $product->image;
@@ -127,9 +129,10 @@ class ProductController extends Controller
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),
                 'department_id' => $request->input('department_id'),
+                'unit_price' => $request->input('unit_price'),
                 'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
-
+            DB::commit();
             return redirect()->route('product.all')->with(['success' => 'تم تحديث المنتج ' . $request->input('name') . ' بنجاح.']);
         } catch (\Exception $e) {
             DB::rollBack();

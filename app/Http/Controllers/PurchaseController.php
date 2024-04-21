@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Purchase;
 use App\Http\Requests\StorePurchaseRequest;
 use App\Http\Requests\UpdatePurchaseRequest;
+use App\Models\Party;
 use App\Models\Supplier;
 use App\Models\WarehouseTransaction;
 use Exception;
@@ -24,6 +25,7 @@ class PurchaseController extends Controller
             $rules = [
                 'product' => 'nullable|exists:products,id',
                 'supplier' => 'nullable|exists:suppliers,id',
+                'party' => 'nullable|exists:parties,id',
                 'date_from' => 'nullable|date',
                 'date_to' => 'nullable|date',
             ];
@@ -43,6 +45,9 @@ class PurchaseController extends Controller
             if ($request->filled('supplier')) {
                 $purchases->where('supplier_id', $request->input('supplier'));
             }
+            if ($request->filled('party')) {
+                $purchases->where('party_id', $request->input('party'));
+            }
 
             if ($request->filled('date_from')) {
                 $purchases->whereDate('updated_at', '>=', $request->input('date_from'));
@@ -53,11 +58,12 @@ class PurchaseController extends Controller
             }
 
 
-            $purchases = $purchases->with(['supplier', 'product'])->paginate(PAGINATION);
+            $purchases = $purchases->with(['supplier', 'product', 'party'])->paginate(PAGINATION);
             $suppliers = Supplier::all();
             $products = Product::all();
+            $parties = Party::all();
 
-            return view('pages.purchases.index', compact('purchases', 'products', 'suppliers'));
+            return view('pages.purchases.index', compact('purchases', 'products', 'suppliers', 'parties'));
         } catch (\Exception $e) {
             Log::error('حدث خطأ أثناء جلب عمليات الشراء: ' . $e->getMessage());
 
@@ -76,6 +82,7 @@ class PurchaseController extends Controller
                 'quantity' => $request->input('quantity'),
                 'unit_price' => $request->input('unit_price'),
                 'total_price' => ((float) $request->input('unit_price') * (int) $request->input('quantity')),
+                'party_id' => $request->has('party_id') ? $request->input('party_id') : null,
                 'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
             $product = Product::findOrFail($request->input('product_id'));
@@ -83,9 +90,11 @@ class PurchaseController extends Controller
 
             WarehouseTransaction::create([
                 'product_id' => $product->id,
+                'rent_id' => null,
                 'quantity' => $request->input('quantity'),
                 'from' => 'المورد: ' . Supplier::findOrFail($request->input('supplier_id'))->name,
                 'to' => "المخزن",
+                'type' => 'purchases',
             ]);
             DB::commit();
             return redirect()->route('purchase.all')
@@ -111,6 +120,7 @@ class PurchaseController extends Controller
                 'quantity' => $request->input('quantity'),
                 'unit_price' => $request->input('unit_price'),
                 'total_price' => ((float) $request->input('unit_price') * (int) $request->input('quantity')),
+                'party_id' => $request->has('party_id') ? $request->input('party_id') : null,
                 'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
             $product = Product::findOrFail($request->input('product_id'));
@@ -118,17 +128,19 @@ class PurchaseController extends Controller
 
             WarehouseTransaction::create([
                 'product_id' => $product->id,
+                'rent_id' => null,
                 'quantity' => abs($request->input('quantity') - $oldQty),
                 'from' => 'المورد: ' . Supplier::findOrFail($request->input('supplier_id'))->name,
                 'to' => "المخزن",
+                'type' => 'purchases',
             ]);
             DB::commit();
-            return redirect()->route('purchase.all')->with(['success' => 'تم تحديث دفعات عملية الشراء بنجاح.']);
+            return redirect()->route('purchase.all')->with(['success' => 'تم تحديث عملية الشراء بنجاح.']);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('حدث خطأ أثناء تحديث عملية الشراء: ' . $e->getMessage());
 
-            return redirect()->back()->withInput($request->all())->with(['error' => 'حدث خطأ أثناء تحديث دفعات عملية الشراء. يرجى المحاولة مرة أخرى.']);
+            return redirect()->back()->withInput($request->all())->with(['error' => 'حدث خطأ أثناء تحديث عملية الشراء. يرجى المحاولة مرة أخرى.']);
         }
     }
 

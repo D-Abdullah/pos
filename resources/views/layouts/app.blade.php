@@ -5,11 +5,12 @@
 
 <body>
     {{-- Loader --}}
-    <div id="spinner">
+    <div id="spinner" aria-label="Loading" role="alert">
         <div class="spinner-border" style="width: 5rem; height: 5rem; color:#7367f0;" role="status">
             <span class="sr-only">Loading...</span>
         </div>
     </div>
+
 
 
     <div class="page position-relative">
@@ -40,20 +41,24 @@
     </div>
 
     @include('includes.scripts')
+    <script>
+        // Start Loader
+        const loader = document.querySelector("#spinner");
 
-<script>
-    // Start Loader
-const loader = document.querySelector("#spinner");
-
-window.addEventListener("DOMContentLoaded", () => {
-    loader.style.display = "flex";
-});
-
-window.addEventListener("load", () => {
-    loader.style.display = "none";
-});
-
-</script>
+        document.addEventListener("DOMContentLoaded", () => {
+            loader.style.display = "flex";
+        });
+        document.addEventListener("DOMContentLoaded", function() {
+            loader.style.display = "none";
+        });
+        document.addEventListener("load", () => {
+            loader.style.display = "none";
+        });
+        $(document).ajaxError(function(event, jqXHR, ajaxSettings, thrownError) {
+            // Display error message to user
+            alert("An error occurred: " + thrownError);
+        });
+    </script>
 
 
 </body>
