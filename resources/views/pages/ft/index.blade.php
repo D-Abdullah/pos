@@ -91,6 +91,10 @@
         .js-example-basic-single.edit.safe~.select2-container {
             width: 100% !important
         }
+
+        input[type="date"] {
+            width: 280px !important
+        }
     </style>
 
 @endsection
@@ -109,28 +113,89 @@
                     <button class="text-light main-btn ms-4"> اضافه معامله ماليه</button>
                 </div>
 
-                <form action="{{ url()->current() }}" method="GET" class="mb-0 gap-4 d-flex align-items-end">
+                <form action="{{ url()->current() }}" method="GET" class="mb-0 gap-4 d-flex flex-wrap align-items-end">
                     <div>
-                        <label>بحث بالاسم</label>
-
-                        <input type="search" name="name" value="{{ request('name') }}" placeholder="بحث بالاسم"
-                            id="search">
+                        <label for="filterType" class="d-block">نوع</label>
+                        <select class="js-example-basic-single filter type" name="type" id="filterType">
+                            <option value="" {{ request('type') ? 'disabled hidden' : 'selected disabled hidden' }}>
+                                اختر نوع العمليه
+                            </option>
+                            <option value="income" {{ request('type') == 'income' ? 'selected' : '' }}>
+                                دخل
+                            </option>
+                            <option value="expense" {{ request('type') == 'expense' ? 'selected' : '' }}>
+                                مصروف
+                            </option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="filterParty" class="d-block">الحفله</label>
+                        <select class="js-example-basic-single filter party" name="party" id="filterParty">
+                            <option value="" {{ request('party') ? 'disabled hidden' : 'selected disabled hidden' }}>
+                                اختر حفله
+                            </option>
+                            @foreach ($parties as $party)
+                                <option value="{{ $party->id }}" {{ request('party') == $party->id ? 'selected' : '' }}>
+                                    {{ $party->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div>
-                        <label>بحث برقم الهاتف</label>
-                        <input type="search" name="phone" value="{{ request('phone') }}" placeholder="بحث رقم الهاتف"
-                            id="searchPhone">
+                        <label for="filterFTType" class="d-block">نوع المعامله الماليه</label>
+                        <select class="js-example-basic-single filter FTType" name="FTType" id="filterFTType">
+                            <option value="" {{ request('FTType') ? 'disabled hidden' : 'selected disabled hidden' }}>
+                                اختر نوع المعامله الماليه
+                            </option>
+                            @foreach ($ftTypes as $ftt)
+                                <option value="{{ $ftt->id }}" {{ request('FTType') == $ftt->id ? 'selected' : '' }}>
+                                    {{ $ftt->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label for="filterFrom" class="d-block">من / الى</label>
+                        <select class="js-example-basic-single filter from" name="from" id="filterFrom">
+                            <option value="" {{ request('from') ? 'disabled hidden' : 'selected disabled hidden' }}>
+                                من / الى</option>
+                            <option value="safe" {{ request('from') == 'safe' ? 'selected' : '' }}>الخزنه</option>
+                            <option value="custody" {{ request('from') == 'custody' ? 'selected' : '' }}>عهده موظف</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="filterEmployee" class="d-block">الموظف</label>
+                        <select class="js-example-basic-single filter employee" name="employee" id="filterEmployee">
+                            <option value=""
+                                {{ request('employee') ? 'disabled hidden' : 'selected disabled hidden' }}>اختر الموظف
+                            </option>
+                            @foreach ($employees as $employee)
+                                <option value="{{ $employee->id }}"
+                                    {{ request('employee') == $employee->id ? 'selected' : '' }}>{{ $employee->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label for="filterSafe" class="d-block">الخزنه</label>
+                        <select class="js-example-basic-single filter safe" name="safe" id="filterSafe">
+                            <option value="" {{ request('safe') ? 'disabled hidden' : 'selected disabled hidden' }}>
+                                اختر الخزنه
+                            </option>
+                            @foreach ($safes as $safe)
+                                <option value="{{ $safe->id }}" {{ request('safe') == $safe->id ? 'selected' : '' }}>
+                                    {{ $safe->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div>
-                        <label for="startDate">من تاريخ:</label>
+                        <label for="startDate" class="d-block">من تاريخ:</label>
                         <input type="date" id="startDate" name="date_from" value="{{ request('date_from') }}">
                     </div>
 
                     <!-- Filter by Date To -->
                     <div>
-                        <label for="date_to">إلى تاريخ:</label>
+                        <label for="date_to" class="d-block">إلى تاريخ:</label>
                         <input type="date" id="date_to" name="date_to" value="{{ request('date_to') }}">
                     </div>
 
@@ -205,7 +270,8 @@
                             @php
                                 $type = ['income' => 'دخل', 'expense' => 'مصروف'];
                             @endphp
-                            <b style="{{ $ft->type == 'income' ? 'color:#080' : 'color:#800' }}">{{ $type[$ft->type] }}</b>
+                            <b
+                                style="{{ $ft->type == 'income' ? 'color:#080' : 'color:#800' }}">{{ $type[$ft->type] }}</b>
                         </td>
                         <td>{{ $ft->amount }}</td>
                         <td>
@@ -319,23 +385,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="f-row d-flex mt-2" style="text-align: right">
-                                        <div>
-                                            <div class="">
-                                                <label class="d-block">الحفله (اختياري)</label>
-                                                <select class="js-example-basic-single edit party" name="party_id">
-                                                    <option value="" selected disabled hidden>الحفله (اختياري)
-                                                    </option>
-                                                    @foreach ($parties as $party)
-                                                        <option value="{{ $party->id }}"
-                                                            {{ $party->id == $ft->party_id ? 'selected' : '' }}>
-                                                            {{ $party->name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
+
 
                                     <div class="f-row d-flex mt-2" style="text-align: right">
                                         <div>
@@ -382,6 +432,23 @@
                                                         <option value="{{ $safe->id }}"
                                                             {{ $safe->id == $ft->safe_id ? 'selected' : '' }}>
                                                             {{ $safe->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="f-row d-flex mt-2" style="text-align: right">
+                                        <div>
+                                            <div class="">
+                                                <label class="d-block">الحفله (اختياري)</label>
+                                                <select class="js-example-basic-single edit party" name="party_id">
+                                                    <option value="" selected disabled hidden>الحفله (اختياري)
+                                                    </option>
+                                                    @foreach ($parties as $party)
+                                                        <option value="{{ $party->id }}"
+                                                            {{ $party->id == $ft->party_id ? 'selected' : '' }}>
+                                                            {{ $party->name }}
                                                         </option>
                                                     @endforeach
                                                 </select>
@@ -460,6 +527,13 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
+            $('.js-example-basic-single.filter.type').select2();
+            $('.js-example-basic-single.filter.party').select2();
+            $('.js-example-basic-single.filter.FTType').select2();
+            $('.js-example-basic-single.filter.from').select2();
+            $('.js-example-basic-single.filter.employee').select2();
+            $('.js-example-basic-single.filter.safe').select2();
+
             $('.js-example-basic-single.add.type').select2();
             $('.js-example-basic-single.add.party').select2();
             $('.js-example-basic-single.add.from').select2();

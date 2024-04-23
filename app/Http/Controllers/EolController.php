@@ -76,9 +76,11 @@ class EolController extends Controller
             ]);
             WarehouseTransaction::create([
                 'product_id' => $product->id,
+                'rent_id' => null,
                 'quantity' => $request->input('quantity'),
                 'from' => "المخزن",
                 'to' => 'هالك',
+                'type' => 'eol',
             ]);
             DB::commit();
             return redirect()->route('eol.all')->with(['success' => 'تم إنشاء الهالك ' . Product::find($request->input('product_id'))->name . ' بنجاح.']);
@@ -114,9 +116,11 @@ class EolController extends Controller
             ]);
             WarehouseTransaction::create([
                 'product_id' => $product->id,
+                'rent_id' => null,
                 'quantity' => max($request->input('quantity') - $oldQty),
                 'from' => "المخزن",
                 'to' => 'هالك',
+                'type' => 'eol',
             ]);
             DB::commit();
             return redirect()->route('eol.all')->with(['success' => 'تم تحديث الهالك ' . Product::find($request->input('product_id'))->name . ' ' . $request->input('quantity') . ' بنجاح.']);

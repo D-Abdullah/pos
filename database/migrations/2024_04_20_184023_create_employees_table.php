@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('phone');
-            $table->integer('custody')->unsigned()->default(0);
+            $table->integer('custody')->default(0);
             $table->foreignId('added_by')->nullable()
                 ->constrained('users')
                 ->onDelete('set null')

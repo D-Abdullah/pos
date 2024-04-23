@@ -90,7 +90,8 @@
             </div>
         @endcan
         @can('read ft')
-            <div class="list  {{ Request::is('ft/*') ? 'active' : '' }} jobs d-flex gap-0 align-items-center">
+            <div
+                class="list  {{ Request::is('financial-transaction/*') ? 'active' : '' }} jobs d-flex gap-0 align-items-center">
                 <a href="{{ route('ft.all') }}" class="dark">
                     <img class="dark" src="{{ asset('Assets/imgs/git-compare.png') }}" alt="">
                 </a>

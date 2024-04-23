@@ -52,21 +52,7 @@
                 </div>
             </div>
         </div>
-        <div class="f-row d-flex mt-2">
-            <div>
-                <div class="">
-                    <label for="party" class="d-block">الحفله (اختياري)</label>
-                    <select class="js-example-basic-single add party" name="party_id" id="party">
-                        <option value="" selected disabled hidden>الحفله (اختياري)
-                        </option>
-                        @foreach ($parties as $party)
-                            <option value="{{ $party->id }}">{{ $party->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-        </div>
+
 
         <div class="f-row d-flex mt-2">
             <div>
@@ -104,6 +90,21 @@
                         </option>
                         @foreach ($safes as $safe)
                             <option value="{{ $safe->id }}">{{ $safe->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="f-row d-flex mt-2">
+            <div>
+                <div class="">
+                    <label for="party" class="d-block">الحفله (اختياري)</label>
+                    <select class="js-example-basic-single add party" name="party_id" id="party">
+                        <option value="" selected disabled hidden>الحفله (اختياري)
+                        </option>
+                        @foreach ($parties as $party)
+                            <option value="{{ $party->id }}">{{ $party->name }}
                             </option>
                         @endforeach
                     </select>
