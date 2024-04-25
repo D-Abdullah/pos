@@ -7,6 +7,8 @@ use App\Models\Supplier;
 use App\Http\Requests\StoreSupplierRequest;
 use App\Http\Requests\UpdateSupplierRequest;
 use App\Models\Deposit;
+use App\Models\Employee;
+use App\Models\Safe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -66,7 +68,9 @@ class SupplierController extends Controller
                 $supplier->total_receivables = $totalReceivables;
             }
             $products = Product::all();
-            return view('pages.suppliers.index', compact('suppliers', 'products'));
+            $safes = Safe::all();
+            $employees = Employee::all();
+            return view('pages.suppliers.index', compact('suppliers', 'products', 'safes', 'employees'));
         } catch (\Exception $e) {
             Log::error('حدث خطأ أثناء جلب الموردات: ' . $e->getMessage());
 
@@ -127,6 +131,7 @@ class SupplierController extends Controller
      */
     public function deposits(Request $request, $id)
     {
+        return $request->all();
         try {
             $supplier = Supplier::find($id);
             if (!$supplier) {

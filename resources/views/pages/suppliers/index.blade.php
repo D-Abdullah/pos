@@ -4,7 +4,7 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('Assets/Css files/suppliers.css') }}">
-
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
         #startDate {
             max-width: 220px !important;
@@ -39,6 +39,32 @@
             color: white;
             border-radius: 4px;
             padding: 10px;
+        }
+
+        .select2-container--default .select2-search--dropdown .select2-search__field {
+            padding: 0;
+            outline: none;
+            border: 1px solid #ddd;
+            height: 30px !important;
+
+        }
+
+        .select2-container--default .select2-selection--single {
+            height: 45px !important;
+            border: 1px solid #ddd;
+        }
+
+        .select2-container[dir="rtl"] .select2-selection--single .select2-selection__rendered {
+            padding-top: 7px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 0px !important;
+            top: 50% !important;
+        }
+
+        .select2-container {
+            width: 160px !important;
         }
     </style>
 @endsection
@@ -159,7 +185,6 @@
                     <tr>
                         <td>{{ $supplier->name }}</td>
                         <td>{{ $supplier->email }}</td>
-                        {{-- <td class="address">{{ $supplier->address }}</td> --}}
                         <td>{{ $supplier->phone }}</td>
                         <td class="cost">
                             @if ($supplier->payment_type == 'both')
@@ -179,13 +204,6 @@
                             </div>
                         </td>
                         <td>{{ $supplier->updated_at->format('Y/m/d') }}</td>
-                        {{-- <td>
-                            @if ($supplier->is_active)
-                                <span class="live">مفعل</span>
-                            @else
-                                <span class="died">غير مفعل</span>
-                            @endif
-                        </td> --}}
                         <td>
                             <div class="edit d-flex align-items-center justify-content-center">
                                 <img src="{{ asset('Assets/imgs/edit-circle.png') }}" data-id="{{ $supplier->id }}"
@@ -390,6 +408,52 @@
                                                                     class="deposit-date category-input form-control"
                                                                     placeholder="التاريخ" required>
                                                             </div>
+                                                            {{-- ---------------------------------------------------------------------------- --}}
+                                                            <div class="">
+                                                                <label class="d-block">من /
+                                                                    الى</label>
+                                                                <select class="js-example-basic-single from"
+                                                                    name="deposits[0][from]">
+                                                                    <option selected disabled hidden>من / الى
+                                                                    </option>
+                                                                    <option value="safe">الخزنه</option>
+                                                                    <option value="custody">عهده موظف</option>
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="custodyContainer" style="display: none">
+                                                                <label class="d-block">اسم
+                                                                    الموظف</label>
+                                                                <select class="js-example-basic-single employee"
+                                                                    name="deposits[0][employee_id]">
+                                                                    <option value="" selected disabled hidden>اختر
+                                                                        الموظف
+                                                                    </option>
+                                                                    @foreach ($employees as $employee)
+                                                                        <option value="{{ $employee->id }}">
+                                                                            {{ $employee->name }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="safeContainer" style="display: none">
+                                                                <label class="d-block">اسم
+                                                                    الخزنه</label>
+                                                                <select class="js-example-basic-single safe"
+                                                                    name="deposits[0][safe_id]">
+                                                                    <option value="" selected disabled hidden>اختر
+                                                                        الخزنه
+                                                                    </option>
+                                                                    @foreach ($safes as $safe)
+                                                                        <option value="{{ $safe->id }}">
+                                                                            {{ $safe->name }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                            {{-- ---------------------------------------------------------------------------- --}}
+
                                                             <button type="button" class="remove-btn p-3" hidden
                                                                 disabled><i class="fa-solid fa-trash"></i></button>
 
@@ -731,10 +795,14 @@
 
     {{-- deposits --}}
     <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         $(document).ready(function() {
+            // $('.js-example-basic-single.from').select2();
+            // $('.js-example-basic-single.employee').select2();
+            // $('.js-example-basic-single.safe').select2();
             //init modal open
             function openModal(modal) {
                 modal.removeClass('close');
@@ -761,7 +829,20 @@
                 let removeElement = addDepositsContainer.find('.remove-btn');
                 let checkElement = addDepositsContainer.find('.check-btn');
                 let formBtn = modal.find('#modalSubmitBtnDollar');
+                let fromSelect = modal.find('.js-example-basic-single.from');
 
+                fromSelect.on('change', function() {
+                    let from = fromSelect.val();
+                    let custody = $(this).parent().parent().find('.custodyContainer');
+                    let safe = $(this).parent().parent().find('.safeContainer');
+                    if (from == 'safe') {
+                        custody.hide(0);
+                        safe.show(300);
+                    } else if (from == 'custody') {
+                        safe.hide(0);
+                        custody.show(300);
+                    }
+                })
                 if (pt == 'cash') {
                     addContainer.removeClass('d-flex');
                     addContainer.hide();
@@ -771,7 +852,9 @@
                     formBtn.text('دفع تكلفه المورد')
                 } else {
                     formBtn.text('اضافه الدفعات')
+                    var count = 0;
                     addElement.click(function() {
+                        count++;
                         let newDepositSection = addDepositsContainer.find('.deposit-section')
                             .last().clone(true);
                         var I = addDepositsContainer.children().not('input').length;
@@ -780,7 +863,43 @@
                         newDepositSection.find('.check-btn').removeAttr('disabled');
                         newDepositSection.find('.remove-btn').removeAttr('disabled');
                         newDepositSection.find('.check-btn').fadeIn(300);
-                        newDepositSection.find('input').each(function() {
+                        newDepositSection.find('.custodyContainer').hide(0);
+                        newDepositSection.find('.safeContainer').hide(0);
+                        newDepositSection.find('input, select').each(function() {
+                            if ($(this).is('select')) {
+                                $(this).val('').trigger("change");
+                                // if ($(this).attr('data-select2-id')) {
+                                //     $(this).select2('destroy');
+                                //     $(this).addClass(count);
+                                //     $(this).next().remove();
+                                //     $(this).removeAttr("data-select2-id");
+                                //     $(this).removeAttr("tabindex");
+                                //     $(this).removeAttr("aria-hidden");
+                                //     $(this).removeClass("select2-hidden-accessible");
+                                //     $(this).find('option').each(function() {
+                                //         $(this).removeAttr("data-select2-id");
+                                //     });
+                                //     $(this).select2();
+                                // }
+                                let fromSelectNew = newDepositSection.find(
+                                    '.js-example-basic-single.from');
+
+                                fromSelectNew.on('change', function() {
+                                    let from = fromSelectNew.val();
+                                    let custody = newDepositSection.find(
+                                        '.custodyContainer');
+                                    let safe = newDepositSection
+                                        .find(
+                                            '.safeContainer');
+                                    if (from == 'safe') {
+                                        custody.hide(0);
+                                        safe.show(300);
+                                    } else if (from == 'custody') {
+                                        safe.hide(0);
+                                        custody.show(300);
+                                    }
+                                })
+                            }
                             let name = $(this).attr('name');
                             if (name != undefined) {
                                 if ($(this).hasClass('deleteThis')) {
@@ -805,6 +924,9 @@
                         newDepositSection.find('.remove-btn').removeAttr('disabled');
                         newDepositSection.hide().appendTo(addDepositsContainer).slideDown(
                             300);
+                        // newDepositSection.find('select').each(function() {
+                        // $(this).select2();
+                        // });
 
                     });
                     removeElement.click(function() {
