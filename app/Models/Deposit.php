@@ -14,7 +14,7 @@ class Deposit extends Model
         'is_paid', # bool
         'type', # supplier or client
         'supplier_id',
-        'party_id',
+        'client_id',
         'from',
         'employee_id',
         'safe_id',

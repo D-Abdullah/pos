@@ -66,6 +66,11 @@
         .select2-container {
             width: 160px !important;
         }
+
+        select {
+            height: 45px;
+            width: 165px;
+        }
     </style>
 @endsection
 
@@ -380,6 +385,51 @@
                                                                         value="{{ $deposit->date }}"
                                                                         placeholder="التاريخ" required>
                                                                 </div>
+                                                                <div class="">
+                                                                    <label class="d-block">الى</label>
+                                                                    <select class="js-example-basic-single from" disabled
+                                                                        name="deposits[0][from]">
+                                                                        <option value="safe"
+                                                                            {{ $deposit->from == 'safe' ? 'selected' : '' }}>
+                                                                            الخزنه</option>
+                                                                        <option value="custody"
+                                                                            {{ $deposit->from == 'custody' ? 'selected' : '' }}>
+                                                                            عهده موظف</option>
+                                                                    </select>
+                                                                </div>
+
+                                                                <div class="custodyContainer"
+                                                                    style="{{ $deposit->from == 'custody' ? '' : 'display: none' }}">
+                                                                    <label class="d-block">اسم
+                                                                        الموظف</label>
+                                                                    <select class="js-example-basic-single employee"
+                                                                        disabled name="deposits[0][employee_id]">
+
+                                                                        @foreach ($employees as $employee)
+                                                                            <option value="{{ $employee->id }}"
+                                                                                {{ $deposit->employee_id == $employee->id ? 'selected' : '' }}>
+                                                                                {{ $employee->name }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+
+                                                                <div class="safeContainer"
+                                                                    style="{{ $deposit->from == 'safe' ? '' : 'display: none' }}">
+                                                                    <label class="d-block">اسم
+                                                                        الخزنه</label>
+                                                                    <select class="js-example-basic-single safe" disabled
+                                                                        name="deposits[0][safe_id]">
+
+                                                                        @foreach ($safes as $safe)
+                                                                            <option value="{{ $safe->id }}"
+                                                                                {{ $deposit->safe_id == $safe->id ? 'selected' : '' }}>
+                                                                                {{ $safe->name }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                                {{-- ---------------------------------------------------------------------------- --}}
                                                                 <button type="button" class="remove-btn p-3" hidden
                                                                     disabled><i class="fa-solid fa-trash"></i></button>
 
@@ -410,11 +460,11 @@
                                                             </div>
                                                             {{-- ---------------------------------------------------------------------------- --}}
                                                             <div class="">
-                                                                <label class="d-block">من /
+                                                                <label class="d-block">
                                                                     الى</label>
-                                                                <select class="js-example-basic-single from"
+                                                                <select class="js-example-basic-single from" required
                                                                     name="deposits[0][from]">
-                                                                    <option selected disabled hidden>من / الى
+                                                                    <option selected disabled hidden> الى
                                                                     </option>
                                                                     <option value="safe">الخزنه</option>
                                                                     <option value="custody">عهده موظف</option>
@@ -800,9 +850,6 @@
 
     <script>
         $(document).ready(function() {
-            // $('.js-example-basic-single.from').select2();
-            // $('.js-example-basic-single.employee').select2();
-            // $('.js-example-basic-single.safe').select2();
             //init modal open
             function openModal(modal) {
                 modal.removeClass('close');
@@ -852,9 +899,7 @@
                     formBtn.text('دفع تكلفه المورد')
                 } else {
                     formBtn.text('اضافه الدفعات')
-                    var count = 0;
                     addElement.click(function() {
-                        count++;
                         let newDepositSection = addDepositsContainer.find('.deposit-section')
                             .last().clone(true);
                         var I = addDepositsContainer.children().not('input').length;
@@ -867,38 +912,30 @@
                         newDepositSection.find('.safeContainer').hide(0);
                         newDepositSection.find('input, select').each(function() {
                             if ($(this).is('select')) {
-                                $(this).val('').trigger("change");
-                                // if ($(this).attr('data-select2-id')) {
-                                //     $(this).select2('destroy');
-                                //     $(this).addClass(count);
-                                //     $(this).next().remove();
-                                //     $(this).removeAttr("data-select2-id");
-                                //     $(this).removeAttr("tabindex");
-                                //     $(this).removeAttr("aria-hidden");
-                                //     $(this).removeClass("select2-hidden-accessible");
-                                //     $(this).find('option').each(function() {
-                                //         $(this).removeAttr("data-select2-id");
-                                //     });
-                                //     $(this).select2();
-                                // }
-                                let fromSelectNew = newDepositSection.find(
-                                    '.js-example-basic-single.from');
+                                if ($(this).hasClass('employee') || $(this).hasClass(
+                                        'safe')) {
+                                    $(this).parent().hide(0);
 
-                                fromSelectNew.on('change', function() {
-                                    let from = fromSelectNew.val();
-                                    let custody = newDepositSection.find(
-                                        '.custodyContainer');
-                                    let safe = newDepositSection
-                                        .find(
-                                            '.safeContainer');
-                                    if (from == 'safe') {
-                                        custody.hide(0);
-                                        safe.show(300);
-                                    } else if (from == 'custody') {
-                                        safe.hide(0);
-                                        custody.show(300);
+                                    if ($(this).hasClass('employee')) {
+                                        let opt = `
+                                        <option value="" selected disabled hidden> اختر الموظف
+                                        </option>`;
+                                        $(this).prepend(opt);
                                     }
-                                })
+                                    if ($(this).hasClass('safe')) {
+                                        let opt = `
+                                        <option value="" selected disabled hidden> اختر الخزنه
+                                        </option>`;
+                                        $(this).prepend(opt);
+                                    }
+
+                                } else if ($(this).hasClass('from')) {
+                                    let opt = `
+                                        <option value="" selected disabled hidden> الى
+                                        </option>`;
+                                    $(this).prepend(opt);
+                                }
+                                $(this).val('').trigger("change");
                             }
                             let name = $(this).attr('name');
                             if (name != undefined) {
@@ -924,9 +961,24 @@
                         newDepositSection.find('.remove-btn').removeAttr('disabled');
                         newDepositSection.hide().appendTo(addDepositsContainer).slideDown(
                             300);
-                        // newDepositSection.find('select').each(function() {
-                        // $(this).select2();
-                        // });
+                        let fromSelectNew = newDepositSection.find(
+                            '.js-example-basic-single.from');
+
+                        fromSelectNew.on('change', function() {
+                            let from = fromSelectNew.val();
+                            let custody = newDepositSection.find(
+                                '.custodyContainer');
+                            let safe = newDepositSection
+                                .find(
+                                    '.safeContainer');
+                            if (from == 'safe') {
+                                custody.hide(0);
+                                safe.show(300);
+                            } else if (from == 'custody') {
+                                safe.hide(0);
+                                custody.show(300);
+                            }
+                        })
 
                     });
                     removeElement.click(function() {
@@ -976,7 +1028,6 @@
                     }
                 });
             });
-
         });
     </script>
 
