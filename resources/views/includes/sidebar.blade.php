@@ -32,17 +32,6 @@
                 <a class="mb-0" href="{{ route('report.all') }}"> التقارير</a>
             </div>
         @endcan
-        @can('read user')
-            <div class="list  {{ Request::is('user/*') ? 'active' : '' }} data-users d-flex gap-0 align-items-center">
-                <a href="{{ route('user.all') }}" class="dark">
-                    <img class="dark" src="{{ asset('Assets/imgs/User Info.png') }}" alt="">
-                </a>
-                <a href="{{ route('user.all') }}" class="light">
-                    <img class="none" src="{{ asset('Assets/imgs/User Info-light.png') }}" alt="">
-                </a>
-                <a class="mb-0" href="{{ route('user.all') }}">اعضاء الاداره</a>
-            </div>
-        @endcan
         @can('read role')
             <div class="list  {{ Request::is('role/*') ? 'active' : '' }} jobs d-flex gap-0 align-items-center">
                 <a href="{{ route('role.all') }}" class="dark">
@@ -54,6 +43,18 @@
                 <a class="mb-0" href="{{ route('role.all') }}">الصلاحيات</a>
             </div>
         @endcan
+        @can('read user')
+            <div class="list  {{ Request::is('user/*') ? 'active' : '' }} data-users d-flex gap-0 align-items-center">
+                <a href="{{ route('user.all') }}" class="dark">
+                    <img class="dark" src="{{ asset('Assets/imgs/User Info.png') }}" alt="">
+                </a>
+                <a href="{{ route('user.all') }}" class="light">
+                    <img class="none" src="{{ asset('Assets/imgs/User Info-light.png') }}" alt="">
+                </a>
+                <a class="mb-0" href="{{ route('user.all') }}">اعضاء الاداره</a>
+            </div>
+        @endcan
+
 
         @can('read employee')
             <div class="list  {{ Request::is('employee/*') ? 'active' : '' }} jobs d-flex gap-0 align-items-center">

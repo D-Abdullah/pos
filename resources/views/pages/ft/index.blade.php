@@ -115,10 +115,10 @@
 
                 <form action="{{ url()->current() }}" method="GET" class="mb-0 gap-4 d-flex flex-wrap align-items-end">
                     <div>
-                        <label for="filterType" class="d-block">نوع</label>
+                        <label for="filterType" class="d-block">نوع الحركه</label>
                         <select class="js-example-basic-single filter type" name="type" id="filterType">
                             <option value="" {{ request('type') ? 'disabled hidden' : 'selected disabled hidden' }}>
-                                اختر نوع العمليه
+                                اختر نوع الحركه
                             </option>
                             <option value="income" {{ request('type') == 'income' ? 'selected' : '' }}>
                                 دخل
@@ -227,7 +227,7 @@
 
             <thead class="head">
                 <tr>
-                    <th>نوع</th>
+                    <th>نوع الحركه</th>
                     <th>تكلفه</th>
                     <th>الحفله</th>
                     <th>نوع المعامله الماليه</th>
@@ -331,7 +331,7 @@
                                         alt="">
                                     <h2 class="text-center mt-4 mb-4 opacity-75">تعديل المعامله الماليه </h2>
                                     <div class="d-flex">
-                                        <label class="d-block mb-1"><b>النوع: </b></label>
+                                        <label class="d-block mb-1"><b>نوع الحركه: </b></label>
                                         <div class="text-center w-100 d-flex justify-content-around">
                                             <div>
                                                 <input style="height: 20px!important; width: 20px!important"

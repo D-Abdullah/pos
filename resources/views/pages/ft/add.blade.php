@@ -4,7 +4,7 @@
         @csrf
         <h2 class="text-center mt-4 mb-4 opacity-75">اضافة معامله ماليه جديده</h2>
         <div class="d-flex">
-            <label class="d-block mb-1"><b>النوع: </b></label>
+            <label class="d-block mb-1"><b>نوع الحركه: </b></label>
             <div class="text-center w-100 d-flex justify-content-around">
                 <div>
                     <input style="height: 20px!important; width: 20px!important" class="category-input" type="radio"
