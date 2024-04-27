@@ -41,8 +41,8 @@
     </style>
     <style>
         /* Style for the remove button */
-        .remove-btn {
-            background-color: #ff6767;
+        .check-btn {
+            background-color: #15d057;
             color: #fff;
             border: none;
             padding: 5px 10px;
@@ -65,6 +65,18 @@
             font-size: 12px;
             text-align: center;
         }
+
+        .js-example-basic-single.from~.select2-container {
+            width: 190px !important
+        }
+
+        .js-example-basic-single.employee~.select2-container {
+            width: 190px !important
+        }
+
+        .js-example-basic-single.safe~.select2-container {
+            width: 190px !important
+        }
     </style>
 @endsection
 
@@ -82,12 +94,11 @@
                     <div>
                         <label for="client" class="d-block">اختر العميل</label>
                         <select class="js-example-basic-single add" name="client_id" id="client">
-                            <option value="" {{ request('client') ? 'disabled hidden' : 'selected disabled hidden' }}>
+                            <option value="" selected disabled hidden>
                                 اختر العميل
                             </option>
                             @foreach ($clients as $client)
-                                <option value="{{ $client->id }}"
-                                    {{ request('client') == $client->id ? 'selected' : '' }}>
+                                <option value="{{ $client->id }}" {{ old('client_id') == $client->id ? 'selected' : '' }}>
                                     {{ $client->name }}
                                 </option>
                             @endforeach
@@ -104,33 +115,7 @@
                         <input type="date" name="date" value="{{ old('date') }}" class="deposit-date form-control"
                             placeholder="التاريخ">
                     </div>
-
-                    {{-- <div class="select-form">
-                        <label class="mb-1">الحاله</label>
-                        <select name="status" id="" class="rounded-3 p-1">
-                            <option selected hidden disabled>اختر الحاله</option>
-                            @foreach ($status as $s)
-                                <option value="{{ $s['value'] }}" {{ old('status') == $s['value'] ? 'selected' : '' }}>
-                                    {{ $s['name'] }}</option>
-                            @endforeach
-                        </select>
-                    </div> --}}
-
                     <input type="hidden" name="status" value="contracted">
-
-                    {{-- <div class="d-none">
-                        <label for="state" class="d-block">الحاله </label>
-                        <select class="js-example-basic-single status" name="status" id="state">
-                            <option selected hidden disabled>
-                                الحاله
-                            </option>
-                            @foreach ($status as $s)
-                                <option value="{{ $s['value'] }}" {{ old('status') == $s['value'] ? 'selected' : '' }}>
-                                    {{ $s['name'] }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div> --}}
 
                 </div>
                 <div class="parent d-flex mb-4">
@@ -140,36 +125,73 @@
                     </div>
                 </div>
                 <div class="elements">
-                    <div id="addDepositsContainer">
-                        <div class="f-row d-flex gap-4 align-items-end deposit-section">
+                    <h3>الدفعه الأولى</h3>
+                    {{-- ++++++++++++++++++++++++++++++++++++++++++++++++++++ --}}
+                    <div id="addDepositsContainer" class="addDepositsContainer">
+                        <div class="f-row d-flex gap-4 align-items-end deposit-section" id="initialDepositMultiSection">
                             <div>
                                 <label class="d-block mb-1" for="deposit-amount">المبلغ</label>
-                                <input type="text" name="deposits[0][cost]" class="deposit-amount form-control"
-                                    placeholder="المبلغ" value="{{ old('deposits.0.cost') }}">
+                                <input type="text" name="d_cost" class="deposit-amount category-input form-control"
+                                    placeholder="المبلغ" value="{{ old('d_cost') }}">
                             </div>
                             <div>
                                 <label class="d-block mb-1" for="deposit-date">التاريخ</label>
-                                <input type="date" name="deposits[0][date]" class="deposit-date form-control"
-                                    placeholder="التاريخ" value="{{ old('deposits.0.date') }}">
+                                <input type="date" name="d_date" class="deposit-date category-input form-control"
+                                    placeholder="التاريخ" value="{{ old('d_date') }}">
                             </div>
-                            <button type="button" class="remove-btn p-3" hidden disabled><i
-                                    class="fa-solid fa-trash"></i></button>
+                            {{-- ---------------------------------------------------------------------------- --}}
+                            <div class="">
+                                <label class="d-block">
+                                    من</label>
+                                <select class="js-example-basic-single from" name="d_from" aria-placeholder="من">
+                                    <option selected disabled hidden> من
+                                    </option>
+                                    <option value="safe" {{ old('d_from') == 'safe' ? 'selected' : '' }}>الخزنه</option>
+                                    <option value="custody" {{ old('d_from') == 'custody' ? 'selected' : '' }}>عهده موظف
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="custodyContainer" style="display: none">
+                                <label class="d-block">اسم
+                                    الموظف</label>
+                                <select class="js-example-basic-single employee" name="d_employee_id">
+                                    <option value="" selected disabled hidden>اختر
+                                        الموظف
+                                    </option>
+                                    @foreach ($employees as $employee)
+                                        <option value="{{ $employee->id }}"
+                                            {{ old('d_employee_id') == $employee->id ? 'selected' : '' }}>
+                                            {{ $employee->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="safeContainer" style="display: none">
+                                <label class="d-block">اسم
+                                    الخزنه</label>
+                                <select class="js-example-basic-single safe" name="d_safe_id">
+                                    <option value="" selected disabled hidden>اختر
+                                        الخزنه
+                                    </option>
+                                    @foreach ($safes as $safe)
+                                        <option value="{{ $safe->id }}"
+                                            {{ old('d_safe_id') == $safe->id ? 'selected' : '' }}>
+                                            {{ $safe->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            {{-- ---------------------------------------------------------------------------- --}}
+
+                            <button type="button" class="check-btn p-3 ">
+                                <i class="fa-solid fa-check"></i>
+                            </button>
+                            <input class="is-paid" type="hidden" value="0" name="d_is_paid">
                         </div>
                     </div>
-
-                    <button type="button" class="main-btn p-2 ps-3 pe-3 specialBtn m-0 mt-2 mb-2" id="addElement">
-                        <svg class="pointer" xmlns="http://www.w3.org/2000/svg" width="26" height="27"
-                            viewBox="0 0 26 27" fill="none">
-                            <path d="M13 5.52753V20.6942" stroke="#fff" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                            <path d="M13 5.52753V20.6942" stroke="white" stroke-opacity="0.2" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M5.41663 13.1108H20.5833" stroke="#fff" stroke-width="1.5" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                            <path d="M5.41663 13.1108H20.5833" stroke="white" stroke-opacity="0.2" stroke-width="1.5"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </button>
+                    {{-- ++++++++++++++++++++++++++++++++++++++++++++++++++++ --}}
                 </div>
             </div>
             <div id="invalidAdd" class="invalid invalidAdd my-3"></div>
@@ -184,64 +206,47 @@
     {{-- For JQuery --}}
     <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script>
-        function addElement() {
-            let depositsContainer = document.getElementById('addDepositsContainer');
-            let newDepositSection = depositsContainer.querySelector('.deposit-section').cloneNode(true);
-            var I = depositsContainer.childElementCount;
-            newDepositSection.querySelectorAll('input').forEach(function(input) {
-                input.value = '';
-                let name = input.name;
-                let index = name.match(/\d+/g);
-                if (index == null) {
-                    return;
-                } else {
-                    finalName = name.replace(/(\d)+/, I);
-                }
-                input.setAttribute('name', finalName);
-            });
-
-            newDepositSection.querySelector('.remove-btn').removeAttribute('disabled');
-            newDepositSection.querySelector('.remove-btn').removeAttribute('hidden');
-
-            depositsContainer.appendChild(newDepositSection);
-
-            initRemoveButtons(); // Initialize remove buttons after adding a new section
-        }
-
-        function removeElement(button) {
-            let depositsContainer = document.getElementById('addDepositsContainer');
-
-            if (depositsContainer.childElementCount > 1) {
-                depositsContainer.removeChild(button.parentNode);
-            } else {
-                button.setAttribute('disabled', 'disabled');
-                button.setAttribute('hidden', 'hidden');
-            }
-        }
-
-        function initRemoveButtons() {
-            document.querySelectorAll('.remove-btn').forEach(function(button) {
-                button.addEventListener('click', function() {
-                    removeElement(button);
-                });
-            });
-        }
-
-        document.getElementById('addElement').addEventListener('click', addElement);
-
-        // Initialize remove buttons on page load
-        initRemoveButtons();
-    </script>
 
     <script>
         $(document).ready(function() {
             $('.js-example-basic-single.add').select2();
-        });
-
-        $(document).ready(function() {
             $('.js-example-basic-single.status').select2();
+            $('.js-example-basic-single.from').select2();
+            $('.js-example-basic-single.employee').select2();
+            $('.js-example-basic-single.safe').select2();
+            let checkElement = $('.check-btn');
+            let fromSelect = $('.js-example-basic-single.from');
+            checkElement.click(function() {
+                new Swal({
+                        title: "هل انت متأكد؟",
+                        text: "سوف تتم عملية الدفع بالفعل ولا يمكن التراجع عنها",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "تأكيد الدفع",
+                        cancelButtonText: "الغاء",
+                        dangerMode: true,
+                    })
+                    .then((willDelete) => {
+                        if (willDelete.isConfirmed) {
+                            $(this).parent().find('.is-paid').val('1');
+                            $(this).fadeOut(300);
+                        }
+                    });
+            });
+            fromSelect.on('change', function() {
+                let from = fromSelect.val();
+                let custody = $(this).parent().parent().find('.custodyContainer');
+                let safe = $(this).parent().parent().find('.safeContainer');
+                if (from == 'safe') {
+                    custody.hide(0);
+                    safe.show(300);
+                } else if (from == 'custody') {
+                    safe.hide(0);
+                    custody.show(300);
+                }
+            })
         });
     </script>
 
@@ -262,7 +267,9 @@
                 const inputType = input.getAttribute('type');
                 const inputValue = input.value.trim();
                 const inputName = input.getAttribute('placeholder') || input.getAttribute('aria-placeholder');
-
+                if (!inputName) {
+                    continue;
+                }
                 if (inputType === 'date' || inputType === 'number' || inputType === 'select-one') {
                     if (inputValue === "") {
                         emptyFields.push(inputName);
@@ -276,7 +283,7 @@
 
             if (emptyFields.length > 0) {
                 event.preventDefault();
-                addMessage.textContent = `الحقول التالية مطلوبة: ${emptyFields.join(', ')}`;
+                addMessage.textContent = `الحقل: ${emptyFields[0]} مطلوب`;
                 // Optionally, you can focus on the first empty field
                 addInputs[0].focus();
             }

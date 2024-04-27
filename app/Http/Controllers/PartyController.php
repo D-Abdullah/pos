@@ -9,10 +9,12 @@ use App\Http\Requests\StorePartyRequest;
 use App\Http\Requests\UpdatePartyRequest;
 use App\Models\Client;
 use App\Models\Department;
+use App\Models\Employee;
 use App\Models\Eol;
 use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\Rent;
+use App\Models\Safe;
 use App\Models\WarehouseTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -62,7 +64,9 @@ class PartyController extends Controller
                     'value' => 'completed'
                 ]
             ];
-            return view('pages.party.add', compact('clients', 'status'));
+            $employees = Employee::all();
+            $safes = Safe::all();
+            return view('pages.party.add', compact('clients', 'status', 'employees', 'safes'));
         } catch (\Exception $e) {
             Log::error('حدث خطأ أثناء جلب صفحه اضافه الحفله: ' . $e->getMessage());
 
@@ -79,7 +83,6 @@ class PartyController extends Controller
      */
     public function store(StorePartyRequest $request)
     {
-        // return $request->all();
         try {
             DB::beginTransaction();
             $party = Party::create([
@@ -91,16 +94,19 @@ class PartyController extends Controller
                 'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
 
-            // if ($request->input('deposits')) {
-            //     for ($i = 0; $i < count($request->input('deposits')); $i++) {
-            //         $deposit = new Deposit();
-            //         $deposit->party_id = $party->id;
-            //         $deposit->type = "party";
-            //         $deposit->cost = $request->input('deposits')[$i]['cost'];
-            //         $deposit->date = $request->input('deposits')[$i]['date'];
-            //         $deposit->save();
-            //     }
-            // }
+            $deposit = new Deposit();
+            $deposit->cost = $request->input('d_cost');
+            $deposit->date = $request->input('d_date');
+            $deposit->type = "client";
+            $deposit->client_id = $request->input('client_id');
+            $deposit->supplier_id = null;
+            $deposit->is_paid = $request->input('d_is_paid');
+            $deposit->from = $request->input('d_from');
+            $deposit->employee_id = $request->input('d_from') == 'custody' ? $request->input('d_employee_id') : null;
+            $deposit->safe_id = $request->input('d_from') == 'safe' ? $request->input('d_safe_id') : null;
+
+            $deposit->save();
+
 
             DB::commit();
             return redirect()->route('party.addBill', $party->id)
