@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class StoreBillRequest extends FormRequest
 {
@@ -11,7 +13,7 @@ class StoreBillRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return auth()->check();
     }
 
     /**
@@ -22,7 +24,15 @@ class StoreBillRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+
         ];
+    }
+    protected function failedValidation(Validator $validator): void
+    {
+        $firstError = $validator->errors()->first();
+
+        throw new HttpResponseException(
+            redirect()->back()->with(['error' => $firstError])->withInput($this->all())
+        );
     }
 }

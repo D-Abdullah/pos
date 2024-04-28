@@ -200,19 +200,13 @@
                                                 value="{{ $rent->name }}" class="category-input" placeholder="الاسم">
                                         </div>
                                         <div>
-                                            <label class="d-block mb-1" for="sale-rent">سعر الايجار</label>
+                                            <label class="d-block mb-1" for="sale-rent">السعر</label>
                                             <input type="text" name="rent_price" id="sale-rent"
                                                 value="{{ $rent->rent_price }}" class="category-input"
-                                                placeholder="سعر الايجار">
+                                                placeholder="السعر">
                                         </div>
                                     </div>
                                     <div class="f-row d-flex gap-4">
-                                        <div>
-                                            <label class="d-block mb-1" for="user-name">سعر البيع</label>
-                                            <input type="text" name="sale_price" id="user-name"
-                                                value="{{ $rent->sale_price }}" class="category-input"
-                                                placeholder="سعر البيع">
-                                        </div>
                                         <div>
                                             <label class="d-block mb-1" for="gmail">الكميه</label>
                                             <input type="number" name="quantity" id="gmail"

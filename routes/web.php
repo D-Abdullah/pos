@@ -277,6 +277,8 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/get-name/{type}', [PartyController::class, 'getname'])
             ->name('party.getName');
+        Route::get('/data/{type}', [PartyController::class, 'getData'])
+            ->name('party.data');
 
         Route::middleware('permission:create party')
             ->get('/add-bill/{id}', [PartyController::class, 'createBill'])

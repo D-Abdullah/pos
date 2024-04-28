@@ -128,31 +128,9 @@ class PartyController extends Controller
     {
         try {
             $party = Party::with('client')->findOrFail($id);
-            $products = Product::all();
-            $rents = Rent::all();
             $categories = Department::all();
 
-            // Initialize an array to store average unit prices for each product
-            $averagePrices = [];
-
-            // Loop through each product to calculate average unit price
-            foreach ($products as $product) {
-                // Fetch all purchases for the current product
-                $purchases = Purchase::where('product_id', $product->id)->pluck('unit_price');
-
-                // Calculate the average unit price for the current product
-                $averagePrice = $purchases->avg();
-
-                // Add the average price to the array
-                $averagePrices[$product->id] = $averagePrice;
-            }
-
-            // Now, add a new item to each product with the calculated average price
-            foreach ($products as $product) {
-                $product->avg_price = $averagePrices[$product->id] ?? 0;
-            }
-
-            return view('pages.party.addBill', compact('id', 'products', 'rents', 'party', 'categories'));
+            return view('pages.party.addBill', compact('id', 'party', 'categories'));
         } catch (\Exception $e) {
             Log::error('حدث خطأ أثناء عرض صفحه بيانات الفاتوره: ' . $e->getMessage());
 
@@ -363,5 +341,56 @@ class PartyController extends Controller
             return Rent::where('id', $request->id)->first();
         }
         return null;
+    }
+
+    public function getData(Request $request, $type)
+    {
+        // request parameters is (type, name, department, id, page)
+        try {
+            $rules = [
+                'id' => 'nullable|numeric',
+                'name' => 'nullable|string',
+                'department' => 'nullable|exists:departments,id',
+            ];
+
+            $request->validate($rules);
+            if ($type == 'product') {
+                $products = Product::query();
+
+                if ($request->filled('name')) {
+                    $searchTerm = trim($request->input('name'));
+                    $products->where(function ($query) use ($searchTerm) {
+                        $query->where('name', 'like', '%' . $searchTerm . '%')
+                            ->orWhere('description', 'like', '%' . $searchTerm . '%');
+                    });
+                }
+                if ($request->filled('department')) {
+                    $products->where('department_id', $request->input('department'));
+                }
+                if ($request->filled('id')) {
+                    $products->where('id', $request->input('id'));
+                }
+                $data = $products->with('department')->paginate(PAGINATION);
+            } else if ($type == 'rent') {
+                $rent = Rent::query();
+
+                if ($request->filled('name')) {
+                    $searchTerm = trim($request->input('name'));
+                    $rent->where(function ($query) use ($searchTerm) {
+                        $query->where('name', 'like', '%' . $searchTerm . '%');
+                    });
+                }
+                if ($request->filled('id')) {
+                    $rent->where('id', $request->input('id'));
+                }
+                $data = $rent->paginate(PAGINATION);
+            }
+
+            return response()->json($data);
+        } catch (\Exception $e) {
+            Log::error('حدث خطأ أثناء جلب المنتجات: ' . $e->getMessage());
+
+            return redirect()->back()->with(['error' => 'حدث خطأ أثناء جلب المنتجات. يرجى المحاولة مرة أخرى.']);
+        }
     }
 }

@@ -10,17 +10,12 @@
                 <input type="text" name="name" id="name" placeholder="اسم" class="category-input">
             </div>
             <div>
-                <label class="d-block mb-1" for="sale-rent">سعر الايجار الوحده الواحده</label>
-                <input type="number" step="0.1" name="rent_price" id="sale-rent" placeholder="سعر الايجار"
+                <label class="d-block mb-1" for="sale-rent">السعر</label>
+                <input type="number" step="0.1" name="rent_price" id="sale-rent" placeholder="السعر"
                     class="category-input">
             </div>
         </div>
         <div class="f-row d-flex gap-4">
-            <div>
-                <label class="d-block mb-1" for="user-name">سعر البيع الوحده الواحده</label>
-                <input type="number" step="0.1" name="sale_price" id="user-name" placeholder="سعر البيع"
-                    class="category-input">
-            </div>
             <div>
                 <label class="d-block mb-1" for="gmail">الكميه</label>
                 <input type="number" name="quantity" id="gmail" placeholder="الكمية" class="category-input">
