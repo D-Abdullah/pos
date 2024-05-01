@@ -1,5 +1,5 @@
 <div class="popup-add popup close shadow-sm rounded-3 position-fixed">
-    <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
+    <img class="position-absolute normal-dismiss" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
     <form action="{{ route('rent.add') }}" method="post" id="add-cate" enctype="multipart/form-data">
         @csrf
         <h2 class= "text-center mt-4

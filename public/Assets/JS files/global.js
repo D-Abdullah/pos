@@ -82,7 +82,7 @@ document.querySelectorAll("table #edit").forEach((edit) => {
 
 // handle popup
 let popups = document.querySelectorAll(".popup");
-let popupsExit = document.querySelectorAll(".popup img");
+let popupsExit = document.querySelectorAll(".popup img.normal-dismiss");
 
 document.querySelectorAll(".features .add-button button").forEach((button) => {
     button.addEventListener("click", () => {

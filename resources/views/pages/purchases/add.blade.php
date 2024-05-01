@@ -7,7 +7,7 @@
 </style>
 
 <div class="popup-add popup pb-5 close shadow-sm rounded-3 position-fixed ">
-    <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
+    <img class="position-absolute normal-dismiss" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
     <form id="add-purchase" action="{{ route('purchase.add') }}" method="post" id="purchaseForm">
         @csrf
         <h2 class="text-center mt-4 mb-4 opacity-75">انشاء عملية شراء</h2>

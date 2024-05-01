@@ -393,7 +393,7 @@
 
 
     <div class="popup-add popup close shadow-sm rounded-3 position-fixed" id="popupAddOurProduct">
-        <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
+        <img class="position-absolute normal-dismiss" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
 
         <h2 class="text-center mt-4 mb-4 opacity-75">اضافة <span id="nameProduct"></span></h2>
         <div class="f-row d-flex gap-4">
@@ -445,7 +445,7 @@
     </div>
 
     <div class="popup-edit popup close shadow-sm rounded-3 position-fixed" id="popupEditOurProduct">
-        <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
+        <img class="position-absolute normal-dismiss" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
         <h2 class="text-center mt-4 mb-4 opacity-75">تعديل <span id="nameProduct"></span></h2>
         <div class="f-row d-flex gap-4">
             <div>
@@ -499,7 +499,7 @@
 
     <!-- start of popup rent -->
     <div class="popup-add popup close shadow-sm rounded-3 position-fixed" id="popupAddRent">
-        <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
+        <img class="position-absolute normal-dismiss" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
         <h2 class="text-center mt-4 mb-4 opacity-75">اضافة <span id="nameProduct"></span></h2>
         <div class="f-row d-flex gap-4">
             <div>
@@ -539,7 +539,7 @@
     </div>
 
     <div class="popup-edit popup close shadow-sm rounded-3 position-fixed" id="popupEditRent">
-        <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
+        <img class="position-absolute normal-dismiss" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
         <h2 class="text-center mt-4 mb-4 opacity-75">تعديل <span id="nameProduct"></span></h2>
         <div class="f-row d-flex gap-4">
             <div>
@@ -582,7 +582,7 @@
 
     <!-- start of popuo special -->
     <div class="popup-add popup close shadow-sm rounded-3 position-fixed" id="popupAddSpecial">
-        <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
+        <img class="position-absolute normal-dismiss" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
         <h2 class="text-center mt-4 mb-4 opacity-75">تكلفه اضافيه مخصصه</h2>
         <div class="f-row d-flex gap-4">
             <div>
@@ -604,7 +604,7 @@
     </div>
 
     <div class="popup-edit popup close shadow-sm rounded-3 position-fixed" id="popupEditSpecial">
-        <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
+        <img class="position-absolute normal-dismiss" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
         <h2 class="text-center mt-4 mb-4 opacity-75">تعديل تكلفه اضافيه</h2>
         <div class="f-row d-flex gap-4">
             <div>
@@ -628,7 +628,7 @@
     <!-- end of popuo special -->
 
     <div class="popup-delete popup close shadow-sm rounded-3 position-fixed">
-        <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
+        <img class="position-absolute normal-dismiss" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
         <h3 class="fs-5 fw-bold mb-3">حذف العنصر</h3>
         <p>هل تريد الحذف متاكد !!</p>
         <div class="buttons mt-5 d-flex">

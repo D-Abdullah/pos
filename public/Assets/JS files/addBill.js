@@ -51,7 +51,7 @@ $(document).ready(function () {
             let element = `
                 <div class="box open-modal" data-type="${type}" data-id="${
                 data[i].id
-            }">
+            }" data-action="add">
             <div style="width: 100%; height: 300px; overflow: hidden;">
                 <img src="${window.location.origin}/${data[i].image}"
                     style="padding: 25px; border-radius: 22px; width: 100%; height: 100%; object-fit: cover;"
@@ -79,6 +79,112 @@ $(document).ready(function () {
                 </div>`;
             container.append(element);
         }
+
+        //modals actions
+        $(".open-modal").click(function () {
+            let type = $(this).data("type");
+            let id = $(this).data("id");
+            let action = $(this).data("action");
+            let modal = $("#popupModal");
+            let title = modal.find("#modalTitle");
+            let modalForm = modal.find("#modalFormElement");
+            let formBtn = modal.find("#modalSubmitBtn");
+
+            //reset inputs required
+            modal.find(".modalInputsContainers").each(function () {
+                $(this).find("input, select, textarea").attr("required", false);
+            });
+
+            // status checkbox change inner text
+            modal
+                .find("#statusContainer input#statusInput")
+                .on("change", function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    let $parent = $(this).parent();
+                    let $lable = $parent.find("label");
+                    if ($parent.hasClass("notReady")) {
+                        $parent.removeClass("notReady");
+                        $lable.text("جاهز");
+                    } else {
+                        $parent.addClass("notReady");
+                        $lable.text("قيد التحضير");
+                    }
+                });
+
+            //eol reason toggle
+            modal
+                .find("#typeInputContainer select#typeInput")
+                .on("change", function () {
+                    if ($(this).val() == "eol") {
+                        modal.find("#eolReasonContainer").slideDown(300);
+                    } else {
+                        modal.find("#eolReasonContainer").slideUp(300);
+                    }
+                });
+
+            // form button name
+            if (action == "add") {
+                formBtn.text("اضافه الى الفاتوره");
+                modalForm.find("input#from").val(type);
+                // modal inputs data debend on type
+                switch (type) {
+                    case "product":
+                        title.text("اضافه عنصر من المخزن");
+                        productInputs(modal, id);
+                        break;
+                    case "rent":
+                        title.text("اضافه عنصر من قايمه الإيجار");
+                        rentInputs(modal, id);
+                        break;
+                    case "custom":
+                        title.text("اضافه عنصر مخصص");
+                        customInputs(modal);
+                        break;
+                    default:
+                        break;
+                }
+                if (type === "product" || type === "rent") {
+                    let SData = getData(type, null, null, null, id);
+                    $.when(SData).done(function (response) {
+                        let data = response.data[0];
+                        productAndRentInputs(modal, type, data);
+                        validateModal(modalForm, modal, type, data);
+                        setTimeout(() => {
+                            modal
+                                .find("#infoContainer")
+                                .addClass("d-flex")
+                                .slideDown();
+                        }, 300);
+                    });
+                } else {
+                    modal.find("#infoContainer").removeClass("d-flex").hide(0);
+                    validateModal(modalForm, modal, type);
+                }
+            } else if (action == "edit") {
+                formBtn.text("تعديل الفاتوره");
+            } else if (action == "delete") {
+                formBtn.text("حذف الفاتوره");
+            } else {
+                formBtn.text("حفظ التعديلات");
+            }
+            // open this modal
+            openModal(modal);
+
+            // listen on dismiss modal
+            $(".popup img#dismiss").click(function () {
+                if (!$(this).parent().hasClass("none")) {
+                    closeModal(modal);
+                }
+            });
+
+            $(".overlay-alfa").on("click", function (e) {
+                if ($(e.target).hasClass("overlay-alfa")) {
+                    closeModal(modal);
+                }
+            });
+        });
     }
 
     // init product data
@@ -211,9 +317,17 @@ $(document).ready(function () {
         });
     });
 
+    /*************************************************************** */
+
     //init hide modal inputs
     function hideModalInputs(modal) {
         modal.find(".modalInputsContainers").hide();
+        modal.find("#infoContainer").removeClass("d-flex").hide(0);
+        let validationContainer = modal.find("#validationContainer");
+        let validationTxt = validationContainer.find("small");
+        validationContainer.hide();
+        validationTxt.text("");
+        return;
     }
 
     //init modal reset
@@ -240,11 +354,9 @@ $(document).ready(function () {
             );
         modal.find("#eolReasonContainer textarea#eolReason").val("");
         modal.find("#statusContainer").removeClass("notReady");
-        modal.find("#statusContainer label#status").text("جاهز");
-        modal.find("#statusContainer input#flexCheckDefault20").val("");
-        modal
-            .find("#statusContainer input#flexCheckDefault20")
-            .prop("checked", true);
+        modal.find("#statusContainer label").text("جاهز");
+        modal.find("#statusContainer input#statusInput").val("0");
+        modal.find("#statusContainer input#statusInput").prop("checked", true);
 
         hideModalInputs(modal);
     }
@@ -275,31 +387,31 @@ $(document).ready(function () {
     }
 
     //init product and rents inputs
-    function productAndRentInputs(modal, type) {
+    function productAndRentInputs(modal, type, data) {
         modal.find("#quantityContainer").show();
-        modal
-            .find("#quantityContainer")
-            .find("input#quantity")
-            .attr("required", true);
-        if (type == "items") {
-            modal.find("#typeInputContainer").show();
-            modal
-                .find("#typeInputContainer")
-                .find("select#typeInput")
-                .attr("required", true);
-        }
+        modal.find("#unitPriceContainer").show();
         modal.find("#statusContainer").show();
+        modal.find("#modalInfoName span").text(data.name);
+        modal.find("#modalInfoQuantity span").text(data.quantity);
+        modal
+            .find("img#modalInfoImage")
+            .attr("src", window.location.origin + "/" + data.image);
+        if (type == "product") {
+            modal.find("#typeInputContainer").show();
+            modal.find("#modalInfoDepartment").show();
+            modal.find("#modalInfoPrice span").text(data.unit_price);
+            // modal.find("#modalInfoDepartment span").text(data.department.name);
+        } else {
+            modal.find("#typeInputContainer").hide();
+            modal.find("#modalInfoDepartment").hide();
+            modal.find("#modalInfoPrice span").text(data.rent_price);
+        }
     }
 
     //init custom inputs
     function customInputs(modal) {
         modal.find("#nameContainer").show();
-        modal.find("#nameContainer").find("input#name").attr("required", true);
         modal.find("#totalPriceContainer").show();
-        modal
-            .find("#totalPriceContainer")
-            .find("input#totalPrice")
-            .attr("required", true);
     }
 
     // calculate and update total price
@@ -307,451 +419,273 @@ $(document).ready(function () {
         var totalPrice = 0;
         $("#dataTableBody tr:not(.type-eol)").each(function () {
             var rowTotal = parseFloat(
-                $(this).find("td#totalPriceTableItem").text()
+                $(this).find("td.totalPriceTableItem").text()
             );
             totalPrice += +rowTotal;
         });
-        $("#totalPriceCell").text("الاجمالي: " + totalPrice);
-        closeModal(modal);
-    }
+        $("#totalPriceCell").text(totalPrice);
+        $("button#payButton").removeAttr("disabled").css("cursor", "pointer");
 
-    // get name of the product or the rent
-    function getNameFromServer(id, type) {
-        return $.ajax({
-            url: "/party/get-name/" + type + "/",
-            method: "GET",
-            data: {
-                id: id,
-            },
+        closeModal(modal);
+        new Swal({
+            title: "تمت العمليه بنجاح",
+            text: "تمت اضافه العنصر بنجاح.",
+            icon: "success",
+            confirmButtonText: "حسناً",
         });
     }
 
     // appent into table
-    function addToTable(data, modal) {
-        // Remove the empty data row if it exists
-        $("#emptyDataTable").remove();
+    function addToTable(form, modal, type, data = null) {
+        let product_id = form.find("input#productId").val();
+        let rent_id = form.find("input#rentId").val();
+        let from = form.find("input#from").val();
+        let party_id = form.find("input#partyId").val();
+        let name = form.find("#nameContainer input").val();
+        let total_price = form.find("#totalPriceContainer input").val();
+        let quantity = form.find("#quantityContainer input").val();
+        let unit_price = form.find("#unitPriceContainer input").val();
+        let status = form.find("#statusContainer input").prop("checked");
+        let typeInput = form.find("#typeInputContainer select").val();
+        let eol = form.find("#eolReasonContainer textarea").val();
+        let tbody = $("tbody#dataTableBody");
+        let billForm = $("form#requestBillForm");
 
         // Create a new row with data
         var newRow = $("<tr>");
-        if (data.type == "eol") {
+        if (typeInput == "eol") {
             newRow.addClass("type-eol");
         }
 
-        let from =
-            data.from == "items"
-                ? "المنتجات"
-                : data.from == "rent"
-                ? "الايجارات"
-                : "مخصص";
-        let type =
-            data.type == "rent"
+        let fromVal =
+            from == "product"
+                ? "مخزن"
+                : from == "rent"
+                ? "إيجار"
+                : from == "custom"
+                ? "مخصص"
+                : "-";
+        let typeVal =
+            typeInput == "rent"
                 ? "ايجار"
-                : data.type == "sale"
+                : typeInput == "sale"
                 ? "بيع"
-                : "هالك";
-        let status = data.status ? "جاهز" : "غير جاهز";
+                : typeInput == "eol"
+                ? "هالك"
+                : "-";
+        let statusVal = status ? "جاهز" : "قيد التحضير";
+        let statusReqVal = status ? "ready" : "preparing";
+        let nameVal =
+            type == "product" || type == "rent"
+                ? data.name
+                : type == "custom"
+                ? name
+                : "-";
+        let eolVal = typeInput == "eol" ? eol : "-";
 
-        // Usage in your code
-        let productPromise = null;
-        let rentPromise = null;
-        if (data.product_id !== "----") {
-            productPromise = getNameFromServer(data.product_id, "product");
-        }
+        // Append table data (td) elements with data values
+        newRow.append(`<td class="text-center">
+            <img src="${
+                window.location.origin
+            }/${type == "custom" ? "imgs/default.png" : data.image}" width="75" height="75" style="object-fit: cover; border-radius: 25px">
+        </td>`);
+        newRow.append(`<td class="text-center">` + fromVal + "</td>");
+        newRow.append(`<td class="text-center">` + nameVal + "</td>");
+        newRow.append(`<td class="text-center">` + quantity + "</td>");
+        newRow.append(`<td class="text-center">` + unit_price + "</td>");
+        newRow.append(
+            '<td class="text-center totalPriceTableItem">' +
+                +total_price +
+                "</td>"
+        );
+        newRow.append(`<td class="text-center">` + typeVal + "</td>");
+        newRow.append(`<td class="text-center">` + statusVal + "</td>");
+        newRow.append(`<td class="text-center">` + eolVal + "</td>");
+        newRow.append(`
+            <td class="text-center">
+                <div class="edit d-flex align-items-center justify-content-center">
+                    <img src="${
+                        window.location.origin
+                    }/Assets/imgs/edit-circle.png" alt="" class="open-modal" data-type="${type}" data-id="${type == "custom" ? "" : data.id}" data-action="edit">
+                    <img src="${
+                        window.location.origin
+                    }/Assets/imgs/trash (1).png" alt="" class="ms-2 me-2 open-modal" data-type="${type}" data-id="${type == "custom" ? "" : data.id}" data-action="delete">
+                </div>
+            </td>
+        `);
+        newRow.append("</tr>");
+        // Append the new row to the table body
+        tbody.find("#emptyDataTable").remove();
+        tbody.append(newRow);
 
-        if (data.rent_id !== "----") {
-            rentPromise = getNameFromServer(data.rent_id, "rent");
-        }
+        // // Append hidden input fields for each item
+        billForm.append(
+            '<input type="hidden" name="bill[' +
+                tbody.find("tr").length +
+                '][from]" value="' +
+                from +
+                '">'
+        );
+        billForm.append(
+            '<input type="hidden" name="bill[' +
+                tbody.find("tr").length +
+                '][name]" value="' +
+                name +
+                '">'
+        );
+        billForm.append(
+            '<input type="hidden" name="bill[' +
+                tbody.find("tr").length +
+                '][quantity]" value="' +
+                quantity +
+                '">'
+        );
+        billForm.append(
+            '<input type="hidden" name="bill[' +
+                tbody.find("tr").length +
+                '][unit_price]" value="' +
+                unit_price +
+                '">'
+        );
+        billForm.append(
+            '<input type="hidden" name="bill[' +
+                tbody.find("tr").length +
+                '][total_price]" value="' +
+                total_price +
+                '">'
+        );
+        billForm.append(
+            '<input type="hidden" name="bill[' +
+                tbody.find("tr").length +
+                '][type]" value="' +
+                typeInput +
+                '">'
+        );
+        billForm.append(
+            '<input type="hidden" name="bill[' +
+                tbody.find("tr").length +
+                '][status]" value="' +
+                statusReqVal +
+                '">'
+        );
+        billForm.append(
+            '<input type="hidden" name="bill[' +
+                tbody.find("tr").length +
+                '][party_id]" value="' +
+                party_id +
+                '">'
+        );
+        billForm.append(
+            '<input type="hidden" name="bill[' +
+                tbody.find("tr").length +
+                '][product_id]" value="' +
+                product_id +
+                '">'
+        );
+        billForm.append(
+            '<input type="hidden" name="bill[' +
+                tbody.find("tr").length +
+                '][rent_id]" value="' +
+                rent_id +
+                '">'
+        );
+        billForm.append(
+            '<input type="hidden" name="bill[' +
+                tbody.find("tr").length +
+                '][eol_reason]" value="' +
+                eol +
+                '">'
+        );
 
-        if (data.from == "custom") {
-            // Append table data (td) elements with data values
-            newRow.append("<td>" + from + "</td>");
-            newRow.append("<td>" + data.name + "</td>");
-            newRow.append("<td>" + "----" + "</td>");
-            newRow.append("<td>" + "----" + "</td>");
-            newRow.append(
-                '<td id="totalPriceTableItem">' + data.total_price + "</td>"
-            );
-            newRow.append("<td>" + "----" + "</td>");
-            newRow.append("<td>" + status + "</td>");
-            newRow.append("<td>" + "----" + "</td>");
-            newRow.append("<td>" + "----" + "</td>");
-            newRow.append("<td>" + "----" + "</td>");
-            // Append hidden input fields for each item
-            $("#requestBillForm").append(
-                '<input type="hidden" name="bill[' +
-                    $("#dataTableBody tr").length +
-                    '][from]" value="' +
-                    data.from +
-                    '">'
-            );
-            $("#requestBillForm").append(
-                '<input type="hidden" name="bill[' +
-                    $("#dataTableBody tr").length +
-                    '][name]" value="' +
-                    data.name +
-                    '">'
-            );
-            $("#requestBillForm").append(
-                '<input type="hidden" name="bill[' +
-                    $("#dataTableBody tr").length +
-                    '][quantity]" value="' +
-                    data.quantity +
-                    '">'
-            );
-            $("#requestBillForm").append(
-                '<input type="hidden" name="bill[' +
-                    $("#dataTableBody tr").length +
-                    '][unit_price]" value="' +
-                    data.unit_price +
-                    '">'
-            );
-            $("#requestBillForm").append(
-                '<input type="hidden" name="bill[' +
-                    $("#dataTableBody tr").length +
-                    '][total_price]" value="' +
-                    data.total_price +
-                    '">'
-            );
-            $("#requestBillForm").append(
-                '<input type="hidden" name="bill[' +
-                    $("#dataTableBody tr").length +
-                    '][type]" value="' +
-                    data.type +
-                    '">'
-            );
-            $("#requestBillForm").append(
-                '<input type="hidden" name="bill[' +
-                    $("#dataTableBody tr").length +
-                    '][status]" value="' +
-                    data.status +
-                    '">'
-            );
-            $("#requestBillForm").append(
-                '<input type="hidden" name="bill[' +
-                    $("#dataTableBody tr").length +
-                    '][party_id]" value="' +
-                    data.party_id +
-                    '">'
-            );
-            $("#requestBillForm").append(
-                '<input type="hidden" name="bill[' +
-                    $("#dataTableBody tr").length +
-                    '][product_id]" value="' +
-                    data.product_id +
-                    '">'
-            );
-            $("#requestBillForm").append(
-                '<input type="hidden" name="bill[' +
-                    $("#dataTableBody tr").length +
-                    '][rent_id]" value="' +
-                    data.rent_id +
-                    '">'
-            );
-            $("#requestBillForm").append(
-                '<input type="hidden" name="bill[' +
-                    $("#dataTableBody tr").length +
-                    '][eol_reason]" value="' +
-                    data.eol_reason +
-                    '">'
-            );
-            // Append the new row to the table body
-            $("#dataTableBody").append(newRow);
-
-            // Calculate and update total price
-            updateTotalPrice(modal);
-        } else {
-            // Resolve promises and set names
-            $.when(productPromise, rentPromise).done(function (
-                productResponse,
-                rentResponse
-            ) {
-                let res, resPrice;
-                if (productResponse) {
-                    res = productResponse[0];
-                    resPrice = res.avg_price;
-                }
-                if (rentResponse) {
-                    res = rentResponse[0];
-                    resPrice = res.sale_price;
-                }
-                // Append table data (td) elements with data values
-                newRow.append("<td>" + from + "</td>");
-                newRow.append("<td>" + data.name + "</td>");
-                newRow.append("<td>" + data.quantity + "</td>");
-                newRow.append("<td>" + resPrice + "</td>");
-                newRow.append(
-                    '<td id="totalPriceTableItem">' +
-                        resPrice * data.quantity +
-                        "</td>"
-                );
-                newRow.append("<td>" + type + "</td>");
-                newRow.append("<td>" + status + "</td>");
-                if (rentResponse) {
-                    newRow.append("<td>" + "----" + "</td>");
-                    newRow.append("<td>" + res.name + "</td>");
-                }
-                if (productResponse) {
-                    newRow.append("<td>" + res.name + "</td>");
-                    newRow.append("<td>" + "----" + "</td>");
-                }
-                newRow.append("<td>" + data.eol_reason + "</td>");
-
-                // Append hidden input fields for each item
-                $("#requestBillForm").append(
-                    '<input type="hidden" name="bill[' +
-                        $("#dataTableBody tr").length +
-                        '][from]" value="' +
-                        data.from +
-                        '">'
-                );
-                $("#requestBillForm").append(
-                    '<input type="hidden" name="bill[' +
-                        $("#dataTableBody tr").length +
-                        '][name]" value="' +
-                        data.name +
-                        '">'
-                );
-                $("#requestBillForm").append(
-                    '<input type="hidden" name="bill[' +
-                        $("#dataTableBody tr").length +
-                        '][quantity]" value="' +
-                        data.quantity +
-                        '">'
-                );
-                $("#requestBillForm").append(
-                    '<input type="hidden" name="bill[' +
-                        $("#dataTableBody tr").length +
-                        '][unit_price]" value="' +
-                        data.unit_price +
-                        '">'
-                );
-                $("#requestBillForm").append(
-                    '<input type="hidden" name="bill[' +
-                        $("#dataTableBody tr").length +
-                        '][total_price]" value="' +
-                        data.total_price +
-                        '">'
-                );
-                $("#requestBillForm").append(
-                    '<input type="hidden" name="bill[' +
-                        $("#dataTableBody tr").length +
-                        '][type]" value="' +
-                        data.type +
-                        '">'
-                );
-                $("#requestBillForm").append(
-                    '<input type="hidden" name="bill[' +
-                        $("#dataTableBody tr").length +
-                        '][status]" value="' +
-                        data.status +
-                        '">'
-                );
-                $("#requestBillForm").append(
-                    '<input type="hidden" name="bill[' +
-                        $("#dataTableBody tr").length +
-                        '][party_id]" value="' +
-                        data.party_id +
-                        '">'
-                );
-                $("#requestBillForm").append(
-                    '<input type="hidden" name="bill[' +
-                        $("#dataTableBody tr").length +
-                        '][product_id]" value="' +
-                        data.product_id +
-                        '">'
-                );
-                $("#requestBillForm").append(
-                    '<input type="hidden" name="bill[' +
-                        $("#dataTableBody tr").length +
-                        '][rent_id]" value="' +
-                        data.rent_id +
-                        '">'
-                );
-                $("#requestBillForm").append(
-                    '<input type="hidden" name="bill[' +
-                        $("#dataTableBody tr").length +
-                        '][eol_reason]" value="' +
-                        data.eol_reason +
-                        '">'
-                );
-                // Append the new row to the table body
-                $("#dataTableBody").append(newRow);
-
-                // Calculate and update total price
-                updateTotalPrice(modal);
-            });
-        }
+        // Calculate and update total price
+        updateTotalPrice(modal);
     }
+    function handleModalBtnClickEvent(type, modal, modalForm, data) {
+        return function () {
+            let validationContainer = modalForm.find("#validationContainer");
+            let validationTxt = validationContainer.find("small");
 
-    // validate modal
-    function validateModal(salePrice, modal, type) {
-        //data object for the request
-        let data = {
-            from: modal.find("#from").val()
-                ? modal.find("#from").val()
-                : "----",
-            name: modal.find("#name").val()
-                ? modal.find("#name").val()
-                : "----",
-            quantity: modal.find("#quantity").val()
-                ? +modal.find("#quantity").val()
-                : "----",
-            unit_price: salePrice ? salePrice : "----",
-            type: modal.find("#typeInput").val()
-                ? modal.find("#typeInput").val()
-                : "----",
-            status: modal
-                .find("#statusContainer input#flexCheckDefault20")
-                .prop("checked")
-                ? "ready"
-                : "preparing",
-            party_id: modal.find("#partyId").val()
-                ? +modal.find("#partyId").val()
-                : "----",
-            product_id: modal.find("#productId").val()
-                ? +modal.find("#productId").val()
-                : "----",
-            rent_id: modal.find("#rentId").val()
-                ? +modal.find("#rentId").val()
-                : "----",
-            eol_reason: modal.find("#eolReason").val()
-                ? modal.find("#eolReason").val()
-                : "----",
-            total_price: 0,
+            let name = modalForm.find("#nameContainer input");
+            let total_price = modalForm.find("#totalPriceContainer input");
+            let quantity = modalForm.find("#quantityContainer input");
+            let unit_price = modalForm.find("#unitPriceContainer input");
+            let status = modalForm.find("#statusContainer input");
+            let typeInput = modalForm.find("#typeInputContainer select");
+            let eol = modalForm.find("#eolReasonContainer textarea");
+            if (type == "product" || type == "rent") {
+                if (quantity.val() == "") {
+                    validationTxt.text("الكميه مطلوبه.");
+                    validationContainer.slideDown();
+                    quantity.focus();
+                    return;
+                } else if (+quantity.val() > +data.quantity) {
+                    validationTxt.text(
+                        "الكميه المدخله اكبر من الكميه المتاحه."
+                    );
+                    validationContainer.slideDown();
+                    quantity.focus();
+                    return;
+                } else if (unit_price.val() == "") {
+                    validationTxt.text("التكلفه مطلوبه.");
+                    validationContainer.slideDown();
+                    unit_price.focus();
+                    return;
+                } else if (typeInput.val() == "" && type == "product") {
+                    validationTxt.text("النوع مطلوبه.");
+                    validationContainer.slideDown();
+                    typeInput.focus();
+                    return;
+                } else if (
+                    typeInput.val() == "eol" &&
+                    eol.val() == "" &&
+                    type == "product"
+                ) {
+                    validationTxt.text("السبب مطلوب.");
+                    validationContainer.slideDown();
+                    eol.focus();
+                    return;
+                } else {
+                    validationContainer.slideUp();
+                    validationTxt.text("");
+                    total_price.val(+quantity.val() * +unit_price.val());
+                    addToTable(modalForm, modal, type, data);
+                    return;
+                }
+            } else if (type == "custom") {
+                if (name.val() == "") {
+                    validationTxt.text("اسم العنصر مطلوب.");
+                    validationContainer.slideDown();
+                    name.focus();
+                    return;
+                } else if (total_price.val() == "") {
+                    validationTxt.text("التكلفه مطلوبه.");
+                    validationContainer.slideDown();
+                    total_price.focus();
+                    return;
+                } else {
+                    validationContainer.slideUp();
+                    validationTxt.text("");
+                    quantity.val(1);
+                    unit_price.val(total_price.val());
+                    status.val("1");
+                    status.prop("checked", true);
+                    typeInput.val("sale").trigger("change");
+                    addToTable(modalForm, modal, type, null);
+                    return;
+                }
+            }
+            return;
         };
-
-        if (data.from == "items" || data.from == "rent") {
-            let quantity = +modal.find("input#quantity").val();
-            if (!isNaN(quantity) && salePrice) {
-                data.total_price = quantity * salePrice;
-            }
-        } else {
-            let totalPriceInput = modal
-                .find(
-                    '#totalPriceContainer input#totalPrice[required="required"]'
-                )
-                .val();
-            if (totalPriceInput) {
-                data.total_price = totalPriceInput;
-            }
-        }
-        addToTable(data, modal);
     }
-
-    //modals actions
-    $(".open-modal").click(function () {
-        // debugger;
-        let type = $(this).data("type");
-        let id = $(this).data("id");
-        let action = $(this).data("action");
-        let salePrice = $(this).data("saleprice");
-        let modal = $("#popupModal");
-        let title = modal.find("#modalTitle");
-        let modalForm = modal.find("#modalFormElement");
-        let formBtn = modal.find("#modalSubmitBtn");
-
-        //reset inputs required
-        modal.find(".modalInputsContainers").each(function () {
-            $(this).find("input, select, textarea").attr("required", false);
-        });
-
-        // status checkbox change inner text
-        modal
-            .find("#statusContainer input#flexCheckDefault20")
-            .on("change", function () {
-                let $parent = $(this).parent();
-                let $lable = $parent.find("label#status");
-                if ($parent.hasClass("notReady")) {
-                    $parent.removeClass("notReady");
-                } else {
-                    $parent.addClass("notReady");
-                }
-                if ($parent.hasClass("notReady")) {
-                    $lable.text("قيد التحضير");
-                } else {
-                    $lable.text("جاهز");
-                }
-            });
-
-        //eol reason toggle
-        modal
-            .find("#typeInputContainer select#typeInput")
-            .on("change", function () {
-                if ($(this).val() == "eol") {
-                    modal.find("#eolReasonContainer").slideDown(300);
-                } else {
-                    modal.find("#eolReasonContainer").slideUp(300);
-                }
-            });
-
-        // form button name
-        if (!action) {
-            formBtn.text("اضافه الى الفاتوره");
-
-            //init default values
-            modal.find("#from").val(type);
-            modal.find("#partyId").val("{{ $id }}");
-
-            // modal inputs data debend on type
-            switch (type) {
-                case "items":
-                    title.text("اضافه عنصر من المخزن");
-                    productInputs(modal, id);
-                    break;
-                case "rent":
-                    title.text("اضافه عنصر من قايمه الإيجار");
-                    rentInputs(modal, id);
-                    break;
-                case "custom":
-                    title.text("اضافه عنصر مخصص");
-                    customInputs(modal);
-                    break;
-                default:
-                    break;
-            }
-            if (type === "items" || type === "rent") {
-                productAndRentInputs(modal, type);
-            }
-        } else if (action == "edit") {
-            formBtn.text("تعديل الفاتوره");
-        } else if (action == "delete") {
-            formBtn.text("حذف الفاتوره");
-        } else {
-            formBtn.text("حفظ التعديلات");
-        }
-
-        // open this modal
-        openModal(modal);
-
-        // stop modal form submit
-        modalForm.submit(function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            e.stopImmediatePropagation();
-        });
-        // click event on submit btn for the modal form
-        modalForm.find("button#modalSubmitBtn").click(function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            e.stopImmediatePropagation();
-            if (modalForm.find('[required="required"]').val() == "") {
-                return;
-            } else {
-                validateModal(salePrice, modal, type);
-            }
-        });
-
-        // listen on dismiss modal
-        $(".popup img#dismiss").click(function () {
-            if (!$(this).parent().hasClass("none")) {
-                closeModal(modal);
-            }
-        });
-
-        $(".overlay-alfa").on("click", function (e) {
-            if ($(e.target).hasClass("overlay-alfa")) {
-                closeModal(modal);
-            }
-        });
-    });
+    // validate modal
+    function validateModal(modalForm, modal, type, data = null) {
+        // click event on submit btn for the modal modalForm
+        modalForm
+            .find("#modalSubmitBtn")
+            .off("click")
+            .on(
+                "click",
+                handleModalBtnClickEvent(type, modal, modalForm, data)
+            );
+    }
 });

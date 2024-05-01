@@ -304,8 +304,8 @@
 
                             <div
                                 class="popup-dolar id-{{ $supplier->id }} popup close shadow-sm rounded-3 position-fixed overflow-auto">
-                                <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" id="dismiss"
-                                    alt="">
+                                <img class="position-absolute normal-dismiss" src="{{ asset('Assets/imgs/Close.png') }}"
+                                    id="dismiss" alt="">
                                 <h3 class="mt-3">كشف حساب المورد {{ $supplier->name }}</h3>
                                 <div class="dolar-container p-5 d-flex flex-column">
                                     <div

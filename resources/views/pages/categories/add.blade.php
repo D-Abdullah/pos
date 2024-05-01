@@ -7,7 +7,7 @@
 </style>
 
 <div class="popup-add popup close shadow-sm rounded-3 position-fixed">
-    <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
+    <img class="position-absolute normal-dismiss" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
     <h2 class="text-center mt-4 mb-4 opacity-75">اضافة قسم جديدة</h2>
     <form id="add-cate" method="post" action="{{ route('department.add') }}">
         @csrf

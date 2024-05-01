@@ -145,6 +145,7 @@ class PartyController extends Controller
      */
     public function storeBill(Request $request, int $id)
     {
+        return $request->all();
         try {
             DB::beginTransaction();
             $party = Party::findOrFail($id);

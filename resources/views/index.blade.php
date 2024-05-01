@@ -147,7 +147,8 @@
 
                     {{-- Add ,Edit  Popup --}}
                     <div id="targetPopup" class="popup-add popup shadow-sm rounded-3 position-fixed close">
-                        <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
+                        <img class="position-absolute normal-dismiss" src="{{ asset('Assets/imgs/Close.png') }}"
+                            alt="">
                         <h2 class="text-center mt-4 mb-4 opacity-75">اضافة تارجيت جديدة</h2>
                         <form id="add-cate" method="post" action="">
 
@@ -166,7 +167,8 @@
 
                     {{-- Delete Popup --}}
                     <div id="targetDelete" class="popup-delete popup close shadow-sm rounded-3 position-fixed">
-                        <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}" alt="">
+                        <img class="position-absolute normal-dismiss" src="{{ asset('Assets/imgs/Close.png') }}"
+                            alt="">
                         <h3 class="fs-5 fw-bold mb-3">حذف العنصر</h3>
                         <p>هل تريد الحذف متاكد !!</p>
                         <div class="buttons mt-5 d-flex">
@@ -221,7 +223,7 @@
                 <canvas id="myChart5"></canvas>
             </div>
             <!-- <div class="up d-flex gap-5">
-                                                                                                                                                                                                                                                                                                                                                                                                    </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                                        </div> -->
         </div>
     </div>
 
