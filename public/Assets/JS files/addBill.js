@@ -40,6 +40,16 @@ $(document).ready(function () {
             let title = modal.find("#modalTitle");
             let modalForm = modal.find("#modalFormElement");
             let formBtn = modal.find("#modalSubmitBtn");
+            let editIndex = null;
+            if (action != "add") {
+                editIndex = $(this)
+                    .parent()
+                    .parent()
+                    .parent()
+                    .attr("id")
+                    .split("-")[1];
+                console.log(editIndex);
+            }
 
             //reset inputs required
             modal.find(".modalInputsContainers").each(function () {
@@ -75,43 +85,53 @@ $(document).ready(function () {
                     }
                 });
 
+            modalForm.find("input#from").val(type);
+            // modal inputs data debend on type
+            switch (type) {
+                case "product":
+                    productInputs(modal, id);
+                    break;
+                case "rent":
+                    rentInputs(modal, id);
+                    break;
+                case "custom":
+                    customInputs(modal, action, editIndex);
+                    break;
+                default:
+                    break;
+            }
+            if (type === "product" || type === "rent") {
+                let SData = getData(type, null, null, null, id);
+                $.when(SData).done(function (response) {
+                    let data = response.data[0];
+                    productAndRentInputs(modal, type, data, action, editIndex);
+                    validateModal(modalForm, modal, type, data);
+                    setTimeout(() => {
+                        modal
+                            .find("#infoContainer")
+                            .addClass("d-flex")
+                            .slideDown();
+                    }, 300);
+                });
+            } else {
+                modal.find("#infoContainer").removeClass("d-flex").hide(0);
+                validateModal(modalForm, modal, type);
+            }
             // form button name
             if (action == "add") {
                 formBtn.text("اضافه الى الفاتوره");
-                modalForm.find("input#from").val(type);
-                // modal inputs data debend on type
                 switch (type) {
                     case "product":
                         title.text("اضافه عنصر من المخزن");
-                        productInputs(modal, id);
                         break;
                     case "rent":
                         title.text("اضافه عنصر من قايمه الإيجار");
-                        rentInputs(modal, id);
                         break;
                     case "custom":
                         title.text("اضافه عنصر مخصص");
-                        customInputs(modal);
                         break;
                     default:
                         break;
-                }
-                if (type === "product" || type === "rent") {
-                    let SData = getData(type, null, null, null, id);
-                    $.when(SData).done(function (response) {
-                        let data = response.data[0];
-                        productAndRentInputs(modal, type, data);
-                        validateModal(modalForm, modal, type, data);
-                        setTimeout(() => {
-                            modal
-                                .find("#infoContainer")
-                                .addClass("d-flex")
-                                .slideDown();
-                        }, 300);
-                    });
-                } else {
-                    modal.find("#infoContainer").removeClass("d-flex").hide(0);
-                    validateModal(modalForm, modal, type);
                 }
             } else if (action == "edit") {
                 formBtn.text("تعديل الفاتوره");
@@ -413,9 +433,13 @@ $(document).ready(function () {
     }
 
     //init custom inputs
-    function customInputs(modal) {
+    function customInputs(modal, action, editIndex = null) {
         modal.find("#nameContainer").show();
         modal.find("#totalPriceContainer").show();
+        if (action == "edit") {
+            modal.find("#nameContainer").val();
+            modal.find("#totalPriceContainer").val();
+        }
     }
 
     // calculate and update total price
@@ -456,7 +480,7 @@ $(document).ready(function () {
         let billForm = $("form#requestBillForm");
 
         // Create a new row with data
-        var newRow = $("<tr>");
+        var newRow = $(`<tr id="row-${tbody.find("tr").length}" >`);
         if (typeInput == "eol") {
             newRow.addClass("type-eol");
         }

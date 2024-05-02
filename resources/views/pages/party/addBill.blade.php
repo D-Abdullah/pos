@@ -167,7 +167,7 @@
     </table>
 
     <div class="part show gap-4 mb-4" id="product">
-        <div class="products ps-2 pe-2">
+        <div class="products ps-2 pe-2 mb-5">
             <div class="info p-2 mb-1 d-flex gap-4 align-items-center justify-content-center">
                 <div class="w-50">
                     <input type="search" name="search" id="productFilterWithName" placeholder="بحث بإسم المنتج">
@@ -196,7 +196,7 @@
     </div>
 
     <div class="part gap-4 mb-4" id="rent">
-        <div class="products">
+        <div class="products ps-2 pe-2 mb-5">
             <div class="info p-2 mb-1 d-flex gap-4 align-items-center justify-content-center">
                 <div class="w-100">
                     <input type="search" name="search" id="rentFilterWithName" placeholder="بحث بإسم المنتج">
