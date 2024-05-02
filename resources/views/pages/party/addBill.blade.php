@@ -220,7 +220,7 @@
         <img class="position-absolute normal-dismiss" src="{{ asset('Assets/imgs/Close.png') }}" id="dismiss"
             alt="">
         <h2 class="text-center mt-4 mb-4 opacity-75" id="modalTitle"></h2>
-        <div class="d-flex justify-content-around align-items-center" id="infoContainer">
+        <div class="justify-content-around align-items-center" style="display:none" id="infoContainer">
             <div>
                 <p class="mb-0" id="modalInfoName"><b>اسم: </b> <span></span></p>
                 <p class="mb-0" id="modalInfoDepartment"><b>قسم: </b> <span></span></p>

@@ -30,56 +30,7 @@ $(document).ready(function () {
         }
     }
 
-    // append elements
-    function appendElements(type, data, pagination = false) {
-        let container = $("#" + type + "Data");
-        if (!pagination) {
-            container.html("");
-        }
-        container.find(".loading-spinner").remove();
-        if (data.length == 0) {
-            container.append(`
-                <div class="box">
-                    <div class="info-box p-3">
-                        <span class="d-block fs-5 text-center"><b>لا يوجد بيانات</b></span>
-                    </div>
-                </div>
-            `);
-            return;
-        }
-        for (let i = 0; i < data.length; i++) {
-            let element = `
-                <div class="box open-modal" data-type="${type}" data-id="${
-                data[i].id
-            }" data-action="add">
-            <div style="width: 100%; height: 300px; overflow: hidden;">
-                <img src="${window.location.origin}/${data[i].image}"
-                    style="padding: 25px; border-radius: 22px; width: 100%; height: 100%; object-fit: cover;"
-                    alt="${data[i].name}">
-            </div>
-
-                    <div class="info-box p-3">
-                        <span class="d-block fs-5"><b>اسم:</b> ${
-                            data[i].name
-                        }</span>
-                        <span class="${
-                            type == "rent" ? "d-none" : "d-block"
-                        } fs-5"><b>قسم:</b> ${
-                type == "rent" ? "" : data[i].department.name
-            }</span>
-                        <span class="d-block fs-5"><b>سعر:</b> ${
-                            type == "rent"
-                                ? data[i].rent_price
-                                : data[i].unit_price
-                        } جنيه</span>
-                        <span class="d-block fs-5"><b>كميه:</b> ${
-                            data[i].quantity
-                        }</span>
-                    </div>
-                </div>`;
-            container.append(element);
-        }
-
+    function openModalEvent() {
         //modals actions
         $(".open-modal").click(function () {
             let type = $(this).data("type");
@@ -185,6 +136,59 @@ $(document).ready(function () {
                 }
             });
         });
+    }
+
+    // append elements
+    function appendElements(type, data, pagination = false) {
+        let container = $("#" + type + "Data");
+        if (!pagination) {
+            container.html("");
+        }
+        container.find(".loading-spinner").remove();
+        if (data.length == 0) {
+            container.append(`
+                <div class="box">
+                    <div class="info-box p-3">
+                        <span class="d-block fs-5 text-center"><b>لا يوجد بيانات</b></span>
+                    </div>
+                </div>
+            `);
+            return;
+        }
+        for (let i = 0; i < data.length; i++) {
+            let element = `
+                <div class="box open-modal" data-type="${type}" data-id="${
+                data[i].id
+            }" data-action="add">
+            <div style="width: 100%; height: 300px; overflow: hidden;">
+                <img src="${window.location.origin}/${data[i].image}"
+                    style="padding: 25px; border-radius: 22px; width: 100%; height: 100%; object-fit: cover;"
+                    alt="${data[i].name}">
+            </div>
+
+                    <div class="info-box p-3">
+                        <span class="d-block fs-5"><b>اسم:</b> ${
+                            data[i].name
+                        }</span>
+                        <span class="${
+                            type == "rent" ? "d-none" : "d-block"
+                        } fs-5"><b>قسم:</b> ${
+                type == "rent" ? "" : data[i].department.name
+            }</span>
+                        <span class="d-block fs-5"><b>سعر:</b> ${
+                            type == "rent"
+                                ? data[i].rent_price
+                                : data[i].unit_price
+                        } جنيه</span>
+                        <span class="d-block fs-5"><b>كميه:</b> ${
+                            data[i].quantity
+                        }</span>
+                    </div>
+                </div>`;
+            container.append(element);
+        }
+
+        openModalEvent();
     }
 
     // init product data
@@ -425,7 +429,7 @@ $(document).ready(function () {
         });
         $("#totalPriceCell").text(totalPrice);
         $("button#payButton").removeAttr("disabled").css("cursor", "pointer");
-
+        openModalEvent();
         closeModal(modal);
         new Swal({
             title: "تمت العمليه بنجاح",
@@ -484,25 +488,53 @@ $(document).ready(function () {
         let eolVal = typeInput == "eol" ? eol : "-";
 
         // Append table data (td) elements with data values
-        newRow.append(`<td class="text-center">
+        newRow.append(`<td class="text-center" style="vertical-align: middle;">
             <img src="${
                 window.location.origin
             }/${type == "custom" ? "imgs/default.png" : data.image}" width="75" height="75" style="object-fit: cover; border-radius: 25px">
         </td>`);
-        newRow.append(`<td class="text-center">` + fromVal + "</td>");
-        newRow.append(`<td class="text-center">` + nameVal + "</td>");
-        newRow.append(`<td class="text-center">` + quantity + "</td>");
-        newRow.append(`<td class="text-center">` + unit_price + "</td>");
         newRow.append(
-            '<td class="text-center totalPriceTableItem">' +
+            `<td class="text-center" style="vertical-align: middle;">` +
+                fromVal +
+                "</td>"
+        );
+        newRow.append(
+            `<td class="text-center" style="vertical-align: middle;">` +
+                nameVal +
+                "</td>"
+        );
+        newRow.append(
+            `<td class="text-center" style="vertical-align: middle;">` +
+                quantity +
+                "</td>"
+        );
+        newRow.append(
+            `<td class="text-center" style="vertical-align: middle;">` +
+                unit_price +
+                "</td>"
+        );
+        newRow.append(
+            '<td class="text-center totalPriceTableItem" style="vertical-align: middle;">' +
                 +total_price +
                 "</td>"
         );
-        newRow.append(`<td class="text-center">` + typeVal + "</td>");
-        newRow.append(`<td class="text-center">` + statusVal + "</td>");
-        newRow.append(`<td class="text-center">` + eolVal + "</td>");
+        newRow.append(
+            `<td class="text-center" style="vertical-align: middle;">` +
+                typeVal +
+                "</td>"
+        );
+        newRow.append(
+            `<td class="text-center" style="vertical-align: middle;">` +
+                statusVal +
+                "</td>"
+        );
+        newRow.append(
+            `<td class="text-center" style="vertical-align: middle;">` +
+                eolVal +
+                "</td>"
+        );
         newRow.append(`
-            <td class="text-center">
+            <td class="text-center" style="vertical-align: middle;">
                 <div class="edit d-flex align-items-center justify-content-center">
                     <img src="${
                         window.location.origin
