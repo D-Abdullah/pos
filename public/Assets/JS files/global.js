@@ -150,34 +150,34 @@ function closePopups() {
     }
 }
 
-document.onkeyup = function (e) {
-    let overlay = document.querySelector(".overlay");
-    if (e.key === "Escape") {
-        if (overlay) {
-            overlay.classList.add("none");
+// document.onkeyup = function (e) {
+//     let overlay = document.querySelector(".overlay");
+//     if (e.key === "Escape") {
+//         if (overlay) {
+//             overlay.classList.add("none");
 
-            popups.forEach((popup) => {
-                if (!popup.classList.contains("close")) {
-                    popup.classList.add("close");
+//             popups.forEach((popup) => {
+//                 if (!popup.classList.contains("close")) {
+//                     popup.classList.add("close");
 
-                    document
-                        .querySelector("body")
-                        .classList.remove("overflow-hidden");
-                }
-            });
-        } else {
-            let overlayC = document.querySelector(".overlay-alfa");
-            overlayC.classList.add("none");
+//                     document
+//                         .querySelector("body")
+//                         .classList.remove("overflow-hidden");
+//                 }
+//             });
+//         } else {
+//             let overlayC = document.querySelector(".overlay-alfa");
+//             overlayC.classList.add("none");
 
-            popups.forEach((popup) => {
-                if (!popup.classList.contains("close")) {
-                    popup.classList.add("close");
+//             popups.forEach((popup) => {
+//                 if (!popup.classList.contains("close")) {
+//                     popup.classList.add("close");
 
-                    document
-                        .querySelector("body")
-                        .classList.remove("overflow-hidden");
-                }
-            });
-        }
-    }
-};
+//                     document
+//                         .querySelector("body")
+//                         .classList.remove("overflow-hidden");
+//                 }
+//             });
+//         }
+//     }
+// };

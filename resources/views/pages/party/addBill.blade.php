@@ -242,8 +242,8 @@
             </div>
 
             <div class="modalInputsContainers" id="totalPriceContainer" style="display: none">
-                <label class="d-block mb-1" for="totalPrice">السعر الاجمالي</label>
-                <input type="number" step="0.1" id="totalPrice" placeholder="ضع السعر الاجمالي">
+                <label class="d-block mb-1" for="totalPrice">التكلفه</label>
+                <input type="number" step="0.1" id="totalPrice" placeholder="ضع التكلفه ">
             </div>
 
             <div class="modalInputsContainers" id="quantityContainer" style="display: none">
@@ -252,8 +252,8 @@
             </div>
 
             <div class="modalInputsContainers" id="unitPriceContainer" style="display: none">
-                <label class="d-block mb-1" for="unitPrice">سعر الوحده</label>
-                <input type="number" step="0.1" id="unitPrice" placeholder="ضع سعر الوحده">
+                <label class="d-block mb-1" for="unitPrice">التكلفه</label>
+                <input type="number" step="0.1" id="unitPrice" placeholder="ضع التكلفه">
             </div>
 
             <div class="modalInputsContainers" id="typeInputContainer" style="display: none">
