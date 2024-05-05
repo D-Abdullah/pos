@@ -18,6 +18,7 @@ class Product extends Model
         'party_qty',
         'image',
         'unit_price',
+        'purchase_price',
         'created_at',
         'updated_at'
     ];

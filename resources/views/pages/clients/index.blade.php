@@ -141,8 +141,8 @@
                                 <form id="edit-cate" method="post" action="{{ route('client.update', $client->id) }}">
                                     @csrf
                                     @method('put')
-                                    <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
-                                        alt="">
+                                    <img class="position-absolute normal-dismiss"
+                                        src="{{ asset('Assets/imgs/Close.png') }}" alt="">
                                     <h2 class="text-center mt-4 mb-4 opacity-75">تعديل: {{ $client->name }} </h2>
                                     <div class="f-row d-flex gap-4">
                                         <div>

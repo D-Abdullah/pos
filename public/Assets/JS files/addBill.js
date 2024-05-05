@@ -87,42 +87,57 @@ $(document).ready(function () {
 
             modalForm.find("input#from").val(type);
             // modal inputs data debend on type
-            switch (type) {
-                case "product":
-                    productInputs(modal, id);
-                    break;
-                case "rent":
-                    rentInputs(modal, id);
-                    break;
-                case "custom":
-                    customInputs(modal, action, editIndex);
-                    break;
-                default:
-                    break;
-            }
-            if (type === "product" || type === "rent") {
-                let SData = getData(type, null, null, null, id);
-                $.when(SData).done(function (response) {
-                    let data = response.data[0];
-                    productAndRentInputs(modal, type, data, action, editIndex);
+            if (action != "delete") {
+                switch (type) {
+                    case "product":
+                        productInputs(modal, id);
+                        break;
+                    case "rent":
+                        rentInputs(modal, id);
+                        break;
+                    case "custom":
+                        customInputs(modal, action, editIndex);
+                        break;
+                    default:
+                        break;
+                }
+                if (type === "product" || type === "rent") {
+                    let SData = getData(type, null, null, null, id);
+                    $.when(SData).done(function (response) {
+                        let data = response.data[0];
+                        productAndRentInputs(
+                            modal,
+                            type,
+                            data,
+                            action,
+                            editIndex
+                        );
+                        validateModal(
+                            modalForm,
+                            modal,
+                            type,
+                            data,
+                            action,
+                            editIndex
+                        );
+                        setTimeout(() => {
+                            modal
+                                .find("#infoContainer")
+                                .addClass("d-flex")
+                                .slideDown();
+                        }, 300);
+                    });
+                } else if (type === "custom") {
+                    modal.find("#infoContainer").removeClass("d-flex").hide(0);
                     validateModal(
                         modalForm,
                         modal,
                         type,
-                        data,
+                        null,
                         action,
                         editIndex
                     );
-                    setTimeout(() => {
-                        modal
-                            .find("#infoContainer")
-                            .addClass("d-flex")
-                            .slideDown();
-                    }, 300);
-                });
-            } else if (type === "custom") {
-                modal.find("#infoContainer").removeClass("d-flex").hide(0);
-                validateModal(modalForm, modal, type, null, action, editIndex);
+                }
             }
             // form button name
             if (action == "add") {
@@ -156,7 +171,21 @@ $(document).ready(function () {
                         break;
                 }
             } else if (action == "delete") {
-                formBtn.text("حذف الفاتوره");
+                formBtn.text("حذف العنصر من الفاتوره");
+                switch (type) {
+                    case "product":
+                        title.text("حذف عنصر من المخزن");
+                        break;
+                    case "rent":
+                        title.text("حذف عنصر من قايمه الإيجار");
+                        break;
+                    case "custom":
+                        title.text("حذف عنصر مخصص");
+                        break;
+                    default:
+                        break;
+                }
+                validateModal(modalForm, modal, type, null, action, editIndex);
             } else {
                 formBtn.text("حفظ التعديلات");
             }
@@ -379,7 +408,6 @@ $(document).ready(function () {
         modal.find("input#productId").val("");
         modal.find("input#rentId").val("");
         modal.find("input#from").val("");
-        modal.find("input#partyId").val("");
 
         modal.find("#nameContainer input#name").val("");
         modal.find("#totalPriceContainer input#totalPrice").val("");
@@ -524,7 +552,7 @@ $(document).ready(function () {
             );
             totalPrice += +rowTotal;
         });
-        $("#totalPriceCell").text(totalPrice);
+        $("#totalPriceCell").text(totalPrice == NaN ? 0 : totalPrice);
         $("button#payButton").removeAttr("disabled").css("cursor", "pointer");
         openModalEvent();
         closeModal(modal);
@@ -534,6 +562,86 @@ $(document).ready(function () {
             icon: "success",
             confirmButtonText: "حسناً",
         });
+    }
+    // delete from table
+    function deleteFromTable(
+        form,
+        modal,
+        type,
+        data = null,
+        action,
+        editIndex
+    ) {
+        let product_id = form.find("input#productId").val();
+        let rent_id = form.find("input#rentId").val();
+        let from = form.find("input#from").val();
+        let party_id = form.find("input#partyId").val();
+        let name = form.find("#nameContainer input").val();
+        let total_price = form.find("#totalPriceContainer input").val();
+        let quantity = form.find("#quantityContainer input").val();
+        let unit_price = form.find("#unitPriceContainer input").val();
+        let status = form.find("#statusContainer input").prop("checked");
+        let typeInput = form.find("#typeInputContainer select").val();
+        let eol = form.find("#eolReasonContainer textarea").val();
+        let tbody = $("tbody#dataTableBody");
+        let billForm = $("form#requestBillForm");
+        alert(editIndex);
+        // Create a new row with data
+        var currentRow = tbody.find(`tr#row-${editIndex}`);
+        currentRow.html("");
+        currentRow.addClass("type-eol");
+        currentRow.addClass("d-none");
+        if (tbody.find("tr").length == 0) {
+            tbody.append(`
+            <tr id="emptyDataTable">
+                <td colspan="10" class="text-center p-4">
+                    لا توجد بيانات
+                </td>
+            </tr>`);
+            billForm.find("button#payButton").attr("disabled", true);
+            billForm.find("button#payButton").css("cursor", "not-allowed");
+        }
+
+        // Append hidden input fields for each item
+        billForm
+            .find(`input[type="hidden"][name="bill[${editIndex}][from]"]`)
+            .remove();
+
+        billForm
+            .find(`input[type="hidden"][name="bill[${editIndex}][name]"]`)
+            .remove();
+        billForm
+            .find(`input[type="hidden"][name="bill[${editIndex}][quantity]"]`)
+            .remove();
+        billForm
+            .find(`input[type="hidden"][name="bill[${editIndex}][unit_price]"]`)
+            .remove();
+        billForm
+            .find(
+                `input[type="hidden"][name="bill[${editIndex}][total_price]"]`
+            )
+            .remove();
+        billForm
+            .find(`input[type="hidden"][name="bill[${editIndex}][type]"]`)
+            .remove();
+        billForm
+            .find(`input[type="hidden"][name="bill[${editIndex}][status]"]`)
+            .remove();
+        billForm
+            .find(`input[type="hidden"][name="bill[${editIndex}][party_id]"]`)
+            .remove();
+        billForm
+            .find(`input[type="hidden"][name="bill[${editIndex}][product_id]"]`)
+            .remove();
+        billForm
+            .find(`input[type="hidden"][name="bill[${editIndex}][rent_id]"]`)
+            .remove();
+        billForm
+            .find(`input[type="hidden"][name="bill[${editIndex}][eol_reason]"]`)
+            .remove();
+
+        // Calculate and update total price
+        updateTotalPrice(modal);
     }
     // update from table
     function updateFromTable(
@@ -710,9 +818,10 @@ $(document).ready(function () {
         let eol = form.find("#eolReasonContainer textarea").val();
         let tbody = $("tbody#dataTableBody");
         let billForm = $("form#requestBillForm");
-
         // Create a new row with data
-        var newRow = $(`<tr id="row-${tbody.find("tr").length}" >`);
+        var newRow = $(
+            `<tr id="row-${tbody.find("tr:not(#emptyDataTable)").length}" >`
+        );
         if (typeInput == "eol") {
             newRow.addClass("type-eol");
         }
@@ -802,89 +911,89 @@ $(document).ready(function () {
             </td>
         `);
         newRow.append("</tr>");
-        // Append the new row to the table body
-        tbody.find("#emptyDataTable").remove();
-        tbody.append(newRow);
 
         // // Append hidden input fields for each item
         billForm.append(
             '<input type="hidden" name="bill[' +
-                tbody.find("tr").length +
+                tbody.find("tr:not(#emptyDataTable)").length +
                 '][from]" value="' +
                 from +
                 '">'
         );
         billForm.append(
             '<input type="hidden" name="bill[' +
-                tbody.find("tr").length +
+                tbody.find("tr:not(#emptyDataTable)").length +
                 '][name]" value="' +
                 name +
                 '">'
         );
         billForm.append(
             '<input type="hidden" name="bill[' +
-                tbody.find("tr").length +
+                tbody.find("tr:not(#emptyDataTable)").length +
                 '][quantity]" value="' +
                 quantity +
                 '">'
         );
         billForm.append(
             '<input type="hidden" name="bill[' +
-                tbody.find("tr").length +
+                tbody.find("tr:not(#emptyDataTable)").length +
                 '][unit_price]" value="' +
                 unit_price +
                 '">'
         );
         billForm.append(
             '<input type="hidden" name="bill[' +
-                tbody.find("tr").length +
+                tbody.find("tr:not(#emptyDataTable)").length +
                 '][total_price]" value="' +
                 total_price +
                 '">'
         );
         billForm.append(
             '<input type="hidden" name="bill[' +
-                tbody.find("tr").length +
+                tbody.find("tr:not(#emptyDataTable)").length +
                 '][type]" value="' +
                 typeInput +
                 '">'
         );
         billForm.append(
             '<input type="hidden" name="bill[' +
-                tbody.find("tr").length +
+                tbody.find("tr:not(#emptyDataTable)").length +
                 '][status]" value="' +
                 statusReqVal +
                 '">'
         );
         billForm.append(
             '<input type="hidden" name="bill[' +
-                tbody.find("tr").length +
+                tbody.find("tr:not(#emptyDataTable)").length +
                 '][party_id]" value="' +
                 party_id +
                 '">'
         );
         billForm.append(
             '<input type="hidden" name="bill[' +
-                tbody.find("tr").length +
+                tbody.find("tr:not(#emptyDataTable)").length +
                 '][product_id]" value="' +
                 product_id +
                 '">'
         );
         billForm.append(
             '<input type="hidden" name="bill[' +
-                tbody.find("tr").length +
+                tbody.find("tr:not(#emptyDataTable)").length +
                 '][rent_id]" value="' +
                 rent_id +
                 '">'
         );
         billForm.append(
             '<input type="hidden" name="bill[' +
-                tbody.find("tr").length +
+                tbody.find("tr:not(#emptyDataTable)").length +
                 '][eol_reason]" value="' +
                 eol +
                 '">'
         );
 
+        // Append the new row to the table body
+        tbody.find("#emptyDataTable").remove();
+        tbody.append(newRow);
         // Calculate and update total price
         updateTotalPrice(modal);
     }
@@ -907,7 +1016,16 @@ $(document).ready(function () {
             let status = modalForm.find("#statusContainer input");
             let typeInput = modalForm.find("#typeInputContainer select");
             let eol = modalForm.find("#eolReasonContainer textarea");
-            if (type == "product" || type == "rent") {
+            if (action == "delete") {
+                deleteFromTable(
+                    modalForm,
+                    modal,
+                    type,
+                    data,
+                    action,
+                    editIndex
+                );
+            } else if (type == "product" || type == "rent") {
                 if (quantity.val() == "") {
                     validationTxt.text("الكميه مطلوبه.");
                     validationContainer.slideDown();

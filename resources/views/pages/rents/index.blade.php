@@ -190,8 +190,8 @@
                                     enctype="multipart/form-data">
                                     @csrf
                                     @method('put')
-                                    <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
-                                        alt="">
+                                    <img class="position-absolute normal-dismiss"
+                                        src="{{ asset('Assets/imgs/Close.png') }}" alt="">
                                     <h2 class="text-center mt-4 mb-4 opacity-75">تعديل الايجار</h2>
                                     <div class="f-row d-flex gap-4">
                                         <div>

@@ -40,7 +40,7 @@ class WarehouseController extends Controller
             DB::rollBack();
             Log::error('حدث خطأ أثناء عرض المخزن: ' . $e->getMessage());
 
-            return redirect()->back()->with(['error' => 'حدث خطأ أثناء عرض المخزن. يرجى المحاولة مرة أخرى.' . $e->getMessage()]);
+            return redirect()->back()->with(['error' => 'حدث خطأ أثناء عرض المخزن. يرجى المحاولة مرة أخرى.']);
         }
     }
 }

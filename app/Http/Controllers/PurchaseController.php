@@ -75,6 +75,11 @@ class PurchaseController extends Controller
     {
         try {
             DB::beginTransaction();
+
+            $product = Product::findOrFail($request->input('product_id'));
+            $totalQty = $product->quantity + $request->input('quantity');
+            $totalPrice = (float) floatval(Purchase::where('product_id', $product->id)->sum('total_price')) + (float) floatval((float) $request->input('unit_price') * (int) $request->input('quantity'));
+
             $purchase = Purchase::create([
                 'product_id' => $request->input('product_id'),
                 'supplier_id' => $request->input('supplier_id'),
@@ -85,8 +90,11 @@ class PurchaseController extends Controller
                 'party_id' => $request->has('party_id') ? $request->input('party_id') : null,
                 'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
-            $product = Product::findOrFail($request->input('product_id'));
-            $product->update(['quantity' => $product->quantity + $request->input('quantity')]);
+
+            $product->update([
+                'quantity' => $totalQty,
+                'purchase_price' => $totalPrice / $totalQty,
+            ]);
 
             WarehouseTransaction::create([
                 'product_id' => $product->id,
@@ -104,7 +112,7 @@ class PurchaseController extends Controller
             Log::error('حدث خطأ أثناء اضافه عمليه شراء: ' . $e->getMessage());
 
             return redirect()->back()->withInput($request->all())
-                ->with(['error' => 'حدث خطأ أثناء اضافه عمليه شراء. يرجى المحاولة مرة أخرى.' . $e->getMessage()]);
+                ->with(['error' => 'حدث خطأ أثناء اضافه عمليه شراء. يرجى المحاولة مرة أخرى.']);
         }
     }
     public function update(UpdatePurchaseRequest $request, int $id)
@@ -113,6 +121,10 @@ class PurchaseController extends Controller
             DB::beginTransaction();
             $purchase = Purchase::findOrFail($id);
             $oldQty = $purchase->quantity;
+            $product = Product::findOrFail($request->input('product_id'));
+            $totalQty = $product->quantity + $request->input('quantity');
+            $totalPrice = (float) floatval(Purchase::where('product_id', $product->id)->sum('total_price')) + (float) floatval((float) $request->input('unit_price') * (int) $request->input('quantity'));
+
             $purchase->update([
                 'product_id' => $request->input('product_id'),
                 'supplier_id' => $request->input('supplier_id'),
@@ -123,8 +135,10 @@ class PurchaseController extends Controller
                 'party_id' => $request->has('party_id') ? $request->input('party_id') : null,
                 'added_by' => auth()->user()->getAuthIdentifier(),
             ]);
-            $product = Product::findOrFail($request->input('product_id'));
-            $product->update(['quantity' => $product->quantity + $request->input('quantity') - $oldQty]);
+            $product->update([
+                'quantity' => $totalQty,
+                'purchase_price' => $totalPrice / $totalQty,
+            ]);
 
             WarehouseTransaction::create([
                 'product_id' => $product->id,
@@ -149,9 +163,14 @@ class PurchaseController extends Controller
     {
         try {
             $purchase = Purchase::findOrFail($id);
-
+            $product = Product::findOrFail($purchase->product_id);
+            $totalQty = $product->quantity - $purchase->quantity;
+            $totalPrice = (float) floatval(Purchase::where('product_id', $product->id)->sum('total_price')) - (float) floatval($purchase->total_price);
+            $product->update([
+                'quantity' => $totalQty,
+                'purchase_price' => $totalPrice / $totalQty,
+            ]);
             $purchase->delete();
-
             return redirect()->route('purchase.all')->with(['success' => 'تم حذف عمليه الشراء بنجاح.']);
         } catch (\Exception $e) {
             Log::error('حدث خطأ أثناء حذف عمليه الشراء: ' . $e->getMessage());

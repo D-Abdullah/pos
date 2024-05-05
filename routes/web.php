@@ -192,10 +192,6 @@ Route::group(['middleware' => 'auth'], function () {
             ->delete('/{id}', [UserController::class, 'destroy'])->name('user.delete');
     });
 
-    //reports
-    Route::group(['prefix' => 'report'], function () {
-        Route::middleware('permission:read report')->get('/all', [ReportController::class, 'index'])->name('report.all');
-    });
 
     //Employees
     Route::group(['prefix' => 'employee'], function () {

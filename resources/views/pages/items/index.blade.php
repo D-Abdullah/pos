@@ -216,8 +216,8 @@
                                     @csrf
                                     @method('put')
 
-                                    <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
-                                        alt="">
+                                    <img class="position-absolute normal-dismiss"
+                                        src="{{ asset('Assets/imgs/Close.png') }}" alt="">
                                     <h2 class="text-center mt-4 mb-4 opacity-75"> تعديل: {{ $product->name }} </h2>
                                     <div class="f-row d-flex gap-4">
                                         <div>
@@ -245,6 +245,11 @@
                                             </select>
                                         </div>
 
+                                    </div>
+                                    <div>
+                                        <label class="d-block mb-1" for="category-purchasePrice">سعر الشراء</label>
+                                        <input class="category-input" disabled readonly id="category-purchasePrice"
+                                            value="{{ $product->purchase_price }}">
                                     </div>
                                     <div>
                                         <label class="d-block mb-1" for="category-unitPrice">سعر الوحده</label>

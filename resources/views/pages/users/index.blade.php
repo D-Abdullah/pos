@@ -192,7 +192,7 @@
                         </td>
                         <td class="p-0 ">
                             <div class="popup-edit id-{{ $user->id }} popup close shadow-sm rounded-3 position-fixed">
-                                <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
+                                <img class="position-absolute normal-dismiss" src="{{ asset('Assets/imgs/Close.png') }}"
                                     alt="">
                                 <form class="text-end" action="{{ route('user.update', ['id' => $user->id]) }}"
                                     method="post" id="edit-cate">
@@ -231,7 +231,7 @@
                                         <div>
                                             <label class="d-block mb-1" for="user-phone">رقم الهاتف</label>
                                             <input type="number" name="phone" id="user-phone" maxlength="11"
-                                                placeholder="ادخل رقم الهاتف" value="{{ $user->phone}}"
+                                                placeholder="ادخل رقم الهاتف" value="{{ $user->phone }}"
                                                 class="{{ $errors->has('phone') ? 'is-invalid' : '' }} category-input">
                                             @if ($errors->has('phone'))
                                                 <div class="invalid-feedback">
@@ -266,7 +266,7 @@
 
                             <div
                                 class="popup-delete  id-{{ $user->id }}  popup close shadow-sm rounded-3 position-fixed">
-                                <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
+                                <img class="position-absolute normal-dismiss" src="{{ asset('Assets/imgs/Close.png') }}"
                                     alt="">
                                 <h3 class="fs-5 fw-bold mb-3">حذف العنصر</h3>
                                 <p>هل تريد الحذف متاكد !!</p>

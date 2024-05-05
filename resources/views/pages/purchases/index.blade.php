@@ -203,9 +203,7 @@
                     </th>
                 </tr>
             </thead>
-
             <tbody>
-
                 @if (count($purchases) === 0)
                     <tr>
                         <td colspan="8" class="text-center">
@@ -213,8 +211,6 @@
                         </td>
                     </tr>
                 @endif
-
-
                 @foreach ($purchases as $purchase)
                     <tr>
                         @if ($purchase->product)
@@ -253,8 +249,8 @@
                                     id="purchaseFormUpdate">
                                     @csrf
                                     @method('put')
-                                    <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
-                                        alt="">
+                                    <img class="position-absolute normal-dismiss"
+                                        src="{{ asset('Assets/imgs/Close.png') }}" alt="">
                                     <h2 class="text-center mt-4 mb-4 opacity-75">تحديث عملية شراء</h2>
 
                                     <div class="f-row d-flex gap-4">
@@ -338,55 +334,15 @@
                                         <div>
                                             <label class="d-block mb-1" for="purchase-total-price">سعر الوحده</label>
                                             <input type="text" name="unit_price" id="purchase-total-price"
-                                                class="form-control {{ $errors->has('total_price') ? 'is-invalid' : '' }}"
-                                                value="{{ $purchase->total_price }}" placeholder="السعر الوحده">
-                                            @if ($errors->has('total_price'))
+                                                class="form-control {{ $errors->has('unit_price') ? 'is-invalid' : '' }}"
+                                                value="{{ $purchase->unit_price }}" placeholder="السعر الوحده">
+                                            @if ($errors->has('unit_price'))
                                                 <div class="invalid-feedback">
-                                                    {{ $errors->first('total_price') }}
+                                                    {{ $errors->first('unit_price') }}
                                                 </div>
                                             @endif
                                         </div>
                                     </div>
-
-                                    <!-- Deposits Container -->
-                                    {{-- <div id="addDepositsContainerUpdateElement{{ $purchase->id }}"
-                                                data-id="{{ $purchase->id }}">
-                                                @foreach ($purchase->deposits as $index => $deposit)
-                                                    <div class="f-row d-flex gap-4 align-items-end deposit-section-update">
-                                                        <div>
-                                                            <label class="d-block mb-1" for="deposit-amount">المبلغ</label>
-                                                            <input type="text" name="deposits[{{ $index }}][cost]"
-                                                                class="deposit-amount form-control" placeholder="المبلغ"
-                                                                value="{{ old('deposits.' . $index . '.cost', $deposit->cost) }}">
-                                                        </div>
-                                                        <div>
-                                                            <label class="d-block mb-1" for="deposit-date">التاريخ</label>
-                                                            <input type="date" name="deposits[{{ $index }}][date]"
-                                                                class="deposit-date form-control" placeholder="التاريخ"
-                                                                value="{{ old('deposits.' . $index . '.date', $deposit->date) }}">
-                                                        </div>
-                                                        <button type="button" class="remove-btn update-only"
-                                                            {{ $index == 0 ? 'hidden' : '' }}><i
-                                                                class="fa-solid fa-trash"></i></button>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                            <!-- Add Deposit Button -->
-
-                                            <button type="button" data-id="{{ $purchase->id }}"
-                                                class="main-btn p-2 ps-3 pe-3 specialBtn m-0 mt-2 mb-2 addElementBtn">
-                                                <svg class="pointer" xmlns="http://www.w3.org/2000/svg" width="26"
-                                                    height="27" viewBox="0 0 26 27" fill="none">
-                                                    <path d="M13 5.52753V20.6942" stroke="#fff" stroke-width="2"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                    <path d="M13 5.52753V20.6942" stroke="white" stroke-opacity="0.2"
-                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                                    <path d="M5.41663 13.1108H20.5833" stroke="#fff" stroke-width="1.5"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                    <path d="M5.41663 13.1108H20.5833" stroke="white" stroke-opacity="0.2"
-                                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                </svg>
-                                            </button> --}}
 
                                     <!-- Submit Button -->
                                     <div id="invalidEdit" class="invalid invalidEdit my-3"></div>
@@ -398,7 +354,7 @@
                             </div>
                             <div
                                 class="popup-delete id-{{ $purchase->id }} popup close shadow-sm rounded-3 position-fixed">
-                                <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
+                                <img class="position-absolute normal-dismiss" src="{{ asset('Assets/imgs/Close.png') }}"
                                     alt="">
                                 <h3 class="fs-5 fw-bold mb-3">حذف العنصر</h3>
                                 <p>هل تريد الحذف متاكد !!</p>

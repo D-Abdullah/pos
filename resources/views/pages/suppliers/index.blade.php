@@ -232,8 +232,8 @@
                                     action="{{ route('supplier.update', $supplier->id) }}">
                                     @csrf
                                     @method('put')
-                                    <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
-                                        alt="">
+                                    <img class="position-absolute normal-dismiss"
+                                        src="{{ asset('Assets/imgs/Close.png') }}" alt="">
                                     <h2 class="text-center mt-4 mb-4 opacity-75">تعديل: {{ $supplier->name }} </h2>
                                     <div class="f-row d-flex gap-4">
                                         <div>
@@ -291,7 +291,7 @@
                             </div>
                             <div
                                 class="popup-delete id-{{ $supplier->id }} popup close shadow-sm rounded-3 position-fixed">
-                                <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
+                                <img class="position-absolute normal-dismiss" src="{{ asset('Assets/imgs/Close.png') }}"
                                     alt="">
                                 <h3 class="fs-5 fw-bold mb-3">حذف المورد</h3>
                                 <p>هل تريد الحذف متاكد !!</p>

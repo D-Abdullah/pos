@@ -228,7 +228,7 @@
             <thead class="head">
                 <tr>
                     <th>نوع الحركه</th>
-                    <th>تكلفه</th>
+                    <th>القيمه</th>
                     <th>الحفله</th>
                     <th>نوع المعامله الماليه</th>
                     <th>من/الى</th>
@@ -327,8 +327,8 @@
                                 <form id="edit-cate" method="post" action="{{ route('ft.update', $ft->id) }}">
                                     @csrf
                                     @method('put')
-                                    <img class="position-absolute" src="{{ asset('Assets/imgs/Close.png') }}"
-                                        alt="">
+                                    <img class="position-absolute normal-dismiss"
+                                        src="{{ asset('Assets/imgs/Close.png') }}" alt="">
                                     <h2 class="text-center mt-4 mb-4 opacity-75">تعديل المعامله الماليه </h2>
                                     <div class="d-flex">
                                         <label class="d-block mb-1"><b>نوع الحركه: </b></label>

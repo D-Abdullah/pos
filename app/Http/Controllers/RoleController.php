@@ -94,8 +94,6 @@ class RoleController extends Controller
             'read ft' => 'قراءة معاملات ماليه',
             'update ft' => 'تحديث معاملات ماليه',
             'delete ft' => 'حذف معاملات ماليه',
-
-            'read report' => 'قراءة التقارير',
         ];
     }
 

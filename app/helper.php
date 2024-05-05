@@ -68,6 +68,4 @@ const PERMISSIONS = [
     'read ft',
     'update ft',
     'delete ft',
-
-    'read report',
 ];
