@@ -553,10 +553,12 @@ $(document).ready(function () {
     function updateTotalPrice(modal = null) {
         var totalPrice = 0;
         $("#dataTableBody tr:not(.type-eol)").each(function () {
-            var rowTotal = parseFloat(
-                $(this).find("td.totalPriceTableItem").text()
-            );
-            totalPrice += +rowTotal;
+            if ($(this).find("td.totalPriceTableItem").text() !== "") {
+                var rowTotal = parseFloat(
+                    $(this).find("td.totalPriceTableItem").text()
+                );
+                totalPrice += +rowTotal;
+            }
         });
         $("#totalPriceCell").text(totalPrice == NaN ? 0 : totalPrice);
         $("button#payButton").removeAttr("disabled").css("cursor", "pointer");

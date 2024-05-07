@@ -491,28 +491,45 @@ class PartyController extends Controller
         }
     }
 
-    public function show(Party $party)
+    public function complete($id)
     {
     }
 
-    public function destroy(Party $party)
+    public function destroy($id)
     {
-    }
-    public function getname(Request $request, $type)
-    {
+        try {
+            $party = Party::findOrFail($id)->with('bills', 'client')->first();
+            $delete = false;
+            if ($party->status == "transported") {
+                if (count($party->bills) > 0) {
+                    foreach ($party->bills as $bill) {
+                        if ($bill->status == "ready") {
+                            return redirect()->back()
+                                ->with(['error' => 'لا يمكن حذف هذه الحفله بسبب تعبئة بيانات الفاتورة']);
+                        } else {
+                            $delete = true;
+                        }
+                    }
+                }
+            } else {
+                $delete = true;
+            }
 
-        if ($type == 'product') {
-            $product = Product::where('id', $request->id)->first();
-            $averagePrices = [];
-            $purchases = Purchase::where('product_id', $product->id)->pluck('unit_price');
-            $averagePrice = $purchases->avg();
-            $averagePrices[$product->id] = $averagePrice;
-            $product->avg_price = $averagePrices[$product->id] ?? 0;
-            return $product;
-        } else if ($type == 'rent') {
-            return Rent::where('id', $request->id)->first();
+            if ($delete == true) {
+                foreach ($party->bills as $bill) {
+                    $bill->delete();
+                }
+                $party->delete();
+                return redirect()->route('party.all')
+                    ->with(['success' => 'تم حذف الحفله بنجاح']);
+            }
+
+        } catch (\Exception $e) {
+            Log::error('حدث خطأ أثناء حذف الحفله: ' . $e->getMessage());
+
+            return redirect()->back()
+                ->with(['error' => 'حدث خطأ أثناء حذف الحفله. يرجى المحاولة مرة أخرى.']);
         }
-        return null;
     }
 
     public function getData(Request $request, $type)

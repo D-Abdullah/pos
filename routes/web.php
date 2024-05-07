@@ -271,8 +271,6 @@ Route::group(['middleware' => 'auth'], function () {
             ->post('/add', [PartyController::class, 'store'])
             ->name('party.addStore');
 
-        Route::get('/get-name/{type}', [PartyController::class, 'getname'])
-            ->name('party.getName');
         Route::get('/data/{type}', [PartyController::class, 'getData'])
             ->name('party.data');
 
@@ -295,11 +293,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::middleware('permission:update party')
             ->put('/update-bill/{id}', [PartyController::class, 'updateBill'])
             ->name('party.updateBill');
-
-        Route::middleware('permission:read party')
-            ->get('/show/{id}', [PartyController::class, 'show'])
-            ->name('party.show');
-
         Route::middleware('permission:delete party')
             ->delete('/delete/{id}', [PartyController::class, 'destroy'])
             ->name('party.delete');

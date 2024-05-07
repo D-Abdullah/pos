@@ -207,16 +207,32 @@
                                 @endif
                             </span>
                         </td>
-                        {{-- <td><i class="fa-solid fa-circle-info"></i></td> --}}
                         <td>
                             <div class="edit d-flex align-items-center justify-content-center">
                                 <a href="{{ route('party.edit', $party->id) }}">
                                     <img src="{{ asset('Assets/imgs/edit-circle.png') }}" alt="">
                                 </a>
 
-                                <img src="{{ asset('Assets/imgs/trash (1).png') }}" class=" ms-2 me-2" alt=""
-                                    id="trash">
+                                <img class="ms-2 me-2" src="{{ asset('Assets/imgs/trash (1).png') }}"
+                                    data-id="{{ $party->id }}" alt="" id="trash">
 
+                                <img src="{{ asset('Assets/imgs/trash (1).png') }}" class=" ms-2 me-2" alt="">
+
+                            </div>
+                        </td>
+                        <td class="p-0">
+                            <div
+                                class="popup-delete id-{{ $party->id }} popup close shadow-sm rounded-3 position-fixed">
+                                <img class="position-absolute normal-dismiss" src="{{ asset('Assets/imgs/Close.png') }}"
+                                    alt="">
+                                <h3 class="fs-5 fw-bold mb-3">حذف الحفله</h3>
+                                <p>هل تريد الحذف متاكد !!</p>
+                                <div class="buttons mt-5 d-flex">
+                                    <button class="agree rounded-2">نعم
+                                        أريد</button>
+
+                                    <button class="disagree me-3 text-light rounded-2 main-btn">لا أريد</button>
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -250,6 +266,7 @@
         </div>
 
     </section>
+
     <div class="overlay position-absolute none w-100 h-100"></div>
 @endsection
 
@@ -272,6 +289,77 @@
 
     {{-- Print and Pdf and Excel  --}}
     <script>
+        function fnDelete(id) {
+            // Get the form element
+            var form = document.createElement('form');
+            form.setAttribute('method', 'POST');
+            form.setAttribute('action', `{{ url('party') }}/delete/${id}`);
+            form.style.display = 'none';
+
+            // Add CSRF token field
+            var csrfTokenField = document.createElement('input');
+            csrfTokenField.setAttribute('type', 'hidden');
+            csrfTokenField.setAttribute('name', '_token');
+            csrfTokenField.setAttribute('value', '{{ csrf_token() }}');
+            form.appendChild(csrfTokenField);
+
+            // Add method spoofing for DELETE request
+            var methodField = document.createElement('input');
+            methodField.setAttribute('type', 'hidden');
+            methodField.setAttribute('name', '_method');
+            methodField.setAttribute('value', 'DELETE');
+            form.appendChild(methodField);
+
+            // Append the form to the document body
+            document.body.appendChild(form);
+
+            // Submit the form
+            form.submit();
+        }
+        document.querySelectorAll("#trash").forEach((trash) => {
+            let id = trash.dataset.id;
+
+            trash.addEventListener("click", (e) => {
+                document.querySelector("body").classList.add("overflow-hidden");
+
+                document.querySelector(".overlay").classList.remove("none");
+
+                document.querySelector(".popup-delete").classList.remove("close");
+
+                document
+                    .querySelector(".popup-delete .agree")
+                    .addEventListener("click", () => {
+
+
+                        fnDelete(id)
+
+                        document
+                            .querySelector("body")
+
+                            .classList.remove("overflow-hidden");
+
+                        document.querySelector(".overlay").classList.add("none");
+
+                        document.querySelector(".popup-delete").classList.add("close");
+
+
+
+                    });
+
+                document
+                    .querySelector(".popup-delete .disagree")
+                    .addEventListener("click", () => {
+                        document
+                            .querySelector("body")
+                            .classList.remove("overflow-hidden");
+
+                        document.querySelector(".overlay").classList.add("none");
+
+                        document.querySelector(".popup-delete").classList.add("close");
+                    });
+            });
+        });
+
         function printTable() {
             // Clone the table
             var myTable = document.getElementById("table").cloneNode(true);
