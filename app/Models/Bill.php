@@ -18,6 +18,7 @@ class Bill extends Model
         'unit_price',
         'total_price',
         'type',
+        'eol_reason',
         'status',
     ];
     protected $hidden = [

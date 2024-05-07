@@ -74,17 +74,6 @@ $(document).ready(function () {
                     }
                 });
 
-            // //eol reason toggle
-            // modal
-            //     .find("#typeInputContainer select#typeInput")
-            //     .on("change", function () {
-            //         if ($(this).val() == "eol") {
-            //             modal.find("#eolReasonContainer").slideDown(300);
-            //         } else {
-            //             modal.find("#eolReasonContainer").slideUp(300);
-            //         }
-            //     });
-
             modalForm.find("input#from").val(type);
             // modal inputs data debend on type
             if (action != "delete") {
@@ -258,6 +247,7 @@ $(document).ready(function () {
         }
 
         openModalEvent();
+        updateTotalPrice(null);
     }
 
     // init product data
@@ -503,6 +493,7 @@ $(document).ready(function () {
         if (type == "product") {
             modal.find("#typeInputContainer").show();
             modal.find("#modalInfoDepartment").show();
+
             //eol reason toggle
             modal
                 .find("#typeInputContainer select#typeInput")
@@ -515,6 +506,7 @@ $(document).ready(function () {
                 });
             if (action == "edit") {
                 let form = $("form#requestBillForm");
+
                 let typeI = form
                     .find(`input[name="bill[${editIndex}][type]"]`)
                     .val();
@@ -558,7 +550,7 @@ $(document).ready(function () {
     }
 
     // calculate and update total price
-    function updateTotalPrice(modal) {
+    function updateTotalPrice(modal = null) {
         var totalPrice = 0;
         $("#dataTableBody tr:not(.type-eol)").each(function () {
             var rowTotal = parseFloat(
@@ -569,14 +561,17 @@ $(document).ready(function () {
         $("#totalPriceCell").text(totalPrice == NaN ? 0 : totalPrice);
         $("button#payButton").removeAttr("disabled").css("cursor", "pointer");
         openModalEvent();
-        closeModal(modal);
-        new Swal({
-            title: "تمت العمليه بنجاح",
-            text: "تمت اضافه العنصر بنجاح.",
-            icon: "success",
-            confirmButtonText: "حسناً",
-        });
+        if (modal !== null) {
+            closeModal(modal);
+            new Swal({
+                title: "تمت العمليه بنجاح",
+                text: "تمت اضافه العنصر بنجاح.",
+                icon: "success",
+                confirmButtonText: "حسناً",
+            });
+        }
     }
+
     // delete from table
     function deleteFromTable(
         form,
@@ -924,7 +919,14 @@ $(document).ready(function () {
         `);
         newRow.append("</tr>");
 
-        // // Append hidden input fields for each item
+        // Append hidden input fields for each item
+
+        billForm.append(
+            '<input type="hidden" name="bill[' +
+                tbody.find("tr:not(#emptyDataTable)").length +
+                '][id]" value>'
+        );
+
         billForm.append(
             '<input type="hidden" name="bill[' +
                 tbody.find("tr:not(#emptyDataTable)").length +

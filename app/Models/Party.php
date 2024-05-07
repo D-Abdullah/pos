@@ -21,4 +21,8 @@ class Party extends Model
         }
         return User::where('id', $value)->first()->name;
     }
+    public function bills()
+    {
+        return $this->hasMany(Bill::class);
+    }
 }

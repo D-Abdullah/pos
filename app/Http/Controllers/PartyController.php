@@ -58,10 +58,6 @@ class PartyController extends Controller
                 [
                     'name' => 'منقول',
                     'value' => 'transported'
-                ],
-                [
-                    'name' => 'منتهي',
-                    'value' => 'completed'
                 ]
             ];
             $employees = Employee::all();
@@ -194,20 +190,31 @@ class PartyController extends Controller
                     $billDB->type = $bill['type'];
                     $billDB->status = $bill['status'];
                     $billDB->party_id = $party->id;
+                    $billDB->eol_reason = $bill['eol_reason'];
+
+                    if ($bill['type'] == 'eol') {
+                        Eol::create([
+                            'product_id' => $product->id,
+                            'quantity' => $bill['quantity'],
+                            'added_by' => Auth::user()->id,
+                            'reason' => $bill['eol_reason']
+                        ]);
+                        $product->update([
+                            'quantity' => $product->quantity - $bill['quantity'],
+                        ]);
+                        WarehouseTransaction::create([
+                            'product_id' => $product->id,
+                            'rent_id' => null,
+                            'quantity' => $bill['quantity'],
+                            'from' => "الحفله " . $party->name,
+                            'to' => "هالك",
+                            'type' => 'party_eol',
+                        ]);
+                    }
 
                     // werehouse transaction
                     if ($party->status === "transported" && $bill['status'] === "ready") {
-                        if ($bill['type'] == 'eol') {
-                            Eol::create([
-                                'product_id' => $product->id,
-                                'quantity' => $bill['quantity'],
-                                'added_by' => Auth::user()->id,
-                                'reason' => $bill['eol_ression']
-                            ]);
-                            $product->update([
-                                'quantity' => $product->quantity - $bill['quantity'],
-                            ]);
-                        } else if ($bill['type'] == 'rent') {
+                        if ($bill['type'] == 'rent') {
                             $product->update([
                                 "quantity" => $product->quantity - $bill['quantity'],
                                 "party_id" => $party->id,
@@ -278,10 +285,6 @@ class PartyController extends Controller
                 [
                     'name' => 'منقول',
                     'value' => 'transported'
-                ],
-                [
-                    'name' => 'منتهي',
-                    'value' => 'completed'
                 ]
             ];
             return view('pages.party.edit', compact('clients', 'status', 'party'));
@@ -332,12 +335,160 @@ class PartyController extends Controller
         }
     }
 
-    public function editBill(Party $party)
+    public function editBill($id)
     {
+        try {
+            $party = Party::with('client')->findOrFail($id);
+            $bills = Bill::where("party_id", $id)->with("product", "rent")->get();
+            $categories = Department::all();
+            return view('pages.party.editBill', compact('id', 'party', 'categories', 'bills'));
+        } catch (\Exception $e) {
+            Log::error('حدث خطأ أثناء عرض صفحه تعديل بيانات الفاتوره: ' . $e->getMessage());
+
+            return redirect()->back()
+                ->with(['error' => 'حدث خطأ أثناء عرض صفحه تعديل بيانات الفاتوره. يرجى المحاولة مرة أخرى.']);
+        }
     }
 
-    public function updateBill(UpdatePartyRequest $request, Party $party)
+    public function updateBill(Request $request, $id)
     {
+        // return $request->all();
+        try {
+            DB::beginTransaction();
+            $party = Party::findOrFail($id);
+            // logic
+            foreach ($request->input('bill') as $bill) {
+                if ($bill['id']) {
+                    $billDB = Bill::findOrFail($bill['id']);
+                    if (count($bill) === 1 && isset($bill['id'])) {
+                        $billDB->delete();
+                        continue;
+                    }
+                } else {
+                    $billDB = new Bill();
+                }
+                // rent
+                if ($bill['from'] == 'rent') {
+                    $rent = Rent::findOrFail($bill['rent_id']);
+
+                    $billDB->from = $bill['from'];
+                    $billDB->name = null;
+                    $billDB->quantity = $bill['quantity'];
+                    $billDB->unit_price = $bill['unit_price'];
+                    $billDB->total_price = $bill['total_price'];
+                    $billDB->rent_id = $rent->id;
+                    $billDB->product_id = null;
+                    $billDB->type = $bill['type'];
+                    $billDB->status = $bill['status'];
+                    $billDB->party_id = $party->id;
+                    if ($party->status === "transported" && $bill['status'] === "ready") {
+                        $rent->update([
+                            "party_id" => $party->id,
+                            "party_qty" => $bill['quantity'],
+                        ]);
+                        WarehouseTransaction::create([
+                            'product_id' => null,
+                            'rent_id' => $rent->id,
+                            'quantity' => $bill['quantity'],
+                            'from' => "مخزن الإيجار",
+                            'to' => "الحفله " . $party->name,
+                            'type' => 'party_rent',
+                        ]);
+                    }
+                    $billDB->save();
+                } else if ($bill['from'] == 'product') {
+                    $product = Product::findOrFail($bill['product_id']);
+
+                    $billDB->from = $bill['from'];
+                    $billDB->name = null;
+                    $billDB->quantity = $bill['quantity'];
+                    $billDB->unit_price = $bill['unit_price'];
+                    $billDB->total_price = $bill['total_price'];
+                    $billDB->rent_id = null;
+                    $billDB->product_id = $product->id;
+                    $billDB->type = $bill['type'];
+                    $billDB->status = $bill['status'];
+                    $billDB->party_id = $party->id;
+                    $billDB->eol_reason = $bill['eol_reason'];
+
+                    if ($bill['type'] == 'eol') {
+                        Eol::create([
+                            'product_id' => $product->id,
+                            'quantity' => $bill['quantity'],
+                            'added_by' => Auth::user()->id,
+                            'reason' => $bill['eol_reason']
+                        ]);
+                        $product->update([
+                            'quantity' => $product->quantity - $bill['quantity'],
+                        ]);
+                        WarehouseTransaction::create([
+                            'product_id' => $product->id,
+                            'rent_id' => null,
+                            'quantity' => $bill['quantity'],
+                            'from' => "الحفله " . $party->name,
+                            'to' => "هالك",
+                            'type' => 'party_eol',
+                        ]);
+                    }
+
+                    // werehouse transaction
+                    if ($party->status === "transported" && $bill['status'] === "ready") {
+                        if ($bill['type'] == 'rent') {
+                            $product->update([
+                                "quantity" => $product->quantity - $bill['quantity'],
+                                "party_id" => $party->id,
+                                "party_qty" => $bill['quantity'],
+                            ]);
+                            WarehouseTransaction::create([
+                                'product_id' => $product->id,
+                                'rent_id' => null,
+                                'quantity' => $bill['quantity'],
+                                'from' => "المخزن",
+                                'to' => "الحفله " . $party->name,
+                                'type' => 'party_rent',
+                            ]);
+                        } else if ($bill['type'] == 'sale') {
+                            $product->update([
+                                "quantity" => $product->quantity - $bill['quantity'],
+                                "party_id" => $party->id,
+                                "party_qty" => $bill['quantity'],
+                            ]);
+                            WarehouseTransaction::create([
+                                'product_id' => $product->id,
+                                'rent_id' => null,
+                                'quantity' => $bill['quantity'],
+                                'from' => "المخزن",
+                                'to' => "الحفله " . $party->name,
+                                'type' => 'party_sale',
+                            ]);
+                        }
+                    }
+                    $billDB->save();
+                } else if ($bill['from'] == 'custom') {
+                    $billDB->from = $bill['from'];
+                    $billDB->name = $bill['name'];
+                    $billDB->quantity = $bill['quantity'];
+                    $billDB->unit_price = $bill['unit_price'];
+                    $billDB->total_price = $bill['total_price'];
+                    $billDB->rent_id = null;
+                    $billDB->product_id = null;
+                    $billDB->type = $bill['type'];
+                    $billDB->status = $bill['status'];
+                    $billDB->party_id = $party->id;
+                    $billDB->save();
+                }
+            }
+
+            DB::commit();
+            return redirect()->route('party.all')
+                ->with(['success' => 'تم إنشاء فاتورة الحفله بنجاح']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('حدث خطأ أثناء اضافه بيانات الحفله: ' . $e->getMessage());
+
+            return redirect()->back()->withInput($request->all())
+                ->with(['error' => 'حدث خطأ أثناء اضافه بيانات الحفله. يرجى المحاولة مرة أخرى.']);
+        }
     }
 
     public function show(Party $party)
