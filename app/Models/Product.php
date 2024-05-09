@@ -14,8 +14,6 @@ class Product extends Model
         'description',
         'department_id',
         'added_by',
-        'party_id',
-        'party_qty',
         'image',
         'unit_price',
         'purchase_price',
@@ -39,5 +37,9 @@ class Product extends Model
     public function eol()
     {
         return $this->hasMany(Eol::class);
+    }
+    public function product_parties()
+    {
+        return $this->hasMany(ProductParty::class);
     }
 }
