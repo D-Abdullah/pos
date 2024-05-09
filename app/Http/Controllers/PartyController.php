@@ -32,8 +32,19 @@ class PartyController extends Controller
         try {
             $parties = Party::query();
             $clients = Client::all();
-
-            $parties = $parties->with('client')->paginate(PAGINATION);
+            $readyBill = false;
+            $parties = $parties->with('client', 'bills')->paginate(PAGINATION);
+            foreach ($parties as $party) {
+                foreach ($party->bills as $bill) {
+                    if ($bill->status == "ready") {
+                        $readyBill = true;
+                    } else {
+                        $readyBill = false;
+                        break;
+                    }
+                }
+                $party->readyBill = $readyBill;
+            }
             return view('pages.party.index', compact('parties', 'clients'));
         } catch (\Exception $e) {
             Log::error('حدث خطأ أثناء جلب الحفلات: ' . $e->getMessage());
@@ -493,6 +504,77 @@ class PartyController extends Controller
 
     public function complete($id)
     {
+        try {
+            DB::beginTransaction();
+            $party = Party::findOrFail($id)->with('client', 'bills')->first();
+            // return $party;
+            if ($party->status == "transported") {
+                foreach ($party->bills as $bill) {
+                    if ($bill->type == "rent") {
+                        $data = null;
+                        if ($bill->from == "rent") {
+                            $data = Rent::findOrFail($bill->rent_id);
+                            WarehouseTransaction::create([
+                                'product_id' => null,
+                                'rent_id' => $data->id,
+                                'quantity' => $bill['quantity'],
+                                'from' => "الحفله " . $party->name,
+                                'to' => "مخزن الإيجار",
+                                'type' => 'party_rent',
+                            ]);
+                            $data->update([
+                                "party_id" => abs((float) $data->party_qty - (float) $bill['quantity']) == 0 ? null : $party->id,
+                                "party_qty" => abs((float) $data->party_qty - (float) $bill['quantity']),
+                            ]);
+                        } else if ($bill->from == "product") {
+                            $data = Product::findOrFail($bill->product_id);
+                            WarehouseTransaction::create([
+                                'product_id' => $data->id,
+                                'rent_id' => null,
+                                'quantity' => $bill['quantity'],
+                                'from' => "الحفله " . $party->name,
+                                'to' => "المخزن",
+                                'type' => 'party_sale',
+                            ]);
+                            $data->update([
+                                "party_id" => abs((float) $data->party_qty - (float) $bill['quantity']) == 0 ? null : $party->id,
+                                "party_qty" => abs($data->party_qty - $bill['quantity']),
+                            ]);
+                        }
+                    } else if ($bill->type == "sale") {
+                        $data = null;
+                        if ($bill->from == "rent") {
+                            $data = Rent::findOrFail($bill->rent_id);
+                            $data->update([
+                                "party_id" => abs((float) $data->party_qty - (float) $bill['quantity']) == 0 ? null : $party->id,
+                                "party_qty" => abs((float) $data->party_qty - (float) $bill['quantity']),
+                            ]);
+                        } else if ($bill->from == "product") {
+                            $data = Product::findOrFail($bill->product_id);
+                            $data->update([
+                                "party_id" => abs((float) $data->party_qty - (float) $bill['quantity']) == 0 ? null : $party->id,
+                                "party_qty" => abs($data->party_qty - $bill['quantity']),
+                            ]);
+                        }
+                    }
+                }
+                // finish the party
+                $party->status = "completed";
+                $party->save();
+                DB::commit();
+                return redirect()->route('party.all')
+                    ->with(['success' => 'تم إنهاء الحفله بنجاح']);
+            } else {
+                return redirect()->back()
+                    ->with(['error' => 'لا يمكن انهاء الحفله لان الحفله لازالت في حاله التعاقد']);
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('حدث خطأ أثناء انهاء الحفله: ' . $e->getMessage());
+
+            return redirect()->back()
+                ->with(['error' => 'حدث خطأ أثناء انهاء الحفله. يرجى المحاولة مرة أخرى.']);
+        }
     }
 
     public function destroy($id)

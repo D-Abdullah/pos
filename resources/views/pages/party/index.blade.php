@@ -189,7 +189,8 @@
 
                 @foreach ($parties as $party)
                     <tr>
-                        <td>{{ $party->client->name }}</td>
+                        <td><i class="fas fa-dot-circle" style="color: {{ $party->readyBill ? 'green' : 'red' }};"></i>
+                            {{ $party->client->name }}</td>
                         <td>{{ $party->name }}</td>
                         <td>{{ $party->address }}</td>
                         <td>{{ $party->date }}</td>
@@ -216,7 +217,9 @@
                                 <img class="ms-2 me-2" src="{{ asset('Assets/imgs/trash (1).png') }}"
                                     data-id="{{ $party->id }}" alt="" id="trash">
 
-                                <img src="{{ asset('Assets/imgs/trash (1).png') }}" class=" ms-2 me-2" alt="">
+                                <a href="{{ route('party.complete', $party->id) }}"
+                                    style="display: inline-block;color: #6f6b7d;font-size: 20px;"><i
+                                        class="fa-solid fa-check"></i></a>
 
                             </div>
                         </td>

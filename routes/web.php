@@ -296,5 +296,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::middleware('permission:delete party')
             ->delete('/delete/{id}', [PartyController::class, 'destroy'])
             ->name('party.delete');
+        Route::middleware('permission:update party')
+            ->get('/complete/{id}', [PartyController::class, 'complete'])
+            ->name('party.complete');
     });
 });
