@@ -42,7 +42,7 @@
 @endsection
 
 @section('content')
-    <h2 class="mt-5 mb-5">معاملات المستودع</h2>
+    <h2 class="mt-5 mb-5">معاملات المخزن</h2>
     <!-- start of body -->
     <section class="pt-0 rounded-3 position-relative shadow-sm overflow-auto">
 
@@ -86,11 +86,12 @@
                             @php
                                 $types = [
                                     'purchases' => 'عملية شراء',
-                                    'party_sale' => 'بيع حفله',
-                                    'party_eol' => 'هالك حفله',
-                                    'party_rent' => 'عوائد ايجار حفله',
                                     'eol' => 'هالك',
                                     'rent' => 'ايجار',
+                                    'party_sale' => 'مبيع حفله',
+                                    'party_eol' => 'هالك حفله',
+                                    'party_rent_i' => 'ايجار حفله',
+                                    'party_rent_o' => 'عوائد ايجار حفله',
                                 ];
                             @endphp
                             @foreach ($types as $k => $type)
@@ -169,11 +170,12 @@
                                 @php
                                     $types = [
                                         'purchases' => 'عملية شراء',
-                                        'party_sale' => 'بيع حفله',
-                                        'party_eol' => 'هالك حفله',
-                                        'party_rent' => 'عوائد ايجار حفله',
                                         'eol' => 'هالك',
                                         'rent' => 'ايجار',
+                                        'party_sale' => 'مبيع حفله',
+                                        'party_eol' => 'هالك حفله',
+                                        'party_rent_i' => 'ايجار حفله',
+                                        'party_rent_o' => 'عوائد ايجار حفله',
                                     ];
                                 @endphp
                                 {{ $types[$wt->type] }}

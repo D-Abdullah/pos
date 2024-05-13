@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', ' المستودع')
+@section('title', ' المخزن')
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('Assets/Css files/warehouse.css') }}">

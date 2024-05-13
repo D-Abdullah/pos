@@ -10,10 +10,8 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('parties', function (Blueprint $table) {
-            $table->double('total_price', 10, 2)->nullable()->default(0);
-            $table->double('total_profit', 10, 2)->nullable()->default(0);
-
+        Schema::table('bills', function (Blueprint $table) {
+            $table->boolean('is_transfared')->default(false);
         });
     }
 
@@ -22,9 +20,8 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('parties', function (Blueprint $table) {
-            $table->dropColumn('total_price');
-            $table->dropColumn('total_profit');
+        Schema::table('bills', function (Blueprint $table) {
+            $table->dropColumn('is_transfared');
         });
     }
 };

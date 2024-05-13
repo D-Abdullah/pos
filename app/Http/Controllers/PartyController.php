@@ -12,8 +12,10 @@ use App\Models\Department;
 use App\Models\Employee;
 use App\Models\Eol;
 use App\Models\Product;
+use App\Models\ProductParty;
 use App\Models\Purchase;
 use App\Models\Rent;
+use App\Models\RentParty;
 use App\Models\Safe;
 use App\Models\WarehouseTransaction;
 use Illuminate\Http\Request;
@@ -36,7 +38,7 @@ class PartyController extends Controller
             $parties = $parties->with('client', 'bills')->paginate(PAGINATION);
             foreach ($parties as $party) {
                 foreach ($party->bills as $bill) {
-                    if ($bill->status == "ready") {
+                    if ($bill->status == "ready" && $bill->is_transfared) {
                         $readyBill = true;
                     } else {
                         $readyBill = false;
@@ -99,6 +101,8 @@ class PartyController extends Controller
                 'date' => $request->input('date'),
                 'status' => $request->input('status'),
                 'added_by' => auth()->user()->getAuthIdentifier(),
+                'total_price' => 0,
+                'total_profit' => 0
             ]);
 
             $deposit = new Deposit();
@@ -159,6 +163,7 @@ class PartyController extends Controller
             // logic
             foreach ($request->input('bill') as $bill) {
                 $billDB = new Bill();
+
                 // rent
                 if ($bill['from'] == 'rent') {
                     $rent = Rent::findOrFail($bill['rent_id']);
@@ -174,9 +179,11 @@ class PartyController extends Controller
                     $billDB->status = $bill['status'];
                     $billDB->party_id = $party->id;
                     if ($party->status === "transported" && $bill['status'] === "ready") {
-                        $rent->update([
-                            "party_id" => $party->id,
-                            "party_qty" => $bill['quantity'],
+                        RentParty::create([
+                            'rent_id' => $bill['rent_id'],
+                            'party_id' => $id,
+                            'quantity' => $bill['quantity'],
+                            'type' => $bill['type'],
                         ]);
                         WarehouseTransaction::create([
                             'product_id' => null,
@@ -184,8 +191,13 @@ class PartyController extends Controller
                             'quantity' => $bill['quantity'],
                             'from' => "مخزن الإيجار",
                             'to' => "الحفله " . $party->name,
-                            'type' => 'party_rent',
+                            'type' => 'party_rent_i',
                         ]);
+                        $rent->update([
+                            "quantity" => $rent->quantity - $bill->quantity
+                        ]);
+                        $billDB->purchase_price = $rent->rent_price * $bill['quantity'];
+                        $billDB->profit = (float) (($bill['total_price']) - ($rent->rent_price * $bill['quantity']));
                     }
                     $billDB->save();
                 } else if ($bill['from'] == 'product') {
@@ -221,29 +233,35 @@ class PartyController extends Controller
                             'to' => "هالك",
                             'type' => 'party_eol',
                         ]);
+                        $billDB->purchase_price = $product->purchase_price * $bill['quantity'];
+                        $billDB->profit = 0;
                     }
 
                     // werehouse transaction
                     if ($party->status === "transported" && $bill['status'] === "ready") {
                         if ($bill['type'] == 'rent') {
-                            $product->update([
-                                "quantity" => $product->quantity - $bill['quantity'],
-                                "party_id" => $party->id,
-                                "party_qty" => $bill['quantity'],
-                            ]);
                             WarehouseTransaction::create([
                                 'product_id' => $product->id,
                                 'rent_id' => null,
                                 'quantity' => $bill['quantity'],
                                 'from' => "المخزن",
                                 'to' => "الحفله " . $party->name,
-                                'type' => 'party_rent',
+                                'type' => 'party_rent_i',
                             ]);
+                            ProductParty::create([
+                                'product_id' => $bill['product_id'],
+                                'party_id' => $id,
+                                'quantity' => $bill['quantity'],
+                                'type' => $bill['type'],
+                            ]);
+                            $product->update([
+                                "quantity" => $product->quantity - $bill['quantity']
+                            ]);
+                            $billDB->purchase_price = $product->purchase_price * $bill['quantity'];
+                            $billDB->profit = (float) (($bill['total_price']) - ($product->purchase_price * $bill['quantity']));
                         } else if ($bill['type'] == 'sale') {
                             $product->update([
                                 "quantity" => $product->quantity - $bill['quantity'],
-                                "party_id" => $party->id,
-                                "party_qty" => $bill['quantity'],
                             ]);
                             WarehouseTransaction::create([
                                 'product_id' => $product->id,
@@ -253,6 +271,14 @@ class PartyController extends Controller
                                 'to' => "الحفله " . $party->name,
                                 'type' => 'party_sale',
                             ]);
+                            ProductParty::create([
+                                'product_id' => $bill['product_id'],
+                                'party_id' => $id,
+                                'quantity' => $bill['quantity'],
+                                'type' => $bill['type'],
+                            ]);
+                            $billDB->purchase_price = $product->purchase_price * $bill['quantity'];
+                            $billDB->profit = (float) (($bill['total_price']) - ($product->purchase_price * $bill['quantity']));
                         }
                     }
                     $billDB->save();
@@ -267,10 +293,22 @@ class PartyController extends Controller
                     $billDB->type = $bill['type'];
                     $billDB->status = $bill['status'];
                     $billDB->party_id = $party->id;
+                    $billDB->purchase_price = 0;
+                    $billDB->profit = (float) $bill['total_price'];
                     $billDB->save();
                 }
             }
-
+            $P_total_price = 0;
+            $p_total_profit = 0;
+            $p_bills = Bill::where('party_id', '=', $id)->get();
+            foreach ($p_bills as $bill) {
+                $P_total_price += $bill->total_price;
+                $p_total_profit += $bill->profit;
+            }
+            $party->update([
+                'total_price' => $P_total_price,
+                'total_profit' => $p_total_profit
+            ]);
             DB::commit();
             return redirect()->route('party.all')
                 ->with(['success' => 'تم إنشاء فاتورة الحفله بنجاح']);
@@ -286,7 +324,7 @@ class PartyController extends Controller
     public function edit($id)
     {
         try {
-            $party = Party::findOrFail($id);
+            $party = Party::findOrFail($id)->with('bills', 'client')->first();
             $clients = Client::all();
             $status = [
                 [
@@ -390,22 +428,32 @@ class PartyController extends Controller
                     $billDB->rent_id = $rent->id;
                     $billDB->product_id = null;
                     $billDB->type = $bill['type'];
-                    $billDB->status = $bill['status'];
                     $billDB->party_id = $party->id;
                     if ($party->status === "transported" && $bill['status'] === "ready") {
-                        $rent->update([
-                            "party_id" => $party->id,
-                            "party_qty" => $bill['quantity'],
-                        ]);
-                        WarehouseTransaction::create([
-                            'product_id' => null,
-                            'rent_id' => $rent->id,
-                            'quantity' => $bill['quantity'],
-                            'from' => "مخزن الإيجار",
-                            'to' => "الحفله " . $party->name,
-                            'type' => 'party_rent',
-                        ]);
+                        if (!$billDB->is_transfared) {
+                            RentParty::create([
+                                'rent_id' => $bill['rent_id'],
+                                'party_id' => $id,
+                                'quantity' => $bill['quantity'],
+                                'type' => $bill['type'],
+                            ]);
+                            WarehouseTransaction::create([
+                                'product_id' => null,
+                                'rent_id' => $rent->id,
+                                'quantity' => $bill['quantity'],
+                                'from' => "مخزن الإيجار",
+                                'to' => "الحفله " . $party->name,
+                                'type' => 'party_rent_i',
+                            ]);
+                            $rent->update([
+                                "quantity" => $rent->quantity - $bill->quantity
+                            ]);
+                            $billDB->purchase_price = $rent->rent_price * $bill['quantity'];
+                            $billDB->profit = (float) (($bill['total_price']) - ($rent->rent_price * $bill['quantity']));
+                            $billDB->is_transfared = true;
+                        }
                     }
+                    $billDB->status = $bill['status'];
                     $billDB->save();
                 } else if ($bill['from'] == 'product') {
                     $product = Product::findOrFail($bill['product_id']);
@@ -418,62 +466,84 @@ class PartyController extends Controller
                     $billDB->rent_id = null;
                     $billDB->product_id = $product->id;
                     $billDB->type = $bill['type'];
-                    $billDB->status = $bill['status'];
                     $billDB->party_id = $party->id;
                     $billDB->eol_reason = $bill['eol_reason'];
 
                     if ($bill['type'] == 'eol') {
-                        Eol::create([
-                            'product_id' => $product->id,
-                            'quantity' => $bill['quantity'],
-                            'added_by' => Auth::user()->id,
-                            'reason' => $bill['eol_reason']
-                        ]);
-                        $product->update([
-                            'quantity' => $product->quantity - $bill['quantity'],
-                        ]);
-                        WarehouseTransaction::create([
-                            'product_id' => $product->id,
-                            'rent_id' => null,
-                            'quantity' => $bill['quantity'],
-                            'from' => "الحفله " . $party->name,
-                            'to' => "هالك",
-                            'type' => 'party_eol',
-                        ]);
+                        if (!$billDB->is_transfared) {
+                            Eol::create([
+                                'product_id' => $product->id,
+                                'quantity' => $bill['quantity'],
+                                'added_by' => Auth::user()->id,
+                                'reason' => $bill['eol_reason']
+                            ]);
+                            $product->update([
+                                'quantity' => $product->quantity - $bill['quantity'],
+                            ]);
+                            WarehouseTransaction::create([
+                                'product_id' => $product->id,
+                                'rent_id' => null,
+                                'quantity' => $bill['quantity'],
+                                'from' => "الحفله " . $party->name,
+                                'to' => "هالك",
+                                'type' => 'party_eol',
+                            ]);
+                            $billDB->purchase_price = $product->purchase_price * $bill['quantity'];
+                            $billDB->profit = 0;
+                            $billDB->is_transfared = true;
+                        }
                     }
 
                     // werehouse transaction
                     if ($party->status === "transported" && $bill['status'] === "ready") {
-                        if ($bill['type'] == 'rent') {
-                            $product->update([
-                                "quantity" => $product->quantity - $bill['quantity'],
-                                "party_id" => $party->id,
-                                "party_qty" => $bill['quantity'],
-                            ]);
-                            WarehouseTransaction::create([
-                                'product_id' => $product->id,
-                                'rent_id' => null,
-                                'quantity' => $bill['quantity'],
-                                'from' => "المخزن",
-                                'to' => "الحفله " . $party->name,
-                                'type' => 'party_rent',
-                            ]);
-                        } else if ($bill['type'] == 'sale') {
-                            $product->update([
-                                "quantity" => $product->quantity - $bill['quantity'],
-                                "party_id" => $party->id,
-                                "party_qty" => $bill['quantity'],
-                            ]);
-                            WarehouseTransaction::create([
-                                'product_id' => $product->id,
-                                'rent_id' => null,
-                                'quantity' => $bill['quantity'],
-                                'from' => "المخزن",
-                                'to' => "الحفله " . $party->name,
-                                'type' => 'party_sale',
-                            ]);
+                        if (!$billDB->is_transfared) {
+                            if ($bill['type'] == 'rent') {
+                                ProductParty::create([
+                                    'product_id' => $bill['product_id'],
+                                    'party_id' => $id,
+                                    'quantity' => $bill['quantity'],
+                                    'type' => $bill['type'],
+                                ]);
+                                WarehouseTransaction::create([
+                                    'product_id' => $product->id,
+                                    'rent_id' => null,
+                                    'quantity' => $bill['quantity'],
+                                    'from' => "المخزن",
+                                    'to' => "الحفله " . $party->name,
+                                    'type' => 'party_rent_i',
+                                ]);
+                                $product->update([
+                                    "quantity" => $product->quantity - $bill['quantity']
+                                ]);
+                                $billDB->purchase_price = $product->purchase_price * $bill['quantity'];
+                                $billDB->profit = (float) (($bill['total_price']) - ($product->purchase_price * $bill['quantity']));
+                                $billDB->is_transfared = true;
+                            } else if ($bill['type'] == 'sale') {
+                                $product->update([
+                                    "quantity" => $product->quantity - $bill['quantity'],
+                                ]);
+                                ProductParty::create([
+                                    'product_id' => $bill['product_id'],
+                                    'party_id' => $id,
+                                    'quantity' => $bill['quantity'],
+                                    'type' => $bill['type'],
+                                ]);
+                                WarehouseTransaction::create([
+                                    'product_id' => $product->id,
+                                    'rent_id' => null,
+                                    'quantity' => $bill['quantity'],
+                                    'from' => "المخزن",
+                                    'to' => "الحفله " . $party->name,
+                                    'type' => 'party_sale',
+                                ]);
+                                $billDB->purchase_price = $product->purchase_price * $bill['quantity'];
+                                $billDB->profit = (float) (($bill['total_price']) - ($product->purchase_price * $bill['quantity']));
+                                $billDB->is_transfared = true;
+                            }
                         }
+
                     }
+                    $billDB->status = $bill['status'];
                     $billDB->save();
                 } else if ($bill['from'] == 'custom') {
                     $billDB->from = $bill['from'];
@@ -486,19 +556,32 @@ class PartyController extends Controller
                     $billDB->type = $bill['type'];
                     $billDB->status = $bill['status'];
                     $billDB->party_id = $party->id;
+                    $billDB->purchase_price = 0;
+                    $billDB->profit = (float) $bill['total_price'];
+                    $billDB->is_transfared = true;
                     $billDB->save();
                 }
             }
-
+            $P_total_price = 0;
+            $p_total_profit = 0;
+            $p_bills = Bill::where('party_id', '=', $id)->get();
+            foreach ($p_bills as $bill) {
+                $P_total_price += $bill->total_price;
+                $p_total_profit += $bill->profit;
+            }
+            $party->update([
+                'total_price' => $P_total_price,
+                'total_profit' => $p_total_profit
+            ]);
             DB::commit();
             return redirect()->route('party.all')
-                ->with(['success' => 'تم إنشاء فاتورة الحفله بنجاح']);
+                ->with(['success' => 'تم تعديل فاتورة الحفله بنجاح']);
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('حدث خطأ أثناء اضافه بيانات الحفله: ' . $e->getMessage());
+            Log::error('حدث خطأ أثناء تعديل بيانات الحفله: ' . $e->getMessage());
 
             return redirect()->back()->withInput($request->all())
-                ->with(['error' => 'حدث خطأ أثناء اضافه بيانات الحفله. يرجى المحاولة مرة أخرى.']);
+                ->with(['error' => 'حدث خطأ أثناء تعديل بيانات الحفله. يرجى المحاولة مرة أخرى.']);
         }
     }
 
@@ -507,53 +590,45 @@ class PartyController extends Controller
         try {
             DB::beginTransaction();
             $party = Party::findOrFail($id)->with('client', 'bills')->first();
-            // return $party;
+            // all rent back to store
             if ($party->status == "transported") {
                 foreach ($party->bills as $bill) {
                     if ($bill->type == "rent") {
-                        $data = null;
                         if ($bill->from == "rent") {
-                            $data = Rent::findOrFail($bill->rent_id);
+                            $rent = Rent::findOrFail($bill->rent_id);
                             WarehouseTransaction::create([
                                 'product_id' => null,
-                                'rent_id' => $data->id,
-                                'quantity' => $bill['quantity'],
+                                'rent_id' => $rent->id,
+                                'quantity' => $bill->quantity,
                                 'from' => "الحفله " . $party->name,
                                 'to' => "مخزن الإيجار",
-                                'type' => 'party_rent',
+                                'type' => 'party_rent_o',
                             ]);
-                            $data->update([
-                                "party_id" => abs((float) $data->party_qty - (float) $bill['quantity']) == 0 ? null : $party->id,
-                                "party_qty" => abs((float) $data->party_qty - (float) $bill['quantity']),
+                            $rent->update([
+                                "quantity" => $rent->quantity + $bill->quantity
                             ]);
+                            RentParty::where('party_id', $party->id)
+                                ->where('quantity', $bill->quantity)
+                                ->where('rent_id', $rent->id)
+                                ->where('type', $bill->type)
+                                ->delete();
                         } else if ($bill->from == "product") {
-                            $data = Product::findOrFail($bill->product_id);
+                            $product = Product::findOrFail($bill->product_id);
                             WarehouseTransaction::create([
-                                'product_id' => $data->id,
+                                'product_id' => $product->id,
                                 'rent_id' => null,
                                 'quantity' => $bill['quantity'],
                                 'from' => "الحفله " . $party->name,
                                 'to' => "المخزن",
-                                'type' => 'party_sale',
+                                'type' => 'party_rent_o',
                             ]);
-                            $data->update([
-                                "party_id" => abs((float) $data->party_qty - (float) $bill['quantity']) == 0 ? null : $party->id,
-                                "party_qty" => abs($data->party_qty - $bill['quantity']),
-                            ]);
-                        }
-                    } else if ($bill->type == "sale") {
-                        $data = null;
-                        if ($bill->from == "rent") {
-                            $data = Rent::findOrFail($bill->rent_id);
-                            $data->update([
-                                "party_id" => abs((float) $data->party_qty - (float) $bill['quantity']) == 0 ? null : $party->id,
-                                "party_qty" => abs((float) $data->party_qty - (float) $bill['quantity']),
-                            ]);
-                        } else if ($bill->from == "product") {
-                            $data = Product::findOrFail($bill->product_id);
-                            $data->update([
-                                "party_id" => abs((float) $data->party_qty - (float) $bill['quantity']) == 0 ? null : $party->id,
-                                "party_qty" => abs($data->party_qty - $bill['quantity']),
+                            ProductParty::where('party_id', $party->id)
+                                ->where('quantity', $bill->quantity)
+                                ->where('product_id', $product->id)
+                                ->where('type', $bill->type)
+                                ->delete();
+                            $product->update([
+                                "quantity" => $product->quantity + $bill['quantity']
                             ]);
                         }
                     }
@@ -585,7 +660,7 @@ class PartyController extends Controller
             if ($party->status == "transported") {
                 if (count($party->bills) > 0) {
                     foreach ($party->bills as $bill) {
-                        if ($bill->status == "ready") {
+                        if ($bill->status == "ready" && $bill->is_transfared) {
                             return redirect()->back()
                                 ->with(['error' => 'لا يمكن حذف هذه الحفله بسبب تعبئة بيانات الفاتورة']);
                         } else {

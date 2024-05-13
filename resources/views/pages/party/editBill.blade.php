@@ -228,7 +228,9 @@
                     </td>
                     <td class="text-center" style="vertical-align: middle;">
                         <div class="edit d-flex align-items-center justify-content-center">
-                            @if ($bill->from == 'custom')
+                            @if ($bill->status == 'ready' && $party->status == 'transported' && $bill->is_transfared && $bill->from != 'custom')
+                                <p>جاهز وتم النقل</p>
+                            @elseif ($bill->from == 'custom')
                                 <img src="{{ asset('Assets/imgs/edit-circle.png') }}" alt="" class="open-modal"
                                     data-type="{{ $bill->from }}" data-id="" data-action="edit">
                                 <img src="{{ asset('Assets/imgs/trash (1).png') }}" alt=""

@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Eol;
 use App\Models\Product;
 use App\Models\WarehouseTransaction;
-use App\Http\Requests\StoreWarehouseTransactionRequest;
-use App\Http\Requests\UpdateWarehouseTransactionRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class WarehouseTransactionController extends Controller

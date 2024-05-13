@@ -116,30 +116,42 @@
                             @endforeach
                         </select>
                     </div> --}}
+                    @foreach ($party->bills as $bill)
+                        @if ($bill == 'ready' && $bill->is_transfared)
+                            @php
+                                $bill_status = true;
+                            @endphp
+                        @break
 
+                    @else
+                        @php
+                            $bill_status = false;
+                        @endphp
+                    @endif
+                @endforeach
 
-                    <div>
-                        <label for="state" class="d-block">الحاله </label>
-                        <select class="js-example-basic-single status" name="status" id="state">
-                            <option selected hidden disabled>
-                                الحاله
+                <div class="{{ !$bill_status && $party->status == 'transported' ? 'd-none' : '' }}">
+                    <label for="state" class="d-block">الحاله </label>
+                    <select class="js-example-basic-single status" name="status" id="state">
+                        <option selected hidden disabled>
+                            الحاله
+                        </option>
+                        @foreach ($status as $s)
+                            <option value="{{ $s['value'] }}" {{ $party->status == $s['value'] ? 'selected' : '' }}>
+                                {{ $s['name'] }}
                             </option>
-                            @foreach ($status as $s)
-                                <option value="{{ $s['value'] }}" {{ $party->status == $s['value'] ? 'selected' : '' }}>
-                                    {{ $s['name'] }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+                        @endforeach
+                    </select>
+                </div>
 
+            </div>
+            <div class="parent d-flex mb-4">
+                <div>
+                    <label class="d-block mb-1" for="party-address">عنوان الحفله</label>
+                    <textarea class="w-100" name="address" id="" cols="30" rows="4" placeholder="عنوان الحفله">{{ $party->address }}</textarea>
                 </div>
-                <div class="parent d-flex mb-4">
-                    <div>
-                        <label class="d-block mb-1" for="party-address">عنوان الحفله</label>
-                        <textarea class="w-100" name="address" id="" cols="30" rows="4" placeholder="عنوان الحفله">{{ $party->address }}</textarea>
-                    </div>
-                </div>
-                {{-- <div class="elements">
+            </div>
+            {{-- <div class="elements">
                     <div id="addDepositsContainer">
                         <div class="f-row d-flex gap-4 align-items-end deposit-section">
                             <div>
@@ -171,116 +183,116 @@
                         </svg>
                     </button>
                 </div> --}}
-            </div>
-            <div id="invalidAdd" class="invalid invalidAdd my-3"></div>
-            <button class="submit main-btn p-3 w-100 mt-4 fs-5" type="submit">تعديل</button>
-        @endsection
-    </form>
+        </div>
+        <div id="invalidAdd" class="invalid invalidAdd my-3"></div>
+        <button class="submit main-btn p-3 w-100 mt-4 fs-5" type="submit">تعديل</button>
+    @endsection
+</form>
 </div>
 
 
 @section('script')
-    <script src="{{ asset('Assets/JS files/add-concert.js') }}"></script>
-    {{-- For JQuery --}}
-    <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="{{ asset('Assets/JS files/add-concert.js') }}"></script>
+{{-- For JQuery --}}
+<script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    <script>
-        function addElement() {
-            let depositsContainer = document.getElementById('addDepositsContainer');
-            let newDepositSection = depositsContainer.querySelector('.deposit-section').cloneNode(true);
-            var I = depositsContainer.childElementCount;
-            newDepositSection.querySelectorAll('input').forEach(function(input) {
-                input.value = '';
-                let name = input.name;
-                let index = name.match(/\d+/g);
-                if (index == null) {
-                    return;
-                } else {
-                    finalName = name.replace(/(\d)+/, I);
-                }
-                input.setAttribute('name', finalName);
-            });
-
-            newDepositSection.querySelector('.remove-btn').removeAttribute('disabled');
-            newDepositSection.querySelector('.remove-btn').removeAttribute('hidden');
-
-            depositsContainer.appendChild(newDepositSection);
-
-            initRemoveButtons(); // Initialize remove buttons after adding a new section
-        }
-
-        function removeElement(button) {
-            let depositsContainer = document.getElementById('addDepositsContainer');
-
-            if (depositsContainer.childElementCount > 1) {
-                depositsContainer.removeChild(button.parentNode);
+<script>
+    function addElement() {
+        let depositsContainer = document.getElementById('addDepositsContainer');
+        let newDepositSection = depositsContainer.querySelector('.deposit-section').cloneNode(true);
+        var I = depositsContainer.childElementCount;
+        newDepositSection.querySelectorAll('input').forEach(function(input) {
+            input.value = '';
+            let name = input.name;
+            let index = name.match(/\d+/g);
+            if (index == null) {
+                return;
             } else {
-                button.setAttribute('disabled', 'disabled');
-                button.setAttribute('hidden', 'hidden');
+                finalName = name.replace(/(\d)+/, I);
             }
-        }
+            input.setAttribute('name', finalName);
+        });
 
-        function initRemoveButtons() {
-            document.querySelectorAll('.remove-btn').forEach(function(button) {
-                button.addEventListener('click', function() {
-                    removeElement(button);
-                });
+        newDepositSection.querySelector('.remove-btn').removeAttribute('disabled');
+        newDepositSection.querySelector('.remove-btn').removeAttribute('hidden');
+
+        depositsContainer.appendChild(newDepositSection);
+
+        initRemoveButtons(); // Initialize remove buttons after adding a new section
+    }
+
+    function removeElement(button) {
+        let depositsContainer = document.getElementById('addDepositsContainer');
+
+        if (depositsContainer.childElementCount > 1) {
+            depositsContainer.removeChild(button.parentNode);
+        } else {
+            button.setAttribute('disabled', 'disabled');
+            button.setAttribute('hidden', 'hidden');
+        }
+    }
+
+    function initRemoveButtons() {
+        document.querySelectorAll('.remove-btn').forEach(function(button) {
+            button.addEventListener('click', function() {
+                removeElement(button);
             });
-        }
-
-        document.getElementById('addElement').addEventListener('click', addElement);
-
-        // Initialize remove buttons on page load
-        initRemoveButtons();
-    </script>
-
-    <script>
-        $(document).ready(function() {
-            $('.js-example-basic-single.add').select2();
         });
+    }
 
-        $(document).ready(function() {
-            $('.js-example-basic-single.status').select2();
-        });
-    </script>
+    document.getElementById('addElement').addEventListener('click', addElement);
+
+    // Initialize remove buttons on page load
+    initRemoveButtons();
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('.js-example-basic-single.add').select2();
+    });
+
+    $(document).ready(function() {
+        $('.js-example-basic-single.status').select2();
+    });
+</script>
 
 
 
-    {{-- Validation For Add --}}
-    <script>
-        const addForm = document.getElementById("add-from");
-        const addInputs = addForm.querySelectorAll("input, select,textarea");
-        const addMessage = document.getElementById("invalidAdd");
+{{-- Validation For Add --}}
+<script>
+    const addForm = document.getElementById("add-from");
+    const addInputs = addForm.querySelectorAll("input, select,textarea");
+    const addMessage = document.getElementById("invalidAdd");
 
-        addForm.addEventListener('submit', (event) => {
-            addMessage.textContent = '';
-            let emptyFields = [];
+    addForm.addEventListener('submit', (event) => {
+        addMessage.textContent = '';
+        let emptyFields = [];
 
-            for (let i = 0; i < addInputs.length; i++) {
-                const input = addInputs[i];
-                const inputType = input.getAttribute('type');
-                const inputValue = input.value.trim();
-                const inputName = input.getAttribute('placeholder') || input.getAttribute('aria-placeholder');
+        for (let i = 0; i < addInputs.length; i++) {
+            const input = addInputs[i];
+            const inputType = input.getAttribute('type');
+            const inputValue = input.value.trim();
+            const inputName = input.getAttribute('placeholder') || input.getAttribute('aria-placeholder');
 
-                if (inputType === 'date' || inputType === 'number' || inputType === 'select-one') {
-                    if (inputValue === "") {
-                        emptyFields.push(inputName);
-                    }
-                } else {
-                    if (inputValue === "") {
-                        emptyFields.push(inputName);
-                    }
+            if (inputType === 'date' || inputType === 'number' || inputType === 'select-one') {
+                if (inputValue === "") {
+                    emptyFields.push(inputName);
+                }
+            } else {
+                if (inputValue === "") {
+                    emptyFields.push(inputName);
                 }
             }
+        }
 
-            if (emptyFields.length > 0) {
-                event.preventDefault();
-                addMessage.textContent = `الحقول التالية مطلوبة: ${emptyFields.join(', ')}`;
-                // Optionally, you can focus on the first empty field
-                addInputs[0].focus();
-            }
-        });
-    </script>
+        if (emptyFields.length > 0) {
+            event.preventDefault();
+            addMessage.textContent = `الحقول التالية مطلوبة: ${emptyFields.join(', ')}`;
+            // Optionally, you can focus on the first empty field
+            addInputs[0].focus();
+        }
+    });
+</script>
 
 @endsection

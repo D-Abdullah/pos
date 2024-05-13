@@ -156,6 +156,7 @@
                     <th>التاريخ</th>
                     <th>بواسطه</th>
                     <th>الحاله</th>
+                    <th>اجمالي الفاتوره</th>
                     {{-- <th>التفاصيل</th> --}}
                     <th>
                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 25"
@@ -208,19 +209,24 @@
                                 @endif
                             </span>
                         </td>
+                        <td>{{ number_format($party->total_price, 2) }}</td>
                         <td>
                             <div class="edit d-flex align-items-center justify-content-center">
-                                <a href="{{ route('party.edit', $party->id) }}">
+                                <a href="{{ route('party.edit', $party->id) }}"
+                                    class="ms-2 me-2 {{ $party->status === 'completed' ? 'd-none' : '' }}">
                                     <img src="{{ asset('Assets/imgs/edit-circle.png') }}" alt="">
                                 </a>
 
-                                <img class="ms-2 me-2" src="{{ asset('Assets/imgs/trash (1).png') }}"
-                                    data-id="{{ $party->id }}" alt="" id="trash">
+                                <img class="ms-2 me-2 {{ $party->status === 'completed' || $party->status === 'transported' ? 'd-none' : '' }}"
+                                    src="{{ asset('Assets/imgs/trash (1).png') }}" data-id="{{ $party->id }}"
+                                    alt="" id="trash">
 
-                                <a href="{{ route('party.complete', $party->id) }}"
-                                    style="display: inline-block;color: #6f6b7d;font-size: 20px;"><i
+                                <a href="{{ route('party.complete', $party->id) }}" class="ms-2 me-2"
+                                    style="display: {{ $party->status !== 'completed' && $party->readyBill ? 'inline-block' : 'none' }};color: #6f6b7d;font-size: 20px;"><i
                                         class="fa-solid fa-check"></i></a>
-
+                                @if ($party->status === 'completed')
+                                    <p style="font-weight: 900; font-size: 20px; color: #090">منتهي</p>
+                                @endif
                             </div>
                         </td>
                         <td class="p-0">

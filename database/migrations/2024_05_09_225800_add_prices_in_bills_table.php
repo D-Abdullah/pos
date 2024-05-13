@@ -11,8 +11,8 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('bills', function (Blueprint $table) {
-            $table->double('purchase_price', 10, 2);
-            $table->double('profit', 10, 2);
+            $table->double('purchase_price', 10, 2)->nullable()->default(0);
+            $table->double('profit', 10, 2)->nullable()->default(0);
         });
     }
 

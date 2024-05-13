@@ -22,6 +22,7 @@ class Bill extends Model
         'status',
         'purchase_price',
         'profit',
+        "is_transfared",
         "created_at",
         "updated_at"
 
