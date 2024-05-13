@@ -4,12 +4,79 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('Assets/Css files/customers.css') }}">
-
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
         .invalid {
             color: red;
             font-size: 12px;
             text-align: center;
+        }
+    </style>
+    <style>
+        #startDate {
+            max-width: 220px !important;
+        }
+
+        .remove-btn {
+            background-color: #ff6767;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .dolar-icon {
+
+            width: 15px;
+        }
+
+        .check-btn {
+            background-color: #15d057;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+
+        .dollar-btn {
+            background: #7367f0;
+            color: white;
+            border-radius: 4px;
+            padding: 10px;
+        }
+
+        .select2-container--default .select2-search--dropdown .select2-search__field {
+            padding: 0;
+            outline: none;
+            border: 1px solid #ddd;
+            height: 30px !important;
+
+        }
+
+        .select2-container--default .select2-selection--single {
+            height: 45px !important;
+            border: 1px solid #ddd;
+        }
+
+        .select2-container[dir="rtl"] .select2-selection--single .select2-selection__rendered {
+            padding-top: 7px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 0px !important;
+            top: 50% !important;
+        }
+
+        .select2-container {
+            width: 160px !important;
+        }
+
+        select {
+            height: 45px;
+            width: 165px;
         }
     </style>
 
@@ -134,10 +201,14 @@
                                 <img class="ms-2 me-2" src="{{ asset('Assets/imgs/trash (1).png') }}"
                                     data-id="{{ $client->id }}" alt="" id="trash">
 
+                                <img class="ms-2 me-2 dolar-icon" src="{{ asset('Assets/imgs/dolar.svg') }}"
+                                    data-action="{{ $client->deposits->count() > 0 ? 'edit' : 'add' }}" data-pt="both"
+                                    data-id="{{ $client->id }}" alt="" id="dolar">
                             </div>
                         </td>
                         <td class="p-0">
-                            <div class="popup-edit  id-{{ $client->id }} popup close shadow-sm rounded-3 position-fixed">
+                            <div
+                                class="popup-edit  id-{{ $client->id }} popup close shadow-sm rounded-3 position-fixed">
                                 <form id="edit-cate" method="post" action="{{ route('client.update', $client->id) }}">
                                     @csrf
                                     @method('put')
@@ -171,18 +242,251 @@
                                 </form>
                             </div>
 
-                        </td>
-                        <div class="popup-delete popup close shadow-sm rounded-3 position-fixed">
-                            <img class="position-absolute normal-dismiss" src="{{ asset('Assets/imgs/Close.png') }}"
-                                alt="">
-                            <h3 class="fs-5 fw-bold mb-3">حذف العميل</h3>
-                            <p>هل تريد الحذف متاكد !!</p>
-                            <div class="buttons mt-5 d-flex">
-                                <button onclick="fnDelete('{{ $client->id }}')" class="agree rounded-2">نعم
-                                    أريد</button>
-                                <button class="disagree me-3 text-light rounded-2 main-btn">لا أريد</button>
+                            <div class="popup-delete popup close shadow-sm rounded-3 position-fixed">
+                                <img class="position-absolute normal-dismiss" src="{{ asset('Assets/imgs/Close.png') }}"
+                                    alt="">
+                                <h3 class="fs-5 fw-bold mb-3">حذف العميل</h3>
+                                <p>هل تريد الحذف متاكد !!</p>
+                                <div class="buttons mt-5 d-flex">
+                                    <button onclick="fnDelete('{{ $client->id }}')" class="agree rounded-2">نعم
+                                        أريد</button>
+                                    <button class="disagree me-3 text-light rounded-2 main-btn">لا أريد</button>
+                                </div>
                             </div>
-                        </div>
+
+
+                            <div
+                                class="popup-dolar id-{{ $client->id }} popup close shadow-sm rounded-3 position-fixed overflow-auto">
+                                <img class="position-absolute normal-dismiss" src="{{ asset('Assets/imgs/Close.png') }}"
+                                    id="dismiss" alt="">
+                                <h3 class="mt-3">كشف حساب العميل {{ $client->name }}</h3>
+                                <div class="dolar-container p-5 d-flex flex-column">
+                                    <div
+                                        class="dolar-info d-flex flex-column justify-content-center  align-items-start gap-3">
+                                        <p> <span class="fw-bold"> التكلفة الإجمالية المطلوبة :</span>
+                                            <span>{{ number_format($client->total_required, 0, ',', ',') }} جنيه</span>
+                                        </p>
+                                        <p> <span class="fw-bold">التكلفة الإجمالية المدفوعة :</span>
+                                            <span>{{ number_format($client->total_paid, 0, ',', ',') }} جنيه</span>
+                                        </p>
+                                        <p> <span class="fw-bold">إجمالي تكلفة المستحقات المتبقيه:</span>
+                                            <span>{{ number_format($client->total_receivables, 0, ',', ',') }}
+                                                جنيه</span>
+                                        </p>
+
+                                    </div>
+                                    @if ($client->total_receivables > 0)
+                                        <form id="dolar-form" action="{{ route('client.deposits', $client->id) }}"
+                                            method="post">
+                                            @csrf
+                                            @method('PATCH')
+                                            <div class="buttons mt-5 d-flex justify-content-center">
+                                                <div class="elements w-100">
+
+                                                    <div class="d-flex justify-content-start" id="addElementContainerBtn">
+                                                        <button type="button"
+                                                            class="addElement  id-{{ $client->id }} main-btn p-2 ps-3 pe-3 specialBtn m-0 mt-2 mb-2"
+                                                            id="addElement">
+                                                            <svg class="pointer" xmlns="http://www.w3.org/2000/svg"
+                                                                width="26" height="27" viewBox="0 0 26 27"
+                                                                fill="none">
+                                                                <path d="M13 5.52753V20.6942" stroke="#fff"
+                                                                    stroke-width="2" stroke-linecap="round"
+                                                                    stroke-linejoin="round" />
+                                                                <path d="M13 5.52753V20.6942" stroke="white"
+                                                                    stroke-opacity="0.2" stroke-width="2"
+                                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                                <path d="M5.41663 13.1108H20.5833" stroke="#fff"
+                                                                    stroke-width="1.5" stroke-linecap="round"
+                                                                    stroke-linejoin="round" />
+                                                                <path d="M5.41663 13.1108H20.5833" stroke="white"
+                                                                    stroke-opacity="0.2" stroke-width="1.5"
+                                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+
+                                                    <div id="addDepositsContainer"
+                                                        class="addDepositsContainer id-{{ $client->id }}">
+                                                        @foreach ($client->deposits as $i => $deposit)
+                                                            <div
+                                                                class="f-row d-flex gap-4 align-items-end deposit-section id-{{ $client->id }}">
+                                                                <div>
+                                                                    <label class="d-block mb-1"
+                                                                        for="deposit-amount">المبلغ</label>
+                                                                    <input type="hidden" class="deleteThis"
+                                                                        name="deposits[{{ $i }}][cost]"
+                                                                        value="{{ $deposit->cost }}">
+                                                                    <input type="text" disabled
+                                                                        name="deposits[{{ $i }}][cost]"
+                                                                        class="deposit-amount category-input form-control"
+                                                                        value="{{ $deposit->cost }}" placeholder="المبلغ"
+                                                                        required>
+                                                                    <input type="hidden" class="deleteThis"
+                                                                        name="deposits[{{ $i }}][id]"
+                                                                        class="input-id" value="{{ $deposit->id }}">
+                                                                </div>
+                                                                <div>
+                                                                    <label class="d-block mb-1"
+                                                                        for="deposit-date">التاريخ</label>
+                                                                    <input type="hidden" class="deleteThis"
+                                                                        name="deposits[{{ $i }}][date]"
+                                                                        value="{{ $deposit->date }}">
+                                                                    <input type="date" disabled
+                                                                        name="deposits[{{ $i }}][date]"
+                                                                        class="deposit-date category-input form-control"
+                                                                        value="{{ $deposit->date }}"
+                                                                        placeholder="التاريخ" required>
+                                                                </div>
+                                                                <div class="">
+                                                                    <label class="d-block">الى</label>
+                                                                    <select class="js-example-basic-single from" disabled
+                                                                        name="deposits[0][from]">
+                                                                        <option value="safe"
+                                                                            {{ $deposit->from == 'safe' ? 'selected' : '' }}>
+                                                                            الخزنه</option>
+                                                                        <option value="custody"
+                                                                            {{ $deposit->from == 'custody' ? 'selected' : '' }}>
+                                                                            عهده موظف</option>
+                                                                    </select>
+                                                                </div>
+
+                                                                <div class="custodyContainer"
+                                                                    style="{{ $deposit->from == 'custody' ? '' : 'display: none' }}">
+                                                                    <label class="d-block">اسم
+                                                                        الموظف</label>
+                                                                    <select class="js-example-basic-single employee"
+                                                                        disabled name="deposits[0][employee_id]">
+
+                                                                        @foreach ($employees as $employee)
+                                                                            <option value="{{ $employee->id }}"
+                                                                                {{ $deposit->employee_id == $employee->id ? 'selected' : '' }}>
+                                                                                {{ $employee->name }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+
+                                                                <div class="safeContainer"
+                                                                    style="{{ $deposit->from == 'safe' ? '' : 'display: none' }}">
+                                                                    <label class="d-block">اسم
+                                                                        الخزنه</label>
+                                                                    <select class="js-example-basic-single safe" disabled
+                                                                        name="deposits[0][safe_id]">
+
+                                                                        @foreach ($safes as $safe)
+                                                                            <option value="{{ $safe->id }}"
+                                                                                {{ $deposit->safe_id == $safe->id ? 'selected' : '' }}>
+                                                                                {{ $safe->name }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                                {{-- ---------------------------------------------------------------------------- --}}
+                                                                <button type="button" class="remove-btn p-3" hidden
+                                                                    disabled><i class="fa-solid fa-trash"></i></button>
+
+                                                                <button type="button" class="check-btn p-3 "
+                                                                    {{ $deposit->is_paid ? 'hidden' : '' }}>
+                                                                    <i class="fa-solid fa-check"></i>
+                                                                </button>
+                                                                <input class="is-paid" type="hidden"
+                                                                    value="{{ $deposit->is_paid }}"
+                                                                    name="deposits[{{ $i }}][is_paid]">
+                                                            </div>
+                                                        @endforeach
+                                                        <div class="f-row d-flex gap-4 align-items-end deposit-section id-{{ $client->id }}"
+                                                            id="initialDepositMultiSection">
+                                                            <div>
+                                                                <label class="d-block mb-1"
+                                                                    for="deposit-amount">المبلغ</label>
+                                                                <input type="text" name="deposits[0][cost]"
+                                                                    class="deposit-amount category-input form-control"
+                                                                    placeholder="المبلغ" required>
+                                                            </div>
+                                                            <div>
+                                                                <label class="d-block mb-1"
+                                                                    for="deposit-date">التاريخ</label>
+                                                                <input type="date" name="deposits[0][date]"
+                                                                    class="deposit-date category-input form-control"
+                                                                    placeholder="التاريخ" required>
+                                                            </div>
+                                                            {{-- ---------------------------------------------------------------------------- --}}
+                                                            <div class="">
+                                                                <label class="d-block">
+                                                                    الى</label>
+                                                                <select class="js-example-basic-single from" required
+                                                                    name="deposits[0][from]">
+                                                                    <option selected disabled hidden> الى
+                                                                    </option>
+                                                                    <option value="safe">الخزنه</option>
+                                                                    <option value="custody">عهده موظف</option>
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="custodyContainer" style="display: none">
+                                                                <label class="d-block">اسم
+                                                                    الموظف</label>
+                                                                <select class="js-example-basic-single employee"
+                                                                    name="deposits[0][employee_id]">
+                                                                    <option value="" selected disabled hidden>اختر
+                                                                        الموظف
+                                                                    </option>
+                                                                    @foreach ($employees as $employee)
+                                                                        <option value="{{ $employee->id }}">
+                                                                            {{ $employee->name }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="safeContainer" style="display: none">
+                                                                <label class="d-block">اسم
+                                                                    الخزنه</label>
+                                                                <select class="js-example-basic-single safe"
+                                                                    name="deposits[0][safe_id]">
+                                                                    <option value="" selected disabled hidden>اختر
+                                                                        الخزنه
+                                                                    </option>
+                                                                    @foreach ($safes as $safe)
+                                                                        <option value="{{ $safe->id }}">
+                                                                            {{ $safe->name }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                            {{-- ---------------------------------------------------------------------------- --}}
+
+                                                            <button type="button" class="remove-btn p-3" hidden
+                                                                disabled><i class="fa-solid fa-trash"></i></button>
+
+                                                            <button type="button" class="check-btn p-3 ">
+                                                                <i class="fa-solid fa-check"></i>
+                                                            </button>
+                                                            <input class="is-paid" type="hidden" value="0"
+                                                                name="deposits[0][is_paid]">
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <div id="invalidDolar" class="invalid invalidDolar my-3">
+                                            </div>
+                                            @if ($client->total_receivables > 0)
+                                                <button class="dollar-btn w-100" type="submit"
+                                                    id="modalSubmitBtnDollar">
+                                                    تـأكيد
+                                                </button>
+                                            @endif
+                                        </form>
+                                    @else
+                                        <h3 class="text-danger mt-3">لا يوجد مستحقات </h3>
+                                    @endif
+                                </div>
+
+                            </div>
+                        </td>
 
                     </tr>
                 @endforeach
@@ -221,6 +525,7 @@
 
 
     <div class="overlay position-fixed none w-100 h-100"></div>
+    <div class="overlay-alfa position-fixed none w-100 h-100"></div>
 
 @endsection
 
@@ -472,6 +777,192 @@
             // Submit the form
             form.submit();
         }
+    </script>
+    <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        $(document).ready(function() {
+            //init modal open
+            function openModal(modal) {
+                modal.removeClass('close');
+                $('body').addClass('overflow-hidden');
+                $('.overlay-alfa').removeClass('none');
+            }
+
+            //init close modal
+            function closeModal(modal) {
+                modal.addClass('close');
+                $('body').removeClass('overflow-hidden');
+                $('.overlay-alfa').addClass('none');
+            }
+
+            //modals actions
+            $('.dolar-icon').click(function() {
+                let id = $(this).data('id');
+                let action = $(this).data('action');
+                let pt = $(this).data('pt');
+                let modal = $(`.popup-dolar.id-${id}`);
+                let addContainer = modal.find('#addElementContainerBtn');
+                let addElement = modal.find('#addElement');
+                let addDepositsContainer = modal.find('#addDepositsContainer');
+                let removeElement = addDepositsContainer.find('.remove-btn');
+                let checkElement = addDepositsContainer.find('.check-btn');
+                let formBtn = modal.find('#modalSubmitBtnDollar');
+                let fromSelect = modal.find('.js-example-basic-single.from');
+
+                fromSelect.on('change', function() {
+                    let from = fromSelect.val();
+                    let custody = $(this).parent().parent().find('.custodyContainer');
+                    let safe = $(this).parent().parent().find('.safeContainer');
+                    if (from == 'safe') {
+                        custody.hide(0);
+                        safe.show(300);
+                    } else if (from == 'custody') {
+                        safe.hide(0);
+                        custody.show(300);
+                    }
+                })
+                if (pt == 'cash') {
+                    addContainer.removeClass('d-flex');
+                    addContainer.hide();
+                    addDepositsContainer.find('.is-paid').val('1');
+                    addDepositsContainer.find('.check-btn').hide();
+                    addDepositsContainer.find('.remove-btn').hide();
+                    formBtn.text('دفع تكلفه المورد')
+                } else {
+                    formBtn.text('اضافه الدفعات')
+                    addElement.click(function() {
+                        let newDepositSection = addDepositsContainer.find('.deposit-section')
+                            .last().clone(true);
+                        var I = addDepositsContainer.children().not('input').length;
+                        newDepositSection.find('.check-btn').removeAttr('hidden');
+                        newDepositSection.find('.remove-btn').removeAttr('hidden');
+                        newDepositSection.find('.check-btn').removeAttr('disabled');
+                        newDepositSection.find('.remove-btn').removeAttr('disabled');
+                        newDepositSection.find('.check-btn').fadeIn(300);
+                        newDepositSection.find('.custodyContainer').hide(0);
+                        newDepositSection.find('.safeContainer').hide(0);
+                        newDepositSection.find('input, select').each(function() {
+                            if ($(this).is('select')) {
+                                if ($(this).hasClass('employee') || $(this).hasClass(
+                                        'safe')) {
+                                    $(this).parent().hide(0);
+
+                                    if ($(this).hasClass('employee')) {
+                                        let opt = `
+                                        <option value="" selected disabled hidden> اختر الموظف
+                                        </option>`;
+                                        $(this).prepend(opt);
+                                    }
+                                    if ($(this).hasClass('safe')) {
+                                        let opt = `
+                                        <option value="" selected disabled hidden> اختر الخزنه
+                                        </option>`;
+                                        $(this).prepend(opt);
+                                    }
+
+                                } else if ($(this).hasClass('from')) {
+                                    let opt = `
+                                        <option value="" selected disabled hidden> الى
+                                        </option>`;
+                                    $(this).prepend(opt);
+                                }
+                                $(this).val('').trigger("change");
+                            }
+                            let name = $(this).attr('name');
+                            if (name != undefined) {
+                                if ($(this).hasClass('deleteThis')) {
+                                    $(this).remove();
+                                }
+                                console.log(name);
+                                let index = name.match(/\[(\d+)\]/);
+                                if (index != undefined) {
+                                    let finalName = name.replace(/(\d)+/, I);
+                                    $(this).attr('name', finalName);
+                                    $(this).val('');
+                                    $(this).removeAttr('disabled');
+                                    if ($(this).hasClass('is-paid')) {
+                                        $(this).val('0');
+                                    }
+                                    if ($(this).hasClass('input-id')) {
+                                        $(this).remove();
+                                    }
+                                }
+                            }
+                        });
+                        newDepositSection.find('.remove-btn').removeAttr('disabled');
+                        newDepositSection.hide().appendTo(addDepositsContainer).slideDown(
+                            300);
+                        let fromSelectNew = newDepositSection.find(
+                            '.js-example-basic-single.from');
+
+                        fromSelectNew.on('change', function() {
+                            let from = fromSelectNew.val();
+                            let custody = newDepositSection.find(
+                                '.custodyContainer');
+                            let safe = newDepositSection
+                                .find(
+                                    '.safeContainer');
+                            if (from == 'safe') {
+                                custody.hide(0);
+                                safe.show(300);
+                            } else if (from == 'custody') {
+                                safe.hide(0);
+                                custody.show(300);
+                            }
+                        })
+
+                    });
+                    removeElement.click(function() {
+                        if (addDepositsContainer.children().length > 1) {
+                            $(this).parent().slideUp(300, function() {
+                                $(this).remove();
+                            });
+                        }
+                    });
+                    checkElement.click(function() {
+                        new Swal({
+                                title: "هل انت متأكد؟",
+                                text: "سوف تتم عملية الدفع بالفعل ولا يمكن التراجع عنها",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonText: "تأكيد الدفع",
+                                cancelButtonText: "الغاء",
+                                dangerMode: true,
+                            })
+                            .then((willDelete) => {
+                                if (willDelete.isConfirmed) {
+                                    $(this).parent().find('.is-paid').val('1');
+                                    $(this).fadeOut(300);
+                                }
+                            });
+                    });
+                }
+
+                if (action == 'edit') {
+                    formBtn.text('تـأكيد')
+                    addDepositsContainer.find('#initialDepositMultiSection').remove();
+                    // addElement.click();
+                }
+                // open this modal
+                openModal(modal);
+
+                // listen on dismiss modal
+                $(".popup img#dismiss").click(function() {
+                    if (!$(this).parent().hasClass("none")) {
+                        closeModal(modal);
+                    }
+                });
+
+                $(".overlay-alfa").on("click", function(e) {
+                    if ($(e.target).hasClass("overlay-alfa")) {
+                        closeModal(modal);
+                    }
+                });
+            });
+        });
     </script>
 
 

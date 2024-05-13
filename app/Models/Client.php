@@ -23,4 +23,12 @@ class Client extends Model
         }
         return User::where('id', $value)->first()->name;
     }
+    public function parties()
+    {
+        return $this->hasMany(Party::class);
+    }
+    public function deposits()
+    {
+        return $this->hasMany(Deposit::class);
+    }
 }

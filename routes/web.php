@@ -124,6 +124,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::middleware('permission:delete client')
             ->delete('/{id}', [ClientController::class, 'destroy'])
             ->name('client.delete');
+        Route::middleware('permission:update client')
+            ->patch('/{id}', [ClientController::class, 'deposits'])
+            ->name('client.deposits');
     });
 
     //rents
