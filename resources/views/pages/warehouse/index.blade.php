@@ -29,19 +29,41 @@
             @endif
             الفعليه
         </a>
-        <a href="{{ url()->current() }}?type=party"
-            class="btn border-0 p-2 ps-4 pe-4 secound-btn {{ request('type') == 'party' ? 'active-btn' : '' }} mb-2">
-            @if (request('type') == 'party')
+        <a href="{{ url()->current() }}?type=pp"
+            class="btn border-0 p-2 ps-4 pe-4 secound-btn {{ request('type') == 'pp' ? 'active-btn' : '' }} mb-2">
+            @if (request('type') == 'pp')
                 <img class="light" src="{{ asset('Assets/imgs/file-import-light.png') }}" alt="">
             @else
                 <img class="dark" src="{{ asset('Assets/imgs/file-import.png') }}" alt="">
             @endif
             عهده
         </a>
+
+        <a href="{{ url()->current() }}?type=rp"
+            class="btn border-0 p-2 ps-4 pe-4 secound-btn {{ request('type') == 'rp' ? 'active-btn' : '' }} mb-2">
+            @if (request('type') == 'rp')
+                <img class="light" src="{{ asset('Assets/imgs/file-import-light.png') }}" alt="">
+            @else
+                <img class="dark" src="{{ asset('Assets/imgs/file-import.png') }}" alt="">
+            @endif
+            عهده إيجار
+        </a>
     </div>
     <!-- end of buttons -->
 
-    <h2 class="mb-5">المخزن</h2>
+    <h2 class="mb-5">
+        @if (request('type') == 'all')
+            اجمالي المخزن
+        @elseif(request('type') == 'current')
+            اجمالي المتاح في المخزن
+        @elseif(request('type') == 'pp')
+            اجمالي عهده منتجات المخزن في الحفلات
+        @elseif(request('type') == 'rp')
+            اجمالي عهده ايجار المخزن في الحفلات
+        @else
+        @endif
+
+    </h2>
 
 
     <div class="component-left me-3 d-flex align-items-center justify-content-end mb-2">
@@ -67,7 +89,9 @@
             <thead class="head">
                 <tr>
                     <th>اسم المنتج</th>
-                    <th>القسم</th>
+                    @if (request('type') != 'rp')
+                        <th>القسم</th>
+                    @endif
                     <th>الكميه</th>
                 </tr>
             </thead>
@@ -83,13 +107,15 @@
                 @foreach ($wts as $wt)
                     <tr>
                         <td>{{ $wt->name }}</td>
-                        @if ($wt->department)
-                            <td>{{ $wt->department->name }}</td>
-                        @else
-                            <td class="text-danger fw-bold">لم يتم التحديد</td>
+                        @if (request('type') != 'rp')
+                            @if ($wt->department)
+                                <td>{{ $wt->department->name }}</td>
+                            @else
+                                <td class="text-danger fw-bold">لا يوجد قسم</td>
+                            @endif
                         @endif
                         <td>
-                            {{ request('type') == 'party' ? $wt->party_qty : $wt->quantity }}
+                            {{ $wt->quantity }}
                         </td>
                     </tr>
                 @endforeach
