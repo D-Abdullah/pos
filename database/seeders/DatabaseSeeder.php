@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
             PermissionsSeeder::class,
             RolesSeeder::class,
             UserSeeder::class,
-            FakeData::class,
+            // FakeData::class,
         ]);
     }
 }

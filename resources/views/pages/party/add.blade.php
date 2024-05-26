@@ -142,9 +142,9 @@
                             {{-- ---------------------------------------------------------------------------- --}}
                             <div class="">
                                 <label class="d-block">
-                                    من</label>
-                                <select class="js-example-basic-single from" name="d_from" aria-placeholder="من">
-                                    <option selected disabled hidden> من
+                                    الى</label>
+                                <select class="js-example-basic-single from" name="d_from" aria-placeholder="الى">
+                                    <option selected disabled hidden> الى
                                     </option>
                                     <option value="safe" {{ old('d_from') == 'safe' ? 'selected' : '' }}>الخزنه</option>
                                     <option value="custody" {{ old('d_from') == 'custody' ? 'selected' : '' }}>عهده موظف

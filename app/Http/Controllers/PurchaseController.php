@@ -79,6 +79,7 @@ class PurchaseController extends Controller
             $product = Product::findOrFail($request->input('product_id'));
             $totalQty = $product->quantity + $request->input('quantity');
             $totalPrice = (float) floatval(Purchase::where('product_id', $product->id)->sum('total_price')) + (float) floatval((float) $request->input('unit_price') * (int) $request->input('quantity'));
+            $totalPurchasesQuantity = (float) floatval((float) floatval(Purchase::where('product_id', $product->id)->sum('quantity')) + (float) floatval($request->input('quantity')));
 
             $purchase = Purchase::create([
                 'product_id' => $request->input('product_id'),
@@ -93,7 +94,7 @@ class PurchaseController extends Controller
 
             $product->update([
                 'quantity' => $totalQty,
-                'purchase_price' => $totalPrice / $totalQty,
+                'purchase_price' => $totalPrice / $totalPurchasesQuantity,
             ]);
 
             WarehouseTransaction::create([
@@ -124,6 +125,7 @@ class PurchaseController extends Controller
             $product = Product::findOrFail($request->input('product_id'));
             $totalQty = $product->quantity + $request->input('quantity');
             $totalPrice = (float) floatval(Purchase::where('product_id', $product->id)->sum('total_price')) + (float) floatval((float) $request->input('unit_price') * (int) $request->input('quantity'));
+            $totalPurchasesQuantity = (float) floatval((float) floatval(Purchase::where('product_id', $product->id)->sum('quantity')) + (float) floatval($request->input('quantity')));
 
             $purchase->update([
                 'product_id' => $request->input('product_id'),
@@ -137,7 +139,7 @@ class PurchaseController extends Controller
             ]);
             $product->update([
                 'quantity' => $totalQty,
-                'purchase_price' => $totalPrice / $totalQty,
+                'purchase_price' => $totalPrice / $totalPurchasesQuantity,
             ]);
 
             WarehouseTransaction::create([
@@ -166,9 +168,10 @@ class PurchaseController extends Controller
             $product = Product::findOrFail($purchase->product_id);
             $totalQty = $product->quantity - $purchase->quantity;
             $totalPrice = (float) floatval(Purchase::where('product_id', $product->id)->sum('total_price')) - (float) floatval($purchase->total_price);
+            $totalPurchasesQuantity = (float) floatval((float) floatval(Purchase::where('product_id', $product->id)->sum('quantity')) + (float) floatval($purchase->quantity));
             $product->update([
                 'quantity' => $totalQty,
-                'purchase_price' => $totalPrice / $totalQty,
+                'purchase_price' => $totalPrice / $totalPurchasesQuantity,
             ]);
             $purchase->delete();
             return redirect()->route('purchase.all')->with(['success' => 'تم حذف عمليه الشراء بنجاح.']);

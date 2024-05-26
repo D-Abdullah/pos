@@ -45,6 +45,11 @@ class SafeController extends Controller
 
             $safes = $safes->paginate(PAGINATION);
 
+            // $st = array();
+            // foreach ($safes as $safe) {
+
+            // }
+
             DB::commit();
             return view('pages.safe.index', compact('safes'));
         } catch (Exception $e) {
@@ -99,7 +104,7 @@ class SafeController extends Controller
             //code
             $safe = Safe::findOrFail($id);
             $safe->delete();
-
+            // if condition for delete not empty safe as it is not empty
             DB::commit();
             return redirect()->route('safe.all')->with(['success' => 'تم حذف الخزنه بنجاح.']);
         } catch (Exception $e) {

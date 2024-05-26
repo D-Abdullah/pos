@@ -107,7 +107,11 @@ class EmployeeController extends Controller
             DB::beginTransaction();
             //code
             $employee = Employee::findOrFail($id);
-            $employee->delete();
+            if ($employee->custody != 0) {
+                return redirect()->back()->with(['error' => 'لا يمكن حذف الموظف الذي يحتوي على قيمة في العده. يرجى المحاولة مرة أخرى.']);
+            } else {
+                $employee->delete();
+            }
 
             DB::commit();
             return redirect()->route('employee.all')->with(['success' => 'تم حذف الموظف بنجاح.']);

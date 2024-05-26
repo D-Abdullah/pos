@@ -221,7 +221,8 @@
                                     src="{{ asset('Assets/imgs/trash (1).png') }}" data-id="{{ $party->id }}"
                                     alt="" id="trash">
 
-                                <a href="{{ route('party.complete', $party->id) }}" class="ms-2 me-2"
+                                <a onclick="confirmComplete('{{ route('party.complete', $party->id) }}')" href="#"
+                                    class="ms-2 me-2"
                                     style="display: {{ $party->status !== 'completed' && $party->readyBill ? 'inline-block' : 'none' }};color: #6f6b7d;font-size: 20px;"><i
                                         class="fa-solid fa-check"></i></a>
                                 @if ($party->status === 'completed')
@@ -502,6 +503,15 @@
         $(document).ready(function() {
             $('.js-example-basic-single.the-state').select2();
         });
+    </script>
+
+    <script>
+        function confirmComplete(url) {
+            if (confirm('هل انت متأكد من انهاء هذه الحفله')) {
+                // redirect to the get url from the parameter
+                window.location.href = url;
+            }
+        }
     </script>
 
 @endsection

@@ -386,7 +386,7 @@
                                                                         placeholder="التاريخ" required>
                                                                 </div>
                                                                 <div class="">
-                                                                    <label class="d-block">الى</label>
+                                                                    <label class="d-block">من</label>
                                                                     <select class="js-example-basic-single from" disabled
                                                                         name="deposits[0][from]">
                                                                         <option value="safe"
@@ -461,10 +461,10 @@
                                                             {{-- ---------------------------------------------------------------------------- --}}
                                                             <div class="">
                                                                 <label class="d-block">
-                                                                    الى</label>
+                                                                    من</label>
                                                                 <select class="js-example-basic-single from" required
                                                                     name="deposits[0][from]">
-                                                                    <option selected disabled hidden> الى
+                                                                    <option selected disabled hidden> من
                                                                     </option>
                                                                     <option value="safe">الخزنه</option>
                                                                     <option value="custody">عهده موظف</option>
@@ -528,7 +528,7 @@
                                             @endif
                                         </form>
                                     @else
-                                        <h3 class="text-danger mt-3">لا يوجد مستحقات </h3>
+                                        <h3 class="text-danger mt-3">جدول لكل المدفوع لهذا المورد</h3>
                                     @endif
                                 </div>
 
@@ -931,7 +931,7 @@
 
                                 } else if ($(this).hasClass('from')) {
                                     let opt = `
-                                        <option value="" selected disabled hidden> الى
+                                        <option value="" selected disabled hidden> من
                                         </option>`;
                                     $(this).prepend(opt);
                                 }

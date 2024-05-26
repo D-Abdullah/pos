@@ -131,7 +131,6 @@ class SupplierController extends Controller
      */
     public function deposits(Request $request, $id)
     {
-        // return $request->all();
         try {
             $supplier = Supplier::find($id);
             if (!$supplier) {
@@ -147,11 +146,9 @@ class SupplierController extends Controller
             $totalCost = $depositsCollection->sum('cost');
             if ($totalRequired < $totalCost) {
                 return redirect()->back()->withInput($request->all())->with(['error' => 'المبلغ المدفوع اكبر من المبلغ المطلوب.']);
-                // return redirect()->back()->withInput($request->all())->with(['error' => 'total = ' . $totalCost . ' | req = ' . $totalRequired]);
             }
             if ($totalRequired != $totalCost && $supplier->payment_type == 'cash') {
                 return redirect()->back()->withInput($request->all())->with(['error' => 'هذا المورد لا يقبل دفعات لذا يرجى التأكد من دفع كل المستحقات دفعه واحده.']);
-                // return redirect()->back()->withInput($request->all())->with(['error' => ' total = ' . $totalCost . ' | req = ' . $totalRequired . ' con = ' . ((int) $totalRequired != (int) $totalCost ? "yes" : "no")]);
             }
             if ($supplier->deposits->count() > 0) {
                 foreach ($request->input('deposits') as $deposit) {

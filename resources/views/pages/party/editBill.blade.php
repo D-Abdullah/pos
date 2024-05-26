@@ -229,7 +229,13 @@
                     <td class="text-center" style="vertical-align: middle;">
                         <div class="edit d-flex align-items-center justify-content-center">
                             @if ($bill->status == 'ready' && $party->status == 'transported' && $bill->is_transfared && $bill->from != 'custom')
-                                <p>جاهز وتم النقل</p>
+                                @if ($bill->from == 'product')
+                                    <img src="{{ asset('Assets/imgs/edit-circle.png') }}" alt=""
+                                        class="open-modal" data-type="{{ $bill->from }}"
+                                        data-id="{{ $bill->product_id }}" data-action="edit">
+                                @else
+                                    <p>جاهز وتم النقل</p>
+                                @endif
                             @elseif ($bill->from == 'custom')
                                 <img src="{{ asset('Assets/imgs/edit-circle.png') }}" alt="" class="open-modal"
                                     data-type="{{ $bill->from }}" data-id="" data-action="edit">

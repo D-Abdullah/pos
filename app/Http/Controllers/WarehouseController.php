@@ -19,8 +19,6 @@ class WarehouseController extends Controller
             if ($r->has('type')) {
                 $type = $r->input('type');
                 if ($type == 'all') {
-                    $wts = Product::with('department')->paginate(PAGINATION);
-                } else if ($type == 'current') {
                     $products = Product::whereHas('product_parties', function ($query) {
                         $query->where('type', 'rent');
                     })->orWhereDoesntHave('product_parties')->with([
@@ -37,6 +35,8 @@ class WarehouseController extends Controller
                         $product->quantity -= $quantity;
                     }
                     $wts = $products;
+                } else if ($type == 'current') {
+                    $wts = Product::with('department')->paginate(PAGINATION);
                 } else if ($type == 'pp') { // products in party
                     $products = Product::whereHas('product_parties', function ($query) {
                         $query->where('type', 'rent');
